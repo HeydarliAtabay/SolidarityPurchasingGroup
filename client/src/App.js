@@ -7,7 +7,7 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
-          SGP - Solidarity Purchasing Group
+          SPG - Solidarity Purchasing Group
         </p>
       </header>
     </div>
