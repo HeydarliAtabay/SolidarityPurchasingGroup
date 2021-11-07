@@ -36,7 +36,7 @@ function Frontpage(props) {
                         </tr>
                         <tr>
                             <td className="py-2 px-4">Delivery person area</td>
-                            <td className="text-center py-2 px-4"><Button Button className="w-100">Login as delivery person</Button></td>
+                            <td className="text-center py-2 px-4"><Button className="w-100">Login as delivery person</Button></td>
                             <td className="text-center py-2 px-4"><Button className="w-100 btn-secondary">Register</Button></td>
                         </tr>
                     </tbody>
