@@ -1,4 +1,5 @@
 import { Button, Row } from "react-bootstrap";
+import {Link} from "react-router-dom"
 
 function Frontpage(props) {
 
@@ -42,6 +43,9 @@ function Frontpage(props) {
                     </tbody>
                 </table>
             </div>
+            <Link to='/products'>
+            <Button>See Products</Button>
+            </Link>
         </Row>
     );
 }
