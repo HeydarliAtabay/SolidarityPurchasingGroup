@@ -2,9 +2,10 @@
 
 const express = require('express');
 const morgan = require('morgan'); // logging middleware
-const productsDAO = require('./DAOs/products-dao');
 const clientsDao = require('./DAOs/clients-dao');
 const ordersDao = require('./DAOs/client-orders-dao');
+const productsDAO = require('./DAOs/products-dao');
+const providersDAO = require('./DAOs/providers-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
@@ -23,12 +24,10 @@ app.get('/api/clients', async (req, res) => {
     const o = await clientsDao.getAllClients();
     return res.status(200).json(o);
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        code: 500,
-        error: `Database error during the retrieve of the list of clients.`,
-      });
+    res.status(500).json({
+      code: 500,
+      error: `Database error during the retrieve of the list of clients.`,
+    });
   }
 });
 
@@ -38,12 +37,10 @@ app.get('/api/orders', async (req, res) => {
     const m = await ordersDao.getAllOrders();
     return res.status(200).json(m);
   } catch (err) {
-    res
-      .status(500)
-      .json({
-        code: 500,
-        error: 'Database error during the retrieve of the list of orders.',
-      });
+    res.status(500).json({
+      code: 500,
+      error: 'Database error during the retrieve of the list of orders.',
+    });
   }
 });
 
@@ -56,12 +53,10 @@ app.put(
       await ordersDao.delivered(req.params.order_id);
       res.status(200).end('Update Completed!');
     } catch (err) {
-      res
-        .status(503)
-        .json({
-          code: 503,
-          error: `Unavailable service during the update of order`,
-        });
+      res.status(503).json({
+        code: 503,
+        error: `Unavailable service during the update of order`,
+      });
     }
   }
 );
@@ -69,7 +64,9 @@ app.put(
 //GET all products
 app.get('/api/products/all', async (req, res) => {
   try {
-    res.json(await productsDAO.getAllProducts());
+    const products = await productsDAO.getAllProducts();
+    console.log(products);
+    res.json(products);
   } catch (err) {
     console.log(err);
     res.json(err);
@@ -80,8 +77,34 @@ app.get('/api/products/all', async (req, res) => {
 app.get('/api/product/:product_id', async (req, res) => {
   try {
     const product_id = req.params.product_id;
-    console.log(await productsDAO.getProductById(product_id));
-    res.json(await productsDAO.getProductById(product_id));
+    const product = await productsDAO.getProductById(product_id);
+    console.log(product);
+    res.json(product);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+//Get all providers
+app.get('/api/providers/all', async (req, res) => {
+  try {
+    const providers = await providersDAO.getAllProviders();
+    console.log(providers);
+    res.json(providers);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+//GET provider by its ID
+app.get('/api/provider/:provider_id', async (req, res) => {
+  try {
+    const provider_id = req.params.provider_id;
+    const provider = await providersDAO.getProviderById(provider_id);
+    console.log(provider);
+    res.json(provider);
   } catch (err) {
     console.log(err);
     res.json(err);

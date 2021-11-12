@@ -55,7 +55,6 @@ function updateDelivered(order_id) {
 async function getAllProducts() {
     const response = await fetch('http://localhost:3000/api/products/all');
     if (response.ok) {
-        //return tasksJson.map((t) => Task.from(t));
         return await response.json();
     } else {
         let err = { status: response.status, errObj: response };
@@ -67,7 +66,6 @@ async function getAllProducts() {
 async function getProductById(product_id) {
     const response = await fetch('http://localhost:3000/api/product/'+product_id);
     if (response.ok) {
-        //return tasksJson.map((t) => Task.from(t));
         return await response.json();
     } else {
         let err = { status: response.status, errObj: response };
@@ -75,5 +73,27 @@ async function getProductById(product_id) {
     }
 }
 
-const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById}
+//GET all providers
+async function getAllProviders() {
+  const response = await fetch('http://localhost:3000/api/providers/all');
+  if (response.ok) {
+      return await response.json();
+  } else {
+      let err = { status: response.status, errObj: response };
+      throw err;  // An object with the error coming from the server
+  }
+}
+
+//GET provider by specific ID
+async function getProviderById(provider_id) {
+  const response = await fetch('http://localhost:3000/api/provider/'+provider_id);
+  if (response.ok) {
+      return await response.json();
+  } else {
+      let err = { status: response.status, errObj: response };
+      throw err;  // An object with the error coming from the server
+  }
+}
+
+const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById}
 export default API;
