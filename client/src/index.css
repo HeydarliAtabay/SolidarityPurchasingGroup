@@ -65,3 +65,35 @@ code {
 .remains{
   font-size: 15pt;
 }
+
+.vertical-separator-frontpage{
+  border-left: solid 1px rosybrown;
+}
+
+.carousel-custom-background{
+  background-color: rgba(255,255,255,0.75);
+}
+
+.text-justify-custom{
+  text-align: justify;
+}
+
+.text-right-custom{
+  text-align: right;
+}
+
+.align-bottom-custom{
+  align-items: flex-start;
+}
+
+.w-35-custom{
+  width: 35%;
+}
+
+.farmer-img-custom-dimensions{
+  height: 250px;
+}
+
+.bg-color-frontpage{
+  background-color: linen;
+}
