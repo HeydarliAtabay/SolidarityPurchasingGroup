@@ -25,7 +25,7 @@ function ProductPage (props){
                     <h4>Scadenza: {props.prod.expiryDate}</h4>
                 </Row>
                 <Row>
-                    <h4>Venditore: {props.prod.productProviderName}</h4>
+                    <h4>Venditore: {props.prod.providerName}</h4>
                 </Row>
                     
                     
