@@ -25,7 +25,8 @@ function ProductGallery(props){
     /* hooks for the modal display mode */
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [prodModal, setProdModal] = useState(props.products[0]);
+    
 
 
     const handleSubmit = (event) =>{
@@ -75,7 +76,7 @@ function ProductGallery(props){
         <div style ={{textAlign: "center"}}>
             <li className ="flex-container">
                     {productsToDisplay.map( p => {
-                            return ( <DisplayProduct prod={p} handleShow={handleShow}/>);
+                            return ( <DisplayProduct prod={p} setShow={setShow} setProdModal={setProdModal}/>);
                     })}
             </li>
         </div>
@@ -83,22 +84,15 @@ function ProductGallery(props){
         
 
 
-        <Modal show={show} onHide={handleClose}>
+        <Modal size="lg" show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>{prodModal.name}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            CIAO!!
-            <ProductPage></ProductPage>
+            
+            <ProductPage prod = {prodModal}></ProductPage>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Save Changes
-          </Button>
-        </Modal.Footer>
+        
       </Modal>
 
         </>
@@ -113,12 +107,15 @@ function DisplayProduct(props){
         width: 300,
         height: 300,
     };
-    let imgName = props.prod.id + ".jpg"
-    let link ="/products"+props.prod.id
+    let imgName = props.prod.id + ".jpg";
+    let link ="/products"+props.prod.id;
+    const handleShow = () => {props.setShow(true);
+            props.setProdModal(props.prod);    
+    }
     return(
     
     
-        <div onClick={props.handleShow}>
+        <div onClick={handleShow}>
             <h1>{props.prod.name}</h1>
         <img className = "image"
             style = {styleObj}
