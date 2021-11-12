@@ -52,6 +52,30 @@ app.get('/api/orders', async (req, res) => {
     
         });
 
+//GET all products
+app.get("/api/products/all", async(req,res)=>{
+
+    try{
+        res.json(await productsDAO.getAllProducts());
+    }
+    catch(err){
+        console.log(err);
+        res.json(err);
+    }
+});
+
+//GET product by its ID
+app.get("/api/product/:product_id", async(req,res)=>{
+    try{
+        const product_id = req.params.product_id;
+        console.log(await productsDAO.getProductById(product_id));
+        res.json(await productsDAO.getProductById(product_id));
+    }
+    catch(err){
+        console.log(err);
+        res.json(err);
+    }
+});
 
 /* CONNECTION */
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
