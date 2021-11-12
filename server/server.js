@@ -5,6 +5,7 @@ const morgan = require("morgan"); // logging middleware
 const clientsDao = require('./DAOs/clients-dao');
 const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
+const providersDAO = require('./DAOs/providers-dao');
 const passportLocal = require("passport-local").Strategy; //Authentication strategy
 const session = require("express-session"); //Session middleware
 const passport = require("passport"); //Authentication middleware
@@ -57,7 +58,9 @@ app.get('/api/orders', async (req, res) => {
 app.get("/api/products/all", async(req,res)=>{
 
     try{
-        res.json(await productsDAO.getAllProducts());
+        const products = await productsDAO.getAllProducts();
+        console.log(products);
+        res.json(products);
     }
     catch(err){
         console.log(err);
@@ -69,8 +72,37 @@ app.get("/api/products/all", async(req,res)=>{
 app.get("/api/product/:product_id", async(req,res)=>{
     try{
         const product_id = req.params.product_id;
-        console.log(await productsDAO.getProductById(product_id));
-        res.json(await productsDAO.getProductById(product_id));
+        const product = await productsDAO.getProductById(product_id)
+        console.log(product);
+        res.json(product);
+    }
+    catch(err){
+        console.log(err);
+        res.json(err);
+    }
+});
+
+//Get all providers
+app.get("/api/providers/all", async(req,res)=>{
+
+    try{
+        const providers = await providersDAO.getAllProviders();
+        console.log(providers);
+        res.json(providers);
+    }
+    catch(err){
+        console.log(err);
+        res.json(err);
+    }
+});
+
+//GET provider by its ID
+app.get("/api/provider/:provider_id", async(req,res)=>{
+    try{
+        const provider_id = req.params.provider_id;
+        const provider = await providersDAO.getProviderById(provider_id);
+        console.log(provider);
+        res.json(provider);
     }
     catch(err){
         console.log(err);
