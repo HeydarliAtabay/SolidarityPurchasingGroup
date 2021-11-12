@@ -50,5 +50,30 @@ function updateDelivered(order_id) {
       }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communicate with server failed" }] }) });
   });
 }
-const API = {getAllClients, getAllOrders,updateDelivered}
+
+//GET all products
+async function getAllProducts() {
+    const response = await fetch('http://localhost:3000/api/products/all');
+    if (response.ok) {
+        //return tasksJson.map((t) => Task.from(t));
+        return await response.json();
+    } else {
+        let err = { status: response.status, errObj: response };
+        throw err;  // An object with the error coming from the server
+    }
+}
+
+//GET product by specific ID
+async function getProductById(product_id) {
+    const response = await fetch('http://localhost:3000/api/product/'+product_id);
+    if (response.ok) {
+        //return tasksJson.map((t) => Task.from(t));
+        return await response.json();
+    } else {
+        let err = { status: response.status, errObj: response };
+        throw err;  // An object with the error coming from the server
+    }
+}
+
+const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById}
 export default API;
