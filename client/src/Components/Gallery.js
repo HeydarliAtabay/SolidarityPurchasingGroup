@@ -1,7 +1,7 @@
 import {Link} from 'react-router-dom'
 import {Row, Col, Button, Form, Modal} from 'react-bootstrap'
 import {useState} from 'react'
-import ProductPage from './Frontpage'
+import ProductPage from './ProductPage'
 
 
 function filterProducts(cat, products){
