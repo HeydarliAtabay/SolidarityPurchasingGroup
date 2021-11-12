@@ -58,9 +58,18 @@ useEffect(()=>{
   
   
   console.log(time);
+  /* local objects to be deleted once we have a backend */
+  const imgNames = ['1.jpg','2.jpg','3.jpg','4.jpg','5.jpg']
 
-  const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
-
+  const productsArray = [{id: 1, name: "carrots", description: "carotine deliziose", category:"Vegetables", price: 2.0, unit: "kg", quantity: 250, expiryDate: "10 giorni", providerId:12, providerName:"cascina Torchiano"},
+                        {id: 2, name: "eggplants", description: "pomodori molto rossi", category: "Vegetables", price: 1.05, unit: "kg", quantity: 304, expiryDate: "1 mese", providerId: 1, providerName:" LIDL"},
+                        {id: 3, name: "tomatoes",  description:" melanzane scadute ma ancora buone", category: "Vegetables", price: 0.35, unit: "kg", quantity: 1594, expiryDate: " tre giorni fa", providerId:666, providerName:"EATALY"},
+                        {id: 4, name: "fennels", description: "zucchine fresche", category: "Fruits", price:0.54, unit:"kg", quantity:24, expiryDate:" 5 giorni", providerId: 124, providerName:" orto del nonno"},
+                        {id: 5, name: "zucchinis", description: "zucchine fresche", category: "Fruits", price:0.54, unit:"kg", quantity:24, expiryDate:" 5 giorni", providerId: 124, providerName:" orto del nonno"},
+                        {id: 6, name: "SPRITE", description: "senza zuccheri", category: "Drinks", price: 0.99, unit:"kg", quantity: 2222, expiryDate: "", providerId:25, providerName:"POLITO"},
+                        {id: 6, name: "COCA COLA", description: "senza caffeina", category: "Drinks", price: 0.99, unit:"kg", quantity: 2222, expiryDate: "", providerId:25, providerName:"POLITO"},
+                        {id: 6, name: "CODEINA", description: "senza sciroppo", category: "Drinks", price: 0.99, unit:"kg", quantity: 2222, expiryDate: "", providerId:25, providerName:"POLITO"}]
+ 
   return (
     <Router>
       <MyNavbar time={time} setTime={setTime} />
@@ -72,13 +81,11 @@ useEffect(()=>{
          <Route path="/client" render={() => (
           <ClientPage clients={clients} clientid={1} />
         )} />
-        <Route path="/" render={() => <Frontpage />} />
-      </Switch>
-      <Switch>
         <Route
           path="/products"
-          render={() => <ProductGallery imgN={imgNames} />}
+          render={() => <ProductGallery products={productsArray} />}
         />
+        <Route path="/" render={() => <Frontpage />} />
       </Switch>
     </Router>
   );
