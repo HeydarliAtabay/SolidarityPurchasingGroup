@@ -4,6 +4,7 @@ const express = require("express");
 const morgan = require("morgan"); // logging middleware
 const clientsDao = require('./DAOs/clients-dao');
 const ordersDao = require('./DAOs/client-orders-dao');
+const productsDAO = require('./DAOs/products-dao');
 const passportLocal = require("passport-local").Strategy; //Authentication strategy
 const session = require("express-session"); //Session middleware
 const passport = require("passport"); //Authentication middleware
