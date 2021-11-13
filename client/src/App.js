@@ -63,7 +63,6 @@ function App() {
     const getAllProducts = async () => {
       await API.getAllProducts()
         .then((res) => {
-          console.log(res);
           setProducts(res);
         })
         .catch((err) => {
@@ -76,8 +75,7 @@ function App() {
   console.log(time);
   /* local objects to be deleted once we have a backend */
   const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
-  console.log(products)
-  
+  console.log(products);
 
   return (
     <Router>

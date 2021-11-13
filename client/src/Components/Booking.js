@@ -8,17 +8,9 @@ function Booking(props) {
   const [productsBasket, setProductsBasket] = useState([]);
   const [update, setUpdate] = useState(false);
 
-  /* const products = [
-    { id: 1, name: 'Potato' },
-    { id: 2, name: 'Tomato' },
-    { id: 3, name: 'Finocchio' },
-    { id: 4, name: 'Insalata' },
-    { id: 5, name: 'Olio' },
-    { id: 6, name: 'Carote' },
-  ];*/
-
   const rows = [...Array(Math.ceil(props.products.length / 3))];
   const productRows = Array(rows.length);
+
   rows.forEach((row, idx) => {
     productRows[idx] = props.products.slice(idx * 3, idx * 3 + 3);
   });
@@ -47,6 +39,9 @@ function Booking(props) {
       );
     }
   };
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   const listOfCardProducts = productRows.map((line, index) => {
     return (
       <>
@@ -57,7 +52,13 @@ function Booking(props) {
                 <Card style={{ width: '18rem' }}>
                   <Card.Img variant="top" />
                   <Card.Body>
-                    <Card.Title>{productline.name}</Card.Title>
+                    <Card.Title>
+                      {capitalizeFirstLetter(productline.name)}
+                    </Card.Title>
+                    <Card.Text>Price: €{productline.price} </Card.Text>
+                    <Card.Text>
+                      Quantity: {productline.quantity} {productline.unit}
+                    </Card.Text>
 
                     <Row>
                       <Button
@@ -121,6 +122,7 @@ function Booking(props) {
               productsBasket={productsBasket}
               onAdd={onAdd}
               onRemove={onRemove}
+              capitalizeFirstLetter={capitalizeFirstLetter}
             />
           </Col>
         </Row>
@@ -131,31 +133,3 @@ function Booking(props) {
   );
 }
 export default Booking;
-/*else if (productsBasket.length == 1) {
-      return (
-        <>
-          <p>
-            1°- Product: {productsBasket[0].name} Qty:{' '}
-            {productsBasket[0].qty}
-          </p>{' '}
-        </>
-      );
-    }
-    
-     <select
-                        style={{ textAlign: 'center' }}
-                        class="custom-select my-1 mr-sm-2"
-                        id="inlineFormCustomSelectPref"
-                        onChange={() => {
-                          setqty(2);
-                        }}
-                      >
-                        <option selected>Choose...</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">2</option>
-                        <option value="3">3</option>
-                        <option value="5">5</option>
-                      </select>
-    
-    */
