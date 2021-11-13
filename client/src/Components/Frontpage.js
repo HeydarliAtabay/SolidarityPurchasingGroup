@@ -1,8 +1,8 @@
 import { Button, Row, Carousel } from "react-bootstrap";
-import { Link } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 
 function Frontpage(props) {
-
+  const history=useHistory()
     return (
         <Row className="bg-color-frontpage">
             <div className="col-lg-3">
@@ -13,7 +13,11 @@ function Frontpage(props) {
                         <h5 className="d-inline my-auto">{userIcon} Clients area</h5>
                         <div>
                             <button className="mx-2 btn btn-outline-primary">Login</button>
-                            <button className="btn btn-outline-secondary">Register</button>
+                            <button className="btn btn-outline-secondary"
+                             onClick={(event) => {
+                                history.push("/registration")
+                    }}
+                            >Register</button>
                         </div>
                     </div>
                 </div>
