@@ -8,6 +8,7 @@ import { client, clientOrders } from './Client';
 import API from './API';
 import EmployeePage from './EmployeePage';
 import ClientPage from './ClientPage';
+import UserRegistration from './Components/UserRegistration'
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -91,6 +92,10 @@ function App() {
         <Route
           path="/client"
           render={() => <ClientPage clients={clients} clientid={1} />}
+        />
+        <Route
+          path="/registration"
+          render={() => <UserRegistration />}
         />
         <Route
           path="/products"
