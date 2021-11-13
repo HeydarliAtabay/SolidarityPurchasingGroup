@@ -111,6 +111,24 @@ app.get('/api/provider/:provider_id', async (req, res) => {
   }
 });
 
+app.post('/api/insert-order', async (req, res) => {
+  try{
+    const client_id = req.query.cid;
+    const order_items = req.body.order_items; 
+    
+    const order_id = await ordersDao.insert_order(client_id); 
+    const response = await ordersDao.insert_order_items(order_id, order_items);
+
+    console.log(response);
+    res.json(response); 
+  }
+  catch (err)
+  {
+    console.log(err);
+    res.json(err);
+  }
+});
+
 /* CONNECTION */
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)

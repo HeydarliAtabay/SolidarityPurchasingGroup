@@ -23,7 +23,7 @@ exports.getAllOrders=()=>{
 
     }   );
     };
-//retrieve order given its id
+//retrieve order given its id 
 exports.getO = (order_id) => {
     return new Promise((resolve, reject) => {
         const sql = 'SELECT * FROM orders WHERE order_id =? ';
@@ -37,7 +37,7 @@ exports.getO = (order_id) => {
         });
     });
 }
-//update delivered order
+//update delivered order 
 exports.delivered = async (order_id) => {
     const test = await this.getO(order_id);
     
@@ -52,4 +52,57 @@ exports.delivered = async (order_id) => {
         });
     });
 
+}
+
+// insert a new order
+exports.insert_order = async (client_id) => {
+    return new Promise((resolve, reject) => { 
+
+        const MAX_NUM = 10_000_000;
+        const sql = 'INSERT INTO orders (order_id, client_id) VALUES (?, ?)'; 
+        const order_id = Math.floor(Math.random() * MAX_NUM);
+
+        db.run(sql, [order_id, client_id], function (err) {
+            if (err) {
+                reject(err);
+                console.log(err.message);
+                return;
+            }
+            resolve(order_id); 
+        });
+
+    });
+}
+
+exports.insert_order_items = async (order_id, order_items) =>
+{
+    return new Promise((resolve, reject) => { 
+        
+        const MAX_ITEMS = 1000;
+        const err_response = { "status": "FAIL" };
+        const ok_response = { "status": "OK" };
+        
+        let placeholders = "";
+        const rows = [];
+
+        if(order_items.length > MAX_ITEMS)
+        {
+            reject(err_response);
+            return;
+        }
+
+        placeholders = order_items.map(prod => `(${order_id}, ${prod.product_id}, ${prod.quantity})`).join(', ')
+
+        console.log(placeholders);
+        console.log(rows);
+
+        const sql = 'INSERT INTO order_items (order_id, product_id, quantity) VALUES ' + placeholders;
+
+        db.run(sql, rows, function(err) { 
+            console.log(err.message);
+            return;
+        });
+
+        resolve(ok_response);
+    });
 }

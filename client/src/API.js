@@ -95,5 +95,10 @@ async function getProviderById(provider_id) {
   }
 }
 
+async function insertNewOrder()
+{
+  
+}
+
 const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById}
 export default API;
