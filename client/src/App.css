@@ -4,3 +4,37 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+
+
+.RegistrationForm {
+  padding-top: 1rem;
+  width: 900px;
+  margin: auto;
+  text-align: center;
+  border: 2px solid rgb(226, 221, 221);
+  border-radius: 25px;
+}
+
+.regText {
+  margin-top: 10px;
+  text-align: center;
+}
+.countReg{
+  width: 200px;
+}
+.countReg1{
+  width: 200px;
+}
+
+.pet{
+  margin-left: 110px;
+  display: flex;
+  
+}
+
+.subBtn{
+  margin-top: 25px;
+  align-items: center;
+  align-self: center;
+  text-align: center;
+}
