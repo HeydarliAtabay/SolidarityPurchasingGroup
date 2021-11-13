@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const bcrypt = require('bcryptjs');
 const morgan = require('morgan'); // logging middleware
 const clientsDao = require('./DAOs/clients-dao');
 const ordersDao = require('./DAOs/client-orders-dao');
@@ -127,6 +128,47 @@ app.post('/api/insert-order', async (req, res) => {
     console.log(err);
     res.json(err);
   }
+});
+
+// adding a client 
+
+app.post("/api/clients", async (req, res) => {
+ 
+ try{
+  //const hashedPassword = await bcrypt.hash(req.body.hash,10)
+  var salt = bcrypt.genSaltSync(10);
+  const oldPassword=req.body.hash
+  const hashedPassword = await bcrypt.hash(oldPassword,salt)
+  const client={
+    budget:req.body.budget,
+    name:req.body.name,
+    surname:req.body.surname,
+    gender: req.body.gender,
+    birthdate: req.body.birthdate,
+    country: req.body.country,
+    region: req.body.region,
+    address: req.body.address,
+    city: req.body.city,
+    phone: req.body.phone,
+    email: req.body.email,
+    hash: hashedPassword
+  }
+  if (!client) {
+    res.status(400).end();
+  } else {
+    
+   await clientsDao
+      .createClient(client)
+      .then((id) => res.status(201).json({ id: id }))
+      .catch((err) => res.status(500).json(error));
+  }
+ }
+ catch(e){
+   console.log(e);
+   res.status(500).send('Something broke!')
+
+ }
+  
 });
 
 /* CONNECTION */
