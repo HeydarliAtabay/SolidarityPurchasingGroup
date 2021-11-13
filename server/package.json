@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bcryptjs": "^2.4.3",
     "dayjs": "^1.10.7",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
