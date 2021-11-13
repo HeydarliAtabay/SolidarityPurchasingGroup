@@ -100,5 +100,35 @@ async function insertNewOrder()
   
 }
 
-const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById}
+// Adding new client
+
+function addClient(client) {
+  return new Promise((resolve, reject) => {
+    fetch('http://localhost:3000/api/clients', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body : JSON.stringify({ budget:client.budget,name:client.name, surname:client.surname, gender:client.gender, 
+        birthdate:client.birthdate, country:client.country, region:client.region,
+        address:client.address, city:client.city, phone:client.phone, email:client.email, hash:client.hash
+      })
+      }).then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // analyze the cause of error
+          response.json()
+            .then((message) => { reject(message); }) // error message in the response body
+            .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
+        }
+    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+  });
+}
+
+const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById,
+              addClient
+}
+
+const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById, addClient}
 export default API;
