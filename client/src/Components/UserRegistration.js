@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
 import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
+import API from '../API'
 
 function UserRegistration(props){
     const history=useHistory()
@@ -25,11 +26,48 @@ function UserRegistration(props){
     const okayStyle = {color: "green" }
     const noStyle={color:"red"}
 
+    const addClient= async(client)=>{
+      const update= await API.addClient(client)
+      console.log(update)
+    }
+
+    const handleSubmit = (event) => {
+      event.preventDefault();
+      event.stopPropagation(); 
+
+
+        const newClient = Object.assign({}, {
+          budget: 0.0,
+          name:name,
+          surname: surname,
+          gender: gender,
+          birthdate:date,
+          country:country,
+          region: region,
+          address: address,
+          city: city,
+          phone: phone,
+          email:email,
+          hash:password1
+         });
+
+         try{
+         addClient(newClient)
+         setTimeout(()=>history.push('/'),500)
+         
+         }
+         catch{
+
+         }
+
+      
+    }
+    
     return(
         <>
         <h3 className="regText">Registration form</h3>
         <div className="RegistrationForm">
-        <Form>
+        <Form onSubmit={handleSubmit}>
             {/*Personal information*/}
         <Row>
             <Col sm={4}>
