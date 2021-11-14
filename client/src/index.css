@@ -94,6 +94,14 @@ code {
   height: 250px;
 }
 
+.product-image-size-custom{
+  width: 90%;
+}
+
+.product-buy-size-custom{
+  width: 50px;
+}
+
 .bg-color-frontpage{
   background-color: linen;
 }
