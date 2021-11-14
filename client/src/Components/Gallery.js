@@ -85,15 +85,16 @@ function ProductGallery(props){
 
 
         <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>{prodModal.name}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-            
-            <ProductPage prod = {prodModal}></ProductPage>
-        </Modal.Body>
-        
-      </Modal>
+            <Modal.Header closeButton>
+                <Modal.Title>{prodModal.name}</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <ProductPage prod={prodModal}></ProductPage>
+            </Modal.Body>
+            <Modal.Footer>
+                <button className="btn btn-secondary">Back to the products</button>
+            </Modal.Footer>
+        </Modal>
 
         </>
         
