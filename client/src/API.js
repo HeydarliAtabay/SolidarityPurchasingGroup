@@ -126,9 +126,5 @@ function addClient(client) {
   });
 }
 
-const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById,
-              addClient
-}
-
 const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById, addClient}
 export default API;
