@@ -281,6 +281,43 @@ function addTransaction(tr) {
   });
 }
 
+// Increase balance of clients
+function increaseBalance(amount, clientId) {
+  return new Promise((resolve, reject) => {
+    fetch(
+      'http://localhost:3000/api/clients/update/balance/' +
+        clientId +
+        '/' +
+        amount,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // analyze the cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            }) // error message in the response body
+            .catch(() => {
+              reject({ error: 'Cannot parse server response.' });
+            }); // something else
+        }
+      })
+      .catch(() => {
+        reject({ error: 'Cannot communicate with the server.' });
+      }); // connection errors
+  });
+}
+
 const API = {
   getAllClients,
   getAllOrders,
@@ -292,6 +329,7 @@ const API = {
   addClient,
   getAllPaymentMethods,
   addTransaction,
+  increaseBalance,
   insertNewOrder,
   updateQuantity,
 };
