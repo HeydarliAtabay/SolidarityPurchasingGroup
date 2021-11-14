@@ -14,10 +14,22 @@ function ModalWalletTopUp(props) {
   const [cvv,setCvv]=useState("")
   const [amount,setAmount]=useState(0)
 
+  {/*Should be modified*/}
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
+    const newTransaction = Object.assign({}, {
+      type:"wallet top-up",
+      client_id:clientId,
+      method_id:1, 
+      account_num:number,
+      amount: amount,
+      date:"14-11-2021",
+      time:"00:00",
+      status:1
+     });
 
+    onSave(newTransaction)
   };
   return (
     <div className="cont">
@@ -177,7 +189,7 @@ function ModalWalletTopUp(props) {
 
 
 function EmployeePage(props){
-  const {clients,methods}=props
+  const {clients,methods,addTr}=props
   const MODAL = { CLOSED: -2, ADD: -1 };
   const [selectedTask, setSelectedTask] = useState(MODAL.CLOSED);
 
@@ -185,6 +197,15 @@ function EmployeePage(props){
         setSelectedTask(MODAL.CLOSED);
        
       }
+
+      const handleSave = (tr) => {
+        addTransaction(tr)
+        setSelectedTask(MODAL.CLOSED); 
+      } 
+      
+      function addTransaction (tr)  {
+       addTr(tr)
+      }   
 
 const [show, setShow] = useState(false);
  let b="booked";
@@ -206,7 +227,7 @@ const [show, setShow] = useState(false);
 > Make a top-up of the client wallet </Button>
 </ListGroupItem >
 </ListGroup></Col>
-{(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>} 
+{(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>} 
 
 <Col xs={5} md={5}>
 {show?<ListGroup variant="flush">

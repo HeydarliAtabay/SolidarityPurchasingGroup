@@ -142,9 +142,33 @@ async function getAllPaymentMethods(){
        }
    }
 
+   // Adding new transaction
+
+function addTransaction(tr) {
+  return new Promise((resolve, reject) => {
+    fetch('http://localhost:3000/api/transactions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body : JSON.stringify({ type: tr.type, client_id:tr.client_id, method_id: tr.method_id, account_num: tr.account_num,
+                              amount:tr.amount, date:tr.date, time:tr.time, status:1
+      })
+      }).then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // analyze the cause of error
+          response.json()
+            .then((message) => { reject(message); }) // error message in the response body
+            .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
+        }
+    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+  });
+}
 
 
 const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById, addClient,
-      getAllPaymentMethods
-}
+      getAllPaymentMethods, addTransaction
+    }
 export default API;
