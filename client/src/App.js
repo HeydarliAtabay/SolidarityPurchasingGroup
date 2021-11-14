@@ -23,23 +23,16 @@ function App() {
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
+  const [methods, setMethods] = useState([]);
 
   const updateRech = (x) => {
     setRecharged(x);
   };
   /* USEFFECT clients */
   useEffect(() => {
-    const getClients = async () => {
-      await API.getAllClients().then((data) => {
-        data.forEach((x) => {
-          p.push(new client(x.client_id, x.budget));
-        });
-        let m = [...p];
-        p = [];
-        setClients(m);
-      });
-    };
-    getClients();
+    API.getAllClients().then(newClients=>{
+      setClients(newClients)
+     })
   }, []);
 
   /* USEFFECT orders*/
@@ -73,6 +66,12 @@ function App() {
     getAllProducts();
   }, []);
 
+  useEffect(() => {
+      API.getAllPaymentMethods().then(newMethods=>{
+        setMethods(newMethods)
+       })
+    }, []) 
+
   console.log(time);
   /* local objects to be deleted once we have a backend */
   const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
@@ -86,7 +85,7 @@ function App() {
         <Route
           path="/employee"
           render={() => (
-            <EmployeePage orders={orders} setRecharged={updateRech} />
+            <EmployeePage orders={orders} clients={clients} methods={methods} setRecharged={updateRech} />
           )}
         />
         <Route
@@ -108,3 +107,4 @@ function App() {
 }
 
 export default App;
+
