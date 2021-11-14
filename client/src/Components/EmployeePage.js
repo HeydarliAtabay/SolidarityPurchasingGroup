@@ -28,7 +28,7 @@ function ModalWalletTopUp(props) {
                  
                   onChange={(ev) => {
                   }}
-                > 
+                >
                  {
                 clients.map((client)=>{
                     return(
@@ -108,6 +108,7 @@ const [show, setShow] = useState(false);
 <Image src={ris} style={{'cursor':'pointer'}} onClick={()=>{
    API.updateDelivered(s.order_id).then(()=>{
        
+   
           props.setRecharged(true);
           
      })
