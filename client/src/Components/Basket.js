@@ -9,8 +9,8 @@ function Basket(props) {
       <h2>Basket:</h2>
       {props.productsBasket.length === 0 && <div>Cart is Empty</div>}
       {props.productsBasket.map((item) => (
-        <Row key={item.id}>
-          <Col>
+        <Row key={item.id} className="pt-3">
+          <Col xs="4">
             <div>{props.capitalizeFirstLetter(item.name)}</div>
           </Col>
           <Col>

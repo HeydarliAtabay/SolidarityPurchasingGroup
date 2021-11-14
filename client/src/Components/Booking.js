@@ -6,7 +6,6 @@ function Booking(props) {
   //the props that I want are: a vector containg the products and a state about login or not.
   const [isLogged, setLogged] = useState(true);
   const [productsBasket, setProductsBasket] = useState([]);
-  const [update, setUpdate] = useState(false);
 
   const rows = [...Array(Math.ceil(props.products.length / 3))];
   const productRows = Array(rows.length);
