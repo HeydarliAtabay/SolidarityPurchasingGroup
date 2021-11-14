@@ -112,63 +112,79 @@ app.get('/api/provider/:provider_id', async (req, res) => {
   }
 });
 
-app.post('/api/insert-order', async (req, res) => {
-  try{
-    const client_id = req.query.cid;
-    const order_items = req.body.order_items; 
-    
-    const order_id = await ordersDao.insert_order(client_id); 
-    const response = await ordersDao.insert_order_items(order_id, order_items);
+app.post('/api/neworder', async (req, res) => {
+  try {
+    const client_id = req.body.client_id;
+    console.log(client_id);
+    const order_items = req.body.order_items;
+    console.log(order_items);
+    let response, response1;
 
+    const order_id = await ordersDao.insert_order(client_id);
+    order_items.forEach(async (prod) => {
+      if (prod.quantity >= prod.qty) {
+        response = await ordersDao.insert_order_items(order_id, prod);
+        if (response.status !== 'OK') throw 'something goes wrong';
+        console.log(response);
+      } else throw 'We do not have enough product ';
+      const newQuantity = prod.quantity - prod.qty;
+      response1 = await productsDAO.putProductQuantity(prod.id, newQuantity);
+    });
     console.log(response);
-    res.json(response); 
-  }
-  catch (err)
-  {
+    res.json(response);
+  } catch (err) {
     console.log(err);
     res.json(err);
   }
 });
+//update quantity
+app.put('/api/modifyquantity', async (req, res) => {
+  productsDAO
+    .putProductQuantity(req.body.id, req.body.quantity)
+    .then(() => {
+      res.status(200).json();
+      return res;
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
 
-// adding a client 
+// adding a client
 
-app.post("/api/clients", async (req, res) => {
- 
- try{
-  //const hashedPassword = await bcrypt.hash(req.body.hash,10)
-  var salt = bcrypt.genSaltSync(10);
-  const oldPassword=req.body.hash
-  const hashedPassword = await bcrypt.hash(oldPassword,salt)
-  const client={
-    budget:req.body.budget,
-    name:req.body.name,
-    surname:req.body.surname,
-    gender: req.body.gender,
-    birthdate: req.body.birthdate,
-    country: req.body.country,
-    region: req.body.region,
-    address: req.body.address,
-    city: req.body.city,
-    phone: req.body.phone,
-    email: req.body.email,
-    hash: hashedPassword
+app.post('/api/clients', async (req, res) => {
+  try {
+    //const hashedPassword = await bcrypt.hash(req.body.hash,10)
+    var salt = bcrypt.genSaltSync(10);
+    const oldPassword = req.body.hash;
+    const hashedPassword = await bcrypt.hash(oldPassword, salt);
+    const client = {
+      budget: req.body.budget,
+      name: req.body.name,
+      surname: req.body.surname,
+      gender: req.body.gender,
+      birthdate: req.body.birthdate,
+      country: req.body.country,
+      region: req.body.region,
+      address: req.body.address,
+      city: req.body.city,
+      phone: req.body.phone,
+      email: req.body.email,
+      hash: hashedPassword,
+    };
+    if (!client) {
+      res.status(400).end();
+    } else {
+      await clientsDao
+        .createClient(client)
+        .then((id) => res.status(201).json({ id: id }))
+        .catch((err) => res.status(500).json(error));
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send('Something broke!');
   }
-  if (!client) {
-    res.status(400).end();
-  } else {
-    
-   await clientsDao
-      .createClient(client)
-      .then((id) => res.status(201).json({ id: id }))
-      .catch((err) => res.status(500).json(error));
-  }
- }
- catch(e){
-   console.log(e);
-   res.status(500).send('Something broke!')
-
- }
-  
 });
 
 /* CONNECTION */

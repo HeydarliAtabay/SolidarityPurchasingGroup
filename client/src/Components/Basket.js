@@ -1,4 +1,6 @@
-import { Button, Row, Col, Card, Container } from 'react-bootstrap';
+import { Button, Row, Col, Card, Container, Alert } from 'react-bootstrap';
+import { useState } from 'react';
+
 function Basket(props) {
   const itemsPrice = props.productsBasket.reduce(
     (a, c) => a + c.price * c.qty,
@@ -45,7 +47,37 @@ function Basket(props) {
             </Col>
           </Row>
           <Row>
-            <Button className="mt-3">Confirm</Button>
+            <Button onClick={() => props.onConfirm()} className="mt-3">
+              Confirm
+            </Button>
+            <Alert show={props.showsuccess} variant="success">
+              <Alert.Heading>Order success</Alert.Heading>
+              <hr />
+              <div className="d-flex justify-content-end">
+                <Button
+                  onClick={() => props.setShowsuccess(false)}
+                  variant="outline-success"
+                >
+                  Close
+                </Button>
+              </div>
+            </Alert>
+            <Alert
+              show={props.showdanger}
+              onClose={() => props.setShowdanger(false)}
+              variant="danger"
+            >
+              <Alert.Heading>Something goes wrong</Alert.Heading>
+              <hr />
+              <div className="d-flex justify-content-end">
+                <Button
+                  onClick={() => props.setShowdanger(false)}
+                  variant="outline-success"
+                >
+                  Close
+                </Button>
+              </div>
+            </Alert>
           </Row>
         </>
       )}

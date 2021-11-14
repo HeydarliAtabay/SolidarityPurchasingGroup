@@ -1,6 +1,7 @@
 import { Button, Row, Col, Card, Container } from 'react-bootstrap';
 import { useState } from 'react';
 import Basket from './Basket';
+import API from '../API';
 
 function Booking(props) {
   //the props that I want are: a vector containg the products and a state about login or not.
@@ -8,22 +9,36 @@ function Booking(props) {
   const [productsBasket, setProductsBasket] = useState([]);
 
   const rows = [...Array(Math.ceil(props.products.length / 3))];
+  const [showsuccess, setShowsuccess] = useState(false);
+  const [showdanger, setShowdanger] = useState(false);
   const productRows = Array(rows.length);
 
   rows.forEach((row, idx) => {
     productRows[idx] = props.products.slice(idx * 3, idx * 3 + 3);
   });
-
+  const onConfirm = async () => {
+    const order = { client_id: 1, order_items: productsBasket };
+    const res = await API.insertNewOrder(order);
+    if (res.status == 200) setShowsuccess(true);
+    else {
+      setShowdanger(true);
+    }
+    props.updateProps();
+  };
   const onAdd = (product) => {
     const exist = productsBasket.find((x) => x.id === product.id);
     if (exist) {
-      setProductsBasket(
-        productsBasket.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
-        )
-      );
+      if (product.quantity >= exist.qty + 1) {
+        setProductsBasket(
+          productsBasket.map((x) =>
+            x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+          )
+        );
+      }
     } else {
-      setProductsBasket([...productsBasket, { ...product, qty: 1 }]);
+      if (product.quantity >= 1) {
+        setProductsBasket([...productsBasket, { ...product, qty: 1 }]);
+      }
     }
   };
   const onRemove = (product) => {
@@ -118,9 +133,14 @@ function Booking(props) {
           </Col>
           <Col xs={3}>
             <Basket
+              setShowsuccess={setShowsuccess}
+              setShowdanger={setShowdanger}
+              showsuccess={showsuccess}
+              showdanger={showdanger}
               productsBasket={productsBasket}
               onAdd={onAdd}
               onRemove={onRemove}
+              onConfirm={onConfirm}
               capitalizeFirstLetter={capitalizeFirstLetter}
             />
           </Col>

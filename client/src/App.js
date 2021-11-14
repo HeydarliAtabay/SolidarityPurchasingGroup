@@ -8,7 +8,7 @@ import { client, clientOrders } from './Client';
 import API from './API';
 import EmployeePage from './EmployeePage';
 import ClientPage from './ClientPage';
-import UserRegistration from './Components/UserRegistration'
+import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -23,6 +23,7 @@ function App() {
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
+  const [update, setUpdate] = useState(false); //used when an order is confirmed in order to update the quantity
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -71,18 +72,30 @@ function App() {
         });
     };
     getAllProducts();
-  }, []);
+  }, [update]);
 
   console.log(time);
   /* local objects to be deleted once we have a backend */
   const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
-  console.log(products);
+
+  function updateProps() {
+    setUpdate(!update);
+  }
 
   return (
     <Router>
       <MyNavbar time={time} setTime={setTime} />
       <Switch>
-        <Route path="/booking" render={() => <Booking products={products} />} />
+        <Route
+          path="/booking"
+          render={() => (
+            <Booking
+              products={products}
+              updateProps={updateProps}
+              time={time}
+            />
+          )}
+        />
         <Route
           path="/employee"
           render={() => (
@@ -93,10 +106,7 @@ function App() {
           path="/client"
           render={() => <ClientPage clients={clients} clientid={1} />}
         />
-        <Route
-          path="/registration"
-          render={() => <UserRegistration />}
-        />
+        <Route path="/registration" render={() => <UserRegistration />} />
         <Route
           path="/products"
           render={() => <ProductGallery products={products} />}
