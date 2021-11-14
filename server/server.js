@@ -7,6 +7,7 @@ const clientsDao = require('./DAOs/clients-dao');
 const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
+const walletsDAO = require('./DAOs/wallet-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
@@ -187,6 +188,40 @@ app.post('/api/clients', async (req, res) => {
   }
 });
 
+app.get('/api/methods', (req,res)=>{
+  walletsDAO.listAllPaymentMethods()
+      .then((methods)=>{res.json(methods)})
+      .catch((error)=>{res.status(500).json(error)} )
+})
+
+app.put('/api/clients/update/balance/:clientId/:amount',  async(req,res) => {
+  const clientId = req.params.clientId;
+  const amount =req.params.amount;
+try {
+  let task = await walletsDAO.increaseBalance(amount,clientId);
+  res.json(`Balance of client : ${clientId} was increased`);
+} catch (error) {
+  res
+    .status(500)
+    .json(
+      `Error while updating the balance of user with id: ${clientId}   ` +
+        error
+    );
+}
+});
+
+
+app.post("/api/transactions", (req, res) => {
+  const transaction = req.body;
+  if (!transaction) {
+    res.status(400).end();
+  } else {
+    walletsDAO
+      .createTransaction(transaction)
+      .then((id) => res.status(201).json({ id: id }))
+      .catch((err) => res.status(500).json(error));
+  }
+});
 /* CONNECTION */
 app.listen(PORT, () =>
   console.log(`Server running on http://localhost:${PORT}`)

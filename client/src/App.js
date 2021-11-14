@@ -4,17 +4,16 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from './Components/MyNavbar';
 import Frontpage from './Components/Frontpage';
 import Booking from './Components/Booking';
-import { client, clientOrders } from './Client';
+import { clientOrders } from './classes/ClientOrder';
 import API from './API';
-import EmployeePage from './EmployeePage';
-import ClientPage from './ClientPage';
+import EmployeePage from './Components/EmployeePage';
+import ClientPage from './Components/ClientPage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import ProductGallery from './Components/Gallery';
 
-let p = [];
 let r = [];
 
 function App() {
@@ -24,23 +23,16 @@ function App() {
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
   const [update, setUpdate] = useState(false); //used when an order is confirmed in order to update the quantity
+  const [methods, setMethods] = useState([]);
 
   const updateRech = (x) => {
     setRecharged(x);
   };
   /* USEFFECT clients */
   useEffect(() => {
-    const getClients = async () => {
-      await API.getAllClients().then((data) => {
-        data.forEach((x) => {
-          p.push(new client(x.client_id, x.budget));
-        });
-        let m = [...p];
-        p = [];
-        setClients(m);
-      });
-    };
-    getClients();
+    API.getAllClients().then((newClients) => {
+      setClients(newClients);
+    });
   }, []);
 
   /* USEFFECT orders*/
@@ -74,6 +66,15 @@ function App() {
     getAllProducts();
   }, [update]);
 
+  useEffect(() => {
+    API.getAllPaymentMethods().then((newMethods) => {
+      setMethods(newMethods);
+    });
+  }, []);
+
+  function addTransaction(tr) {
+    API.addTransaction(tr).then((err) => {});
+  }
   console.log(time);
   /* local objects to be deleted once we have a backend */
   const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
@@ -99,12 +100,18 @@ function App() {
         <Route
           path="/employee"
           render={() => (
-            <EmployeePage orders={orders} setRecharged={updateRech} />
+            <EmployeePage
+              orders={orders}
+              clients={clients}
+              methods={methods}
+              addTr={addTransaction}
+              setRecharged={updateRech}
+            />
           )}
         />
         <Route
           path="/client"
-          render={() => <ClientPage clients={clients} clientid={1} />}
+          render={() => <ClientPage clients={clients} clientid={2} />}
         />
         <Route path="/registration" render={() => <UserRegistration />} />
         <Route
