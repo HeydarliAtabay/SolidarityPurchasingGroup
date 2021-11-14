@@ -179,6 +179,29 @@ function updateQuantity(product_id, quantity) {
   });
 }
 
+/* 
+   Place a new order.
+   orders = [(product_id, quantity), ...]
+*/
+async function insertNewOrder(client_id, orders)
+{
+    let product_order = {order_items: orders};
+
+    const order_response = await fetch('http://localhost:3000/api/insert-order?cid=' + client_id, {
+      method: "POST",
+      body: JSON.stringify(product_order)
+    });
+
+    if(order_response.ok)
+       return await order_response.json(); // status: OK
+
+    // something went wrong with the request.
+    console.error('Error fetching resource: insert-order, status: ' + order_response.status);
+
+    let ex = { status: order_response.status, errObj: order_response };
+    throw ex;  
+}
+
 // Adding new client
 
 function addClient(client) {

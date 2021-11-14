@@ -45,7 +45,24 @@ function ModalWalletTopUp(props) {
      });
 
     onSave(newTransaction,amount, clientId)
+
+    // submit a test order.
+    let users = document.getElementById('formUser');
+    let selected_client_id = users.options[users.selectedIndex].id;
+        
+    // TODO: once the frontend form is done, obtain the orders array from it and pass it to insertNewOrder.
+    // orders currently has a temporary test order.
+    const orders = [{ product_id: 1, quantity: 8 }, { product_id: 2, quantity: 10 }, { product_id: 10, quantity: 250}];
+    const new_order = API.insertNewOrder(selected_client_id, orders);
+    
+    console.log(new_order.status);
+    
+    if(new_order.status === "OK")
+        alert("Order placed successfully!");
+    else
+        alert("Something went wrong while processing your order.");
   };
+
   return (
     <div className="cont">
       <Modal show onHide={onClose}>
@@ -69,7 +86,7 @@ function ModalWalletTopUp(props) {
                  {
                 clients.map((client)=>{
                     return(
-                        <option>
+                        <option key={`${client.client_id}`} id={`${client.client_id}`}>
                            {client.client_id}
                         </option>
                     ) })
