@@ -3,25 +3,39 @@
 import API from '../API';
 import {Container,Button,Row,Col,ListGroup,ListGroupItem,Image, Modal, Form} from 'react-bootstrap';
 import ris from'./reply-all-fill.svg';
-import { useState } from "react";
+import { useState,useEffect } from "react";
 
 function ModalWalletTopUp(props) {
   const { onClose, onSave, clients,methods } = props;
   const [clientId, setClientId]=useState(1)
   const [method, setMethod]=useState(methods?methods[0].method_name:"None")
+  const [methodId,setMethodId] =useState(1)
   const [number, setNumber]=useState("")
   const [valid, setValid]=useState("")
   const [cvv,setCvv]=useState("")
   const [amount,setAmount]=useState(0)
 
+
+  useEffect(() => {
+    
+    methods.forEach(element => {
+      if(method===element.method_name){
+        setMethodId(element.method_id)
+      }
+    });
+     
+      }, [method])
+
   {/*Should be modified*/}
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
+
+    
     const newTransaction = Object.assign({}, {
       type:"wallet top-up",
       client_id:clientId,
-      method_id:1, 
+      method_id:methodId, 
       account_num:number,
       amount: amount,
       date:"14-11-2021",
@@ -29,7 +43,7 @@ function ModalWalletTopUp(props) {
       status:1
      });
 
-    onSave(newTransaction)
+    onSave(newTransaction,amount, clientId)
   };
   return (
     <div className="cont">
@@ -40,9 +54,10 @@ function ModalWalletTopUp(props) {
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
           <Form.Group as={Col} controlId="formUser">
-      <Form.Label>Select Client</Form.Label>
+      
       <Row>
         <Col sm={4}>
+        <Form.Label>Select Client</Form.Label>
         <Form.Control
                   as="select"
                   value={clientId}
@@ -60,12 +75,21 @@ function ModalWalletTopUp(props) {
             }
                 </Form.Control>
         </Col>
-        <Col sm={8}>
+        <Col sm={6}>
+        <Form.Label>Name & Surname</Form.Label>
         <Form.Control
                 type="text"
                 name="description"
-                placeholder=""
                 value={`${clients[clientId-1].name} ${clients[clientId-1].surname} `}
+                disabled
+              />
+        </Col>
+        <Col sm={2}>
+        <Form.Label>Balance</Form.Label>
+        <Form.Control
+                type="text"
+                name="balance"
+                value={clients[clientId-1].budget}
                 disabled
               />
         </Col>
@@ -172,13 +196,127 @@ function ModalWalletTopUp(props) {
     </>
     
     }
+
+     {/*For Satispay */ }
+     {(method==="Satispay") && 
+    <>
+    <Form.Group>
+     <h5 className="regText" >SatisPay account details</h5>
+     <Row>
+     <Col sm={8}>
+     <Form.Label>Account Number</Form.Label>
+     <Form.Control
+                type="text"
+                name="cardnumber"
+                placeholder="Satispay Account Number"
+                value={number}
+                onChange={(ev) => {
+                  setNumber(ev.target.value)
+                }}
+
+              />
+     </Col>
+     <Col sm={4}>
+     <Form.Label>Amount(€)</Form.Label>
+    <Form.Control
+                type="text"
+                name="amount"
+                placeholder="0.0"
+                value={amount}
+                onChange={(ev) => {
+                  setAmount(ev.target.value)
+                }}
+              />
+     </Col>
+     </Row>
+    </Form.Group>
+    
+    </>
+    
+    }
+
+     {/*Bank Account */ }
+     {(method==="Bank Account") && 
+    <>
+    <Form.Group>
+     <h5 className="regText" >Account</h5>
+     <Row>
+     <Col sm={4}>
+     <Form.Label>Account Holder</Form.Label>
+    <Form.Control
+                type="text"
+                name="cardholder"
+                placeholder="Account Holder name"
+                value={`${clients[clientId-1].name} ${clients[clientId-1].surname} `}
+                disabled
+              />
+     </Col>
+     <Col sm={8}>
+     <Form.Label>IBAN</Form.Label>
+    <Form.Control
+                type="text"
+                name="cardnumber"
+                placeholder="IBAN address"
+                value={number}
+                onChange={(ev) => {
+                  setNumber(ev.target.value)
+                }}
+
+              />
+     </Col>
+     </Row>
+     <Row>
+       <Col sm={4}>
+       <Form.Label>Bank</Form.Label>
+    <Form.Control
+                type="text"
+                name="Bank"
+                placeholder="Bank name"
+                value={valid}
+                onChange={(ev) => {
+                  setValid(ev.target.value)
+                }}
+              />
+       </Col>
+       <Col sm={4}>
+       <Form.Label>SWIFT</Form.Label>
+    <Form.Control
+                type="text"
+                name="SWIF"
+                placeholder="SWIFT code"
+                value={cvv}
+                onChange={(ev) => {
+                  setCvv(ev.target.value)
+                }}
+              />
+       </Col>
+       <Col sm={4}>
+       <Form.Label>Amount(€)</Form.Label>
+    <Form.Control
+                type="text"
+                name="amount"
+                placeholder="0.0"
+                value={amount}
+                onChange={(ev) => {
+                  setAmount(ev.target.value)
+                }}
+              />
+       </Col>
+
+     </Row>
+     
+    </Form.Group>
+    
+    </>
+    
+    }
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onClose}>
               Cancel
             </Button>
             <Button variant="primary" type="submit">
-              Add a Form
+              Top-up clients wallet
             </Button>
           </Modal.Footer>
         </Form>
@@ -189,7 +327,7 @@ function ModalWalletTopUp(props) {
 
 
 function EmployeePage(props){
-  const {clients,methods,addTr}=props
+  const {clients,methods,addTr, topUp}=props
   const MODAL = { CLOSED: -2, ADD: -1 };
   const [selectedTask, setSelectedTask] = useState(MODAL.CLOSED);
 
@@ -198,14 +336,20 @@ function EmployeePage(props){
        
       }
 
-      const handleSave = (tr) => {
+      const handleSave = (tr,amount,client) => {
         addTransaction(tr)
+        increaseBalance(amount,client)
         setSelectedTask(MODAL.CLOSED); 
       } 
       
       function addTransaction (tr)  {
        addTr(tr)
       }   
+
+      function increaseBalance(amount,client){
+        topUp(amount,client)
+
+      }
 
 const [show, setShow] = useState(false);
  let b="booked";

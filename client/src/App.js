@@ -76,6 +76,10 @@ function App() {
     function addTransaction (tr)  {
       API.addTransaction(tr).then((err)=>{})
     }
+
+    function topUpBalance (amount,client)  {
+      API.increaseBalance(amount,client).then((err)=>{})
+    }
   console.log(time);
   /* local objects to be deleted once we have a backend */
   const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
@@ -89,7 +93,7 @@ function App() {
         <Route
           path="/employee"
           render={() => (
-            <EmployeePage orders={orders} clients={clients} methods={methods} addTr={addTransaction} setRecharged={updateRech} />
+            <EmployeePage orders={orders} clients={clients} methods={methods} addTr={addTransaction} topUp={topUpBalance} setRecharged={updateRech} />
           )}
         />
         <Route
