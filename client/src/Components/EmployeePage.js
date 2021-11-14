@@ -7,6 +7,12 @@ import { useState } from "react";
 
 function ModalWalletTopUp(props) {
   const { onClose, onSave, clients,methods } = props;
+  const [clientId, setClientId]=useState(1)
+  const [method, setMethod]=useState(methods?methods[0].method_name:"None")
+  const [number, setNumber]=useState("")
+  const [valid, setValid]=useState("")
+  const [cvv,setCvv]=useState("")
+  const [amount,setAmount]=useState(0)
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -23,22 +29,137 @@ function ModalWalletTopUp(props) {
           <Modal.Body>
           <Form.Group as={Col} controlId="formUser">
       <Form.Label>Select Client</Form.Label>
-      <Form.Control
+      <Row>
+        <Col sm={4}>
+        <Form.Control
                   as="select"
-                 
+                  value={clientId}
                   onChange={(ev) => {
+                    setClientId(ev.target.value)
                   }}
                 >
                  {
                 clients.map((client)=>{
                     return(
                         <option>
-                           {`${client.client_id}. ${client.name} ${client.surname}`} 
+                           {client.client_id}
+                        </option>
+                    ) })
+            }
+                </Form.Control>
+        </Col>
+        <Col sm={8}>
+        <Form.Control
+                type="text"
+                name="description"
+                placeholder=""
+                value={`${clients[clientId-1].name} ${clients[clientId-1].surname} `}
+                disabled
+              />
+        </Col>
+      
+      </Row>
+     
+                
+    </Form.Group>
+
+   
+
+    <Form.Group as={Col} controlId="formMethod">
+      <Form.Label>Select Payment Method</Form.Label>
+      <Form.Control
+                  as="select"
+                 value={method}
+                  onChange={(ev) => {
+                    setMethod(ev.target.value)
+                  }}
+                >
+                 {
+                methods.map((method)=>{
+                    return(
+                        <option>
+                          {method.method_name} 
                         </option>
                     ) })
             }
                 </Form.Control>
     </Form.Group>
+
+     {/*For debit/credit card payment */ }
+     {(method==="Credit/debit card") && 
+    <>
+    <Form.Group>
+     <h5 className="regText" >Card details</h5>
+     <Row>
+     <Col sm={4}>
+     <Form.Label>Card Holder</Form.Label>
+    <Form.Control
+                type="text"
+                name="cardholder"
+                placeholder="Card Holder name"
+                value={`${clients[clientId-1].name} ${clients[clientId-1].surname} `}
+                disabled
+              />
+     </Col>
+     <Col sm={8}>
+     <Form.Label>Card No</Form.Label>
+    <Form.Control
+                type="text"
+                name="cardnumber"
+                placeholder="Card Number"
+                value={number}
+                onChange={(ev) => {
+                  setNumber(ev.target.value)
+                }}
+
+              />
+     </Col>
+     </Row>
+     <Row>
+       <Col sm={4}>
+       <Form.Label>Valid</Form.Label>
+    <Form.Control
+                type="text"
+                name="validity"
+                placeholder="MM/YY"
+                value={valid}
+                onChange={(ev) => {
+                  setValid(ev.target.value)
+                }}
+              />
+       </Col>
+       <Col sm={4}>
+       <Form.Label>CVV</Form.Label>
+    <Form.Control
+                type="text"
+                name="cvv"
+                placeholder="CVV"
+                value={cvv}
+                onChange={(ev) => {
+                  setCvv(ev.target.value)
+                }}
+              />
+       </Col>
+       <Col sm={4}>
+       <Form.Label>Amount(€)</Form.Label>
+    <Form.Control
+                type="text"
+                name="amount"
+                placeholder="0.0"
+                value={amount}
+                onChange={(ev) => {
+                  setAmount(ev.target.value)
+                }}
+              />
+       </Col>
+
+     </Row>
+     
+    </Form.Group>
+    
+    </>
+    
+    }
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={onClose}>
