@@ -4,17 +4,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from './Components/MyNavbar';
 import Frontpage from './Components/Frontpage';
 import Booking from './Components/Booking';
-import { client, clientOrders } from './Client';
+import { clientOrders } from './classes/ClientOrder';
 import API from './API';
-import EmployeePage from './EmployeePage';
-import ClientPage from './ClientPage';
+import EmployeePage from './Components/EmployeePage';
+import ClientPage from './Components/ClientPage';
 import UserRegistration from './Components/UserRegistration'
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import ProductGallery from './Components/Gallery';
 
-let p = [];
+
 let r = [];
 
 function App() {
@@ -90,7 +90,7 @@ function App() {
         />
         <Route
           path="/client"
-          render={() => <ClientPage clients={clients} clientid={1} />}
+          render={() => <ClientPage clients={clients} clientid={2} />}
         />
         <Route
           path="/registration"
