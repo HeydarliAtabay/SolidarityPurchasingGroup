@@ -18,9 +18,7 @@ exports.getAllOrders=()=>{
             reject(err);
             return;
         }
-         const o=rows.map((e)=>({client_id:e.client_id, budget :e.budget, name:e.name, surname:e.surname, gender:e.gender,birthdate:e.birthdate,
-        country:e.country, region:e.region, address: e.address, city: e.city, phone:e.phone, email:e.email
-        }));
+        const o=rows.map((e)=>({order_id:e.order_id, client_id:e.client_id, product_name:e.product_name, state:e.state}));
         resolve(o);  });
 
     }   );

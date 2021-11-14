@@ -18,7 +18,9 @@ exports.getAllClients=()=>{
             reject(err);
             return;
         }
-        const o=rows.map((e)=>({client_id:e.client_id, budget :e.budget}));
+        const o=rows.map((e)=>({client_id:e.client_id, budget :e.budget, name:e.name, surname:e.surname, gender:e.gender,birthdate:e.birthdate,
+          country:e.country, region:e.region, address: e.address, city: e.city, phone:e.phone, email:e.email
+          }));
         resolve(o);
     });
 
