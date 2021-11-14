@@ -4,6 +4,7 @@ import API from '../API';
 import {Container,Button,Row,Col,ListGroup,ListGroupItem,Image, Modal, Form} from 'react-bootstrap';
 import ris from'./reply-all-fill.svg';
 import { useState,useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
 function ModalWalletTopUp(props) {
   const { onClose, onSave, clients,methods } = props;
@@ -328,6 +329,7 @@ function ModalWalletTopUp(props) {
 
 function EmployeePage(props){
   const {clients,methods,addTr, topUp}=props
+  const history=useHistory()
   const MODAL = { CLOSED: -2, ADD: -1 };
   const [selectedTask, setSelectedTask] = useState(MODAL.CLOSED);
 
@@ -369,6 +371,13 @@ const [show, setShow] = useState(false);
 <Button variant="light" style={{'fontSize': 20,'borderStyle':'hidden','backgroundColor':"#ffb6c1"}} 
  onClick={() =>  {setShow(false);setSelectedTask(MODAL.ADD)}}
 > Make a top-up of the client wallet </Button>
+</ListGroupItem >
+<ListGroupItem key={"1000000*"} >
+<Button variant="light" style={{'fontSize': 20,'borderStyle':'hidden','backgroundColor':"#ffb6c1"}} 
+onClick={(event) => {
+  history.push("/registration")
+}}
+> Make a registration for the new client </Button>
 </ListGroupItem >
 </ListGroup></Col>
 {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>} 
