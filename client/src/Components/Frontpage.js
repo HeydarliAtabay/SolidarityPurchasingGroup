@@ -103,7 +103,7 @@ function Frontpage(props) {
                     <h1>Solidarity Purchasing Group</h1>
                     <br></br>
                 </div>
-                <div className="d-block w-75 mx-auto">
+                <div className="d-block w-75 mx-auto shadow-lg">
                     <Carousel variant="dark">
                         <Carousel.Item interval={10000}>
                             <img
@@ -141,7 +141,7 @@ function Frontpage(props) {
                     </Carousel>
 
                 </div>
-                <div className="d-block w-100 pt-5 pb-3 px-5 mt-5 bg-warning">
+                <div className="d-block w-100 pt-5 pb-3 px-5 mt-5 bg-warning rounded">
                     <div className="d-flex justify-content-between">
                         <div className="d-block w-50">
                             <h2 className="d-block">Meet our products</h2>
@@ -165,7 +165,7 @@ function Frontpage(props) {
                         </Link>
                     </div>
                 </div>
-                <div className="d-block w-100 pt-5 pb-0 px-5 bg-secondary">
+                <div className="d-block w-100 pt-5 pb-0 px-5 bg-secondary rounded">
                     <div className="d-flex justify-content-between">
                         <div className="w-35-custom">
                             <img
@@ -189,7 +189,7 @@ function Frontpage(props) {
                     </div>
                     <br />
                 </div>
-                <div className="d-block w-100 pt-5 pb-0 px-5 bg-primary">
+                <div className="d-block w-100 pt-5 pb-0 px-5 bg-primary rounded">
                     <div className="d-flex justify-content-between">
                         <div className="d-block w-50">
                             <h2 className="d-block text-light">Lorem ipsum</h2>
