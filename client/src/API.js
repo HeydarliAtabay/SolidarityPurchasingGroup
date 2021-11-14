@@ -126,5 +126,25 @@ function addClient(client) {
   });
 }
 
-const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById, addClient}
+//GET ->retrieve payment methods 
+async function getAllPaymentMethods(){
+
+  const response=await fetch("http://localhost:3000/api/methods");
+  if(response.ok){
+    const responseBody=await response.json();
+    return responseBody;
+  }
+   else{
+       try {
+         const err=await response.json();
+         throw err.message;}
+          catch(err){throw err;}
+       }
+   }
+
+
+
+const API = {getAllClients, getAllOrders,updateDelivered, getAllProducts, getProductById, getAllProviders, getProviderById, addClient,
+      getAllPaymentMethods
+}
 export default API;
