@@ -7,6 +7,7 @@ const clientsDao = require('./DAOs/clients-dao');
 const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
+const walletsDAO = require('./DAOs/wallet-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
@@ -170,6 +171,12 @@ app.post("/api/clients", async (req, res) => {
  }
   
 });
+
+app.get('/api/methods', (req,res)=>{
+  walletsDAO.listAllPaymentMethods()
+      .then((methods)=>{res.json(methods)})
+      .catch((error)=>{res.status(500).json(error)} )
+})
 
 /* CONNECTION */
 app.listen(PORT, () =>
