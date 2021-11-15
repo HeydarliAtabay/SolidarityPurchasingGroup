@@ -15,7 +15,7 @@ function Basket(props) {
             <Button
               variant="success"
               width="16"
-              onClick={() => props.onAdd(item)}
+              onClick={() => props.onAdd(item, 1)}
             >
               +
             </Button>
@@ -31,7 +31,7 @@ function Basket(props) {
             </Button>{' '}
           </Col>
           <Col>
-            {item.qty}x€{item.price.toFixed(2)}
+            {item.qty}{item.unit} x €{item.price.toFixed(2)}
           </Col>
         </Row>
       ))}
@@ -46,7 +46,7 @@ function Basket(props) {
             <Button onClick={() => props.onConfirm()} className="mt-3">
               Confirm
             </Button>
-            <Alert show={props.showsuccess} variant="success">
+            <Alert className="m-3" show={props.showsuccess} variant="success">
               <Alert.Heading>Order success</Alert.Heading>
               <hr />
               <div className="d-flex justify-content-end">
@@ -59,6 +59,7 @@ function Basket(props) {
               </div>
             </Alert>
             <Alert
+              className="m-3"
               show={props.showdanger}
               onClose={() => props.setShowdanger(false)}
               variant="danger"
@@ -68,7 +69,7 @@ function Basket(props) {
               <div className="d-flex justify-content-end">
                 <Button
                   onClick={() => props.setShowdanger(false)}
-                  variant="outline-success"
+                  variant="outline-danger"
                 >
                   Close
                 </Button>

@@ -1,4 +1,4 @@
-import { Button, Row, Col, Card, Container, Modal } from 'react-bootstrap';
+import { Button, Row, Col, Card, Container, Modal, Dropdown } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import API from './../API'
 import Basket from './Basket';
@@ -16,13 +16,15 @@ function Booking(props) {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const rows = [...Array(Math.ceil(products.filter((p) => (p && p.active === 1)).length / 3))];
-  const productRows = Array(rows.filter(r => (r && r.active === 1)).length);
+  let rows = [...Array(Math.ceil(products.filter((p) => (p && p.active === 1)).length / 3))];
+  let productRows = Array(rows.filter(r => (r && r.active === 1)).length);
 
   const itemsPrice = productsBasket.reduce((a, c) => a + c.price * c.qty, 0); //a=accumulator c=current, so it computes the total
 
   const [showsuccess, setShowsuccess] = useState(false);
   const [showdanger, setShowdanger] = useState(false);
+
+  const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
 
   /*USEFFECT products*/
   useEffect(() => {
@@ -53,12 +55,13 @@ function Booking(props) {
 
     setProducts(prods => (
       prods.map(p => {
-        if (searchTerm === "" ||
-          (activeCategory === "All" && p.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          (p.category === activeCategory && p.name.toLowerCase().includes(searchTerm.toLowerCase()))) {
+        if (/*searchTerm === "" ||*/
+          (activeCategory === "All" /*&& p.name.toLowerCase().includes(searchTerm.toLowerCase())*/) ||
+          (p.category === activeCategory /*&& p.name.toLowerCase().includes(searchTerm.toLowerCase())*/)) {
           p.active = 1;
           return p;
         }
+
         p.active = 0;
         return p;
       })
@@ -70,8 +73,13 @@ function Booking(props) {
   });
 
   const onConfirm = async () => {
+    if (props.isEmployee && selectedUser.client_id === -1) {
+      setShowdanger(true);
+      return;
+    }
+
     const order = {
-      client_id: 1,
+      client_id: props.isEmployee ? selectedUser.client_id : 1,
       order_items: productsBasket,
       total: itemsPrice.toFixed(2),
     };
@@ -83,19 +91,19 @@ function Booking(props) {
     props.updateProps();
   };
 
-  const onAdd = (product) => {
+  const onAdd = (product, buyQty) => {
     const exist = productsBasket.find((x) => x.id === product.id);
     if (exist) {
-      if (product.quantity >= exist.qty + 1) {
+      if (product.quantity >= exist.qty + buyQty) {
         setProductsBasket(
           productsBasket.map((x) =>
-            x.id === product.id ? { ...exist, qty: exist.qty + 1 } : x
+            x.id === product.id ? { ...exist, qty: exist.qty + buyQty } : x
           )
         );
       }
     } else {
-      if (product.quantity >= 1) {
-        setProductsBasket([...productsBasket, { ...product, qty: 1 }]);
+      if (product.quantity >= buyQty) {
+        setProductsBasket([...productsBasket, { ...product, qty: buyQty }]);
       }
     }
   };
@@ -145,10 +153,10 @@ function Booking(props) {
                       variant="primary"
                       className="mb-1 align-middle"
                       onClick={() => {
-                        onAdd(productline);
+                        onAdd(productline, 1);
                       }}
                     >
-                      {cartIcon} Add to Booking List
+                      {cartIcon} Add to Basket
                     </Button>
                     <Button
                       variant="secondary"
@@ -184,25 +192,46 @@ function Booking(props) {
 
   return (
     <>
-      <Container className="mx-3 w-100-custom">
+      <Container fluid className="mx-3 w-100-custom">
         <span className="d-block text-center mt-5 mb-2 display-2">
           Product Booking
         </span>
         <h5 className="d-block mx-auto mb-5 text-center text-muted">
-          Choose below the products you want to add to your Booking List
+          Choose below the products you want to book for the client
         </h5>
+        {props.isEmployee ?
+          <div className="d-block text-center">
+            <Dropdown className="d-block mb-3" value={selectedUser.client_id}>
+              <Dropdown.Toggle variant="success" id="dropdown-basic">
+                Select the desired client
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                {props.clients.map((c) => (
+                  <Dropdown.Item onClick={() => (setSelectedUser(c))} key={c.client_id} value={c.client_id} eventKey={c.client_id}><b>{c.name} {c.surname}</b> ({c.email})</Dropdown.Item>
+                ))}
+
+              </Dropdown.Menu>
+            </Dropdown>
+            {selectedUser.client_id !== -1 ? <h6 className="fw-bold">Ordering for: {selectedUser.name + " " + selectedUser.surname + " " + selectedUser.email}</h6> : ''}
+          </div>
+          :
+          ''
+        }
         {isLogged ? (
           <Row className>
             <Col lg={9} className="my-5 vertical-separator-products text-center">
               <div className="d-block mx-5 my-3">
                 <div className="container">
                   <div className="row">
+                    {/*
                     <div className="col-lg-9 text-center">
                       <input className="form-control mb-2" value={searchTerm} onChange={(event) => (setSearchTerm(event.target.value))} placeholder="Search for products here" />
                     </div>
                     <div className="col-lg-3 text-center">
                       <button className="btn btn-primary px-5" onClick={() => (filterProducts())} >Search</button>
                     </div>
+                    */}
                   </div>
                 </div>
 
@@ -261,7 +290,7 @@ function Booking(props) {
           <Modal.Title>{capitalizeFirstLetter(currentProductDetails ? currentProductDetails.name : '')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <ProductPage prod={currentProductDetails} operationType="booking"></ProductPage>
+          <ProductPage onAdd={onAdd} setShowProductDetailsModal={setShowProductDetailsModal} prod={currentProductDetails} operationType="booking"></ProductPage>
         </Modal.Body>
         <Modal.Footer>
           <button className="btn btn-secondary" onClick={() => (setShowProductDetailsModal(false))}>Back to the products</button>

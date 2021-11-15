@@ -70,6 +70,14 @@ code {
   border-left: solid 1px rosybrown;
 }
 
+.vertical-separator-products{
+  border-right: solid 1px rosybrown;
+}
+
+.hr-color-custom{
+  color: rosybrown;
+}
+
 .carousel-custom-background{
   background-color: rgba(255,255,255,0.75);
 }
@@ -104,4 +112,21 @@ code {
 
 .bg-color-frontpage{
   background-color: linen;
+}
+
+.sticky-button-custom{
+  z-index: 1020;
+  position: fixed;
+  bottom: -20px;
+  right: 10px;
+}
+
+.w-100-custom{
+  min-width: 100%;
+}
+
+.client-area-450px-width-custom{
+  width: 450px!important;
+  min-width: 450px!important;
+  max-width: 450px!important;
 }

@@ -10,19 +10,19 @@ function ProductPage(props) {
 
     const RemoveProduct = () => {
         setBuyQuantity((qty) => {
-            if (qty - 0.5 < 0) {
+            if (qty - 1 < 0) {
                 return qty;
             }
-            return qty - 0.5;
+            return qty - 1;
         });
     }
 
     const AddProduct = () => {
         setBuyQuantity((qty) => {
-            if (qty + 0.5 > props.prod.quantity) {
+            if (qty + 1 > props.prod.quantity) {
                 return qty;
             }
-            return qty + 0.5;
+            return qty + 1;
         });
     }
 
@@ -55,7 +55,11 @@ function ProductPage(props) {
                             </div>
                         </div>
                         <div className="d-block text-center mt-3">
-                            <button className="btn btn-success mx-2">Add to basket</button>
+                            <button className="btn btn-success mx-2" onClick={() => {
+                                props.onAdd(props.prod, buyQuantity);
+                                props.setShowProductDetailsModal(false);
+                            }
+                            }>Add to basket</button>
                         </div>
                         <hr />
                         <div className="d-block mx-2">

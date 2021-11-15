@@ -18,7 +18,7 @@ const Navbar = function (props) {
                             <a className="nav-link active" aria-current="page" href="/client">Client</a>
                         </li>
                         <li className="nav-item">
-                            <a className="nav-link active" aria-current="page" href="/staff">Staff</a>
+                            <a className="nav-link active" aria-current="page" href="/employee">Staff</a>
                         </li>
                         <li className="nav-item">
                             <a className="nav-link active" aria-current="page" href="/farmer">Farmer</a>
