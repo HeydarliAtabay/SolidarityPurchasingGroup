@@ -12,8 +12,8 @@ return (<>
   <>
   {show?
       <Alert style={{'backgroundColor':"#dc143c"}} onClose={() => setShow(false)} dismissible >
-        <Alert.Heading style={{'fontSize': 22}}>-ATTENTION-</Alert.Heading>
-        <p style={{'fontSize': 22}}>
+        <Alert.Heading data-testid="alertH"style={{'fontSize': 22}}>-ATTENTION-</Alert.Heading>
+        <p data-testid="alert" style={{'fontSize': 22}}>
           Your wallet balance is insufficient. Please top it up!
         </p>
       </Alert>:<></>}</>:<></>}</Row></Container>
