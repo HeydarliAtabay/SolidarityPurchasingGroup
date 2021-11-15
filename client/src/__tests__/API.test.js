@@ -244,3 +244,70 @@ describe('test GetProviderByID', () => {
         });
     });
 });
+
+describe('test getAllPaymentMethods', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+        API.getAllPaymentMethods().then( (data) => {
+            expect.assertions(1);
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getAllPaymentMethods().catch((data) => {
+            expect.assertions(1);
+            expect(data.status).toBe(500);
+        });
+    });
+});
+
+describe('test addClient', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+        API.addClient('client').then( (data) => {
+            expect.assertions(1);
+            expect(data).toBeNull();
+        });
+    });
+    test('response not ok, json ok', () => {
+        fetch.mockResponseOnce(JSON.stringify({err: 'API error'}), { status: 500 });
+        API.addClient('client').catch( (data) => {
+            expect.assertions(1);
+            expect(data.err).toEqual('API error');
+        });
+    });
+    
+    test('response not ok, json null', () => {
+        fetch.mockResponseOnce(null, { status: 500 });
+        API.addClient('client').catch( (data) => {
+            expect.assertions(1);
+            expect(data.err).toEqual('API error');
+        });
+    });
+});
+
+describe('test addTransaction', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+        API.addTransaction('transaction').then( (data) => {
+            expect.assertions(1);
+            expect(data).toBeNull();
+        });
+    });
+    test('response not ok, json ok', () => {
+        fetch.mockResponseOnce(JSON.stringify({err: 'API error'}), { status: 500 });
+        API.addTransaction('transaction').catch( (data) => {
+            expect.assertions(1);
+            expect(data.err).toEqual('API error');
+        });
+    });
+    
+    test('response not ok, json null', () => {
+        fetch.mockResponseOnce(null, { status: 500 });
+        API.addTransaction('transaction').catch( (data) => {
+            expect.assertions(1);
+            expect(data.err).toEqual('API error');
+        });
+    });
+});
