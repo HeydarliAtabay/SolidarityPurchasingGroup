@@ -1,7 +1,7 @@
 import { Button, Row, Carousel, Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom"
-import ClientPage from './ClientPage'
+import ClientAlert from './ClientAlert'
 function ClientArea(props) {
 
   
@@ -13,7 +13,7 @@ function ClientArea(props) {
                 Client Area
             </span>
             <div className="d-block">
-                <ClientPage clients={props.clients} clientid={props.clientid}/>
+                <ClientAlert clients={props.clients} clientid={props.clientid}/>
             </div>
             <div className="col-lg-3">
                 <div className="card mx-3 my-2 shadow-sm">
