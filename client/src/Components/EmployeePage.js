@@ -129,10 +129,10 @@ function ModalWalletTopUp(props) {
                 }}
               >
                 {
-                  methods.map((method) => {
+                  methods.map((singlemethod) => {
                     return (
                       <option>
-                        {method.method_name}
+                        {singlemethod.method_name}
                       </option>
                     )
                   })
