@@ -1,10 +1,10 @@
 import { Button, Row, Carousel, Alert } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom"
-
+import ClientPage from './ClientPage'
 function ClientArea(props) {
 
-    const [show, setShow] = useState(true);
+  
 
     return (
 
@@ -13,16 +13,7 @@ function ClientArea(props) {
                 Client Area
             </span>
             <div className="d-block">
-                {(props.clients.find(s => (s.client_id === props.clientid && s.budget === 0))) ?
-                    <>
-                        {show ?
-                            <Alert className="m-5 text-center" variant="danger" onClose={() => setShow(false)} dismissible >
-                                <Alert.Heading style={{ 'fontSize': 22 }}>-ATTENTION-</Alert.Heading>
-                                <p style={{ 'fontSize': 22 }}>
-                                    Your wallet balance is insufficient. Please top it up!
-                                </p>
-                            </Alert> : <></>}</> : <></>
-                }
+                <ClientPage clients={props.clients} clientid={props.clientid}/>
             </div>
             <div className="col-lg-3">
                 <div className="card mx-3 my-2 shadow-sm">
