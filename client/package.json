@@ -30,10 +30,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "react-scripts test --watchAll=false --silent --env=jsdom --coverage --testResultsProcessor jest-sonar-reporter",
+    "eject": "react-scripts eject",
+    "coverage": "npm test -- --coverage --watchAll=false --reporters=jest-junit"
   },
-  
   "jest-junit": {
     "outputDirectory": ".",
     "outputName": "test-report.xml",

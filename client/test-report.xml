@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\__tests__\API.test.js">
+  </file>
+  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\App.test.js">
+    <testCase name="renders learn react link" duration="321">
+      <failure message="TestingLibraryElementError: Unable to find an element with the text: /learn react/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible."><![CDATA[TestingLibraryElementError: Unable to find an element with the text: /learn react/i. This could be because the text is broken up by multiple elements. In this case, you can provide a function for your text matcher to make your matcher more flexible.
+
+<body>
+  <div>
+    <nav
+      class="navbar navbar-expand-lg menu-bar"
+    >
+      <div
+        class="container-fluid"
+      >
+        <a
+          class="navbar-brand"
+          href="#"
+        >
+          Solidarity Purchasing Group
+        </a>
+        <button
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          class="navbar-toggler"
+          data-bs-target="#navbarNav"
+          data-bs-toggle="collapse"
+          type="button"
+        >
+          <span
+            class="navbar-toggler-icon"
+          />
+        </button>
+        <div
+          class="collapse navbar-collapse"
+          id="navbarNav"
+        >
+          <ul
+            class="navbar-nav me-auto mb-2 mb-lg-0"
+          >
+            <li
+              class="nav-item"
+            >
+              <a
+                aria-current="page"
+                class="nav-link active"
+                href="/home"
+              >
+                Home
+              </a>
+            </li>
+            <li
+              class="nav-item"
+            >
+              <a
+                aria-current="page"
+                class="nav-link active"
+                href="/client"
+              >
+                Client
+              </a>
+            </li>
+            <li
+              class="nav-item"
+            >
+              <a
+                aria-current="page"
+                class="nav-link active"
+                href="/staff"
+              >
+                Staff
+              </a>
+            </li>
+            <li
+              class="nav-item"
+            >
+              <a
+                aria-current="page"
+                class="nav-link active"
+                href="/farmer"
+              >
+                Farmer
+              </a>
+            </li>
+          </ul>
+          <form
+            class="form-inline"
+          >
+            <select
+              class="form-control-sm mr-2"
+            >
+              <option
+                selected=""
+                value="monday"
+              >
+                Monday
+              </option>
+              <option
+                value="tuesday"
+              >
+                Tuesday
+              </option>
+              <option
+                value="wednesday"
+              >
+                Wednesday
+              </option>
+              <option
+                value="thursday"
+              >
+                Thursday
+              </option>
+              <option
+                value="friday"
+              >
+                Friday
+              </option>
+              <option
+                value="saturday"
+              >
+                Saturday
+              </option>
+              <option
+                value="sunday"
+              >
+                Sunday
+              </option>
+            </select>
+            <select
+              class="form-control-sm mr-3"
+            >
+              <option
+                value="00"
+              >
+                00:00
+              </option>
+              <option
+                value="01"
+              >
+                01:00
+              </option>
+              <option
+                value="02"
+              >
+                02:00
+              </option>
+              <option
+                value="03"
+              >
+                03:00
+              </option>
+              <option
+                value="04"
+              >
+                04:00
+              </option>
+              <option
+                value="05"
+              >
+                05:00
+              </option>
+              <option
+                value="06"
+              >
+                06:00
+              </option>
+              <option
+                value="07"
+              >
+                07:00
+              </option>
+              <option
+                value="08"
+              >
+                08:00
+              </option>
+              <option
+                value="09"
+              >
+                09:00
+              </option>
+              <option
+                selected=""
+                value="10"
+              >
+                10:00
+              </option>
+              <option
+                value="11"
+              >
+                11:00
+              </option>
+              <option
+                value="12"
+              >
+                12:00
+              </option>
+              <option
+                value="13"
+              >
+                13:00
+              </option>
+              <op...
+    at Object.getElementError (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\@testing-library\dom\dist\config.js:37:19)
+    at C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\@testing-library\dom\dist\query-helpers.js:90:38
+    at C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\@testing-library\dom\dist\query-helpers.js:62:17
+    at getByText (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\@testing-library\dom\dist\query-helpers.js:111:19)
+    at Object.<anonymous> (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\App.test.js:6:30)
+    at Promise.then.completed (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\utils.js:276:28)
+    at new Promise (<anonymous>)
+    at callAsyncCircusFn (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\utils.js:216:10)
+    at _callCircusTest (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\run.js:212:40)
+    at processTicksAndRejections (internal/process/task_queues.js:93:5)
+    at _runTest (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\run.js:149:3)
+    at _runTestsForDescribeBlock (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\run.js:63:9)
+    at run (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\run.js:25:3)
+    at runAndTransformResultsToJestFormat (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapterInit.js:176:21)
+    at jestAdapter (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-circus\build\legacy-code-todo-rewrite\jestAdapter.js:109:19)
+    at runTestInternal (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-runner\build\runTest.js:380:16)
+    at runTest (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-runner\build\runTest.js:472:34)
+    at Object.worker (C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\node_modules\jest-runner\build\testWorker.js:133:12)]]></failure>
+    </testCase>
+  </file>
+</testExecutions>
