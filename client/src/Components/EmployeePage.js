@@ -1,6 +1,7 @@
 import API from '../API';
+import DeliverList from './DeliverList';
 import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
-import ris from './reply-all-fill.svg';
+
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -408,40 +409,8 @@ function EmployeePage(props) {
         {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
 
         <Col xs={5} md={5}>
-          {show ? <ListGroup variant="flush">
-            <ListGroupItem key={"1000000000000000*"} style={{ 'backgroundColor': "#ffb6c1" }}>
-              <Row>
-                <Col xs={3} md={3}>ORDER_ID</Col>
-                <Col xs={3} md={3}>CLIENT_ID</Col>
-                <Col xs={3} md={3}>PRODUCT</Col>
-                <Col xs={3} md={3}>DELIVER</Col>
-              </Row></ListGroupItem>
-            {props.orders.filter(x => x.state === b).map((s) =>
-
-              <ListGroupItem key={s.order_id} style={{ 'backgroundColor': "#ffe4e1" }}>
-                <Row><Col xs={3} md={3}>{s.order_id}</Col>
-                  <Col xs={3} md={3}>{s.client_id}</Col>
-                  <Col xs={3} md={3}>{s.product_name}</Col>
-
-
-                  <Col xs={3} md={3}>
-                    <Image src={ris} style={{ 'cursor': 'pointer' }} onClick={() => {
-                      API.updateDelivered(s.order_id).then(() => {
-
-
-                        props.setRecharged(true);
-
-                      })
-                      //api->update state
-                      //set recharged della tabella ordini-clienti
-                    }}></Image>
-                  </Col>
-                </Row>
-              </ListGroupItem>)
-
-            }<ListGroupItem>
-              <Button variant={"light"} style={{ 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1", 'position': 'absolute', 'right': '15px' }} onClick={() => { setShow(false); }}>Close</Button></ListGroupItem>
-          </ListGroup> : <></>}
+          {show ?   //set recharged della tabella ordini-clienti
+                  <DeliverList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />: <></>}
         </Col></Row>
       <br />
 
