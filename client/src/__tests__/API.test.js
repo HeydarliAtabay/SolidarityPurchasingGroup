@@ -24,3 +24,56 @@ describe('test AllPaymentMethods', () => {
         });
     });*/
 });
+
+describe('test getAllClients', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce({ mockData: 'test' });
+        API.getAllClients().then( (data) => {
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        API.getAllClients().catch((data) => {
+           
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('Communicate with server failed');
+        });
+   
+});});
+
+describe('test getAllOrders', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce({ mockData: 'test' });
+        API.getAllOrders().then( (data) => {
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        API.getAllOrders().catch((data) => {
+           
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('Communicate with server failed');
+        });
+   
+});});
+
+
+describe('test updateDelivered(order_id)', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce({ mockData: 'test' });
+        API.updateDelivered(1).then( (data) => {
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        API.updateDelivered(1).catch((data) => {
+           
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('Communicate with server failed');
+        });
+   
+});
+});
