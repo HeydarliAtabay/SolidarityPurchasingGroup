@@ -87,6 +87,17 @@ async function getProductById(product_id) {
   }
 }
 
+//GET all categories
+async function getAllCategories() {
+  const response = await fetch('http://localhost:3000/api/products/categories');
+  if (response.ok) {
+      return await response.json();
+  } else {
+      let err = { status: response.status, errObj: response };
+      throw err;  // An object with the error coming from the server
+  }
+}
+
 //GET all providers
 async function getAllProviders() {
   const response = await fetch('http://localhost:3000/api/providers/all');
@@ -359,5 +370,6 @@ const API = {
   insertNewOrder,
   updateQuantity,
   insertNewBookOrder,
+  getAllCategories
 };
 export default API;
