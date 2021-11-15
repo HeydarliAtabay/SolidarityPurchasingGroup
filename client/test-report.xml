@@ -1,33 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\App.test.js">
-    <testCase name="renders learn react link" duration="5"/>
-  </file>
   <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\__tests__\API.test.js">
-    <testCase name="test AllPaymentMethods no errors" duration="7"/>
-    <testCase name="test getAllClients no errors" duration="1"/>
-    <testCase name="test getAllClients error" duration="1"/>
-    <testCase name="test getAllOrders no errors" duration="0"/>
-    <testCase name="test getAllOrders error" duration="1"/>
+    <testCase name="test AllPaymentMethods no errors" duration="17"/>
+    <testCase name="test getAllClients no errors" duration="3"/>
+    <testCase name="test getAllClients error" duration="2"/>
+    <testCase name="test getAllOrders no errors" duration="2"/>
+    <testCase name="test getAllOrders error" duration="2"/>
     <testCase name="test updateDelivered(order_id) no errors" duration="1"/>
-    <testCase name="test updateDelivered(order_id) error" duration="2"/>
-    <testCase name="test GetAllProducts No errors" duration="9"/>
-    <testCase name="test GetAllProducts Error" duration="5"/>
-    <testCase name="test GetProductByID No errors" duration="2"/>
-    <testCase name="test GetProductByID Error" duration="1"/>
-    <testCase name="test GetAllCategories No errors" duration="2"/>
-    <testCase name="test GetAllCategories Error" duration="1"/>
-    <testCase name="test GetAllProviders No errors" duration="1"/>
-    <testCase name="test GetAllProviders Error" duration="2"/>
-    <testCase name="test GetProviderByID No errors" duration="1"/>
+    <testCase name="test updateDelivered(order_id) error" duration="8"/>
+    <testCase name="test GetAllProducts No errors" duration="20"/>
+    <testCase name="test GetAllProducts Error" duration="3"/>
+    <testCase name="test GetProductByID No errors" duration="3"/>
+    <testCase name="test GetProductByID Error" duration="3"/>
+    <testCase name="test GetAllCategories No errors" duration="13"/>
+    <testCase name="test GetAllCategories Error" duration="2"/>
+    <testCase name="test GetAllProviders No errors" duration="2"/>
+    <testCase name="test GetAllProviders Error" duration="1"/>
+    <testCase name="test GetProviderByID No errors" duration="3"/>
     <testCase name="test GetProviderByID Error" duration="2"/>
-    <testCase name="test getAllPaymentMethods no errors" duration="1"/>
-    <testCase name="test getAllPaymentMethods error" duration="1"/>
-    <testCase name="test addClient no errors" duration="1"/>
-    <testCase name="test addClient response not ok, json ok" duration="1"/>
-    <testCase name="test addClient response not ok, json null" duration="2"/>
-    <testCase name="test addTransaction no errors" duration="1"/>
-    <testCase name="test addTransaction response not ok, json ok" duration="1"/>
-    <testCase name="test addTransaction response not ok, json null" duration="4"/>
+    <testCase name="test getAllPaymentMethods no errors" duration="2"/>
+    <testCase name="test getAllPaymentMethods error" duration="2"/>
+    <testCase name="test addClient no errors" duration="3"/>
+    <testCase name="test addClient response not ok, json ok" duration="6"/>
+    <testCase name="test addClient response not ok, json null" duration="8"/>
+    <testCase name="test addTransaction no errors" duration="2"/>
+    <testCase name="test addTransaction response not ok, json ok" duration="2"/>
+    <testCase name="test addTransaction response not ok, json null" duration="3"/>
+    <testCase name="test insertNewBookOrder(itemsOrdered) no errors" duration="7"/>
+    <testCase name="test insertNewBookOrder(itemsOrdered) response not ok, json ok" duration="3"/>
+    <testCase name="test insertNewBookOrder(itemsOrdered) fetch rejected" duration="2"/>
+  </file>
+  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\__tests__\ClientAlert.test.js">
+    <testCase name="Renders Correctly the client Reminder" duration="159"/>
+  </file>
+  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\__tests__\DeliverList.test.js">
+    <testCase name="Renders button to show products Correctly" duration="133"/>
+    <testCase name="Renders list of products to deliver Correctly" duration="118"/>
+  </file>
+  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\client\src\__tests__\Booking.test.js">
+    <testCase name="Render Booking Correctly" duration="150"/>
+    <testCase name="Render StaffBooking Correctly" duration="57"/>
   </file>
 </testExecutions>

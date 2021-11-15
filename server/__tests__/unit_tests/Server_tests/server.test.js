@@ -67,3 +67,17 @@ describe("Test increasing the balance of client", () => {
         expect(response.statusCode).toBe(200);
     });
 });
+
+describe('Test the provider /api/modifyquantity', () => {
+    test('It should response the PUT method', async () => {
+      const response = await request(server).put('/api/modifyquantity');
+      expect(response.statusCode).toBe(200);
+    });
+  });
+  describe('Test the provider /api/neworder path', () => {
+    test('It should response the POST method', async () => {
+      const response = await request(server).post('/api/neworder');
+      expect(response.statusCode).toBe(200);
+    });
+  });
+  

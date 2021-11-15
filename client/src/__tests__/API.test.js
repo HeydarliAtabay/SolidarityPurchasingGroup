@@ -6,6 +6,25 @@ fetchMock.enableMocks();
 
 beforeEach( () => fetch.resetMocks() );
 
+const itemsOrder = {
+    client_id: 1,
+    order_items: {
+      id: 1,
+      name: 'Carrots',
+      description: 'Some description 1',
+      category: 'Vegetables',
+      price: 1.23,
+      unit: 'kg',
+      quantity: 110,
+      expiryDate: '2021-11-20',
+      providerId: 1,
+      providerName: 'Luca Bianchi',
+      active: 1,
+      qty: 1,
+    },
+    total: 1.23,
+  };
+
 describe('test AllPaymentMethods', () => {
     test('no errors', () => {
         const response=API.getAllPaymentMethods().then( (data) => {
@@ -302,3 +321,31 @@ describe('test addTransaction', () => {
         });
     });
 });
+
+describe('test insertNewBookOrder(itemsOrdered)', () => {
+    test('no errors', async () => {
+      fetch.mockResponseOnce({ mockData: 'test' });
+      await API.insertNewBookOrder('test').then((data) => {
+        expect.assertions(1);
+        expect(data.status).toEqual(200);
+      });
+    });
+    test('response not ok, json ok', async () => {
+      fetch.mockResponseOnce(
+        JSON.stringify({ err: 'API error' }, { status: 500 })
+      );
+      await API.insertNewBookOrder('test').catch((data) => {
+        expect.assertions(1);
+        expect(data.err).toEqual('API error');
+      });
+    });
+    test('fetch rejected', async () => {
+      fetch.mockRejectOnce('error');
+      await API.insertNewBookOrder('itemsOrder').catch((data) => {
+        expect.assertions(2);
+        expect(data.errors[0].param).toEqual('Server');
+        expect(data.errors[0].msg).toEqual('Cannot communicate');
+      });
+    });
+  });
+  

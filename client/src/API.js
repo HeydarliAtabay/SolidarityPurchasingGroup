@@ -124,7 +124,7 @@ async function getProviderById(provider_id) {
 //Insert a new order
 function insertNewBookOrder(itemsOrdered) {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:3000/api/neworder/`, {
+    fetch('http://localhost:3000/api/neworder/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -143,14 +143,16 @@ function insertNewBookOrder(itemsOrdered) {
             })
             .catch((err) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [
+                  { param: 'Application', msg: 'Cannot parse server response' },
+                ],
               });
             });
         }
       })
       .catch((err) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Cannot communicate' }],
         });
       });
   });
