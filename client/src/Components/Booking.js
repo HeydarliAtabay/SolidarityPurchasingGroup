@@ -17,7 +17,7 @@ function Booking(props) {
   const [searchTerm, setSearchTerm] = useState("");
 
   let rows = [...Array(Math.ceil(products.filter((p) => (p && p.active === 1)).length / 3))];
-  let productRows = Array(rows.filter(r => (r && r.active === 1)).length);
+  let productRows = Array(rows.length);
 
   const itemsPrice = productsBasket.reduce((a, c) => a + c.price * c.qty, 0); //a=accumulator c=current, so it computes the total
 
@@ -53,23 +53,23 @@ function Booking(props) {
       activeCategory = categories.find((c) => (c.active === 1)).name;
     }
 
-    setProducts(prods => (
-      prods.map(p => {
-        if (/*searchTerm === "" ||*/
-          (activeCategory === "All" /*&& p.name.toLowerCase().includes(searchTerm.toLowerCase())*/) ||
-          (p.category === activeCategory /*&& p.name.toLowerCase().includes(searchTerm.toLowerCase())*/)) {
-          p.active = 1;
-          return p;
+    setProducts(prods => {
+      const arr = prods.map(p => {
+        if (activeCategory === "All" || p.category === activeCategory) {
+          if (searchTerm === "" || p.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+            p.active = 1;
+            return p;
+          }
         }
-
         p.active = 0;
         return p;
-      })
-    ))
+      });
+      return arr;
+    })
   }
 
   rows.forEach((row, idx) => {
-    productRows[idx] = products.slice(idx * 3, idx * 3 + 3);
+    productRows[idx] = products.filter((p) => (p.active === 1)).slice(idx * 3, idx * 3 + 3);
   });
 
   const onConfirm = async () => {
@@ -224,14 +224,12 @@ function Booking(props) {
               <div className="d-block mx-5 my-3">
                 <div className="container">
                   <div className="row">
-                    {/*
                     <div className="col-lg-9 text-center">
                       <input className="form-control mb-2" value={searchTerm} onChange={(event) => (setSearchTerm(event.target.value))} placeholder="Search for products here" />
                     </div>
                     <div className="col-lg-3 text-center">
                       <button className="btn btn-primary px-5" onClick={() => (filterProducts())} >Search</button>
                     </div>
-                    */}
                   </div>
                 </div>
 
