@@ -2,7 +2,7 @@ import { Button, Row, Carousel } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom"
 
 function Frontpage(props) {
-  const history=useHistory()
+    const history = useHistory()
     return (
         <Row className="bg-color-frontpage">
             <div className="col-lg-3">
@@ -14,9 +14,9 @@ function Frontpage(props) {
                         <div>
                             <button className="mx-2 btn btn-outline-primary">Login</button>
                             <button className="btn btn-outline-secondary"
-                             onClick={(event) => {
-                                history.push("/registration")
-                    }}
+                                onClick={(event) => {
+                                    history.push("/registration")
+                                }}
                             >Register</button>
                         </div>
                     </div>
@@ -160,9 +160,9 @@ function Frontpage(props) {
                     </div>
                     <br />
                     <div className="d-block w-100">
-                        <Link to='/booking'>
-                            <Button>Explore our products</Button>
-                        </Link>
+                        <Button onClick={(event) => {
+                            history.push("/booking")
+                        }}>Explore our products</Button>
                     </div>
                 </div>
                 <div className="d-block w-100 pt-5 pb-0 px-5 bg-secondary rounded">
@@ -181,9 +181,7 @@ function Frontpage(props) {
                                 We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
                             </p>
                             <div className="d-block w-100 mt-5 text-right-custom align-bottom-custom">
-                                <Link to='/'>
-                                    <Button variant="light">Meet the producers</Button>
-                                </Link>
+                                <Button variant="light">Meet the producers</Button>
                             </div>
                         </div>
                     </div>
@@ -198,9 +196,7 @@ function Frontpage(props) {
                                 We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
                             </p>
                             <div className="d-block w-100 mt-5 text-center align-bottom-custom">
-                                <Link to='/'>
-                                    <Button variant="secondary">Blablablabla</Button>
-                                </Link>
+                                <Button variant="secondary">This is a button</Button>
                             </div>
                         </div>
                         <div className="w-35-custom">
