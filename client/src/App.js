@@ -119,10 +119,6 @@ function App() {
           render={() => <ClientPage clients={clients} clientid={2} />}
         />
         <Route path="/registration" render={() => <UserRegistration />} />
-        <Route
-          path="/products"
-          render={() => <ProductGallery products={products} />}
-        />
         <Route path="/" render={() => <Frontpage />} />
       </Switch>
     </Router>
