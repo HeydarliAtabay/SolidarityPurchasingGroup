@@ -69,7 +69,7 @@ async function getAllProducts() {
   if (response.ok) {
     return await response.json();
   } else {
-    let err = { status: response.status, errObj: response };
+    let err = { status: response.status, errObj: await response.json() };
     throw err; // An object with the error coming from the server
   }
 }
@@ -82,7 +82,7 @@ async function getProductById(product_id) {
   if (response.ok) {
     return await response.json();
   } else {
-    let err = { status: response.status, errObj: response };
+    let err = { status: response.status, errObj: await response.json() };
     throw err; // An object with the error coming from the server
   }
 }
@@ -93,7 +93,7 @@ async function getAllCategories() {
   if (response.ok) {
       return await response.json();
   } else {
-      let err = { status: response.status, errObj: response };
+      let err = { status: response.status, errObj: await response.json() };
       throw err;  // An object with the error coming from the server
   }
 }
@@ -104,7 +104,7 @@ async function getAllProviders() {
   if (response.ok) {
     return await response.json();
   } else {
-    let err = { status: response.status, errObj: response };
+    let err = { status: response.status, errObj: await response.json() };
     throw err; // An object with the error coming from the server
   }
 }
@@ -117,7 +117,7 @@ async function getProviderById(provider_id) {
   if (response.ok) {
     return await response.json();
   } else {
-    let err = { status: response.status, errObj: response };
+    let err = { status: response.status, errObj: await response.json() };
     throw err; // An object with the error coming from the server
   }
 }
