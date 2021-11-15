@@ -27,6 +27,7 @@ exports.getAllProducts = () => {
         expiryDate: p.product_expiry,
         providerId: p.provider_id,
         providerName: p.provider_name,
+        active: 1
       }));
       resolve(products);
     });
@@ -52,6 +53,7 @@ exports.getProductById = (product_id) => {
         expiryDate: row.product_expiry,
         providerId: row.provider_id,
         providerName: row.provider_name,
+        active: 1
       };
       resolve(product);
     });
