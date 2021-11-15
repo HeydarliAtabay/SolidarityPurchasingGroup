@@ -64,27 +64,30 @@ exports.delivered = async (order_id) => {
 };
 
 // insert a new order
-exports.insert_order = async (client_id) => {
+exports.insert_order = async (client_id, totalorderprice) => {
   return new Promise((resolve, reject) => {
     const MAX_NUM = 10000000;
     const sql =
-      'INSERT INTO orders (order_id, client_id,product_name,state) VALUES (?, ?,?,?)';
+      'INSERT INTO orders (order_id, client_id,product_name,state,OrderPrice) VALUES (?,?,?,?,?)';
     const order_id = Math.floor(Math.random() * MAX_NUM);
 
-    db.run(sql, [order_id, client_id, , 'booked'], function (err) {
-      if (err) {
-        reject(err);
-        console.log(err.message);
-        return;
+    db.run(
+      sql,
+      [order_id, client_id, , 'booked', totalorderprice],
+      function (err) {
+        if (err) {
+          reject(err);
+          console.log(err.message);
+          return;
+        }
+        resolve(order_id);
       }
-      resolve(order_id);
-    });
+    );
   });
 };
 
 exports.insert_order_items = async (order_id, order_items) => {
   return new Promise((resolve, reject) => {
-    console.log('--insert_order_items order_items ->' + order_items.id);
     const MAX_ITEMS = 1000;
     const err_response = { status: 'FAIL' };
     const ok_response = { status: 'OK' };
@@ -93,10 +96,6 @@ exports.insert_order_items = async (order_id, order_items) => {
       reject(err_response);
       return;
     }
-
-    console.log(
-      '(' + order_id + ',' + order_items.id + ',' + order_items.qty + ')'
-    );
 
     const sql =
       'INSERT INTO order_items (order_id, product_id, quantity) VALUES (?,?,?)';

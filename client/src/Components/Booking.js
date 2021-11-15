@@ -12,13 +12,18 @@ function Booking(props) {
   const [showsuccess, setShowsuccess] = useState(false);
   const [showdanger, setShowdanger] = useState(false);
   const productRows = Array(rows.length);
+  const itemsPrice = productsBasket.reduce((a, c) => a + c.price * c.qty, 0); //a=accumulator c=current, so it computes the total
 
   rows.forEach((row, idx) => {
     productRows[idx] = props.products.slice(idx * 3, idx * 3 + 3);
   });
   const onConfirm = async () => {
-    const order = { client_id: 1, order_items: productsBasket };
-    const res = await API.insertNewOrder(order);
+    const order = {
+      client_id: 1,
+      order_items: productsBasket,
+      total: itemsPrice.toFixed(2),
+    };
+    const res = await API.insertNewBookOrder(order);
     if (res.status == 200) setShowsuccess(true);
     else {
       setShowdanger(true);
@@ -142,6 +147,7 @@ function Booking(props) {
               onRemove={onRemove}
               onConfirm={onConfirm}
               capitalizeFirstLetter={capitalizeFirstLetter}
+              itemsPrice={itemsPrice}
             />
           </Col>
         </Row>

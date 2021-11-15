@@ -2,10 +2,6 @@ import { Button, Row, Col, Card, Container, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 
 function Basket(props) {
-  const itemsPrice = props.productsBasket.reduce(
-    (a, c) => a + c.price * c.qty,
-    0
-  ); //a=accumulator c=current, so it computes the total
   return (
     <>
       <h2>Basket:</h2>
@@ -43,7 +39,7 @@ function Basket(props) {
         <>
           <Row>
             <Col align="center" className="mt-3">
-              Total: €{itemsPrice.toFixed(2)}
+              Total: €{props.itemsPrice.toFixed(2)}
             </Col>
           </Row>
           <Row>

@@ -116,22 +116,20 @@ app.get('/api/provider/:provider_id', async (req, res) => {
 app.post('/api/neworder', async (req, res) => {
   try {
     const client_id = req.body.client_id;
-    console.log(client_id);
+    const totalorderprice = req.body.total;
     const order_items = req.body.order_items;
-    console.log(order_items);
     let response, response1;
 
-    const order_id = await ordersDao.insert_order(client_id);
+    const order_id = await ordersDao.insert_order(client_id, totalorderprice);
     order_items.forEach(async (prod) => {
       if (prod.quantity >= prod.qty) {
         response = await ordersDao.insert_order_items(order_id, prod);
         if (response.status !== 'OK') throw 'something goes wrong';
-        console.log(response);
       } else throw 'We do not have enough product ';
       const newQuantity = prod.quantity - prod.qty;
       response1 = await productsDAO.putProductQuantity(prod.id, newQuantity);
     });
-    console.log(response);
+
     res.json(response);
   } catch (err) {
     console.log(err);
@@ -188,30 +186,34 @@ app.post('/api/clients', async (req, res) => {
   }
 });
 
-app.get('/api/methods', (req,res)=>{
-  walletsDAO.listAllPaymentMethods()
-      .then((methods)=>{res.json(methods)})
-      .catch((error)=>{res.status(500).json(error)} )
-})
-
-app.put('/api/clients/update/balance/:clientId/:amount',  async(req,res) => {
-  const clientId = req.params.clientId;
-  const amount =req.params.amount;
-try {
-  let task = await walletsDAO.increaseBalance(amount,clientId);
-  res.json(`Balance of client : ${clientId} was increased`);
-} catch (error) {
-  res
-    .status(500)
-    .json(
-      `Error while updating the balance of user with id: ${clientId}   ` +
-        error
-    );
-}
+app.get('/api/methods', (req, res) => {
+  walletsDAO
+    .listAllPaymentMethods()
+    .then((methods) => {
+      res.json(methods);
+    })
+    .catch((error) => {
+      res.status(500).json(error);
+    });
 });
 
+app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
+  const clientId = req.params.clientId;
+  const amount = req.params.amount;
+  try {
+    let task = await walletsDAO.increaseBalance(amount, clientId);
+    res.json(`Balance of client : ${clientId} was increased`);
+  } catch (error) {
+    res
+      .status(500)
+      .json(
+        `Error while updating the balance of user with id: ${clientId}   ` +
+          error
+      );
+  }
+});
 
-app.post("/api/transactions", (req, res) => {
+app.post('/api/transactions', (req, res) => {
   const transaction = req.body;
   if (!transaction) {
     res.status(400).end();
