@@ -57,6 +57,24 @@ exports.getProductById = (product_id) => {
     });
   });
 };
+
+exports.getAllCategories = () => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT category_name FROM product_categories';
+        db.all(sql, [], (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            console.log(rows);
+            const categories = rows.map((c) => ({
+                name: c.category_name,
+                active: 0
+            }));
+            resolve(categories);
+        });
+    });
+};
+
 exports.putProductQuantity = (product_id, quantity) => {
   return new Promise((resolve, reject) => {
     const sql = 'UPDATE products SET product_quantity=? Where product_id=?';
