@@ -88,6 +88,18 @@ app.get('/api/product/:product_id', async (req, res) => {
   }
 });
 
+//GET all categories
+app.get('/api/products/categories', async (req, res) => {
+  try {
+    const categories = await productsDAO.getAllCategories();
+    console.log(categories);
+    res.json(categories);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
 //Get all providers
 app.get('/api/providers/all', async (req, res) => {
   try {
