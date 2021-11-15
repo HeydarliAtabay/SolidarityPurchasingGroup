@@ -269,13 +269,14 @@ async function getAllPaymentMethods() {
     return responseBody;
   } else {
     try {
-      const err = await response.json();
+      let err = { status: response.status, errObj: responseBody };
       throw err.message;
     } catch (err) {
       throw err;
     }
   }
 }
+
 
 // Adding new transaction
 

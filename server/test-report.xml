@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\server\__tests__\unit_tests\Registration.test.js">
+  <file path="C:\Users\heyda\Desktop\PoliTO\Third semester\Software Engineering 2\21-22\SPG\server\__tests__\unit_tests\Wallets.test.js">
+    <testCase name="get all payment methods" duration="4"/>
+    <testCase name="get all payment methods but an error occours in db" duration="1"/>
+    <testCase name="get all payment methods but empty" duration="0"/>
+    <testCase name="add new transaction" duration="1"/>
+    <testCase name="add a transaction but an error in db occours when finding it" duration="0"/>
   </file>
 </testExecutions>
