@@ -33,7 +33,7 @@ describe('test getAllClients', () => {
         });
     });
     test('error', () => {
-        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'));
         API.getAllClients().catch((data) => {
            
             expect(data.status).toBe(500);
@@ -50,7 +50,7 @@ describe('test getAllOrders', () => {
         });
     });
     test('error', () => {
-        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'));
         API.getAllOrders().catch((data) => {
            
             expect(data.status).toBe(500);
@@ -68,7 +68,7 @@ describe('test updateDelivered(order_id)', () => {
         });
     });
     test('error', () => {
-        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'));
         API.updateDelivered(1).catch((data) => {
            
             expect(data.status).toBe(500);
