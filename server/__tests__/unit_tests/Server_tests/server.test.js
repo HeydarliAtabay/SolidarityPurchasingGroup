@@ -53,3 +53,17 @@ describe("Test the update orders", () => {
         expect(response.statusCode).toBe(200);
     });
 });
+
+describe("Test to get all payment methods", () => {
+    test("It should response the PUT method", async () => {
+        const response = await request(server).get("/api/methods");
+        expect(response.statusCode).toBe(200);
+    });
+});
+
+describe("Test increasing the balance of client", () => {
+    test("It should response the PUT method", async () => {
+        const response = await request(server).put("/api/clients/update/balance/1/15");
+        expect(response.statusCode).toBe(200);
+    });
+});
