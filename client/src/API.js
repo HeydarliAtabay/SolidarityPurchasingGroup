@@ -269,7 +269,7 @@ async function getAllPaymentMethods() {
     return responseBody;
   } else {
     try {
-      let err = { status: response.status, errObj: responseBody };
+      const err = await response.json();
       throw err.message;
     } catch (err) {
       throw err;

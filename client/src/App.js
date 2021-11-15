@@ -72,11 +72,11 @@ function App() {
   }, []);
 
   function addTransaction(tr) {
-    API.addTransaction(tr).then((err) => { });
+    API.addTransaction(tr).then((err) => { console.log('Transaction was added') }).catch((err)=>{console.log(err)});
   }
 
   function topUpBalance(amount, client) {
-    API.increaseBalance(amount, client).then((err) => { });
+    API.increaseBalance(amount, client).then((err) => { console.log('Balance was topped up') }).catch((err)=>{console.log(err)});
   }
   console.log(time);
   /* local objects to be deleted once we have a backend */
