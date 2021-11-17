@@ -238,7 +238,7 @@ function UserRegistration(props){
 <div className="subBtn">
 <Button variant="danger" type="submit" size="lg"
  onClick={(event) => {
-    history.push("/")
+    history.push("/employee")
 }}
 >
     Cancel

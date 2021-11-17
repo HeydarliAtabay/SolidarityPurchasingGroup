@@ -11,9 +11,9 @@ return (<>
   {(props.clients.find(s=>(s.client_id===props.clientid&&s.budget===0)))?
   <>
   {show?
-      <Alert style={{'backgroundColor':"#dc143c"}} onClose={() => setShow(false)} dismissible >
-        <Alert.Heading data-testid="alertH"style={{'fontSize': 22}}>-ATTENTION-</Alert.Heading>
-        <p data-testid="alert" style={{'fontSize': 22}}>
+      <Alert style={{'backgroundColor':"#dc143c", 'width':"600px"}} onClose={() => setShow(false)} dismissible >
+        <Alert.Heading data-testid="alertH"style={{'fontSize': 22, 'color':"white", 'text-align':"center"}}>-ATTENTION-</Alert.Heading>
+        <p data-testid="alert" style={{'fontSize': 22, 'color':"white", 'text-align':"center"}}>
           Your wallet balance is insufficient. Please top it up!
         </p>
       </Alert>:<></>}</>:<></>}</Row></Container>

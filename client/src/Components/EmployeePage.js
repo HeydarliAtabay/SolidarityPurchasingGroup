@@ -44,14 +44,15 @@ function ModalWalletTopUp(props) {
     });
 
     onSave(newTransaction, amount, clientId)
+    window.location.reload(false);
 
     // submit a test order.
-    let users = document.getElementById('formUser');
+   /* let users = document.getElementById('formUser');
     let selected_client_id = users.options[users.selectedIndex].id;
 
     // TODO: once the frontend form is done, obtain the orders array from it and pass it to insertNewOrder.
     // orders currently has a temporary test order.
-    const orders = [{ product_id: 1, quantity: 8 }, { product_id: 2, quantity: 10 }, { product_id: 10, quantity: 250 }];
+    const orders = [{ product_id: 1, quantity: 8 }, { product_id: 2, quantity: 10 }, { product_id: 10, quantity: 220 }];
     const new_order = API.insertNewOrder(selected_client_id, orders);
 
     console.log(new_order.status);
@@ -59,7 +60,7 @@ function ModalWalletTopUp(props) {
     if (new_order.status === "OK")
       alert("Order placed successfully!");
     else
-      alert("Something went wrong while processing your order.");
+      alert("Something went wrong while processing your order."); */
   };
 
   return (
@@ -383,27 +384,28 @@ function EmployeePage(props) {
         <Col xs={3} md={2}>
           <ListGroup variant="flush">
             <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 20, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered</Button>
+              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered</Button>
             </ListGroupItem>
-            {/*Button for opening a modal form for making a wallet top up */}
             <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 20, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
-                onClick={() => { setShow(false); setSelectedTask(MODAL.ADD) }}
-              > Make a top-up of the client wallet </Button>
-            </ListGroupItem >
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 20, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
+              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
                 onClick={(event) => {
                   history.push("/registration")
                 }}
               > Make a registration for the new client </Button>
             </ListGroupItem >
+            {/*Button for opening a modal form for making a wallet top up */}
             <ListGroupItem>
-              <Button variant="primary" style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}
+              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
+                onClick={() => { setShow(false); setSelectedTask(MODAL.ADD) }}
+              > Make a top-up of the client wallet </Button>
+            </ListGroupItem >
+            
+            <ListGroupItem>
+              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
                 onClick={(event) => {
                   history.push("/staff-booking")
                 }}
-              > Make order for a client </Button>
+              > Make a new order for client </Button>
             </ListGroupItem >
           </ListGroup></Col>
         {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
