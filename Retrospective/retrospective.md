@@ -49,7 +49,7 @@ sections:
 - Unit Testing:
   - Total hours estimated: 30h (6h of studying unit testing methods & 24 hours for implementing tests) 
   - Total hours spent: 33h (9h of studying unit testing methods & 24 hours of testing)
-  - Nr of automated unit test cases : 17(BackEnd)+36(FrontEnd) = 53 unit test cases
+  - Nr of automated unit test cases : 17(for BackEnd)+36(for FrontEnd) = 53 unit test cases
 
 - E2E testing:
   - Total hours estimated: 8h (1h per story) - included inside each story
