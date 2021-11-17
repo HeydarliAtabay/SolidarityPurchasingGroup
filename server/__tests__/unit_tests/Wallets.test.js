@@ -7,7 +7,8 @@ const httpMocks = require('node-mocks-http');
 
 
 // init express
-const app = express();
+let app = express();
+app.disable("x-powered-by");
 const PORT = 3001;
 
 // set-up the middlewares
