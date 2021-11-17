@@ -40,55 +40,58 @@ sections:
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
-- Average hour per task: 97.9(hours)/19(#tasks)= 4.07 hours; Standard deviation:[can you please calculate it??]
+- Average hour per task: 97.9(hours)/19(#tasks)= 4.07 hours; 
+- Standard deviation: 0.28
 - Total task estimation error ratio: 1.013
 
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated: 36h (6h of studying unit testing methods & 30 hours for implementing tests) 
+  - Total hours estimated: 30h (6h of studying unit testing methods & 24 hours for implementing tests) 
   - Total hours spent: 33h (9h of studying unit testing methods & 24 hours of testing)
   - Nr of automated unit test cases : 17(BackEnd)+36(FrontEnd) = 53 unit test cases
 
 - E2E testing:
-  - Total hours estimated: --------------------------
-  - Total hours spent: ---------------------
+  - Total hours estimated: 8h (1h per story) - included inside each story
+  - Total hours spent: 6h
 - Code review
-  - Total hours estimated
-  - Total hours spent
+  - Total hours estimated: 8h (1h per story) - included inside each story
+  - Total hours spent: 10h
 - Technical Debt management:
-  - Total hours estimated: 1h 30min
-  - Total hours spent: 1h 30min
-  - Hours estimated for remediation by SonarQube
-  - Hours estimated for remediation by SonarQube only for the selected and planned issues
-  - Hours spent on remediation
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability")
-  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability )
+  - Total hours estimated: 6h
+  - Total hours spent: 3h
+  - Hours estimated for remediation by SonarQube: 
+  - Hours estimated for remediation by SonarQube only for the selected and planned issues: 
+  - Hours spent on remediation:
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"):
+  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ):
 
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-  - Underestimated need for coordination between team members (many modules of the app were linked and were dependent on one another)
-  - Underestimated code documentation and testing time
+  - FE development time was underestimated. We ended up reallocating time from the BE tasks to deliver a good UI for the tasks.
+  - JEST testing proved much more difficult and tricky than we thought
+  - We included also SonarQube analysis under the "Implement test" task, but since the actual JEST testing proved a lot tougher, we ended up not having enough time to properly do the SonarQube analysis.
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
-  - The need for a well-documented code is essential in a team-working environment
-  - We need to schedule more time for organization and coordination meetings
-  - We need to better divide the tasks among team members to reduce wasted time on coordination
+  - Testing, especially the Technical dept part needs more time to be properly done.
+  - A good FE needs more development time.
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-  - Nothing
+  - Tasks were much better divided this time, which in turn decreased e lot the continous communication efforts needed.
 - Which ones you were not able to achieve? Why?
-  - Nothing
+  - We did not succeed in adding the code documentation since by better dividing the tasks, the need for very detailed documentation decreased. This may well prove problematic in the future if we will need to do incremental work on already implemented features. 
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-
-  - Loose less time in coordination efforts by estimating more hours for communication and documentation
-  - Better define tasks to reduce task dependencies and improve the possibility for all team members to work in parallel
+  - More time for testing.
+  - Testing needs to be treated differently from Technical debt and more time needs to be dedicated to the TD part.
 
 
 - One thing you are proud of as a Team!!
-  - Everyone worked really hard to provide a perfectly working demo
-  - The communication between team members was extremely friendly
+  - Everyone finished all of their tasks and delivered working code.
+  - Team members communication and availability was outstanding. 
+
+
+

@@ -13,7 +13,8 @@ const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
 
 // init express
-const app = express();
+let app = express();
+app.disable("x-powered-by");
 const PORT = 3001;
 
 // set-up the middlewares
