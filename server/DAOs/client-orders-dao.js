@@ -73,7 +73,7 @@ exports.insert_order = async (client_id, totalorderprice) => {
 
     db.run(
       sql,
-      [order_id, client_id, , 'booked', totalorderprice],
+      [order_id, client_id, '', 'booked', totalorderprice],
       function (err) {
         if (err) {
           reject(err);
