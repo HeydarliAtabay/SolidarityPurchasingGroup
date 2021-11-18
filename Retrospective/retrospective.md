@@ -72,21 +72,24 @@ sections:
   - FE development time was underestimated. We ended up reallocating time from the BE tasks to deliver a good UI for the tasks.
   - JEST testing proved much more difficult and tricky than we thought
   - We included also SonarQube analysis under the "Implement test" task, but since the actual JEST testing proved a lot tougher, we ended up not having enough time to properly do the SonarQube analysis.
+  - We forgot to include in the DB task the fact that we needed a certain number of dummy data to be inserted (as requested by the project PDF).
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
   - Testing, especially the Technical dept part needs more time to be properly done.
-  - A good FE needs more development time.
+  - The testing and technical debt tasks need to separated.
+  - A good FE needs more development time allocated.
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-  - Tasks were much better divided this time, which in turn decreased e lot the continous communication efforts needed.
+  - Tasks were much better divided this time, which in turn decreased a lot the continous communication efforts needed.
 - Which ones you were not able to achieve? Why?
-  - We did not succeed in adding the code documentation since by better dividing the tasks, the need for very detailed documentation decreased. This may well prove problematic in the future if we will need to do incremental work on already implemented features. 
+  - We did not succeed in increasing the code documentation size since by better dividing the tasks, the need for very detailed documentation decreased. This may well prove problematic in the future if we will need to do incremental work on already implemented features. 
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
   - More time for testing.
-  - Testing needs to be treated differently from Technical debt and more time needs to be dedicated to the TD part.
+  - By better understanding the current suggestions of Sonarcloud, in the future we can write better code and in turn reduce the remediation efforts.
+  - Testing needs to be treated differently from Technical debt and more time needs to be dedicated to the Technical debt part.
 
 
 - One thing you are proud of as a Team!!
