@@ -36,7 +36,7 @@
     "testResultsProcessor": "jest-sonar-reporter",
     "coveragePathIgnorePatterns": [
       "/node_modules/",
-      "/__test__/",
+      "/__tests__/",
       "/__mocks__"
     ]
   }
