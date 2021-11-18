@@ -82,7 +82,7 @@ sections:
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-  - Tasks were much better divided this time, which in turn decreased a lot the continous communication efforts needed.
+  - Tasks were much better divided this time, which in turn decreased a lot the continuous communication efforts needed.
 - Which ones you were not able to achieve? Why?
   - We did not succeed in increasing the code documentation size since by better dividing the tasks, the need for very detailed documentation decreased. This may well prove problematic in the future if we will need to do incremental work on already implemented features. 
 
