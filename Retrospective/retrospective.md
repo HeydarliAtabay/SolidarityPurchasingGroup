@@ -63,8 +63,8 @@ sections:
   - Hours estimated for remediation by SonarQube: 
   - Hours estimated for remediation by SonarQube only for the selected and planned issues: 
   - Hours spent on remediation:
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"):
-  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ):
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.0%
+  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
 
 ## ASSESSMENT
 
