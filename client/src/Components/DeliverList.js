@@ -4,23 +4,23 @@ import API from '../API'
 function DeliverList(props){
     return(
     <ListGroup variant="flush">
-    <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1"}}>
+    <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
         <Row>
     <Col xs={3} md={3}>ORDER_ID</Col>
     <Col xs={3} md={3}>CLIENT_ID</Col>
-    <Col xs={3} md={3}>PRODUCT</Col>
-    <Col xs={3} md={3}>DELIVER</Col>
+    <Col xs={4} md={4}>PRODUCTS</Col>
+    <Col xs={2} md={2}>DELIVER</Col>
     </Row></ListGroupItem>
     {props.orders.filter(x=>x.state===props.b).map((s)=>
     
-    <ListGroupItem key={s.order_id} style={{'backgroundColor':"#ffe4e1"}}>
+    <ListGroupItem key={s.order_id} style={{'fontSize': 20}}>
       <Row><Col xs={3} md={3}>{s.order_id}</Col>
     <Col xs={3} md={3}>{s.client_id}</Col>
-    <Col xs={3} md={3}>{s.product_name}</Col>
+    <Col xs={4} md={4}>{s.product_name}</Col>
     
     
-    <Col xs={3} md={3}> 
-    <Image src={ris}data-testid="im" style={{'cursor':'pointer'}} onClick={()=>{
+    <Col xs={2} md={2}> 
+    <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
        API.updateDelivered(s.order_id).then(()=>{
            
        
@@ -35,7 +35,7 @@ function DeliverList(props){
     </ListGroupItem>)
     
     }<ListGroupItem>
-    <Button variant={"light"}style={{'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'15px'}}onClick={()=>{props.setShow(false);}}>Close</Button></ListGroupItem>
+    <Button variant={"light"}style={{'fontSize': 20,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'15px'}}onClick={()=>{props.setShow(false);}}>Close</Button></ListGroupItem>
     </ListGroup>
     
     
