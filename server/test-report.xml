@@ -1,36 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\mario\Desktop\SE2-SPG\server\__tests__\unit_tests\Server_tests\server.test.js">
-    <testCase name="Test the products/all path It should response the GET method" duration="10">
-      <failure message="Error: listen EADDRINUSE: address already in use :::3001"><![CDATA[Error: listen EADDRINUSE: address already in use :::3001
-    at Server.setupListenHandle [as _listen2] (net.js:1320:16)
-    at listenInCluster (net.js:1368:12)
-    at Server.listen (net.js:1454:7)
-    at Function.listen (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\express\lib\application.js:618:24)
-    at Object.<anonymous> (C:\Users\mario\Desktop\SE2-SPG\server\server.js:248:5)
-    at Runtime._execModule (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-runtime\build\index.js:1299:24)
-    at Runtime._loadModule (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-runtime\build\index.js:898:12)
-    at Runtime.requireModule (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-runtime\build\index.js:746:10)
-    at Runtime.require [as requireModuleOrMock] (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-runtime\build\index.js:919:21)
-    at Object.<anonymous> (C:\Users\mario\Desktop\SE2-SPG\server\__tests__\unit_tests\Server_tests\server.test.js:2:16)]]></failure>
-    </testCase>
-    <testCase name="Test the product/:product_id path It should response the GET method" duration="41"/>
-    <testCase name="Test the products/categories path It should response the GET method" duration="24"/>
-    <testCase name="Test the providers/all path It should response the GET method" duration="26"/>
-    <testCase name="Test the provider/:product_id path It should response the GET method" duration="18"/>
-    <testCase name="Test the clients path It should response the GET method" duration="19"/>
-    <testCase name="Test the orders path It should response the GET method" duration="38"/>
-    <testCase name="Test the update orders It should response the PUT method" duration="32"/>
-    <testCase name="Test to get all payment methods It should response the PUT method" duration="17"/>
-    <testCase name="Test increasing the balance of client It should response the PUT method" duration="32"/>
-    <testCase name="Test the provider /api/modifyquantity It should response the PUT method" duration="27"/>
-    <testCase name="Test the provider /api/neworder path It should response the POST method" duration="33"/>
-  </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\server\__tests__\unit_tests\Wallets.test.js">
-    <testCase name="get all payment methods" duration="1"/>
-    <testCase name="get all payment methods but an error occours in db" duration="0"/>
+    <testCase name="get all payment methods" duration="4"/>
+    <testCase name="get all payment methods but an error occours in db" duration="1"/>
     <testCase name="get all payment methods but empty" duration="1"/>
     <testCase name="add new transaction" duration="1"/>
-    <testCase name="add a transaction but an error in db occours when finding it" duration="1"/>
+    <testCase name="add a transaction but an error in db occours when finding it" duration="0"/>
+  </file>
+  <file path="C:\Users\mario\Desktop\SE2-SPG\server\__tests__\unit_tests\Server_tests\server.test.js">
+    <testCase name="Test the products/all path It should response the GET method" duration="11"/>
+    <testCase name="Test the product/:product_id path It should response the GET method" duration="2"/>
+    <testCase name="Test the products/categories path It should response the GET method" duration="3"/>
+    <testCase name="Test the providers/all path It should response the GET method" duration="2"/>
+    <testCase name="Test the provider/:product_id path It should response the GET method" duration="2"/>
+    <testCase name="Test the clients path It should response the GET method" duration="2"/>
+    <testCase name="Test the orders path It should response the GET method" duration="1"/>
+    <testCase name="Test the update orders It should response the PUT method" duration="2"/>
+    <testCase name="Test to get all payment methods It should response the PUT method" duration="2"/>
+    <testCase name="Test increasing the balance of client It should response the PUT method" duration="2"/>
+    <testCase name="Test the provider /api/modifyquantity It should response the PUT method" duration="2">
+      <failure message="ReferenceError: response is not defined"><![CDATA[ReferenceError: response is not defined
+    at Object.<anonymous> (C:\Users\mario\Desktop\SE2-SPG\server\__tests__\unit_tests\Server_tests\server.test.js:94:16)
+    at Object.asyncJestTest (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:106:37)
+    at C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
+    <testCase name="Test the provider /api/neworder path It should response the POST method" duration="1">
+      <failure message="ReferenceError: response is not defined"><![CDATA[ReferenceError: response is not defined
+    at Object.<anonymous> (C:\Users\mario\Desktop\SE2-SPG\server\__tests__\unit_tests\Server_tests\server.test.js:102:16)
+    at Object.asyncJestTest (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\jasmineAsyncInstall.js:106:37)
+    at C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\queueRunner.js:45:12
+    at new Promise (<anonymous>)
+    at mapper (C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\queueRunner.js:28:19)
+    at C:\Users\mario\Desktop\SE2-SPG\server\node_modules\jest-jasmine2\build\queueRunner.js:75:41
+    at processTicksAndRejections (internal/process/task_queues.js:95:5)]]></failure>
+    </testCase>
   </file>
 </testExecutions>
