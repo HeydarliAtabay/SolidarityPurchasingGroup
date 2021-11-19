@@ -22,7 +22,10 @@ function UserRegistration(props){
     const [password1, setPassword1]=useState("")
     const [passwordEqual, setPasswordEqual] = useState(0)
     
-
+ let j,v;
+    if(props.clients.length===0)v=1;
+    else {j=props.clients.map(x=>x.client_id);
+    v=Math.max(...j)+1;}
     const okayStyle = {color: "green" }
     const noStyle={color:"red"}
 
@@ -50,9 +53,19 @@ function UserRegistration(props){
           email:email,
           hash:password1
          });
+     const newUser =({
+          id:v,
+          name:name,
+          email:email,
+          hash:password1,
+          role:"client"
+         });
 
          try{
-         addClient(newClient)
+         addClient(newClient).then(()=>{props.setRecharged(true);
+           
+    API.addUser(newUser);
+            });
          setTimeout(()=>history.push('/'),500)
          
          }
