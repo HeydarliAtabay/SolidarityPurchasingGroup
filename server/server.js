@@ -130,8 +130,12 @@ app.post('/api/neworder', async (req, res) => {
   try {
     const client_id = req.body.client_id;
     const totalorderprice = req.body.total;
-    const order_items = req.body.order_items;
+    let order_items = req.body.order_items;
     let response, response1;
+
+    if(order_items===undefined ||order_items===null || order_items===''){
+      order_items=[];
+    }
 
     const order_id = await ordersDao.insert_order(client_id, totalorderprice);
     order_items.forEach(async (prod) => {
