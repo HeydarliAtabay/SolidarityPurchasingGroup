@@ -2,13 +2,15 @@ import { Alert,Container,Row } from "react-bootstrap";
 import { useState } from "react";
 function ClientPage(props) {
   const [show, setShow] = useState(true);
+  
+let t=parseInt(props.clientid);
 
 return (<>
     <br/>
     <Container fluid="sx">
   <Row className="justify-content-md-center">
 
-  {(props.clients.find(s=>(s.client_id===props.clientid&&s.budget===0)))?
+  {props.clients.find(s=>(s.client_id===t&&s.budget===0.0))?
   <>
   {show?
       <Alert style={{'backgroundColor':"#dc143c", 'width':"600px"}} onClose={() => setShow(false)} dismissible >
