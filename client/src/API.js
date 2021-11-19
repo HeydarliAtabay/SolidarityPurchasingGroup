@@ -357,7 +357,72 @@ function increaseBalance(amount, clientId) {
       }); // connection errors
   });
 }
+//api login
+async function logIn(credentials) {
+  let response = await fetch('http://localhost:3000/api/sessions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(credentials),
+  });
+  if(response.ok) {
+    const user = await response.json();
+    return user;
+  }
+  else {
+    try {
+      const errDetail = await response.json();
+      throw errDetail.message;
+    }
+    catch(err) {
+      throw err;
+    }
+  }
+}
 
+async function logOut() {
+  await fetch('http://localhost:3000/api/sessions/current', { method: 'DELETE' });
+}
+
+async function getUserInfo() {
+  const response = await fetch('http://localhost:3000/api/sessions/current');
+  const userInfo = await response.json();
+  if (response.ok) {
+    return userInfo;
+  } else {
+    throw userInfo;  // an object with the error coming from the server
+  }
+}
+
+//POST di un nuovo incontro
+function addUser(S) {
+  return new Promise((resolve, reject) => {
+    fetch('http://localhost:3000/api/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "id": S.id,
+        "name": S.name,
+        "email": S.email,
+       "hash": S.hash,
+       "role": S.role,
+        
+      }),
+    }).then((response) => {
+      if (response.ok) {
+        resolve(null);
+      } else {
+        // cause of error
+        response.json()
+          .then((obj) => { reject(obj); })
+          .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot insert a user" }] }) });
+      }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
+  });
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -373,6 +438,9 @@ const API = {
   insertNewOrder,
   updateQuantity,
   insertNewBookOrder,
-  getAllCategories
+  getAllCategories,
+  logOut, 
+  logIn, 
+  getUserInfo,addUser
 };
 export default API;
