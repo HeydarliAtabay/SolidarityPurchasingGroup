@@ -12,7 +12,10 @@ function Frontpage(props) {
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{userIcon} Clients area</h5>
                         <div>
-                            <button className="mx-2 btn btn-outline-primary">Login</button>
+                            <button className="mx-2 btn btn-outline-primary"
+                             onClick={(event) => {
+                                history.push("/login")
+                            }}>Login</button>
                             <button className="btn btn-outline-secondary"
                                 onClick={(event) => {
                                     history.push("/registration")
@@ -37,7 +40,10 @@ function Frontpage(props) {
                         <li className="list-group-item d-flex justify-content-between">
                             <div className="d-inline my-auto">Store personnel</div>
                             <div className="d-inline">
-                                <button className="mx-2 btn btn-outline-primary">Login</button>
+                                <button className="mx-2 btn btn-outline-primary"
+                                 onClick={(event) => {
+                                    history.push("/login")
+                                }}>Login</button>
                             </div>
                         </li>
                         <li className="list-group-item d-flex justify-content-between">
