@@ -11,7 +11,7 @@ const walletsDAO = require('./DAOs/wallet-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
-
+const dbt = require("./DAOs/users-dao"); // module for accessing the DB
 // init express
 let app = express();
 app.disable("x-powered-by");
@@ -21,6 +21,85 @@ const PORT = 3001;
 app.use(morgan('dev'));
 app.use(express.json());
 
+/*** Set up Passport ***/
+passport.use(
+  new passportLocal(function (username, password, done) {
+    dbt.getUser(username, password).then((user) => {
+      if (!user)
+        return done(null, false, {
+          message: "Incorrect username and/or password.",
+        });
+
+      return done(null, user);
+    });
+  })
+);
+
+// serialize and de-serialize the user
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser((id, done) => {
+  dbt
+    .getUserById(id)
+    .then((user) => {
+      done(null, user);
+    })
+    .catch((err) => {
+      done(err, null);
+    });
+});
+
+const isLoggedIn = (req, res, next) => {
+  if (req.isAuthenticated()) return next();
+
+  return res.status(401).json({ error: "not authenticated" });
+};
+
+// set up the session
+app.use(
+  session({
+    secret:
+      "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// then, init passport
+app.use(passport.initialize());
+/*** Users APIs ***/
+
+// POST /sessions
+// login
+app.post("/api/sessions", function (req, res, next) {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      return res.status(401).json(info);
+    }
+    req.login(user, (err) => {
+      if (err) return next(err);
+
+      return res.json(req.user);
+    });
+  })(req, res, next);
+});
+
+// GET /sessions/current
+app.get("/api/sessions/current", (req, res) => {
+  if (req.isAuthenticated()) {
+    res.status(200).json(req.user);
+  } else res.status(401).json({ code: 401, error: "Unauthenticated user!" });
+});
+
+// DELETE /sessions/current
+// logout
+app.delete("/api/sessions/current", (req, res) => {
+  req.logout();
+  res.end("Logout completed!");
+});
 //GET all clients and budget
 app.get('/api/clients', async (req, res) => {
   try {
@@ -68,7 +147,7 @@ app.put(
 app.get('/api/products/all', async (req, res) => {
   try {
     const products = await productsDAO.getAllProducts();
-    //console.log(products);
+    console.log(products);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -81,7 +160,7 @@ app.get('/api/product/:product_id', async (req, res) => {
   try {
     const product_id = req.params.product_id;
     const product = await productsDAO.getProductById(product_id);
-    //console.log(product);
+    console.log(product);
     res.json(product);
   } catch (err) {
     console.log(err);
@@ -93,7 +172,7 @@ app.get('/api/product/:product_id', async (req, res) => {
 app.get('/api/products/categories', async (req, res) => {
   try {
     const categories = await productsDAO.getAllCategories();
-    //console.log(categories);
+    console.log(categories);
     res.json(categories);
   } catch (err) {
     console.log(err);
@@ -105,7 +184,7 @@ app.get('/api/products/categories', async (req, res) => {
 app.get('/api/providers/all', async (req, res) => {
   try {
     const providers = await providersDAO.getAllProviders();
-    //console.log(providers);
+    console.log(providers);
     res.json(providers);
   } catch (err) {
     console.log(err);
@@ -118,7 +197,7 @@ app.get('/api/provider/:provider_id', async (req, res) => {
   try {
     const provider_id = req.params.provider_id;
     const provider = await providersDAO.getProviderById(provider_id);
-    //console.log(provider);
+    console.log(provider);
     res.json(provider);
   } catch (err) {
     console.log(err);
@@ -130,12 +209,8 @@ app.post('/api/neworder', async (req, res) => {
   try {
     const client_id = req.body.client_id;
     const totalorderprice = req.body.total;
-    let order_items = req.body.order_items;
+    const order_items = req.body.order_items;
     let response, response1;
-
-    if(order_items===undefined ||order_items===null || order_items===''){
-      order_items=[];
-    }
 
     const order_id = await ordersDao.insert_order(client_id, totalorderprice);
     order_items.forEach(async (prod) => {
@@ -241,8 +316,34 @@ app.post('/api/transactions', (req, res) => {
       .catch((err) => res.status(500).json(error));
   }
 });
+//POST ->add users
+        app.post('/api/users', 
+      
+            async (req, res) => {
+               
+            var salt = bcrypt.genSaltSync(10);
+    const oldPassword = req.body.hash;
+    const hashedPassword = await bcrypt.hash(oldPassword, salt);
+                const t = {
+                    
+                   id: req.body.id,
+                    name: req.body.name,
+                    email: req.body.email,
+                  hash: hashedPassword,
+                    role: req.body.role
+                };
+                try {
+                    const result = await dbt.addclient(t);
+            
+                    res.status(201).end("Added client as a user!");
+                } catch (err) {
+                    res.status(503).json({ code: 503, error: "Unavailable service." });
+                }
+            });
 
 module.exports = app;
 
 /* CONNECTION */
-app.listen(PORT);
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`)
+);
