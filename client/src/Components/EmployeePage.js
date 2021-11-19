@@ -1,7 +1,7 @@
 import API from '../API';
 import DeliverList from './DeliverList';
 import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
-
+import{ Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -375,19 +375,22 @@ function EmployeePage(props) {
   const [show, setShow] = useState(false);
   let b = "booked";
   return (<>
-    <br />
+    <br/>
+<div>
+<Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
+   
     <Container fluid>
-      <span className="d-block text-center mt-5 mb-2 display-2">
+   <span className="d-block text-center mt-5 mb-2 display-2">
         Shop Personnel Area
       </span>
       <Row>
         <Col xs={3} md={2}>
           <ListGroup variant="flush">
             <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered</Button>
+              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered</Button>
             </ListGroupItem>
             <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
+              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
                 onClick={(event) => {
                   history.push("/registration")
                 }}
@@ -395,13 +398,13 @@ function EmployeePage(props) {
             </ListGroupItem >
             {/*Button for opening a modal form for making a wallet top up */}
             <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
+              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
                 onClick={() => { setShow(false); setSelectedTask(MODAL.ADD) }}
               > Make a top-up of the client wallet </Button>
             </ListGroupItem >
             
             <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 22, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
+              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
                 onClick={(event) => {
                   history.push("/staff-booking")
                 }}
@@ -410,7 +413,7 @@ function EmployeePage(props) {
           </ListGroup></Col>
         {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
 
-        <Col xs={5} md={5}>
+        <Col xs={9} md={9}>
           {show ?   //set recharged della tabella ordini-clienti
                   <DeliverList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />: <></>}
         </Col></Row>
