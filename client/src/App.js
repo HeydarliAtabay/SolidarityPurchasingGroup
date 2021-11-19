@@ -7,8 +7,10 @@ import { clientOrders } from './classes/ClientOrder';
 import API from './API';
 import EmployeePage from './Components/EmployeePage';
 import UserRegistration from './Components/UserRegistration';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,Row,Alert } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { LoginForm1} from "./Components/LoginForm";
+//import ProductGallery from './Components/Gallery';
 import ClientArea from './Components/ClientArea';
 
 let r = [];
@@ -16,21 +18,51 @@ let r = [];
 function App() {
   const [time, setTime] = useState({ day: 'monday', hour: '10' });
   const [recharged, setRecharged] = useState(true);
+ const [recharged1, setRecharged1] = useState(true);
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
   const [update, setUpdate] = useState(false); //used when an order is confirmed in order to update the quantity
   const [methods, setMethods] = useState([]);
-
+  const [message,setMessage]=useState("");
+  const [userid,setUserid]=useState();
+  const [logged, setLogged] = useState(false);
+ 
   const updateRech = (x) => {
     setRecharged(x);
   };
-  /* USEFFECT clients */
+ const updateRech1 = (x) => {
+    setRecharged1(x);
+  };
+
+ 
+  /*USEFFECT LOGIN*/
   useEffect(() => {
-    API.getAllClients().then((newClients) => {
-      setClients(newClients);
-    });
+    const checkAuth = async () => {
+      try {
+        await API.getUserInfo();
+      } catch (err) {
+        console.error(err.error);
+      }
+    };
+ checkAuth();
   }, []);
+  /* USEFFECT clients */
+ 
+  useEffect(() => {
+    const getAllClients = async () => {
+      await API.getAllClients()
+        .then((res) => {
+          setClients(res);
+          setRecharged1(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+if(recharged1)
+    getAllClients();
+  }, [recharged1]);
 
   /* USEFFECT orders*/
   useEffect(() => {
@@ -83,10 +115,37 @@ function App() {
   function updateProps() {
     setUpdate(!update);
   }
+ 
 
+ const doLogIn = async (credentials) => {
+    try {
+      const user = await API.logIn(credentials);
+      setLogged(true);
+      
+      setMessage("");
+      setUserid(`${user.id}`);
+    } catch (err) {
+
+      setMessage(`"${err}"`);
+
+    }
+  }
+
+
+  const doLogOut = async () => {
+    await API.logOut();
+    
+    setLogged(false);
+   
+    
+  }
   return (
+  
+
     <Router>
       <MyNavbar time={time} setTime={setTime} />
+      
+    
       <Switch>
         <Route
           path="/booking"
@@ -121,14 +180,26 @@ function App() {
               addTr={addTransaction}
               topUp={topUpBalance}
               setRecharged={updateRech}
+              logout={doLogOut}
+            />
+          )}
+        />
+         <Route
+          path="/login"
+          render={() => (
+            <LoginForm1
+             login={doLogIn}
+             logged={logged}
+             clients={clients}
+            
             />
           )}
         />
         <Route
           path="/client"
-          render={() => <ClientArea clients={clients} clientid={2} />}
+          render={() => <ClientArea  logout={doLogOut}clients={clients} clientid={userid} />}
         />
-        <Route path="/registration" render={() => <UserRegistration />} />
+        <Route path="/registration" render={() => <UserRegistration clients={clients} setRecharged={updateRech1}/>} />
         <Route path="/" render={() => <Frontpage />} />
       </Switch>
     </Router>
