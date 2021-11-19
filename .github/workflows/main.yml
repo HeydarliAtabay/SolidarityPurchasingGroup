@@ -18,7 +18,7 @@ jobs:
     - name: Get main
       run: git fetch origin main
     - name: Go to server directory
-      run: cd server
+      run: cd ./SPG/server
     - name: Install dependencies
       run:  npm install
     - name: Install Jest globally
