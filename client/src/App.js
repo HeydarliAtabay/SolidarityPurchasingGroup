@@ -9,8 +9,6 @@ import EmployeePage from './Components/EmployeePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-
-import ProductGallery from './Components/Gallery';
 import ClientArea from './Components/ClientArea';
 
 let r = [];

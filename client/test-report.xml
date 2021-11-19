@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\ClientAlert.test.js">
-    <testCase name="Renders Correctly the client Reminder" duration="275"/>
+    <testCase name="Renders Correctly the client Reminder" duration="587"/>
   </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\ProductPage.test.js">
-    <testCase name="Renders Frontpage correctly" duration="453"/>
+    <testCase name="Renders Frontpage correctly" duration="682"/>
   </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\Booking.test.js">
-    <testCase name="Render Booking Correctly" duration="246"/>
-    <testCase name="Render StaffBooking Correctly" duration="116"/>
+    <testCase name="Render Booking Correctly" duration="690"/>
+    <testCase name="Render StaffBooking Correctly" duration="86"/>
   </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\DeliverList.test.js">
-    <testCase name="Renders button to show products Correctly" duration="122"/>
-    <testCase name="Renders list of products to deliver Correctly" duration="190"/>
+    <testCase name="Renders button to show products Correctly" duration="262"/>
+    <testCase name="Renders list of products to deliver Correctly" duration="116"/>
   </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\Frontpage.test.js">
-    <testCase name="Renders Frontpage correctly" duration="355"/>
+    <testCase name="Renders Frontpage correctly" duration="647"/>
   </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\API.test.js">
-    <testCase name="test AllPaymentMethods no errors" duration="4"/>
+    <testCase name="test AllPaymentMethods no errors" duration="7"/>
     <testCase name="test getAllClients no errors" duration="2"/>
     <testCase name="test getAllClients error" duration="1"/>
     <testCase name="test getAllOrders no errors" duration="1"/>
     <testCase name="test getAllOrders error" duration="1"/>
-    <testCase name="test updateDelivered(order_id) no errors" duration="0"/>
-    <testCase name="test updateDelivered(order_id) error" duration="3"/>
-    <testCase name="test GetAllProducts No errors" duration="7"/>
+    <testCase name="test updateDelivered(order_id) no errors" duration="1"/>
+    <testCase name="test updateDelivered(order_id) error" duration="6"/>
+    <testCase name="test GetAllProducts No errors" duration="8"/>
     <testCase name="test GetAllProducts Error" duration="1"/>
-    <testCase name="test GetProductByID No errors" duration="10"/>
-    <testCase name="test GetProductByID Error" duration="1"/>
-    <testCase name="test GetAllCategories No errors" duration="1"/>
+    <testCase name="test GetProductByID No errors" duration="5"/>
+    <testCase name="test GetProductByID Error" duration="2"/>
+    <testCase name="test GetAllCategories No errors" duration="2"/>
     <testCase name="test GetAllCategories Error" duration="1"/>
     <testCase name="test GetAllProviders No errors" duration="2"/>
-    <testCase name="test GetAllProviders Error" duration="0"/>
-    <testCase name="test GetProviderByID No errors" duration="1"/>
+    <testCase name="test GetAllProviders Error" duration="1"/>
+    <testCase name="test GetProviderByID No errors" duration="7"/>
     <testCase name="test GetProviderByID Error" duration="1"/>
-    <testCase name="test getAllPaymentMethods no errors" duration="2"/>
-    <testCase name="test getAllPaymentMethods error" duration="0"/>
-    <testCase name="test addClient no errors" duration="1"/>
-    <testCase name="test addClient response not ok, json ok" duration="0"/>
-    <testCase name="test addClient response not ok, json null" duration="1"/>
+    <testCase name="test getAllPaymentMethods no errors" duration="0"/>
+    <testCase name="test getAllPaymentMethods error" duration="1"/>
+    <testCase name="test addClient no errors" duration="2"/>
+    <testCase name="test addClient response not ok, json ok" duration="1"/>
+    <testCase name="test addClient response not ok, json null" duration="2"/>
     <testCase name="test addTransaction no errors" duration="1"/>
     <testCase name="test addTransaction response not ok, json ok" duration="1"/>
     <testCase name="test addTransaction response not ok, json null" duration="1"/>
     <testCase name="test insertNewBookOrder(itemsOrdered) no errors" duration="1"/>
-    <testCase name="test insertNewBookOrder(itemsOrdered) response not ok, json ok" duration="0"/>
+    <testCase name="test insertNewBookOrder(itemsOrdered) response not ok, json ok" duration="1"/>
     <testCase name="test insertNewBookOrder(itemsOrdered) fetch rejected" duration="1"/>
   </file>
   <file path="C:\Users\mario\Desktop\SE2-SPG\client\src\__tests__\MyNavbar.test.js">
-    <testCase name="Renders Frontpage correctly" duration="243"/>
+    <testCase name="Renders Frontpage correctly" duration="340"/>
   </file>
 </testExecutions>
