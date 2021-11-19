@@ -67,7 +67,6 @@ exports.getAllCategories = () => {
             if (err) {
                 reject(err);
             }
-            console.log(rows);
             const categories = rows.map((c) => ({
                 name: c.category_name,
                 active: 0

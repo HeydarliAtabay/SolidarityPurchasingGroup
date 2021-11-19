@@ -68,7 +68,7 @@ app.put(
 app.get('/api/products/all', async (req, res) => {
   try {
     const products = await productsDAO.getAllProducts();
-    console.log(products);
+    //console.log(products);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -81,7 +81,7 @@ app.get('/api/product/:product_id', async (req, res) => {
   try {
     const product_id = req.params.product_id;
     const product = await productsDAO.getProductById(product_id);
-    console.log(product);
+    //console.log(product);
     res.json(product);
   } catch (err) {
     console.log(err);
@@ -93,7 +93,7 @@ app.get('/api/product/:product_id', async (req, res) => {
 app.get('/api/products/categories', async (req, res) => {
   try {
     const categories = await productsDAO.getAllCategories();
-    console.log(categories);
+    //console.log(categories);
     res.json(categories);
   } catch (err) {
     console.log(err);
@@ -105,7 +105,7 @@ app.get('/api/products/categories', async (req, res) => {
 app.get('/api/providers/all', async (req, res) => {
   try {
     const providers = await providersDAO.getAllProviders();
-    console.log(providers);
+    //console.log(providers);
     res.json(providers);
   } catch (err) {
     console.log(err);
@@ -118,7 +118,7 @@ app.get('/api/provider/:provider_id', async (req, res) => {
   try {
     const provider_id = req.params.provider_id;
     const provider = await providersDAO.getProviderById(provider_id);
-    console.log(provider);
+    //console.log(provider);
     res.json(provider);
   } catch (err) {
     console.log(err);
@@ -245,6 +245,4 @@ app.post('/api/transactions', (req, res) => {
 module.exports = app;
 
 /* CONNECTION */
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
+app.listen(PORT);
