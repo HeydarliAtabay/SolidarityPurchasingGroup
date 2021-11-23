@@ -1,6 +1,6 @@
 import API from '../API';
 import DeliverList from './DeliverList';
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown} from 'react-bootstrap';
 import{ Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 function ModalWalletTopUp(props) {
   const { onClose, onSave, clients, methods } = props;
   const [clientId, setClientId] = useState(1)
+  const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
   const [method, setMethod] = useState(methods ? methods[0].method_name : "None")
   const [methodId, setMethodId] = useState(1)
   const [number, setNumber] = useState("")
@@ -30,7 +31,7 @@ function ModalWalletTopUp(props) {
   const handleSubmit = (event) => {
     event.preventDefault();
     event.stopPropagation();
-
+    let today=new Date()
 
     const newTransaction = Object.assign({}, {
       type: "wallet top-up",
@@ -38,8 +39,8 @@ function ModalWalletTopUp(props) {
       method_id: methodId,
       account_num: number,
       amount: amount,
-      date: "14-11-2021",
-      time: "00:00",
+      date: today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate(),
+      time: today.getHours()+':'+today.getMinutes() +':'+ today.getSeconds(),
       status: 1
     });
 
@@ -74,8 +75,8 @@ function ModalWalletTopUp(props) {
             <Form.Group as={Col} controlId="formUser">
 
               <Row>
-                <Col sm={4}>
-                  <Form.Label>Select Client</Form.Label>
+             {/*<Col sm={4}>
+                 <Form.Label>Select Client</Form.Label>
                   <Form.Control
                     as="select"
                     value={clientId}
@@ -93,26 +94,37 @@ function ModalWalletTopUp(props) {
                       })
                     }
                   </Form.Control>
+                </Col> */}    
+                <Col sm={8}>
+                <Form.Label>Select Client</Form.Label>
+                <Dropdown className="d-block mb-3" value={selectedUser.client_id}>
+              <Dropdown.Toggle variant="primary" id="dropdown-basic">
+                Select the desired client
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                {clients.map((c) => (
+                  <Dropdown.Item onClick={() =>{
+                    (setSelectedUser(c))
+                    setClientId(c.client_id)
+
+                  } } key={c.client_id} value={c.client_id} eventKey={c.client_id}><b>{c.name} {c.surname}</b> ({c.email})</Dropdown.Item>
+                ))}
+
+              </Dropdown.Menu>
+            </Dropdown>
                 </Col>
-                <Col sm={6}>
-                  <Form.Label>Name & Surname</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="description"
-                    value={`${clients[clientId - 1].name} ${clients[clientId - 1].surname} `}
-                    disabled
-                  />
-                </Col>
-                <Col sm={2}>
+                <Col sm={4}>
                   <Form.Label>Balance</Form.Label>
                   <Form.Control
                     type="text"
                     name="balance"
-                    value={clients[clientId - 1].budget}
+                    value={(selectedUser.client_id !== -1) ? selectedUser.budget  : "0.0"}
                     disabled
                   />
                 </Col>
-
+                {selectedUser.client_id !== -1 ? <h6 className="fw-bold">Wallet top-up for: {selectedUser.name + " " + selectedUser.surname + " " + selectedUser.email}</h6> : ''}
+                
               </Row>
 
 
@@ -153,7 +165,7 @@ function ModalWalletTopUp(props) {
                         type="text"
                         name="cardholder"
                         placeholder="Card Holder name"
-                        value={`${clients[clientId - 1].name} ${clients[clientId - 1].surname} `}
+                        value={(selectedUser.client_id !== -1) ? selectedUser.name + " " + selectedUser.surname : "Card Holder"}
                         disabled
                       />
                     </Col>
@@ -162,6 +174,7 @@ function ModalWalletTopUp(props) {
                       <Form.Control
                         type="text"
                         name="cardnumber"
+                        maxLength='16'
                         placeholder="Card Number"
                         value={number}
                         onChange={(ev) => {
@@ -178,6 +191,7 @@ function ModalWalletTopUp(props) {
                         type="text"
                         name="validity"
                         placeholder="MM/YY"
+                        maxLength='5'
                         value={valid}
                         onChange={(ev) => {
                           setValid(ev.target.value)
@@ -187,8 +201,10 @@ function ModalWalletTopUp(props) {
                     <Col sm={4}>
                       <Form.Label>CVV</Form.Label>
                       <Form.Control
-                        type="text"
+                        type="number"
                         name="cvv"
+                        min='0'
+                        max='999'
                         placeholder="CVV"
                         value={cvv}
                         onChange={(ev) => {
@@ -199,8 +215,10 @@ function ModalWalletTopUp(props) {
                     <Col sm={4}>
                       <Form.Label>Amount(€)</Form.Label>
                       <Form.Control
-                        type="text"
+                        type="number"
                         name="amount"
+                        min='0'
+                        max='1000'
                         placeholder="0.0"
                         value={amount}
                         onChange={(ev) => {
@@ -229,6 +247,7 @@ function ModalWalletTopUp(props) {
                         type="text"
                         name="cardnumber"
                         placeholder="Satispay Account Number"
+                        maxLength='16'
                         value={number}
                         onChange={(ev) => {
                           setNumber(ev.target.value)
@@ -239,8 +258,10 @@ function ModalWalletTopUp(props) {
                     <Col sm={4}>
                       <Form.Label>Amount(€)</Form.Label>
                       <Form.Control
-                        type="text"
+                        type="number"
                         name="amount"
+                        min='0'
+                        max='1000'
                         placeholder="0.0"
                         value={amount}
                         onChange={(ev) => {
@@ -267,7 +288,7 @@ function ModalWalletTopUp(props) {
                         type="text"
                         name="cardholder"
                         placeholder="Account Holder name"
-                        value={`${clients[clientId - 1].name} ${clients[clientId - 1].surname} `}
+                        value={(selectedUser.client_id !== -1) ? selectedUser.name + " " + selectedUser.surname : "Account Holder"}
                         disabled
                       />
                     </Col>
@@ -277,6 +298,7 @@ function ModalWalletTopUp(props) {
                         type="text"
                         name="cardnumber"
                         placeholder="IBAN address"
+                        maxLength='16'
                         value={number}
                         onChange={(ev) => {
                           setNumber(ev.target.value)
@@ -304,6 +326,7 @@ function ModalWalletTopUp(props) {
                         type="text"
                         name="SWIF"
                         placeholder="SWIFT code"
+                        maxLength='8'
                         value={cvv}
                         onChange={(ev) => {
                           setCvv(ev.target.value)
@@ -313,8 +336,10 @@ function ModalWalletTopUp(props) {
                     <Col sm={4}>
                       <Form.Label>Amount(€)</Form.Label>
                       <Form.Control
-                        type="text"
+                        type="number"
                         name="amount"
+                        min='0'
+                        max='1000'
                         placeholder="0.0"
                         value={amount}
                         onChange={(ev) => {
@@ -325,6 +350,32 @@ function ModalWalletTopUp(props) {
 
                   </Row>
 
+                </Form.Group>
+
+              </>
+
+            }
+
+             {/*For Satispay */}
+             {(method === "Cash") &&
+              <>
+                <Form.Group>
+                  <h5 className="regText" >Enter amount paid in cash</h5>
+                  <Row className="justify-content-md-center">
+                    <Col sm={3}>
+                      <Form.Control
+                        type="number"
+                        name="amount"
+                        min='0'
+                        max='1000'
+                        placeholder="0.0"
+                        value={amount}
+                        onChange={(ev) => {
+                          setAmount(ev.target.value)
+                        }}
+                      />
+                    </Col>
+                  </Row>
                 </Form.Group>
 
               </>
