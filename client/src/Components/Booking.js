@@ -106,7 +106,7 @@ function Booking(props) {
       setShowdanger(true);
       return;
     }
-    let p;
+    let p,s;
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
@@ -131,14 +131,8 @@ function Booking(props) {
         setTimeout(() => {}, 3000)
       );
       for (const a of productsBasket) {
-        let order = new clientOrders(
-          location.state.item.order_id,
-          location.state.item.client_id,
-          a.name,
-          'booked',
-          itemsPrice.toFixed(2),
-          i
-        );
+        s=(a.price*a.qty).toFixed(2);
+let order=new clientOrders (location.state.item.order_id , location.state.item.client_id, a.name, "booked", s, i );
         API.addOrder(order).then(() => {
           props.setRecharged(true);
           setTimeout(() => {}, 3000);
