@@ -5,12 +5,12 @@ import Frontpage from './Components/Frontpage';
 import Booking from './Components/Booking';
 import Orders from './Components/Orders';
 import { clientOrders } from './classes/ClientOrder';
-import API from './API'; 
+import API from './API';
 import EmployeePage from './Components/EmployeePage';
 import UserRegistration from './Components/UserRegistration';
-import { useState, useEffect,Row,Alert } from 'react';
+import { useState, useEffect, Row, Alert } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { LoginForm1} from "./Components/LoginForm";
+import { LoginForm1 } from './Components/LoginForm';
 //import ProductGallery from './Components/Gallery';
 import ClientArea from './Components/ClientArea';
 
@@ -19,24 +19,23 @@ let r = [];
 function App() {
   const [time, setTime] = useState({ day: 'monday', hour: '10' });
   const [recharged, setRecharged] = useState(true);
- const [recharged1, setRecharged1] = useState(true);
+  const [recharged1, setRecharged1] = useState(true);
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
   const [products, setProducts] = useState([]);
   const [update, setUpdate] = useState(false); //used when an order is confirmed in order to update the quantity
   const [methods, setMethods] = useState([]);
-  const [message,setMessage]=useState("");
-  const [userid,setUserid]=useState();
+  const [message, setMessage] = useState('');
+  const [userid, setUserid] = useState();
   const [logged, setLogged] = useState(false);
- 
+
   const updateRech = (x) => {
     setRecharged(x);
   };
- const updateRech1 = (x) => {
+  const updateRech1 = (x) => {
     setRecharged1(x);
   };
 
- 
   /*USEFFECT LOGIN*/
   useEffect(() => {
     const checkAuth = async () => {
@@ -46,10 +45,10 @@ function App() {
         console.error(err.error);
       }
     };
- checkAuth();
+    checkAuth();
   }, []);
   /* USEFFECT clients */
- 
+
   useEffect(() => {
     const getAllClients = async () => {
       await API.getAllClients()
@@ -61,8 +60,7 @@ function App() {
           console.log(err);
         });
     };
-if(recharged1)
-    getAllClients();
+    if (recharged1) getAllClients();
   }, [recharged1]);
 
   /* USEFFECT orders*/
@@ -71,7 +69,14 @@ if(recharged1)
       API.getAllOrders().then((data) => {
         data.forEach((x) => {
           r.push(
-            new clientOrders(x.order_id, x.client_id, x.product_name, x.state, x.OrderPrice, x.id)
+            new clientOrders(
+              x.order_id,
+              x.client_id,
+              x.product_name,
+              x.state,
+              x.OrderPrice,
+              x.id
+            )
           );
         });
         let om = [...r];
@@ -103,11 +108,23 @@ if(recharged1)
   }, []);
 
   function addTransaction(tr) {
-    API.addTransaction(tr).then((err) => { console.log('Transaction was added') }).catch((err)=>{console.log(err)});
+    API.addTransaction(tr)
+      .then((err) => {
+        console.log('Transaction was added');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function topUpBalance(amount, client) {
-    API.increaseBalance(amount, client).then((err) => { console.log('Balance was topped up') }).catch((err)=>{console.log(err)});
+    API.increaseBalance(amount, client)
+      .then((err) => {
+        console.log('Balance was topped up');
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
   console.log(time);
   /* local objects to be deleted once we have a backend */
@@ -116,45 +133,53 @@ if(recharged1)
   function updateProps() {
     setUpdate(!update);
   }
- 
 
- const doLogIn = async (credentials) => {
+  const doLogIn = async (credentials) => {
     try {
       const user = await API.logIn(credentials);
       setLogged(true);
-      
-      setMessage("");
+
+      setMessage('');
       setUserid(`${user.id}`);
     } catch (err) {
-
       setMessage(`"${err}"`);
-
     }
-  }
-
+  };
 
   const doLogOut = async () => {
     await API.logOut();
-    
-    setLogged(false);
-   
-    
-  }
-  return (
-  
 
+    setLogged(false);
+  };
+  return (
     <Router>
       <MyNavbar time={time} setTime={setTime} />
-      
-    
+
       <Switch>
         <Route
           path="/booking"
           render={() => (
             <Booking
-            orders={orders}
+              browsing={true}
+              logged={logged}
+              orders={orders}
               isEmployee={false}
               products={products}
+              updateProps={updateProps}
+              time={time}
+              clientid={userid}
+              setRecharged={updateRech}
+            />
+          )}
+        />
+        <Route
+          path="/products-next-week"
+          render={() => (
+            <Booking
+              browsing={true}
+              logged={logged}
+              isEmployee={false}
+              products={products} //product has to change in productavailable nextweek
               updateProps={updateProps}
               time={time}
               clientid={userid}
@@ -166,7 +191,7 @@ if(recharged1)
           path="/orders"
           render={() => (
             <Orders
-            orders={orders}
+              orders={orders}
               clientid={userid}
               setRecharged={updateRech}
             />
@@ -176,7 +201,8 @@ if(recharged1)
           path="/staff-booking"
           render={() => (
             <Booking
-            
+              browsing={false}
+              logged={logged}
               clients={clients}
               isEmployee={true}
               products={products}
@@ -199,22 +225,24 @@ if(recharged1)
             />
           )}
         />
-         <Route
+        <Route
           path="/login"
           render={() => (
-            <LoginForm1
-             login={doLogIn}
-             logged={logged}
-             clients={clients}
-            
-            />
+            <LoginForm1 login={doLogIn} logged={logged} clients={clients} />
           )}
         />
         <Route
           path="/client"
-          render={() => <ClientArea  logout={doLogOut}clients={clients} clientid={userid} />}
+          render={() => (
+            <ClientArea logout={doLogOut} clients={clients} clientid={userid} />
+          )}
         />
-        <Route path="/registration" render={() => <UserRegistration clients={clients} setRecharged={updateRech1}/>} />
+        <Route
+          path="/registration"
+          render={() => (
+            <UserRegistration clients={clients} setRecharged={updateRech1} />
+          )}
+        />
         <Route path="/" render={() => <Frontpage />} />
       </Switch>
     </Router>
