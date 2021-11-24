@@ -8,4 +8,4 @@ function clientOrders(order_id,client_id,product_name,state,OrderPrice,id){
     this.OrderPrice=OrderPrice;
     this.id=id;
     }
-export  {clientOrders};rders};
+export  {clientOrders};
