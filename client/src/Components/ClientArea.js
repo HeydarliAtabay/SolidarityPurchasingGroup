@@ -58,7 +58,7 @@ function ClientArea(props) {
                                 <p className="card-text">
                                     • View &#38; search products<br />
                                     • Book products
-                                </p>
+                                </p> 
                                 <div className="d-block text-end">
                                     <Link to="/booking">
                                         <button className="btn btn-primary">Browse products</button>
@@ -103,9 +103,9 @@ function ClientArea(props) {
                                     • View your order history
                                 </p>
                                 <div className="d-block text-end">
-                                    {/* <Link to="/wallet"> */}
-                                        <button className="btn btn-primary" disabled={true}>View orders</button>
-                                    {/* </Link> */}
+                                    <Link to="/orders"> 
+                                        <button className="btn btn-primary" disabled={false}>View orders</button>
+                                    </Link> 
                                 </div>
                             </div>
                         </div>
