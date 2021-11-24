@@ -128,11 +128,11 @@ app.get('/api/orders', async (req, res) => {
 
 //PUT to update a product as delivered
 app.put(
-  '/api/orders/:order_id',
+  '/api/orders/:order_id/:product_name',
 
   async (req, res) => {
     try {
-      await ordersDao.delivered(req.params.order_id);
+      await ordersDao.delivered(req.params.order_id,req.params.product_name);
       res.status(200).end('Update Completed!');
     } catch (err) {
       res.status(503).json({
@@ -340,7 +340,36 @@ app.post('/api/transactions', (req, res) => {
                     res.status(503).json({ code: 503, error: "Unavailable service." });
                 }
             });
-
+//POST ->orders
+        app.post('/api/orders', 
+            async (req, res) => {
+              
+                const t = {
+                   order_id: req.body.order_id,
+                    client_id: req.body.client_id,
+                   product_name: req.body.product_name,
+                  state: req.body.state,
+                    OrderPrice: req.body.OrderPrice,
+                 id:req.body.id
+                };
+                try {
+                    const result = await ordersDao.addOrder(t);
+            
+                    res.status(201).end("Created order!");
+                } catch (err) {
+                    res.status(503).json({ code: 503, error: "Unavailable service during the create of the order." });
+                }
+            });
+//DELETE ->order item
+app.delete('/api/orders/:id', async (req, res) => {
+      
+      try {
+          await ordersDao.deleteItem(req.params.id);
+          res.status(204).end("order item deleted!");
+      } catch (err) {
+          res.status(503).json({ code: 503, error: `Unavailable service error during the delete of the order item` });
+      }
+  });
 module.exports = app;
 
 /* CONNECTION */
