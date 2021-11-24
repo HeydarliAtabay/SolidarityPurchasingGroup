@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from './Components/MyNavbar';
 import Frontpage from './Components/Frontpage';
 import Booking from './Components/Booking';
+import Orders from './Components/Orders';
 import { clientOrders } from './classes/ClientOrder';
 import API from './API'; 
 import EmployeePage from './Components/EmployeePage';
@@ -70,7 +71,7 @@ if(recharged1)
       API.getAllOrders().then((data) => {
         data.forEach((x) => {
           r.push(
-            new clientOrders(x.order_id, x.client_id, x.product_name, x.state)
+            new clientOrders(x.order_id, x.client_id, x.product_name, x.state, x.OrderPrice, x.id)
           );
         });
         let om = [...r];
@@ -151,10 +152,23 @@ if(recharged1)
           path="/booking"
           render={() => (
             <Booking
+            orders={orders}
               isEmployee={false}
               products={products}
               updateProps={updateProps}
               time={time}
+              clientid={userid}
+              setRecharged={updateRech}
+            />
+          )}
+        />
+        <Route
+          path="/orders"
+          render={() => (
+            <Orders
+            orders={orders}
+              clientid={userid}
+              setRecharged={updateRech}
             />
           )}
         />
@@ -162,6 +176,7 @@ if(recharged1)
           path="/staff-booking"
           render={() => (
             <Booking
+            
               clients={clients}
               isEmployee={true}
               products={products}
