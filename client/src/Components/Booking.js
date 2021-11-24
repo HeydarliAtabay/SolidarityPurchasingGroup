@@ -1,9 +1,10 @@
 import { Button, Row, Col, Card, Container, Modal, Dropdown } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
 import API from './../API'
 import Basket from './Basket';
 import ProductPage from './ProductPage';
-
+import { clientOrders } from '../classes/ClientOrder';
+import {useLocation} from 'react-router-dom'
 function Booking(props) {
   //the props that I want are: a vector containg the products and a state about login or not.
   const [isLogged, setLogged] = useState(true);
@@ -25,7 +26,18 @@ function Booking(props) {
   const [showdanger, setShowdanger] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
-
+  const location= useLocation();
+let indice,ordine;
+if(props.orders.length===0)
+indice=1;
+else{
+let f=props.orders.map(x=>x.id);
+     indice=Math.max(...f)+1;}
+if(props.orders.length===0)
+ordine=1;
+else{
+let f=props.orders.map(x=>x.order_id);
+     ordine=Math.max(...f)+1;}
   /*USEFFECT products*/
   useEffect(() => {
     const getAllProducts = async () => {
@@ -77,17 +89,29 @@ function Booking(props) {
       setShowdanger(true);
       return;
     }
+    let p;
+if(!location.state){
+for(const a of productsBasket){
+  p=(a.price*a.qty).toFixed(2);
+  console.log(p);
+let order=new clientOrders (`${ordine}` , parseInt(props.clientid), a.name, "booked",p ,`${indice}` );
+API.addOrder(order).then(()=>{props.setRecharged(true);
+  setTimeout(()=>{},3000)});indice=indice+1;
+};
+}
+else
+{let i=location.state.item.id;
+API.deleteOrderItem(location.state.item.id).then(setTimeout(()=>{},3000));
+for(const a of productsBasket){
+let order=new clientOrders (location.state.item.order_id , location.state.item.client_id, a.name, "booked",itemsPrice.toFixed(2) ,i );
+API.addOrder(order).then(()=>{props.setRecharged(true);
+  setTimeout(()=>{},3000)});i=i+1;
+};
+}
 
-    const order = {
-      client_id: props.isEmployee ? selectedUser.client_id : 1,
-      order_items: productsBasket,
-      total: itemsPrice.toFixed(2),
-    };
-    const res = await API.insertNewBookOrder(order);
-    if (res.status == 200) setShowsuccess(true);
-    else {
-      setShowdanger(true);
-    }
+    
+    setShowsuccess(true);
+   
     props.updateProps();
   };
 
@@ -264,7 +288,9 @@ function Booking(props) {
               }
             </Col>
             <Col lg={3} className="my-5 text-center px-5">
-              <Basket
+              <Basket 
+              clientid={props.clientid}
+                orders={props.orders}
                 setShowsuccess={setShowsuccess}
                 setShowdanger={setShowdanger}
                 showsuccess={showsuccess}
