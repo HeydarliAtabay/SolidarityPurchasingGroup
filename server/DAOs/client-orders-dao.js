@@ -23,17 +23,20 @@ exports.getAllOrders = () => {
         client_id: e.client_id,
         product_name: e.product_name,
         state: e.state,
+        OrderPrice:e.OrderPrice,
+        id:e.id
       }));
       resolve(o);
     });
   });
 };
-//retrieve order given its id
-exports.getO = (order_id) => {
-  return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM orders WHERE order_id =? ';
 
-    db.get(sql, [order_id], (err, row) => {
+//retrieve order given its id
+exports.getO = (order_id, product_name) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM orders WHERE order_id =? AND product_name=? ';
+
+    db.get(sql, [order_id, product_name], (err, row) => {
       if (err) {
         reject(err);
         return;
@@ -43,15 +46,15 @@ exports.getO = (order_id) => {
   });
 };
 //update delivered order
-exports.delivered = async (order_id) => {
-  const test = await this.getO(order_id);
+exports.delivered = async (order_id, product_name) => {
+  const test = await this.getO(order_id, product_name);
 
   return new Promise((resolve, reject) => {
     const sql =
-      'UPDATE orders SET order_id=?, client_id=?, product_name=?, state=? WHERE order_id=?';
+      'UPDATE orders SET order_id=?, client_id=?, product_name=?, state=?, OrderPrice=? , id=? WHERE order_id=? AND product_name=?';
     db.run(
       sql,
-      [test.order_id, test.client_id, test.product_name, 'delivered', order_id],
+      [test.order_id, test.client_id, test.product_name, 'delivered', test.OrderPrice, test.id, order_id, product_name],
       function (err) {
         if (err) {
           reject(err);
@@ -62,7 +65,6 @@ exports.delivered = async (order_id) => {
     );
   });
 };
-
 // insert a new order
 exports.insert_order = async (client_id, totalorderprice) => {
   return new Promise((resolve, reject) => {
@@ -108,5 +110,34 @@ exports.insert_order_items = async (order_id, order_items) => {
       }
       resolve(ok_response);
     });
+  });
+};
+
+// Add a new order
+exports.addOrder = (t) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'INSERT INTO orders( order_id, client_id, product_name, state, OrderPrice, id ) VALUES ( ?, ?, ?, ?, ?, ? )';
+        db.run(sql, [ t.order_id, t.client_id, t.product_name, t.state, t.OrderPrice, t.id ], function (err) {
+            if (err) {
+                reject(err);
+                
+                return;
+            }
+            resolve(t.order_id);
+        });
+    });
+};
+//delete an order item
+
+exports.deleteItem= (id) => {
+  return new Promise((resolve, reject) => {
+      const sql = 'DELETE FROM orders WHERE id = ? ';
+      db.run(sql, [id], (err) => {
+          if (err) {
+              reject(err);
+              return;
+          } else
+              resolve(null);
+      });
   });
 };
