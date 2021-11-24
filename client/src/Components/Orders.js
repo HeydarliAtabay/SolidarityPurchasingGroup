@@ -21,7 +21,7 @@ const handleClose = (x) => setShow(x);
       <span className="d-block text-center mt-5 mb-2 display-2">
                 Orders
             </span>
-<Row><Col xs={6} md={6}>
+<Row><Col xs={6} md={6}> 
     <ListGroup variant="flush">
    <ListGroupItem key={"ciao"}variant ={"secondary"}style={{ 'fontSize': 25}}>List of my booked orders</ListGroupItem>
     {props.orders.filter(x=>x.state==="booked" && parseInt(x.client_id) === t).map((s)=>{
