@@ -30,13 +30,13 @@ async function getAllOrders() {
   }
 }
 //PUT to update a product as delivered
-function updateDelivered(order_id) {
+function updateDelivered(id,product_name) {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:3000/api/orders/${order_id}`, {
+    fetch(`http://localhost:3000/api/orders/${id}/${product_name}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-      },
+        },
     })
       .then((response) => {
         if (response.ok) {
@@ -423,6 +423,53 @@ function addUser(S) {
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
   });
 }
+
+//POST di un nuovo incontro
+function addOrder(S) {
+  return new Promise((resolve, reject) => {
+    fetch('http://localhost:3000/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        "order_id": S.order_id,
+        "client_id": S.client_id,
+        "product_name": S.product_name,
+       "state": S.state,
+      "OrderPrice": S.OrderPrice,
+       "id": S.id,
+        
+      }),
+    }).then((response) => {
+      if (response.ok) {
+        resolve(null);
+      } else {
+        // cause of error
+        response.json()
+          .then((obj) => { reject(obj); })
+          .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot insert a order" }] }) });
+      }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
+  });
+}
+//DELETE ->order item
+function deleteOrderItem(id) {
+  return new Promise((resolve, reject) => {
+    fetch(`http://localhost:3000/api/orders/${id}`, {
+      method: 'DELETE',
+    }).then((response) => {
+      if (response.ok) {
+        resolve(null);
+      } else {
+        // cause of error
+        response.json()
+          .then((obj) => { reject(obj); })
+          .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot delete a rorder item" }] }) });
+      }
+    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
+  });
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -435,12 +482,12 @@ const API = {
   getAllPaymentMethods,
   addTransaction,
   increaseBalance,
-  insertNewOrder,
+  deleteOrderItem,
   updateQuantity,
   insertNewBookOrder,
   getAllCategories,
   logOut, 
   logIn, 
-  getUserInfo,addUser
+  getUserInfo,addUser,addOrder
 };
 export default API;
