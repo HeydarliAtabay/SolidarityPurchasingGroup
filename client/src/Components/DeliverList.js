@@ -1,46 +1,84 @@
 import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
 import ris from './reply-all-fill.svg';
 import API from '../API'
+import { useState } from "react";
+import p from './circle-fill.svg';
+function onlyUnique(value,index,self){
+return self.indexOf(value)===index;
+
+}
 function DeliverList(props){
-    return(
+ const [show, setShow] = useState(false);
+const [id, setId] = useState();
+
+let m=props.orders.filter(x=>x.state==="booked").map(s=>s.order_id).filter(onlyUnique);
+m.reverse();
+const handleClose = (x) => setShow(x);
+    return(<>
     <ListGroup variant="flush">
     <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
         <Row>
-    <Col xs={3} md={3}>ORDER_ID</Col>
-    <Col xs={3} md={3}>CLIENT_ID</Col>
-    <Col xs={4} md={4}>PRODUCTS</Col>
+    <Col xs={2} md={2}>ORDER_ID</Col>
+    <Col xs={2} md={2}>CLIENT_ID</Col>
+    <Col xs={3} md={3}>PRODUCTS</Col>
+     <Col xs={3} md={3}>TOTAL</Col>
     <Col xs={2} md={2}>DELIVER</Col>
     </Row></ListGroupItem>
-    {props.orders.filter(x=>x.state===props.b).map((s)=>
+    {props.orders.filter(x=>x.state===props.b).map((s)=>{
+     if (!m.find(x => (parseInt(x) === parseInt(s.order_id)))) {
+                    return <ListGroupItem key={s.id} style={{ display: "none" }}></ListGroupItem> }
+else {
+let id=m[m.length-1];
+let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
+let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+let sum=0;
+for (const a of array)
+{sum=sum+a;}
+m.pop();
+
+  return  <ListGroupItem key={s.id} style={{'fontSize': 20}}>
+      <Row><Col xs={2} md={2}>{s.order_id}</Col>
+    <Col xs={2} md={2}>{s.client_id}</Col>
+    <Col xs={3} md={3}>
+<Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setId(s.order_id);}}>
+show</Button></Col>
     
-    <ListGroupItem key={s.order_id} style={{'fontSize': 20}}>
-      <Row><Col xs={3} md={3}>{s.order_id}</Col>
-    <Col xs={3} md={3}>{s.client_id}</Col>
-    <Col xs={4} md={4}>{s.product_name}</Col>
-    
-    
+    <Col xs={3} md={3}>{sum}{' '}€</Col>
     <Col xs={2} md={2}> 
     <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-       API.updateDelivered(s.order_id).then(()=>{
-           
-       
-              props.setRecharged(true);
+for(const a of array2){
+       API.updateDelivered(id, a).then(()=>{
+          
+   props.setRecharged(true); setTimeout(()=>{},3000)});
               
-         })
-         //api->update state
-    //set recharged della tabella ordini-clienti
-    }}></Image>
+         }}
+    }></Image>
     </Col>
     </Row>
-    </ListGroupItem>)
-    
-    }<ListGroupItem>
+    </ListGroupItem>
+    }}
+    )}
+    <ListGroupItem>
     <Button variant={"light"}style={{'fontSize': 20,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'15px'}}onClick={()=>{props.setShow(false);}}>Close</Button></ListGroupItem>
-    </ListGroup>
-    
-    
+  
+  </ListGroup>
+    <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
+
+    </>
     );}
-    
+    function Finestra(props){return(
+  <> <Modal show={props.show} onHide={props.handleClose} animation={false}>
+  <Modal.Header closeButton>
+    <Modal.Title >List Of Ordered Products</Modal.Title>
+  </Modal.Header>
+
+{props.orders.filter(x=>x.order_id===props.id).map((s)=>
+  <Modal.Body key={s.id}>
+ <Image src={p}style={{ width: '5px', height: '5px'}}></Image>{' '}{s.product_name.toUpperCase()}
+</Modal.Body>)}
+ 
+  </Modal></>);}
+
     
     
     
