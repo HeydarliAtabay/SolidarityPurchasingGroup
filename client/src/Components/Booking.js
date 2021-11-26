@@ -53,7 +53,7 @@ function Booking(props) {
   /*USEFFECT products*/
   useEffect(() => {
     const getAllProducts = async () => {
-      await API.getAllProducts()
+      await API.getAllConfirmedProducts(2021, 1)
         .then((res) => {
           setProducts(res);
         })

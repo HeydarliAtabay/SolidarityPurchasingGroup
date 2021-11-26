@@ -64,8 +64,18 @@ function updateDelivered(id,product_name) {
 }
 
 //GET all products
-async function getAllProducts() {
-  const response = await fetch('http://localhost:3000/api/products/all');
+async function getAllConfirmedProducts(year, week) {
+  const response = await fetch('http://localhost:3000/api/products/confirmed/'+year+"/"+week);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+async function getAllExpectedProducts(year, week) {
+  const response = await fetch('http://localhost:3000/api/products/expected/'+year+"/"+week);
   if (response.ok) {
     return await response.json();
   } else {
@@ -474,7 +484,8 @@ const API = {
   getAllClients,
   getAllOrders,
   updateDelivered,
-  getAllProducts,
+  getAllConfirmedProducts,
+  getAllExpectedProducts,
   getProductById,
   getAllProviders,
   getProviderById,

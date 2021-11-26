@@ -143,10 +143,26 @@ app.put(
   }
 );
 
-//GET all products
-app.get('/api/products/all', async (req, res) => {
+//GET all confirmed for sale products
+app.get('/api/products/confirmed/:year/:week', async (req, res) => {
   try {
-    const products = await productsDAO.getAllProducts();
+    const year = req.params.year;
+    const week = req.params.week;
+    const products = await productsDAO.getAllConfirmedProducts(year, week);
+    console.log(products);
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+//GET all expected products
+app.get('/api/products/expected/:year/:week', async (req, res) => {
+  try {
+    const year = req.params.year;
+    const week = req.params.week;
+    const products = await productsDAO.getAllExpectedProducts(year, week);
     console.log(products);
     res.json(products);
   } catch (err) {

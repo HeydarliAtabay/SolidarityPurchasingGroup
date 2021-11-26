@@ -8,11 +8,12 @@ const db = new sqlite.Database('spg.db', (err) => {
   }
 });
 
-exports.getAllProducts = () => {
+exports.getAllConfirmedProducts = (year, week) => {
   return new Promise((resolve, reject) => {
+    const product_status='confirmed';
     const sql =
-      'SELECT * FROM products, providers, product_categories WHERE products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
-    db.all(sql, [], (err, rows) => {
+      'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.product_status=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
+    db.all(sql, [year, week, product_status], (err, rows) => {
       if (err) {
         reject(err);
       }
@@ -27,6 +28,39 @@ exports.getAllProducts = () => {
         expiryDate: p.product_expiry,
         providerId: p.provider_id,
         providerName: p.provider_name,
+        year: p.year,
+        week: p.week_number,
+        status: p.product_status,
+        active: 1
+      }));
+      resolve(products);
+    });
+  });
+};
+
+exports.getAllExpectedProducts = (year, week) => {
+  return new Promise((resolve, reject) => {
+    const product_status='expected';
+    const sql =
+      'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.product_status=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
+    db.all(sql, [year, week, product_status], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      const products = rows.map((p) => ({
+        id: p.product_id,
+        name: p.product_name,
+        description: p.product_description,
+        category: p.category_name,
+        price: p.product_price,
+        unit: p.product_unit,
+        quantity: p.product_quantity,
+        expiryDate: p.product_expiry,
+        providerId: p.provider_id,
+        providerName: p.provider_name,
+        year: p.year,
+        week: p.week_number,
+        status: p.product_status,
         active: 1
       }));
       resolve(products);

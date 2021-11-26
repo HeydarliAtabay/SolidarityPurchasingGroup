@@ -22,7 +22,8 @@ function App() {
   const [recharged1, setRecharged1] = useState(true);
   const [orders, setOrders] = useState([]);
   const [clients, setClients] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [confirmedProducts, setConfirmedProducts] = useState([]);
+  const [expectedProducts, setExpectedProducts] = useState([]);
   const [update, setUpdate] = useState(false); //used when an order is confirmed in order to update the quantity
   const [methods, setMethods] = useState([]);
   const [message, setMessage] = useState('');
@@ -87,18 +88,33 @@ function App() {
     };
     if (recharged) pr();
   }, [recharged]);
+
   /*USEFFECT products*/
   useEffect(() => {
-    const getAllProducts = async () => {
-      await API.getAllProducts()
+    const getAllConfirmedProducts = async () => {
+      await API.getAllConfirmedProducts(2021, 1)
         .then((res) => {
-          setProducts(res);
+          setConfirmedProducts(res);
         })
         .catch((err) => {
           console.log(err);
         });
     };
-    getAllProducts();
+    getAllConfirmedProducts();
+  }, [update]);
+
+  /*USEFFECT for expected products*/
+  useEffect(() => {
+    const getAllExpectedProducts = async () => {
+      await API.getAllExpectedProducts(2021, 2)
+        .then((res) => {
+          setExpectedProducts(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllExpectedProducts();
   }, [update]);
 
   useEffect(() => {
@@ -160,11 +176,11 @@ function App() {
           path="/booking"
           render={() => (
             <Booking
-              browsing={true}
+              browsing={false}
               logged={logged}
               orders={orders}
               isEmployee={false}
-              products={products}
+              products={confirmedProducts}
               updateProps={updateProps}
               time={time}
               clientid={userid}
@@ -179,7 +195,7 @@ function App() {
               browsing={true}
               logged={logged}
               isEmployee={false}
-              products={products} //product has to change in productavailable nextweek
+              products={expectedProducts}
               updateProps={updateProps}
               time={time}
               clientid={userid}
@@ -205,7 +221,7 @@ function App() {
               logged={logged}
               clients={clients}
               isEmployee={true}
-              products={products}
+              products={confirmedProducts}
               updateProps={updateProps}
               time={time}
             />
