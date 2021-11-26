@@ -106,7 +106,7 @@ function Booking(props) {
       setShowdanger(true);
       return;
     }
-    let p,s;
+    let p, s;
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
@@ -131,8 +131,15 @@ function Booking(props) {
         setTimeout(() => {}, 3000)
       );
       for (const a of productsBasket) {
-        s=(a.price*a.qty).toFixed(2);
-let order=new clientOrders (location.state.item.order_id , location.state.item.client_id, a.name, "booked", s, i );
+        s = (a.price * a.qty).toFixed(2);
+        let order = new clientOrders(
+          location.state.item.order_id,
+          location.state.item.client_id,
+          a.name,
+          'booked',
+          s,
+          i
+        );
         API.addOrder(order).then(() => {
           props.setRecharged(true);
           setTimeout(() => {}, 3000);
@@ -148,6 +155,10 @@ let order=new clientOrders (location.state.item.order_id , location.state.item.c
   function handleClick() {
     history.push('/registration');
   }
+  function handleLogin() {
+    history.push('/login');
+  }
+
   const onAdd = (product, buyQty) => {
     const exist = productsBasket.find((x) => x.id === product.id);
     if (exist) {
@@ -281,12 +292,15 @@ let order=new clientOrders (location.state.item.order_id , location.state.item.c
             <span className="d-block text-center mt-5 mb-3 display-2">
               Do not have an account yet?
             </span>
-            <Button
-              className="mb-1 align-middle"
-              size="lg"
-              onClick={handleClick}
-            >
+            <Button className="m1 align-middle" size="lg" onClick={handleClick}>
               Sign up
+            </Button>
+            <Button
+              className="m-1 align-middle"
+              size="lg"
+              onClick={handleLogin}
+            >
+              Login
             </Button>
           </Col>
         </Row>
