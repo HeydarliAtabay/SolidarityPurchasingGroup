@@ -43,3 +43,32 @@ exports.getProviderById = (provider_id) => {
         });
     });
 };
+
+exports.getProviderExistingProducts = (provider_id) => {
+    return new Promise((resolve, reject) => {
+        const product_status = 'confirmed';
+        const sql = 'SELECT * FROM products WHERE products.provider_id=? AND products.product_status=? GROUP BY product_name ORDER BY year, week_number DESC';
+        db.all(sql, [provider_id, product_status], (err, rows) => {
+            if (err) {
+                reject(err);
+            }
+            const providerProducts = rows.map((p)=> ({
+                id: p.product_id,
+                name: p.product_name,
+                description: p.product_description,
+                category: p.category_id,
+                price: p.product_price,
+                unit: p.product_unit,
+                quantity: 0,
+                expiryDate: '',
+                providerId: provider_id,
+                providerName: '',
+                year: 0,
+                week: 0,
+                status: 'confirmed',
+                active: 1
+            }));
+            resolve(providerProducts);
+        });
+    });
+}

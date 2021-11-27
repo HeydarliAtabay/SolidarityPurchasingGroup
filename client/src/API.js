@@ -30,13 +30,13 @@ async function getAllOrders() {
   }
 }
 //PUT to update a product as delivered
-function updateDelivered(id,product_name) {
+function updateDelivered(id, product_name) {
   return new Promise((resolve, reject) => {
     fetch(`http://localhost:3000/api/orders/${id}/${product_name}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        },
+      },
     })
       .then((response) => {
         if (response.ok) {
@@ -65,7 +65,7 @@ function updateDelivered(id,product_name) {
 
 //GET all products
 async function getAllConfirmedProducts(year, week) {
-  const response = await fetch('http://localhost:3000/api/products/confirmed/'+year+"/"+week);
+  const response = await fetch('http://localhost:3000/api/products/confirmed/' + year + "/" + week);
   if (response.ok) {
     return await response.json();
   } else {
@@ -75,7 +75,7 @@ async function getAllConfirmedProducts(year, week) {
 }
 
 async function getAllExpectedProducts(year, week) {
-  const response = await fetch('http://localhost:3000/api/products/expected/'+year+"/"+week);
+  const response = await fetch('http://localhost:3000/api/products/expected/' + year + "/" + week);
   if (response.ok) {
     return await response.json();
   } else {
@@ -101,10 +101,10 @@ async function getProductById(product_id) {
 async function getAllCategories() {
   const response = await fetch('http://localhost:3000/api/products/categories');
   if (response.ok) {
-      return await response.json();
+    return await response.json();
   } else {
-      let err = { status: response.status, errObj: await response.json() };
-      throw err;  // An object with the error coming from the server
+    let err = { status: response.status, errObj: await response.json() };
+    throw err;  // An object with the error coming from the server
   }
 }
 
@@ -131,6 +131,50 @@ async function getProviderById(provider_id) {
     throw err; // An object with the error coming from the server
   }
 }
+
+//GET provider products by providerID
+async function getProviderProducts(provider_id) {
+  const response = await fetch(
+    'http://localhost:3000/api/provider/' + provider_id + '/products'
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//POST array of products expected to be available next week
+async function declareAvailability(products) {
+  const response = await fetch('/api/products/expected', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(products), // Conversion in JSON format
+  });
+  if (response.ok) {
+    return await response.json();
+  }
+  else {
+    throw response.json();
+  }
+}
+
+//POST product image & product_id (used to rename img for correctly displaying in booking.js)
+async function uploadProductImage(formData, product_id) {
+    const response = await fetch('/api/products/expected/upload/'+product_id, {
+      method: 'POST',
+      body: formData
+    });
+    console.log(response);
+    if (response.ok) {
+      return true;
+    }
+    else {
+      throw response;
+    }
+}
+
 //Insert a new order
 function insertNewBookOrder(itemsOrdered) {
   return new Promise((resolve, reject) => {
@@ -336,9 +380,9 @@ function increaseBalance(amount, clientId) {
   return new Promise((resolve, reject) => {
     fetch(
       'http://localhost:3000/api/clients/update/balance/' +
-        clientId +
-        '/' +
-        amount,
+      clientId +
+      '/' +
+      amount,
       {
         method: 'PUT',
         headers: {
@@ -376,7 +420,7 @@ async function logIn(credentials) {
     },
     body: JSON.stringify(credentials),
   });
-  if(response.ok) {
+  if (response.ok) {
     const user = await response.json();
     return user;
   }
@@ -385,7 +429,7 @@ async function logIn(credentials) {
       const errDetail = await response.json();
       throw errDetail.message;
     }
-    catch(err) {
+    catch (err) {
       throw err;
     }
   }
@@ -417,9 +461,9 @@ function addUser(S) {
         "id": S.id,
         "name": S.name,
         "email": S.email,
-       "hash": S.hash,
-       "role": S.role,
-        
+        "hash": S.hash,
+        "role": S.role,
+
       }),
     }).then((response) => {
       if (response.ok) {
@@ -446,10 +490,10 @@ function addOrder(S) {
         "order_id": S.order_id,
         "client_id": S.client_id,
         "product_name": S.product_name,
-       "state": S.state,
-      "OrderPrice": S.OrderPrice,
-       "id": S.id,
-        
+        "state": S.state,
+        "OrderPrice": S.OrderPrice,
+        "id": S.id,
+
       }),
     }).then((response) => {
       if (response.ok) {
@@ -489,6 +533,9 @@ const API = {
   getProductById,
   getAllProviders,
   getProviderById,
+  getProviderProducts,
+  declareAvailability,
+  uploadProductImage,
   addClient,
   getAllPaymentMethods,
   addTransaction,
@@ -497,8 +544,8 @@ const API = {
   updateQuantity,
   insertNewBookOrder,
   getAllCategories,
-  logOut, 
-  logIn, 
-  getUserInfo,addUser,addOrder
+  logOut,
+  logIn,
+  getUserInfo, addUser, addOrder
 };
 export default API;

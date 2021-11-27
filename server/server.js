@@ -12,6 +12,10 @@ const passportLocal = require('passport-local').Strategy; //Authentication strat
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
 const dbt = require("./DAOs/users-dao"); // module for accessing the DB
+
+const fileUpload = require("express-fileupload"); //Middleware for storing files
+const path = require("path"); //Module to create absolute paths
+
 // init express
 let app = express();
 app.disable("x-powered-by");
@@ -20,6 +24,7 @@ const PORT = 3001;
 // set-up the middlewares
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(fileUpload());
 
 /*** Set up Passport ***/
 passport.use(
@@ -132,7 +137,7 @@ app.put(
 
   async (req, res) => {
     try {
-      await ordersDao.delivered(req.params.order_id,req.params.product_name);
+      await ordersDao.delivered(req.params.order_id, req.params.product_name);
       res.status(200).end('Update Completed!');
     } catch (err) {
       res.status(503).json({
@@ -163,7 +168,6 @@ app.get('/api/products/expected/:year/:week', async (req, res) => {
     const year = req.params.year;
     const week = req.params.week;
     const products = await productsDAO.getAllExpectedProducts(year, week);
-    console.log(products);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -176,7 +180,6 @@ app.get('/api/product/:product_id', async (req, res) => {
   try {
     const product_id = req.params.product_id;
     const product = await productsDAO.getProductById(product_id);
-    console.log(product);
     res.json(product);
   } catch (err) {
     console.log(err);
@@ -188,7 +191,6 @@ app.get('/api/product/:product_id', async (req, res) => {
 app.get('/api/products/categories', async (req, res) => {
   try {
     const categories = await productsDAO.getAllCategories();
-    console.log(categories);
     res.json(categories);
   } catch (err) {
     console.log(err);
@@ -200,7 +202,6 @@ app.get('/api/products/categories', async (req, res) => {
 app.get('/api/providers/all', async (req, res) => {
   try {
     const providers = await providersDAO.getAllProviders();
-    console.log(providers);
     res.json(providers);
   } catch (err) {
     console.log(err);
@@ -213,12 +214,64 @@ app.get('/api/provider/:provider_id', async (req, res) => {
   try {
     const provider_id = req.params.provider_id;
     const provider = await providersDAO.getProviderById(provider_id);
-    console.log(provider);
     res.json(provider);
   } catch (err) {
     console.log(err);
     res.json(err);
   }
+});
+
+//Get provider products
+app.get('/api/provider/:provider_id/products', async (req, res) => {
+  try {
+    const provider_id = req.params.provider_id;
+    const providerProducts = await providersDAO.getProviderExistingProducts(provider_id);
+    console.log(providerProducts);
+    res.json(providerProducts);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+//Insert provider's expected production
+app.post('/api/products/expected', async (req, res) => {
+  try {
+    const products = req.body;
+    const productIDs = [];
+    for (let i = 0; i < products.length; i++) {
+      const newID = await productsDAO.insertNewExpectedProduct(products[i], 1);
+      productIDs.push({ old_id: products[i].id, new_id: newID });
+    }
+    console.log(productIDs);
+    res.json(productIDs);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+app.post('/api/products/expected/upload/:img_id', async (req, res) => {
+
+  if (!req.files) {
+    return res.status(400).send("No files were uploaded.");
+  }
+
+  const filename = req.params.img_id;
+
+  let file = req.files.product_image;
+
+  console.log(file);
+
+  file.name = filename+".jpg";
+  const path = __dirname + "/../client/public/products/" + file.name;
+
+  file.mv(path, (err) => {
+    if (err) {
+      return res.status(500).send(err);
+    }
+    return res.send({ status: "success", path: path });
+  });
 });
 
 app.post('/api/neworder', async (req, res) => {
@@ -316,7 +369,7 @@ app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
       .status(500)
       .json(
         `Error while updating the balance of user with id: ${clientId}   ` +
-          error
+        error
       );
   }
 });
@@ -333,59 +386,59 @@ app.post('/api/transactions', (req, res) => {
   }
 });
 //POST ->add users
-        app.post('/api/users', 
-      
-            async (req, res) => {
-               
-            var salt = bcrypt.genSaltSync(10);
+app.post('/api/users',
+
+  async (req, res) => {
+
+    var salt = bcrypt.genSaltSync(10);
     const oldPassword = req.body.hash;
     const hashedPassword = await bcrypt.hash(oldPassword, salt);
-                const t = {
-                    
-                   id: req.body.id,
-                    name: req.body.name,
-                    email: req.body.email,
-                  hash: hashedPassword,
-                    role: req.body.role
-                };
-                try {
-                    const result = await dbt.addclient(t);
-            
-                    res.status(201).end("Added client as a user!");
-                } catch (err) {
-                    res.status(503).json({ code: 503, error: "Unavailable service." });
-                }
-            });
+    const t = {
+
+      id: req.body.id,
+      name: req.body.name,
+      email: req.body.email,
+      hash: hashedPassword,
+      role: req.body.role
+    };
+    try {
+      const result = await dbt.addclient(t);
+
+      res.status(201).end("Added client as a user!");
+    } catch (err) {
+      res.status(503).json({ code: 503, error: "Unavailable service." });
+    }
+  });
 //POST ->orders
-        app.post('/api/orders', 
-            async (req, res) => {
-              
-                const t = {
-                   order_id: req.body.order_id,
-                    client_id: req.body.client_id,
-                   product_name: req.body.product_name,
-                  state: req.body.state,
-                    OrderPrice: req.body.OrderPrice,
-                 id:req.body.id
-                };
-                try {
-                    const result = await ordersDao.addOrder(t);
-            
-                    res.status(201).end("Created order!");
-                } catch (err) {
-                    res.status(503).json({ code: 503, error: "Unavailable service during the create of the order." });
-                }
-            });
+app.post('/api/orders',
+  async (req, res) => {
+
+    const t = {
+      order_id: req.body.order_id,
+      client_id: req.body.client_id,
+      product_name: req.body.product_name,
+      state: req.body.state,
+      OrderPrice: req.body.OrderPrice,
+      id: req.body.id
+    };
+    try {
+      const result = await ordersDao.addOrder(t);
+
+      res.status(201).end("Created order!");
+    } catch (err) {
+      res.status(503).json({ code: 503, error: "Unavailable service during the create of the order." });
+    }
+  });
 //DELETE ->order item
 app.delete('/api/orders/:id', async (req, res) => {
-      
-      try {
-          await ordersDao.deleteItem(req.params.id);
-          res.status(204).end("order item deleted!");
-      } catch (err) {
-          res.status(503).json({ code: 503, error: `Unavailable service error during the delete of the order item` });
-      }
-  });
+
+  try {
+    await ordersDao.deleteItem(req.params.id);
+    res.status(204).end("order item deleted!");
+  } catch (err) {
+    res.status(503).json({ code: 503, error: `Unavailable service error during the delete of the order item` });
+  }
+});
 module.exports = app;
 
 /* CONNECTION */

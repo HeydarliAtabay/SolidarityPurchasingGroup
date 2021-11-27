@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LoginForm1 } from './Components/LoginForm';
 //import ProductGallery from './Components/Gallery';
 import ClientArea from './Components/ClientArea';
+import FarmerProducts from './Components/FarmerProducts';
 
 let r = [];
 
@@ -239,6 +240,12 @@ function App() {
               setRecharged={updateRech}
               logout={doLogOut}
             />
+          )}
+        />
+        <Route
+          path="/farmer"
+          render={() => (
+            <FarmerProducts />
           )}
         />
         <Route

@@ -10,7 +10,7 @@ const db = new sqlite.Database('spg.db', (err) => {
 
 exports.getAllConfirmedProducts = (year, week) => {
   return new Promise((resolve, reject) => {
-    const product_status='confirmed';
+    const product_status = 'confirmed';
     const sql =
       'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.product_status=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
     db.all(sql, [year, week, product_status], (err, rows) => {
@@ -40,7 +40,7 @@ exports.getAllConfirmedProducts = (year, week) => {
 
 exports.getAllExpectedProducts = (year, week) => {
   return new Promise((resolve, reject) => {
-    const product_status='expected';
+    const product_status = 'expected';
     const sql =
       'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.product_status=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
     db.all(sql, [year, week, product_status], (err, rows) => {
@@ -95,19 +95,20 @@ exports.getProductById = (product_id) => {
 };
 
 exports.getAllCategories = () => {
-    return new Promise((resolve, reject) => {
-        const sql = 'SELECT category_name FROM product_categories';
-        db.all(sql, [], (err, rows) => {
-            if (err) {
-                reject(err);
-            }
-            const categories = rows.map((c) => ({
-                name: c.category_name,
-                active: 0
-            }));
-            resolve(categories);
-        });
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT category_id, category_name FROM product_categories';
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      const categories = rows.map((c) => ({
+        id: c.category_id,
+        name: c.category_name,
+        active: 0
+      }));
+      resolve(categories);
     });
+  });
 };
 
 exports.putProductQuantity = (product_id, quantity) => {
@@ -123,3 +124,33 @@ exports.putProductQuantity = (product_id, quantity) => {
     });
   });
 };
+
+exports.deleteExpectedProducts = (provider_id, year, week_number) => {
+  return new Promise((resolve, reject) => {
+    const product_status = 'expected';
+    const sql = 'DELETE from products WHERE provider_id=? AND year=? AND week_number=? AND product_status=?';
+    db.run(sql, [provider_id, year, week_number, product_status], (err) => {
+      if (err) {
+        console.log(err);
+        reject(err.message);
+        return;
+      }
+      resolve();
+    });
+  });
+}
+
+exports.insertNewExpectedProduct = (prod, provider_id) => {
+  return new Promise((resolve, reject) => {
+    const product_status='expected';
+    const sql = "INSERT INTO products(product_name, product_description, category_id, product_price, product_unit, product_quantity, provider_id, year, week_number, product_status) VALUES(?,?,?,?,?,?,?,?,?,?)";
+    db.run(sql, [prod.name, prod.description, prod.category, prod.price, prod.unit, prod.quantity, provider_id, prod.year, prod.week_number, product_status], function (err) {
+      if (err) {
+        reject(err);
+      }
+      console.log(this);
+      resolve(this.lastID);
+    }
+    );
+  });
+}
