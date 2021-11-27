@@ -103,7 +103,24 @@ show</Button></Col>
   </Modal></>);}
 
 
-function ClientModal(props){return(
+function ClientModal(props){
+  const [mailerState, setMailerState] = useState({
+    email: "",
+    message: ""
+  });
+  const [emailSent, setEmailSent]=useState(false)
+
+  const handleSubmitEmail = (event) => {
+
+   
+    API.submitEmail(mailerState).then(()=>{
+    setEmailSent(true) 
+    });
+                 
+            
+  }
+  return(
+ 
   <> 
   <Modal size="md" show={props.show} onHide={props.handleClose} animation={false}>
   <Modal.Header closeButton>
@@ -124,7 +141,43 @@ function ClientModal(props){return(
    <Row> 
    <Col sm={2}> <span style={{fontStyle:'oblique', fontSize:'22px'}}>Email:</span></Col>
      <Col sm={8}><h4>{ `${s.email}`}</h4></Col>
-    <Col sm={2}><Envelope color="green" size={24} style={{'cursor':'pointer'}}/></Col>
+    <Col sm={2}>
+      
+    {!emailSent && 
+    <>
+    <Envelope color="green" size={24} style={{'cursor':'pointer'}}
+    onClick={()=>{
+      setMailerState((prevState) => ({
+        ...prevState,
+        email: s.email,
+        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
+
+        
+      }));
+      handleSubmitEmail();
+    }}
+    
+    />
+    </>
+    } 
+     {emailSent && 
+    <>
+    <Envelope color="gray" size={24} style={{'cursor':'pointer'}}
+    onClick={()=>{
+      setMailerState((prevState) => ({
+        ...prevState,
+        email: s.email,
+        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
+
+        
+      }));
+      handleSubmitEmail();
+    }}
+    
+    />
+    </>
+    }
+     </Col>
    </Row>
 </Modal.Body>)}
 <Modal.Footer>

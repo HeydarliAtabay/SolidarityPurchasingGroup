@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const nodemailer = require("nodemailer"); // for sending an email
 const bcrypt = require('bcryptjs');
 const morgan = require('morgan'); // logging middleware
 const clientsDao = require('./DAOs/clients-dao');
@@ -19,6 +20,7 @@ const fs = require('fs');
 
 // init express
 let app = express();
+require("dotenv").config();
 app.disable("x-powered-by");
 const PORT = 3001;
 
@@ -26,6 +28,53 @@ const PORT = 3001;
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(fileUpload());
+
+let transporter = nodemailer.createTransport({
+  service: "hotmail",
+  auth: {
+    user: "se2_r02team@outlook.com",
+    pass: "123torchiano123!"
+  }
+ });
+
+ /*let mailOptions = {
+  from: "se2_r02team@outlook.com",
+  to: "heydarli.atabay@gmail.com",
+  subject: "It is the test message",
+  text: "Hello Atabay, it is the test",
+ }; */
+
+ /* transporter.sendMail(mailOptions, function (err, data) {
+  if (err) {
+    console.log("Error " + err);
+  } else {
+    console.log("Email sent successfully");
+  }
+ }); */
+
+ app.post("/api/sendEmail", function (req, res) {
+  let mailOptions = {
+    from: "se2_r02team@outlook.com",
+    to: `${req.body.email}`,
+    subject: `Status of your Order`,
+    text: `${req.body.message}`,
+  };
+ 
+  transporter.sendMail(mailOptions, function (err, data) {
+    if (err) {
+      res.json({
+        status: "fail",
+      });
+    } else {
+      console.log("== Message Sent ==");
+      res.json({
+        status: "success",
+      });
+    }
+  });
+ });
+
+
 
 /*** Set up Passport ***/
 passport.use(

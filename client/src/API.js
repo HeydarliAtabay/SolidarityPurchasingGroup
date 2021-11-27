@@ -549,6 +549,30 @@ function deleteOrderItem(id) {
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
   });
 }
+
+const submitEmail = async (e) => {
+  const response = await fetch("http://localhost:3000/api/sendEmail", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ 
+      "email": e.email,
+      "message": e.message,
+     }),
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+      if (resData.status === "success") {
+        alert("Message Sent");
+      } else if (resData.status === "fail") {
+        alert("Message failed to send");
+      }
+    });
+};
+
 const API = {
   getAllClients,
   getAllOrders,
@@ -573,6 +597,7 @@ const API = {
   getAllCategories,
   logOut,
   logIn,
-  getUserInfo, addUser, addOrder
+  getUserInfo, addUser, addOrder,
+  submitEmail
 };
 export default API;
