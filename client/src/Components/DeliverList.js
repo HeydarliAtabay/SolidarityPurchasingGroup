@@ -1,4 +1,5 @@
 import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import {ExclamationDiamond,Telephone, Envelope} from 'react-bootstrap-icons'
 import ris from './reply-all-fill.svg';
 import API from '../API'
 import { useState } from "react";
@@ -9,11 +10,18 @@ return self.indexOf(value)===index;
 }
 function DeliverList(props){
  const [show, setShow] = useState(false);
+ const [showClient, setShowClient]= useState(false);
 const [id, setId] = useState();
+const [client, setClient] = useState(0)
+console.log(props.clients)
 
-let m=props.orders.filter(x=>x.state==="booked").map(s=>s.order_id).filter(onlyUnique);
+let m=props.orders.map(s=>s.order_id).filter(onlyUnique);
 m.reverse();
-const handleClose = (x) => setShow(x);
+const handleClose = (x) => {
+  setShow(x);
+  setShowClient(x);
+
+}
     return(<>
     <ListGroup variant="flush">
     <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
@@ -24,7 +32,7 @@ const handleClose = (x) => setShow(x);
      <Col xs={3} md={3}>TOTAL</Col>
     <Col xs={2} md={2}>DELIVER</Col>
     </Row></ListGroupItem>
-    {props.orders.filter(x=>x.state===props.b).map((s)=>{
+    {props.orders.map((s)=>{
      if (!m.find(x => (parseInt(x) === parseInt(s.order_id)))) {
                     return <ListGroupItem key={s.id} style={{ display: "none" }}></ListGroupItem> }
 else {
@@ -45,14 +53,27 @@ show</Button></Col>
     
     <Col xs={3} md={3}>{sum}{' '}€</Col>
     <Col xs={2} md={2}> 
-    <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-for(const a of array2){
-       API.updateDelivered(id, a).then(()=>{
-          
-   props.setRecharged(true); setTimeout(()=>{},3000)});
+   {s.state===props.b && 
+   <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+    for(const a of array2){
+           API.updateDelivered(id, a).then(()=>{
               
-         }}
-    }></Image>
+       props.setRecharged(true); setTimeout(()=>{},3000)});
+                  
+             }}
+        }></Image>
+
+   }
+   {s.state==="pending" && 
+   <ExclamationDiamond color="red" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+    setShowClient(true);
+    setClient(s.client_id)
+   }}/>
+
+   }
+   
+   
+
     </Col>
     </Row>
     </ListGroupItem>
@@ -63,9 +84,11 @@ for(const a of array2){
   
   </ListGroup>
     <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
-
+    <ClientModal show={showClient}handleClose={handleClose} client={client} clients={props.clients}/>
     </>
     );}
+
+
     function Finestra(props){return(
   <> <Modal show={props.show} onHide={props.handleClose} animation={false}>
   <Modal.Header closeButton>
@@ -78,6 +101,38 @@ for(const a of array2){
 </Modal.Body>)}
  
   </Modal></>);}
+
+
+function ClientModal(props){return(
+  <> 
+  <Modal size="md" show={props.show} onHide={props.handleClose} animation={false}>
+  <Modal.Header closeButton>
+    <Modal.Title >Client Information</Modal.Title>
+  </Modal.Header>
+ 
+  {props.clients.filter(x=>x.client_id===props.client).map((s)=>
+  <Modal.Body key={s.id}>
+ <Row> 
+ <h4>{ `${s.name} ${s.surname}`}</h4>
+   </Row>
+   <Row> 
+     <Col sm={4}> <span style={{fontStyle:'oblique', fontSize:'22px'}}>Telephone :</span></Col>
+     <Col sm={6}><h4>{ `${s.phone}`}</h4></Col>
+    <Col sm={2}><Telephone color="green" size={24} style={{'cursor':'pointer'}}/></Col>
+ 
+   </Row>
+   <Row> 
+   <Col sm={2}> <span style={{fontStyle:'oblique', fontSize:'22px'}}>Email:</span></Col>
+     <Col sm={8}><h4>{ `${s.email}`}</h4></Col>
+    <Col sm={2}><Envelope color="green" size={24} style={{'cursor':'pointer'}}/></Col>
+   </Row>
+</Modal.Body>)}
+<Modal.Footer>
+  <span style={{color:'red'}}> This order is pending due to the insufficient balance. Select the way for contacting the Client </span>
+</Modal.Footer>
+ 
+  </Modal>
+  </>);}
 
     
     

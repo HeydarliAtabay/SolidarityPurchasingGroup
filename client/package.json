@@ -14,6 +14,7 @@
     "jest-sonar-reporter": "^2.0.0",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.2",
+    "react-bootstrap-icons": "^1.6.1",
     "react-country-region-selector": "^3.4.0",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.3",
