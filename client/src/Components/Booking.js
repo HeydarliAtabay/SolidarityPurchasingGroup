@@ -6,6 +6,7 @@ import {
   Container,
   Modal,
   Dropdown,
+  Form,
 } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import API from './../API';
@@ -20,6 +21,12 @@ function Booking(props) {
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
+  const [showCompletePurchase, setShowCompletePurchase] = useState(true);
+  const [address, setAddress] = useState('');
+  const [nation, setNation] = useState('');
+  const [city, setCity] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -314,9 +321,18 @@ function Booking(props) {
         <span className="d-block text-center mt-5 mb-2 display-2">
           Product Booking
         </span>
-        <h5 className="d-block mx-auto mb-5 text-center text-muted">
-          Choose below the products you want to book for the client
-        </h5>
+        {props.browsing ? (
+          <h5 className="d-block mx-auto mb-5 text-center text-muted">
+            These are the products planned for the next week. They are not yet
+            purchasable
+          </h5>
+        ) : (
+          <>
+            <h5 className="d-block mx-auto mb-5 text-center text-muted">
+              Choose below the products you want to book for the client
+            </h5>
+          </>
+        )}
         {props.isEmployee ? (
           <div className="d-block text-center">
             <Dropdown className="d-block mb-3" value={selectedUser.client_id}>
@@ -419,27 +435,100 @@ function Booking(props) {
                 </div>
               )}
             </Col>
-            <Col lg={3} className="my-5 text-center px-5">
-              <Basket
-                clientid={props.clientid}
-                orders={props.orders}
-                setShowsuccess={setShowsuccess}
-                setShowdanger={setShowdanger}
-                showsuccess={showsuccess}
-                showdanger={showdanger}
-                productsBasket={productsBasket}
-                onAdd={onAdd}
-                onRemove={onRemove}
-                onConfirm={onConfirm}
-                capitalizeFirstLetter={capitalizeFirstLetter}
-                itemsPrice={itemsPrice}
-              />
-            </Col>
+            {!props.browsing ? (
+              <Col lg={3} className="my-5 px-5">
+                <Basket
+                  completeAddressing={false}
+                  clientid={props.clientid}
+                  setShowCompletePurchase={setShowCompletePurchase}
+                  address={address}
+                  nation={nation}
+                  city={city}
+                  zipCode={zipCode}
+                  setShowsuccess={setShowsuccess}
+                  setShowdanger={setShowdanger}
+                  showsuccess={showsuccess}
+                  showdanger={showdanger}
+                  productsBasket={productsBasket}
+                  onAdd={onAdd}
+                  onRemove={onRemove}
+                  onConfirm={onConfirm}
+                  capitalizeFirstLetter={capitalizeFirstLetter}
+                  itemsPrice={itemsPrice}
+                />
+              </Col>
+            ) : (
+              <></>
+            )}
           </Row>
         ) : (
           <YouAreNotLoggedScreen />
         )}
       </Container>
+      <Modal
+        size="lg"
+        show={showCompletePurchase}
+        onHide={() => setShowCompletePurchase(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Complete the purchase</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="formGridAddress1">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                value={address}
+                onChange={(ev) => {
+                  setAddress(ev.target.value);
+                }}
+              />
+            </Form.Group>
+            <Row className="mb-3">
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  value={city}
+                  onChange={(ev) => {
+                    setCity(ev.target.value);
+                  }}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>State</Form.Label>
+                <Form.Control
+                  value={nation}
+                  onChange={(ev) => {
+                    setNation(ev.target.value);
+                  }}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridZip">
+                <Form.Label>Zip</Form.Label>
+                <Form.Control
+                  value={zipCode}
+                  onChange={(ev) => {
+                    setZipCode(ev.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Row>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              setShowCompletePurchase(false);
+              setCompleteAddressing(true);
+            }}
+          >
+            Confirm
+          </button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal
         size="lg"
