@@ -145,9 +145,35 @@ async function getProviderProducts(provider_id) {
   }
 }
 
+//GET provider products by providerID
+async function getProviderConfirmationStatus(year, week_number) {
+  const response = await fetch(
+    '/api/provider/confirmationStatus/'+year+'/'+week_number
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//GET provider products by providerID
+async function getProviderExpectedProducts(year, week_number) {
+  const response = await fetch(
+    '/api/products/provider/expected/'+year+'/'+week_number
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
 //POST array of products expected to be available next week
-async function declareAvailability(products) {
-  const response = await fetch('/api/products/expected', {
+async function declareAvailability(products, year, week) {
+  const response = await fetch('/api/products/expected/'+year+'/'+week, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(products), // Conversion in JSON format
@@ -162,11 +188,10 @@ async function declareAvailability(products) {
 
 //POST product image & product_id (used to rename img for correctly displaying in booking.js)
 async function uploadProductImage(formData, product_id) {
-    const response = await fetch('/api/products/expected/upload/'+product_id, {
+    const response = await fetch('/api/products/upload/expected/'+product_id+'', {
       method: 'POST',
       body: formData
     });
-    console.log(response);
     if (response.ok) {
       return true;
     }
@@ -524,6 +549,30 @@ function deleteOrderItem(id) {
     }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
   });
 }
+
+const submitEmail = async (e) => {
+  const response = await fetch("http://localhost:3000/api/sendEmail", {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({ 
+      "email": e.email,
+      "message": e.message,
+     }),
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+      if (resData.status === "success") {
+        alert("Message Sent");
+      } else if (resData.status === "fail") {
+        alert("Message failed to send");
+      }
+    });
+};
+
 const API = {
   getAllClients,
   getAllOrders,
@@ -534,6 +583,8 @@ const API = {
   getAllProviders,
   getProviderById,
   getProviderProducts,
+  getProviderExpectedProducts,
+  getProviderConfirmationStatus,
   declareAvailability,
   uploadProductImage,
   addClient,
@@ -546,6 +597,7 @@ const API = {
   getAllCategories,
   logOut,
   logIn,
-  getUserInfo, addUser, addOrder
+  getUserInfo, addUser, addOrder,
+  submitEmail
 };
 export default API;

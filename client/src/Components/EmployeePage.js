@@ -47,21 +47,7 @@ function ModalWalletTopUp(props) {
     onSave(newTransaction, amount, clientId)
     window.location.reload(false);
 
-    // submit a test order.
-   /* let users = document.getElementById('formUser');
-    let selected_client_id = users.options[users.selectedIndex].id;
-
-    // TODO: once the frontend form is done, obtain the orders array from it and pass it to insertNewOrder.
-    // orders currently has a temporary test order.
-    const orders = [{ product_id: 1, quantity: 8 }, { product_id: 2, quantity: 10 }, { product_id: 10, quantity: 220 }];
-    const new_order = API.insertNewOrder(selected_client_id, orders);
-
-    console.log(new_order.status);
-
-    if (new_order.status === "OK")
-      alert("Order placed successfully!");
-    else
-      alert("Something went wrong while processing your order."); */
+    
   };
 
   return (
@@ -75,26 +61,6 @@ function ModalWalletTopUp(props) {
             <Form.Group as={Col} controlId="formUser">
 
               <Row>
-             {/*<Col sm={4}>
-                 <Form.Label>Select Client</Form.Label>
-                  <Form.Control
-                    as="select"
-                    value={clientId}
-                    onChange={(ev) => {
-                      setClientId(ev.target.value)
-                    }}
-                  >
-                    {
-                      clients.map((client) => {
-                        return (
-                          <option key={`${client.client_id}`} id={`${client.client_id}`}>
-                            {client.client_id}
-                          </option>
-                        )
-                      })
-                    }
-                  </Form.Control>
-                </Col> */}    
                 <Col sm={8}>
                 <Form.Label>Select Client</Form.Label>
                 <Dropdown className="d-block mb-3" value={selectedUser.client_id}>
@@ -356,7 +322,7 @@ function ModalWalletTopUp(props) {
 
             }
 
-             {/*For Satispay */}
+             {/*For Cash */}
              {(method === "Cash") &&
               <>
                 <Form.Group>
@@ -466,7 +432,7 @@ function EmployeePage(props) {
 
         <Col xs={9} md={9}>
           {show ?   //set recharged della tabella ordini-clienti
-                  <DeliverList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />: <></>}
+                  <DeliverList setRecharged={props.setRecharged} orders={props.orders} clients={clients} setShow={setShow} b={b} />: <></>}
         </Col></Row>
       <br />
 
