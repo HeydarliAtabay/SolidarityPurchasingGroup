@@ -21,7 +21,7 @@ function Booking(props) {
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
-  const [showCompletePurchase, setShowCompletePurchase] = useState(true);
+  const [showCompletePurchase, setShowCompletePurchase] = useState(false);
   const [address, setAddress] = useState('');
   const [nation, setNation] = useState('');
   const [city, setCity] = useState('');
@@ -124,7 +124,11 @@ function Booking(props) {
           a.name,
           'booked',
           p,
-          `${indice}`
+          `${indice}`,
+          address,
+          city,
+          nation,
+          zipCode
         );
         API.addOrder(order).then(() => {
           props.setRecharged(true);

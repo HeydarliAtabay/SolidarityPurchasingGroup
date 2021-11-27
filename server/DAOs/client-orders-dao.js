@@ -23,8 +23,8 @@ exports.getAllOrders = () => {
         client_id: e.client_id,
         product_name: e.product_name,
         state: e.state,
-        OrderPrice:e.OrderPrice,
-        id:e.id
+        OrderPrice: e.OrderPrice,
+        id: e.id,
       }));
       resolve(o);
     });
@@ -54,7 +54,16 @@ exports.delivered = async (order_id, product_name) => {
       'UPDATE orders SET order_id=?, client_id=?, product_name=?, state=?, OrderPrice=? , id=? WHERE order_id=? AND product_name=?';
     db.run(
       sql,
-      [test.order_id, test.client_id, test.product_name, 'delivered', test.OrderPrice, test.id, order_id, product_name],
+      [
+        test.order_id,
+        test.client_id,
+        test.product_name,
+        'delivered',
+        test.OrderPrice,
+        test.id,
+        order_id,
+        product_name,
+      ],
       function (err) {
         if (err) {
           reject(err);
@@ -115,29 +124,44 @@ exports.insert_order_items = async (order_id, order_items) => {
 
 // Add a new order
 exports.addOrder = (t) => {
-    return new Promise((resolve, reject) => {
-        const sql = 'INSERT INTO orders( order_id, client_id, product_name, state, OrderPrice, id ) VALUES ( ?, ?, ?, ?, ?, ? )';
-        db.run(sql, [ t.order_id, t.client_id, t.product_name, t.state, t.OrderPrice, t.id ], function (err) {
-            if (err) {
-                reject(err);
-                
-                return;
-            }
-            resolve(t.order_id);
-        });
-    });
+  return new Promise((resolve, reject) => {
+    const sql =
+      'INSERT INTO orders( order_id, client_id, product_name, state, OrderPrice, id,address,city,zipcode,Nation ) VALUES ( ?, ?, ?, ?, ?, ?,?,?,?,? )';
+    db.run(
+      sql,
+      [
+        t.order_id,
+        t.client_id,
+        t.product_name,
+        t.state,
+        t.OrderPrice,
+        t.id,
+        t.address,
+        t.city,
+        t.zipcode,
+        t.Nation,
+      ],
+      function (err) {
+        if (err) {
+          reject(err);
+
+          return;
+        }
+        resolve(t.order_id);
+      }
+    );
+  });
 };
 //delete an order item
 
-exports.deleteItem= (id) => {
+exports.deleteItem = (id) => {
   return new Promise((resolve, reject) => {
-      const sql = 'DELETE FROM orders WHERE id = ? ';
-      db.run(sql, [id], (err) => {
-          if (err) {
-              reject(err);
-              return;
-          } else
-              resolve(null);
-      });
+    const sql = 'DELETE FROM orders WHERE id = ? ';
+    db.run(sql, [id], (err) => {
+      if (err) {
+        reject(err);
+        return;
+      } else resolve(null);
+    });
   });
 };
