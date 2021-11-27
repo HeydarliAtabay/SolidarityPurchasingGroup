@@ -55,7 +55,7 @@ let transporter = nodemailer.createTransport({
   let mailOptions = {
     from: "se2_r02team@outlook.com",
     to: `${req.body.email}`,
-    subject: `Message from Solidarity Purchase Group`,
+    subject: `Status of your Order`,
     text: `${req.body.message}`,
   };
  
