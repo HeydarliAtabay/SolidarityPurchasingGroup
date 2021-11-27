@@ -171,10 +171,8 @@ function App() {
   };
   return (
     <Router>
-
-      <div className="d-block w-max100-custom">
-        <MyNavbar time={time} setTime={setTime} />
-
+      <MyNavbar time={time} setTime={setTime} />
+      <div className="container-fluid">
         <Switch>
           <Route
             path="/booking"
