@@ -14,7 +14,8 @@ const passport = require('passport'); //Authentication middleware
 const dbt = require("./DAOs/users-dao"); // module for accessing the DB
 
 const fileUpload = require("express-fileupload"); //Middleware for storing files
-const path = require("path"); //Module to create absolute paths
+const path = require('path');
+const fs = require('fs');
 
 // init express
 let app = express();
@@ -154,7 +155,6 @@ app.get('/api/products/confirmed/:year/:week', async (req, res) => {
     const year = req.params.year;
     const week = req.params.week;
     const products = await productsDAO.getAllConfirmedProducts(year, week);
-    console.log(products);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -226,7 +226,6 @@ app.get('/api/provider/:provider_id/products', async (req, res) => {
   try {
     const provider_id = req.params.provider_id;
     const providerProducts = await providersDAO.getProviderExistingProducts(provider_id);
-    console.log(providerProducts);
     res.json(providerProducts);
   } catch (err) {
     console.log(err);
@@ -234,11 +233,50 @@ app.get('/api/provider/:provider_id/products', async (req, res) => {
   }
 });
 
+//CHECK provider's confirmation status
+app.get('/api/provider/confirmationStatus/:year/:week_number', async (req, res) => {
+  try {
+    const year = req.params.year;
+    const week_number = req.params.week_number;
+
+    const confirmationStatus = await providersDAO.checkProviderAvailabilityConfirmation(1, year, week_number);
+    res.json(confirmationStatus);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+//GET provider's expected production
+app.get('/api/products/provider/expected/:year/:week_number', async (req, res) => {
+  try {
+    const year = req.params.year;
+    const week_number = req.params.week_number;
+
+    const expectedProducts = await productsDAO.getProviderExpectedProducts(1, year, week_number);
+    res.json(expectedProducts);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
 //Insert provider's expected production
-app.post('/api/products/expected', async (req, res) => {
+app.post('/api/products/expected/:year/:week_number', async (req, res) => {
   try {
     const products = req.body;
+    const year = req.params.year;
+    const week_number = req.params.week_number;
+
+    const oldProductIDs = (await productsDAO.getProviderExpectedProducts(1, year, week_number)).map((p) => (p.id));
     const productIDs = [];
+
+    await productsDAO.deleteExpectedProducts(1, year, week_number);
+    oldProductIDs.forEach(p => {
+      if (fs.existsSync(__dirname + "/../client/public/products/" + p + ".jpg")) {
+        fs.unlinkSync(__dirname + "/../client/public/products/" + p + ".jpg")
+      }
+    });
     for (let i = 0; i < products.length; i++) {
       const newID = await productsDAO.insertNewExpectedProduct(products[i], 1);
       productIDs.push({ old_id: products[i].id, new_id: newID });
@@ -251,8 +289,8 @@ app.post('/api/products/expected', async (req, res) => {
   }
 });
 
-app.post('/api/products/expected/upload/:img_id', async (req, res) => {
-
+//UPLOAD image
+app.post('/api/products/upload/expected/:img_id', (req, res) => {
   if (!req.files) {
     return res.status(400).send("No files were uploaded.");
   }
@@ -261,9 +299,7 @@ app.post('/api/products/expected/upload/:img_id', async (req, res) => {
 
   let file = req.files.product_image;
 
-  console.log(file);
-
-  file.name = filename+".jpg";
+  file.name = filename + ".jpg";
   const path = __dirname + "/../client/public/products/" + file.name;
 
   file.mv(path, (err) => {

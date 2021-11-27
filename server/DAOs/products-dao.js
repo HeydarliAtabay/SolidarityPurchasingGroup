@@ -125,6 +125,34 @@ exports.putProductQuantity = (product_id, quantity) => {
   });
 };
 
+exports.getProviderExpectedProducts = (provider_id, year, week_number) => {
+  return new Promise((resolve, reject) => {
+    const product_status = 'expected';
+    const sql =
+      'SELECT * FROM products WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_status=?';
+    db.all(sql, [provider_id, year, week_number, product_status], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      const products = rows.map((p) => ({
+        id: p.product_id,
+        name: p.product_name,
+        description: p.product_description,
+        category: p.category_id,
+        price: p.product_price,
+        unit: p.product_unit,
+        quantity: p.product_quantity,
+        expiryDate: p.product_expiry,
+        providerId: p.provider_id,
+        year: p.year,
+        week: p.week_number,
+        status: p.product_status
+      }));
+      resolve(products);
+    });
+  });
+}
+
 exports.deleteExpectedProducts = (provider_id, year, week_number) => {
   return new Promise((resolve, reject) => {
     const product_status = 'expected';
@@ -142,7 +170,7 @@ exports.deleteExpectedProducts = (provider_id, year, week_number) => {
 
 exports.insertNewExpectedProduct = (prod, provider_id) => {
   return new Promise((resolve, reject) => {
-    const product_status='expected';
+    const product_status = 'expected';
     const sql = "INSERT INTO products(product_name, product_description, category_id, product_price, product_unit, product_quantity, provider_id, year, week_number, product_status) VALUES(?,?,?,?,?,?,?,?,?,?)";
     db.run(sql, [prod.name, prod.description, prod.category, prod.price, prod.unit, prod.quantity, provider_id, prod.year, prod.week_number, product_status], function (err) {
       if (err) {

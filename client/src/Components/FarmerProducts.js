@@ -1,4 +1,4 @@
-import { Button, Modal, Dropdown, Row, Col, Form, FloatingLabel } from 'react-bootstrap';
+import { Button, Modal, Row, Col, Form, FloatingLabel, Spinner, Alert } from 'react-bootstrap';
 import API from '../API';
 const { useState, useEffect } = require("react");
 
@@ -16,10 +16,42 @@ function FarmerProducts(props) {
     const [modifyProductID, setModifyProductID] = useState(-1);
     const [removeProductID, setRemoveProductID] = useState(-1);
 
+    /*save status alert*/
+    const [saveAlert, setSaveAlert] = useState(null);
+
+    /*spinning circle*/
+    const [showLoading, setShowLoading] = useState(true);
+
     /*useEffect triggers*/
     const [saveAvailability, setSaveAvailability] = useState(false);
+    const [refreshExpected, setRefreshExpected] = useState(true);
 
     /*USEFFECTS*/
+    //Get expected products that the farmer has already inserted before
+    useEffect(() => {
+        if (!refreshExpected) {
+            return;
+        }
+        const getExpectedProducts = async () => {
+
+            setShowLoading(true);
+            setRefreshExpected(false);
+
+            let prods = await API.getProviderExpectedProducts(2021, 2);
+            let expectedProds = [];
+
+            for (let i = 0; i < prods.length; i++) {
+                const img = await srcToFile(process.env.PUBLIC_URL + 'products/' + prods[i].id + '.jpg', 'product_image', 'image/jpg');
+                expectedProds.push({ image: img, ...prods[i] });
+            }
+
+            console.log(expectedProds);
+            setExpectedProducts(expectedProds);
+
+            setShowLoading(false);
+        }
+        getExpectedProducts();
+    }, [refreshExpected]);
     //Get provider products
     useEffect(() => {
         const getExistingProducts = async () => {
@@ -44,6 +76,8 @@ function FarmerProducts(props) {
             return;
         }
         const saveProductAvailability = async () => {
+            setShowLoading(true);
+
             const productData = [];
             expectedProducts.forEach((prod) => (productData.push({
                 id: prod.id,
@@ -58,17 +92,19 @@ function FarmerProducts(props) {
             })));
 
             setSaveAvailability(false);
-            const productIDs = await API.declareAvailability(productData);
+            const productIDs = await API.declareAvailability(productData, 2021, 2);
 
             console.log(productIDs);
 
             for (let i = 0; i < productIDs.length; i++) {
-                const formData = new FormData();
+                console.log(expectedProducts[i].image);
+                let formData = new FormData();
                 formData.append('product_image', expectedProducts[i].image);
-                await API.uploadProductImage(formData, productIDs[i].new_id);
+                console.log(formData);
+                console.log(await API.uploadProductImage(formData, productIDs[i].new_id));
             }
-
-            console.log("Insertion done");
+            setSaveAlert({variant: 'success', msg: 'Product availability successfully recorded'});
+            setRefreshExpected(true);
 
         }
         saveProductAvailability();
@@ -89,68 +125,86 @@ function FarmerProducts(props) {
         setRemoveProductID(-1);
     }
 
+    async function srcToFile(src, fileName, mimeType) {
+        const res = await fetch(src);
+        const buf = await res.arrayBuffer();
+        return new File([buf], fileName, { type: mimeType });
+    }
+
     return (
         <>
-            <div className="container-fluid mx-3">
+            <div className="container-fluid mx-5 w-max100-custom">
                 <span className="d-block text-center mt-5 mb-2 display-2">
                     Expected Production
                 </span>
                 <h5 className="d-block mx-auto mb-5 text-center text-muted">
                     Insert below the expected products for next week
                 </h5>
-                <div className="d-block">
-                    {/*DISPLAYING NOTIFICATION IF NO PRODUCTS INSERTED YET*/
-                        expectedProducts.length === 0 ?
-                            <div className="d-block text-center">
-                                No products inserted yet.
-                            </div>
-                            :
-                            ''
-                    }
-                    {/*DISPLAYING CURRENTLY INSERTED PRODUCTS*/
-                        expectedProducts.map((product) => {
-                            return (
-                                <div key={product.name} className="card mb-3">
-                                    <div className="row g-0">
-                                        <div className="col-md-3">
-                                            <img className="rounded w-100" src={URL.createObjectURL(product.image)} alt="" />
-                                        </div>
-                                        <div className="col-md-9">
-                                            <div className="card-body">
-                                                <h5 className="card-title">{product.name}</h5>
-                                                <p className="card-text">{product.description ? product.description : 'No product description'} </p>
-                                                <div className="row my-2">
-                                                    <div className="col-md">
-                                                        {categoryIcon} <b>{categories.find((c) => (c.id === product.category)).name}</b>
+                {saveAlert &&
+                    <Alert variant={saveAlert.variant} dismissible={true} onClose={()=>(setSaveAlert(null))}>
+                        {saveAlert.msg}
+                    </Alert>
+                }
+                {showLoading &&
+                    <div className="d-block text-center p-5">
+                        <Spinner className="m-5" animation="grow" />
+                    </div>
+                }
+                {!showLoading &&
+                    <div className="d-block text-center">
+                        {/*DISPLAYING NOTIFICATION IF NO PRODUCTS INSERTED YET*/
+                            expectedProducts.length === 0 ?
+                                <div className="d-block text-center">
+                                    No products inserted yet.
+                                </div>
+                                :
+                                ''
+                        }
+                        {/*DISPLAYING CURRENTLY INSERTED PRODUCTS*/
+                            expectedProducts.map((product) => {
+                                return (
+                                    <div key={product.id} className="card mx-auto mb-3 w-75 shadow-lg">
+                                        <div className="row g-0">
+                                            <div className="col-md-3">
+                                                <img className="rounded w-100" src={URL.createObjectURL(product.image)} alt="" />
+                                            </div>
+                                            <div className="col-md-9">
+                                                <div className="card-body">
+                                                    <h5 className="card-title">{product.name}</h5>
+                                                    <p className="card-text">{product.description ? product.description : 'No product description'} </p>
+                                                    <div className="row my-2">
+                                                        <div className="col-md">
+                                                            {categoryIcon} <b>{categories.find((c) => (c.id === product.category)).name}</b>
+                                                        </div>
+                                                        <div className="col-md">
+                                                            {priceIcon}{' '}
+                                                            <b>
+                                                                {product.price} €/{product.unit}
+                                                            </b>
+                                                        </div>
+                                                        <div className="col-md">
+                                                            {stockIcon}{' '}
+                                                            <b>
+                                                                {product.quantity} {product.unit} expected
+                                                            </b>
+                                                        </div>
                                                     </div>
-                                                    <div className="col-md">
-                                                        {priceIcon}{' '}
-                                                        <b>
-                                                            {product.price} €/{product.unit}
-                                                        </b>
+                                                    <div className="d-block mt-5 text-center">
+                                                        <button className="d-inline btn btn-primary mx-3" onClick={() => (setModifyProductID(product.id))}>Modify details</button>
+                                                        <button className="d-inlnee btn btn-secondary mr-3" onClick={() => (setRemoveProductID(product.id))}>Remove product</button>
                                                     </div>
-                                                    <div className="col-md">
-                                                        {stockIcon}{' '}
-                                                        <b>
-                                                            {product.quantity} {product.unit} expected
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div className="d-block mt-5 text-end">
-                                                    <button className="d-inline btn btn-primary mx-3" onClick={() => (setModifyProductID(product.id))}>Modify details</button>
-                                                    <button className="d-inlnee btn btn-secondary mr-3" onClick={() => (setRemoveProductID(product.id))}>Remove product</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            );
-                        })}
-                </div>
+                                );
+                            })}
+                    </div>
+                }
                 <hr />
-                <div className="d-block text-end">
-                    <button className="mx-1 p-2 btn btn-primary" onClick={() => (setShowNewProductModal(true))}>Insert new product</button>
-                    <button className="mx-2 p-2 btn btn-success" disabled={expectedProducts.length === 0} onClick={() => (setSaveAvailability(true))}>Confirm expected availability</button>
+                <div className="d-block mb-5 text-center">
+                    <button className="mx-1 p-3 btn btn-primary" onClick={() => (setShowNewProductModal(true))}>Insert new product</button>
+                    <button className="mx-2 p-3 btn btn-success" onClick={() => (setSaveAvailability(true))}>Save expected availability</button>
                 </div>
             </div>
 

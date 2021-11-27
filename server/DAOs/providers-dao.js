@@ -52,7 +52,7 @@ exports.getProviderExistingProducts = (provider_id) => {
             if (err) {
                 reject(err);
             }
-            const providerProducts = rows.map((p)=> ({
+            const providerProducts = rows.map((p) => ({
                 id: p.product_id,
                 name: p.product_name,
                 description: p.product_description,
@@ -69,6 +69,22 @@ exports.getProviderExistingProducts = (provider_id) => {
                 active: 1
             }));
             resolve(providerProducts);
+        });
+    });
+}
+
+exports.checkProviderAvailabilityConfirmation = (provider_id, year, week_number) => {
+    return new Promise((resolve, reject) => {
+        const product_status = 'confirmed';
+        const sql = 'SELECT COUNT(*) AS value FROM products WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_status=?';
+        db.get(sql, [provider_id, year, week_number, product_status], (err, row) => {
+            if (err) {
+                reject(err);
+            }
+            if (row.value > 0) {
+                resolve(true);
+            }
+            resolve(false);
         });
     });
 }

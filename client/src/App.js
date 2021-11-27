@@ -13,6 +13,7 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LoginForm1 } from './Components/LoginForm';
 //import ProductGallery from './Components/Gallery';
 import ClientArea from './Components/ClientArea';
+import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
 
 let r = [];
@@ -170,104 +171,113 @@ function App() {
   };
   return (
     <Router>
-      <MyNavbar time={time} setTime={setTime} />
 
-      <Switch>
-        <Route
-          path="/booking"
-          render={() => (
-            <Booking
-              browsing={false}
-              logged={logged}
-              orders={orders}
-              isEmployee={false}
-              products={confirmedProducts}
-              updateProps={updateProps}
-              time={time}
-              clientid={userid}
-              setRecharged={updateRech}
-            />
-          )}
-        />
-        <Route
-          path="/products-next-week"
-          render={() => (
-            <Booking
-              browsing={true}
-              logged={logged}
-              isEmployee={false}
-              products={expectedProducts}
-              updateProps={updateProps}
-              time={time}
-              clientid={userid}
-              setRecharged={updateRech}
-            />
-          )}
-        />
-        <Route
-          path="/orders"
-          render={() => (
-            <Orders
-              orders={orders}
-              clientid={userid}
-              setRecharged={updateRech}
-            />
-          )}
-        />
-        <Route
-          path="/staff-booking"
-          render={() => (
-            <Booking
-              browsing={false}
-              logged={logged}
-              clients={clients}
-              isEmployee={true}
-              products={confirmedProducts}
-              updateProps={updateProps}
-              time={time}
-            />
-          )}
-        />
-        <Route
-          path="/employee"
-          render={() => (
-            <EmployeePage
-              orders={orders}
-              clients={clients}
-              methods={methods}
-              addTr={addTransaction}
-              topUp={topUpBalance}
-              setRecharged={updateRech}
-              logout={doLogOut}
-            />
-          )}
-        />
-        <Route
-          path="/farmer"
-          render={() => (
-            <FarmerProducts />
-          )}
-        />
-        <Route
-          path="/login"
-          render={() => (
-            <LoginForm1 login={doLogIn} logged={logged} clients={clients} />
-          )}
-        />
-        <Route
-          path="/client"
-          render={() => (
-            <ClientArea logout={doLogOut} clients={clients} clientid={userid} />
-          )}
-        />
-        <Route
-          path="/registration"
-          render={() => (
-            <UserRegistration clients={clients} setRecharged={updateRech1} />
-          )}
-        />
-        <Route path="/" render={() => <Frontpage />} />
-      </Switch>
+      <div className="d-block w-max100-custom">
+        <MyNavbar time={time} setTime={setTime} />
+
+        <Switch>
+          <Route
+            path="/booking"
+            render={() => (
+              <Booking
+                browsing={false}
+                logged={logged}
+                orders={orders}
+                isEmployee={false}
+                products={confirmedProducts}
+                updateProps={updateProps}
+                time={time}
+                clientid={userid}
+                setRecharged={updateRech}
+              />
+            )}
+          />
+          <Route
+            path="/products-next-week"
+            render={() => (
+              <Booking
+                browsing={true}
+                logged={logged}
+                isEmployee={false}
+                products={expectedProducts}
+                updateProps={updateProps}
+                time={time}
+                clientid={userid}
+                setRecharged={updateRech}
+              />
+            )}
+          />
+          <Route
+            path="/orders"
+            render={() => (
+              <Orders
+                orders={orders}
+                clientid={userid}
+                setRecharged={updateRech}
+              />
+            )}
+          />
+          <Route
+            path="/staff-booking"
+            render={() => (
+              <Booking
+                browsing={false}
+                logged={logged}
+                clients={clients}
+                isEmployee={true}
+                products={confirmedProducts}
+                updateProps={updateProps}
+                time={time}
+              />
+            )}
+          />
+          <Route
+            path="/employee"
+            render={() => (
+              <EmployeePage
+                orders={orders}
+                clients={clients}
+                methods={methods}
+                addTr={addTransaction}
+                topUp={topUpBalance}
+                setRecharged={updateRech}
+                logout={doLogOut}
+              />
+            )}
+          />
+          <Route
+            path="/farmer"
+            render={() => (
+              <FarmerArea />
+            )}
+          />
+          <Route
+            path="/declare-availability"
+            render={() => (
+              <FarmerProducts />
+            )}
+          />
+          <Route
+            path="/login"
+            render={() => (
+              <LoginForm1 login={doLogIn} logged={logged} clients={clients} />
+            )}
+          />
+          <Route
+            path="/client"
+            render={() => (
+              <ClientArea logout={doLogOut} clients={clients} clientid={userid} />
+            )}
+          />
+          <Route
+            path="/registration"
+            render={() => (
+              <UserRegistration clients={clients} setRecharged={updateRech1} />
+            )}
+          />
+          <Route path="/" render={() => <Frontpage />} />
+        </Switch>
+      </div>
     </Router>
   );
 }
