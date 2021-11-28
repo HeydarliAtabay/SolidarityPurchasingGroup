@@ -1,7 +1,7 @@
 'use strict';
 
 const express = require('express');
-const nodemailer = require("nodemailer"); // for sending an email
+const nodemailer = require('nodemailer'); // for sending an email
 const bcrypt = require('bcryptjs');
 const morgan = require('morgan'); // logging middleware
 const clientsDao = require('./DAOs/clients-dao');
@@ -12,16 +12,16 @@ const walletsDAO = require('./DAOs/wallet-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
-const dbt = require("./DAOs/users-dao"); // module for accessing the DB
+const dbt = require('./DAOs/users-dao'); // module for accessing the DB
 
-const fileUpload = require("express-fileupload"); //Middleware for storing files
+const fileUpload = require('express-fileupload'); //Middleware for storing files
 const path = require('path');
 const fs = require('fs');
 
 // init express
 let app = express();
-require("dotenv").config();
-app.disable("x-powered-by");
+require('dotenv').config();
+app.disable('x-powered-by');
 const PORT = 3001;
 
 // set-up the middlewares
@@ -30,21 +30,21 @@ app.use(express.json());
 app.use(fileUpload());
 
 let transporter = nodemailer.createTransport({
-  service: "hotmail",
+  service: 'hotmail',
   auth: {
-    user: "se2_r02team@outlook.com",
-    pass: "123torchiano123!"
-  }
- });
+    user: 'se2_r02team@outlook.com',
+    pass: '123torchiano123!',
+  },
+});
 
- /*let mailOptions = {
+/*let mailOptions = {
   from: "se2_r02team@outlook.com",
   to: "heydarli.atabay@gmail.com",
   subject: "It is the test message",
   text: "Hello Atabay, it is the test",
  }; */
 
- /* transporter.sendMail(mailOptions, function (err, data) {
+/* transporter.sendMail(mailOptions, function (err, data) {
   if (err) {
     console.log("Error " + err);
   } else {
@@ -52,29 +52,27 @@ let transporter = nodemailer.createTransport({
   }
  }); */
 
- app.post("/api/sendEmail", function (req, res) {
+app.post('/api/sendEmail', function (req, res) {
   let mailOptions = {
-    from: "se2_r02team@outlook.com",
+    from: 'se2_r02team@outlook.com',
     to: `${req.body.email}`,
     subject: `Status of your Order`,
     text: `${req.body.message}`,
   };
- 
+
   transporter.sendMail(mailOptions, function (err, data) {
     if (err) {
       res.json({
-        status: "fail",
+        status: 'fail',
       });
     } else {
-      console.log("== Message Sent ==");
+      console.log('== Message Sent ==');
       res.json({
-        status: "success",
+        status: 'success',
       });
     }
   });
- });
-
-
+});
 
 /*** Set up Passport ***/
 passport.use(
@@ -82,7 +80,7 @@ passport.use(
     dbt.getUser(username, password).then((user) => {
       if (!user)
         return done(null, false, {
-          message: "Incorrect username and/or password.",
+          message: 'Incorrect username and/or password.',
         });
 
       return done(null, user);
@@ -109,14 +107,14 @@ passport.deserializeUser((id, done) => {
 const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) return next();
 
-  return res.status(401).json({ error: "not authenticated" });
+  return res.status(401).json({ error: 'not authenticated' });
 };
 
 // set up the session
 app.use(
   session({
     secret:
-      "a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie",
+      'a secret sentence not to share with anybody and anywhere, used to sign the session ID cookie',
     resave: false,
     saveUninitialized: false,
   })
@@ -128,8 +126,8 @@ app.use(passport.initialize());
 
 // POST /sessions
 // login
-app.post("/api/sessions", function (req, res, next) {
-  passport.authenticate("local", (err, user, info) => {
+app.post('/api/sessions', function (req, res, next) {
+  passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
     if (!user) {
       return res.status(401).json(info);
@@ -143,17 +141,17 @@ app.post("/api/sessions", function (req, res, next) {
 });
 
 // GET /sessions/current
-app.get("/api/sessions/current", (req, res) => {
+app.get('/api/sessions/current', (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json(req.user);
-  } else res.status(401).json({ code: 401, error: "Unauthenticated user!" });
+  } else res.status(401).json({ code: 401, error: 'Unauthenticated user!' });
 });
 
 // DELETE /sessions/current
 // logout
-app.delete("/api/sessions/current", (req, res) => {
+app.delete('/api/sessions/current', (req, res) => {
   req.logout();
-  res.end("Logout completed!");
+  res.end('Logout completed!');
 });
 //GET all clients and budget
 app.get('/api/clients', async (req, res) => {
@@ -288,7 +286,9 @@ app.get('/api/provider/:provider_id', async (req, res) => {
 app.get('/api/provider/:provider_id/products', async (req, res) => {
   try {
     const provider_id = req.params.provider_id;
-    const providerProducts = await providersDAO.getProviderExistingProducts(provider_id);
+    const providerProducts = await providersDAO.getProviderExistingProducts(
+      provider_id
+    );
     res.json(providerProducts);
   } catch (err) {
     console.log(err);
@@ -297,32 +297,47 @@ app.get('/api/provider/:provider_id/products', async (req, res) => {
 });
 
 //CHECK provider's confirmation status
-app.get('/api/provider/confirmationStatus/:year/:week_number', async (req, res) => {
-  try {
-    const year = req.params.year;
-    const week_number = req.params.week_number;
+app.get(
+  '/api/provider/confirmationStatus/:year/:week_number',
+  async (req, res) => {
+    try {
+      const year = req.params.year;
+      const week_number = req.params.week_number;
 
-    const confirmationStatus = await providersDAO.checkProviderAvailabilityConfirmation(1, year, week_number);
-    res.json(confirmationStatus);
-  } catch (err) {
-    console.log(err);
-    res.json(err);
+      const confirmationStatus =
+        await providersDAO.checkProviderAvailabilityConfirmation(
+          1,
+          year,
+          week_number
+        );
+      res.json(confirmationStatus);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
   }
-});
+);
 
 //GET provider's expected production
-app.get('/api/products/provider/expected/:year/:week_number', async (req, res) => {
-  try {
-    const year = req.params.year;
-    const week_number = req.params.week_number;
+app.get(
+  '/api/products/provider/expected/:year/:week_number',
+  async (req, res) => {
+    try {
+      const year = req.params.year;
+      const week_number = req.params.week_number;
 
-    const expectedProducts = await productsDAO.getProviderExpectedProducts(1, year, week_number);
-    res.json(expectedProducts);
-  } catch (err) {
-    console.log(err);
-    res.json(err);
+      const expectedProducts = await productsDAO.getProviderExpectedProducts(
+        1,
+        year,
+        week_number
+      );
+      res.json(expectedProducts);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
   }
-});
+);
 
 //Insert provider's expected production
 app.post('/api/products/expected/:year/:week_number', async (req, res) => {
@@ -331,13 +346,17 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
     const year = req.params.year;
     const week_number = req.params.week_number;
 
-    const oldProductIDs = (await productsDAO.getProviderExpectedProducts(1, year, week_number)).map((p) => (p.id));
+    const oldProductIDs = (
+      await productsDAO.getProviderExpectedProducts(1, year, week_number)
+    ).map((p) => p.id);
     const productIDs = [];
 
     await productsDAO.deleteExpectedProducts(1, year, week_number);
-    oldProductIDs.forEach(p => {
-      if (fs.existsSync(__dirname + "/../client/public/products/" + p + ".jpg")) {
-        fs.unlinkSync(__dirname + "/../client/public/products/" + p + ".jpg")
+    oldProductIDs.forEach((p) => {
+      if (
+        fs.existsSync(__dirname + '/../client/public/products/' + p + '.jpg')
+      ) {
+        fs.unlinkSync(__dirname + '/../client/public/products/' + p + '.jpg');
       }
     });
     for (let i = 0; i < products.length; i++) {
@@ -355,21 +374,21 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
 //UPLOAD image
 app.post('/api/products/upload/expected/:img_id', (req, res) => {
   if (!req.files) {
-    return res.status(400).send("No files were uploaded.");
+    return res.status(400).send('No files were uploaded.');
   }
 
   const filename = req.params.img_id;
 
   let file = req.files.product_image;
 
-  file.name = filename + ".jpg";
-  const path = __dirname + "/../client/public/products/" + file.name;
+  file.name = filename + '.jpg';
+  const path = __dirname + '/../client/public/products/' + file.name;
 
   file.mv(path, (err) => {
     if (err) {
       return res.status(500).send(err);
     }
-    return res.send({ status: "success", path: path });
+    return res.send({ status: 'success', path: path });
   });
 });
 
@@ -468,7 +487,7 @@ app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
       .status(500)
       .json(
         `Error while updating the balance of user with id: ${clientId}   ` +
-        error
+          error
       );
   }
 });
@@ -485,57 +504,67 @@ app.post('/api/transactions', (req, res) => {
   }
 });
 //POST ->add users
-app.post('/api/users',
+app.post(
+  '/api/users',
 
   async (req, res) => {
-
     var salt = bcrypt.genSaltSync(10);
     const oldPassword = req.body.hash;
     const hashedPassword = await bcrypt.hash(oldPassword, salt);
     const t = {
-
       id: req.body.id,
       name: req.body.name,
       email: req.body.email,
       hash: hashedPassword,
-      role: req.body.role
+      role: req.body.role,
     };
     try {
       const result = await dbt.addclient(t);
 
-      res.status(201).end("Added client as a user!");
+      res.status(201).end('Added client as a user!');
     } catch (err) {
-      res.status(503).json({ code: 503, error: "Unavailable service." });
+      res.status(503).json({ code: 503, error: 'Unavailable service.' });
     }
-  });
+  }
+);
 //POST ->orders
-app.post('/api/orders',
-  async (req, res) => {
+app.post('/api/orders', async (req, res) => {
+  const t = {
+    order_id: req.body.order_id,
+    client_id: req.body.client_id,
+    product_name: req.body.product_name,
+    state: req.body.state,
+    OrderPrice: req.body.OrderPrice,
+    id: req.body.id,
+    city: req.body.city,
+    Nation: req.body.Nation,
+    zipcode: req.body.zipcode,
+    address: req.body.address,
+    date: req.body.date,
+    time: req.body.time,
+  };
+  try {
+    console.log(t);
+    const result = await ordersDao.addOrder(t);
 
-    const t = {
-      order_id: req.body.order_id,
-      client_id: req.body.client_id,
-      product_name: req.body.product_name,
-      state: req.body.state,
-      OrderPrice: req.body.OrderPrice,
-      id: req.body.id
-    };
-    try {
-      const result = await ordersDao.addOrder(t);
-
-      res.status(201).end("Created order!");
-    } catch (err) {
-      res.status(503).json({ code: 503, error: "Unavailable service during the create of the order." });
-    }
-  });
+    res.status(201).end('Created order!');
+  } catch (err) {
+    res.status(503).json({
+      code: 503,
+      error: 'Unavailable service during the create of the order.',
+    });
+  }
+});
 //DELETE ->order item
 app.delete('/api/orders/:id', async (req, res) => {
-
   try {
     await ordersDao.deleteItem(req.params.id);
-    res.status(204).end("order item deleted!");
+    res.status(204).end('order item deleted!');
   } catch (err) {
-    res.status(503).json({ code: 503, error: `Unavailable service error during the delete of the order item` });
+    res.status(503).json({
+      code: 503,
+      error: `Unavailable service error during the delete of the order item`,
+    });
   }
 });
 module.exports = app;

@@ -65,7 +65,9 @@ function updateDelivered(id, product_name) {
 
 //GET all products
 async function getAllConfirmedProducts(year, week) {
-  const response = await fetch('http://localhost:3000/api/products/confirmed/' + year + "/" + week);
+  const response = await fetch(
+    'http://localhost:3000/api/products/confirmed/' + year + '/' + week
+  );
   if (response.ok) {
     return await response.json();
   } else {
@@ -75,7 +77,9 @@ async function getAllConfirmedProducts(year, week) {
 }
 
 async function getAllExpectedProducts(year, week) {
-  const response = await fetch('http://localhost:3000/api/products/expected/' + year + "/" + week);
+  const response = await fetch(
+    'http://localhost:3000/api/products/expected/' + year + '/' + week
+  );
   if (response.ok) {
     return await response.json();
   } else {
@@ -114,7 +118,7 @@ async function getAllCategories() {
     return await response.json();
   } else {
     let err = { status: response.status, errObj: await response.json() };
-    throw err;  // An object with the error coming from the server
+    throw err; // An object with the error coming from the server
   }
 }
 
@@ -158,7 +162,7 @@ async function getProviderProducts(provider_id) {
 //GET provider products by providerID
 async function getProviderConfirmationStatus(year, week_number) {
   const response = await fetch(
-    '/api/provider/confirmationStatus/'+year+'/'+week_number
+    '/api/provider/confirmationStatus/' + year + '/' + week_number
   );
   if (response.ok) {
     return await response.json();
@@ -171,7 +175,7 @@ async function getProviderConfirmationStatus(year, week_number) {
 //GET provider products by providerID
 async function getProviderExpectedProducts(year, week_number) {
   const response = await fetch(
-    '/api/products/provider/expected/'+year+'/'+week_number
+    '/api/products/provider/expected/' + year + '/' + week_number
   );
   if (response.ok) {
     return await response.json();
@@ -183,31 +187,32 @@ async function getProviderExpectedProducts(year, week_number) {
 
 //POST array of products expected to be available next week
 async function declareAvailability(products, year, week) {
-  const response = await fetch('/api/products/expected/'+year+'/'+week, {
+  const response = await fetch('/api/products/expected/' + year + '/' + week, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(products), // Conversion in JSON format
   });
   if (response.ok) {
     return await response.json();
-  }
-  else {
+  } else {
     throw response.json();
   }
 }
 
 //POST product image & product_id (used to rename img for correctly displaying in booking.js)
 async function uploadProductImage(formData, product_id) {
-    const response = await fetch('/api/products/upload/expected/'+product_id+'', {
+  const response = await fetch(
+    '/api/products/upload/expected/' + product_id + '',
+    {
       method: 'POST',
-      body: formData
-    });
-    if (response.ok) {
-      return true;
+      body: formData,
     }
-    else {
-      throw response;
-    }
+  );
+  if (response.ok) {
+    return true;
+  } else {
+    throw response;
+  }
 }
 
 //Insert a new order
@@ -368,7 +373,6 @@ async function getAllPaymentMethods() {
   }
 }
 
-
 // Adding new transaction
 
 function addTransaction(tr) {
@@ -415,9 +419,9 @@ function increaseBalance(amount, clientId) {
   return new Promise((resolve, reject) => {
     fetch(
       'http://localhost:3000/api/clients/update/balance/' +
-      clientId +
-      '/' +
-      amount,
+        clientId +
+        '/' +
+        amount,
       {
         method: 'PUT',
         headers: {
@@ -458,20 +462,20 @@ async function logIn(credentials) {
   if (response.ok) {
     const user = await response.json();
     return user;
-  }
-  else {
+  } else {
     try {
       const errDetail = await response.json();
       throw errDetail.message;
-    }
-    catch (err) {
+    } catch (err) {
       throw err;
     }
   }
 }
 
 async function logOut() {
-  await fetch('http://localhost:3000/api/sessions/current', { method: 'DELETE' });
+  await fetch('http://localhost:3000/api/sessions/current', {
+    method: 'DELETE',
+  });
 }
 
 async function getUserInfo() {
@@ -480,7 +484,7 @@ async function getUserInfo() {
   if (response.ok) {
     return userInfo;
   } else {
-    throw userInfo;  // an object with the error coming from the server
+    throw userInfo; // an object with the error coming from the server
   }
 }
 
@@ -493,23 +497,37 @@ function addUser(S) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "id": S.id,
-        "name": S.name,
-        "email": S.email,
-        "hash": S.hash,
-        "role": S.role,
-
+        id: S.id,
+        name: S.name,
+        email: S.email,
+        hash: S.hash,
+        role: S.role,
       }),
-    }).then((response) => {
-      if (response.ok) {
-        resolve(null);
-      } else {
-        // cause of error
-        response.json()
-          .then((obj) => { reject(obj); })
-          .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot insert a user" }] }) });
-      }
-    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [{ param: 'Application', msg: 'Cannot insert a user' }],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [
+            { param: 'Server', msg: 'Communication with server failed' },
+          ],
+        });
+      });
   });
 }
 
@@ -522,24 +540,46 @@ function addOrder(S) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        "order_id": S.order_id,
-        "client_id": S.client_id,
-        "product_name": S.product_name,
-        "state": S.state,
-        "OrderPrice": S.OrderPrice,
-        "id": S.id,
-
+        order_id: S.order_id,
+        client_id: S.client_id,
+        product_name: S.product_name,
+        state: S.state,
+        OrderPrice: S.OrderPrice,
+        id: S.id,
+        address: S.address,
+        city: S.city,
+        zipcode: S.zipcode,
+        Nation: S.nation,
+        date: S.date,
+        time: S.time,
       }),
-    }).then((response) => {
-      if (response.ok) {
-        resolve(null);
-      } else {
-        // cause of error
-        response.json()
-          .then((obj) => { reject(obj); })
-          .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot insert a order" }] }) });
-      }
-    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [
+                  { param: 'Application', msg: 'Cannot insert a order' },
+                ],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [
+            { param: 'Server', msg: 'Communication with server failed' },
+          ],
+        });
+      });
   });
 }
 //DELETE ->order item
@@ -547,38 +587,55 @@ function deleteOrderItem(id) {
   return new Promise((resolve, reject) => {
     fetch(`http://localhost:3000/api/orders/${id}`, {
       method: 'DELETE',
-    }).then((response) => {
-      if (response.ok) {
-        resolve(null);
-      } else {
-        // cause of error
-        response.json()
-          .then((obj) => { reject(obj); })
-          .catch((err) => { reject({ errors: [{ param: "Application", msg: "Cannot delete a rorder item" }] }) });
-      }
-    }).catch((err) => { reject({ errors: [{ param: "Server", msg: "Communication with server failed" }] }) });
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [
+                  { param: 'Application', msg: 'Cannot delete a rorder item' },
+                ],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [
+            { param: 'Server', msg: 'Communication with server failed' },
+          ],
+        });
+      });
   });
 }
 
 const submitEmail = async (e) => {
-  const response = await fetch("http://localhost:3000/api/sendEmail", {
-    method: "POST",
+  const response = await fetch('http://localhost:3000/api/sendEmail', {
+    method: 'POST',
     headers: {
-      "Content-type": "application/json",
+      'Content-type': 'application/json',
     },
-    body: JSON.stringify({ 
-      "email": e.email,
-      "message": e.message,
-     }),
+    body: JSON.stringify({
+      email: e.email,
+      message: e.message,
+    }),
   })
     .then((res) => res.json())
     .then(async (res) => {
       const resData = await res;
       console.log(resData);
-      if (resData.status === "success") {
-        alert("Message Sent");
-      } else if (resData.status === "fail") {
-        alert("Message failed to send");
+      if (resData.status === 'success') {
+        alert('Message Sent');
+      } else if (resData.status === 'fail') {
+        alert('Message failed to send');
       }
     });
 };
@@ -608,7 +665,9 @@ const API = {
   getAllCategories,
   logOut,
   logIn,
-  getUserInfo, addUser, addOrder,
-  submitEmail
+  getUserInfo,
+  addUser,
+  addOrder,
+  submitEmail,
 };
 export default API;
