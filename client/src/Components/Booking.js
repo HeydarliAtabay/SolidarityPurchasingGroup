@@ -125,6 +125,7 @@ function Booking(props) {
           parseInt(props.clientid),
           a.name,
           a.id,
+          a.qty,
           'booked',
           p,
           `${indice}`,

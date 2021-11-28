@@ -535,6 +535,7 @@ app.post('/api/order', async (req, res) => {
     client_id: req.body.client_id,
     product_name: req.body.product_name,
     product_id: req.body.product_id,
+    order_quantity: req.body.order_quantity,
     state: req.body.state,
     OrderPrice: req.body.OrderPrice,
     id: req.body.id,

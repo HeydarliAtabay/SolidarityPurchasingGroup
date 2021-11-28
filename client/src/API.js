@@ -542,6 +542,7 @@ function addOrder(S) {
         client_id: S.client_id,
         product_name: S.product_name,
         product_id: S.product_id,
+        order_quantity: S.order_quantity,
         state: S.state,
         OrderPrice: S.OrderPrice,
         id: S.id,
