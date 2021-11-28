@@ -463,6 +463,20 @@ app.put('/api/modifyquantity', async (req, res) => {
     });
 });
 
+//update quantity
+app.put('/api/farmerConfirm/:product_id/:year/:week', async (req, res) => {
+  productsDAO
+    .confirmExpectedProduct(1,req.params.product_id, req.params.year,req.params.week)
+    .then(() => {
+      res.status(200).json();
+      return res;
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
+
 // adding a client
 
 app.post('/api/clients', async (req, res) => {

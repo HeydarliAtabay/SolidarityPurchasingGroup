@@ -17,6 +17,7 @@ import ClientArea from './Components/ClientArea';
 import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
 import FarmerOrderPreparation from './Components/FarmerOrderPreparation';
+import FarmerOrderConfirmation from './Components/FarmerOrderConfirmation';
 
 let r = [];
 
@@ -280,6 +281,13 @@ function App() {
             path="/order-preparation"
             render={() => (
               <FarmerOrderPreparation />
+            )}
+          />
+
+          <Route
+            path="/order-confirmation-farmer"
+            render={() => (
+              <FarmerOrderConfirmation />
             )}
           />
           <Route

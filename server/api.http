@@ -1,6 +1,6 @@
 ### Update number of responders
 
-PUT http://localhost:3001/api/clients/update/balance/1/10
+PUT http://localhost:3001/api/farmerConfirm/57/2021/1
 
 
 ### Adding new transaction
@@ -8,3 +8,7 @@ POST http://localhost:3001/api/transactions
 Content-Type: application/json
 
 { "type":"top-up", "client_id":1, "method_id":1, "account_num":"4217484694987474","amount":10, "date":"14-11-2021", "time":"15:44", "status":1 }
+
+
+### Adding new transaction
+GET http://localhost:3001/api/products/provider/expected/2021/2

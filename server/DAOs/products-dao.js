@@ -182,3 +182,18 @@ exports.insertNewExpectedProduct = (prod, provider_id) => {
     );
   });
 }
+
+
+exports.confirmExpectedProduct = (provider_id,product_id, year, week_number) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE products SET product_status="confirmed" WHERE provider_id = ? AND product_id=? AND year=? AND week_number=?';
+    db.run(sql, [provider_id, product_id, year, week_number ], function (err) {
+      if (err) {
+        console.log(err)
+        reject(err);
+        return;
+      }
+      resolve(this.lastID); // changed from resolve(exports.getTask(this.lastID) because of error "not found" (wrong lastID)
+    });
+  });
+};
