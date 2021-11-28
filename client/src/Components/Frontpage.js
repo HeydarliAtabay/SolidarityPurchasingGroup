@@ -47,6 +47,14 @@ function Frontpage(props) {
                             </div>
                         </li>
                         <li className="list-group-item d-flex justify-content-between">
+                            <div className="d-inline my-auto">Warehouse personnel</div>
+                            <div className="d-inline">
+                                <button className="mx-2 btn btn-outline-primary" onClick={(event) => {
+                                    history.push("/login")
+                                }}>Login</button>
+                            </div>
+                        </li>
+                        <li className="list-group-item d-flex justify-content-between">
                             <div className="d-inline my-auto">Delivery personnel</div>
                             <div className="d-inline">
                                 <button className="mx-2 btn btn-outline-primary">Login</button>

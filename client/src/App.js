@@ -7,6 +7,7 @@ import Orders from './Components/Orders';
 import { clientOrders } from './classes/ClientOrder';
 import API from './API';
 import EmployeePage from './Components/EmployeePage';
+import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect, Row, Alert } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -252,6 +253,16 @@ function App() {
                 logout={doLogOut}
               />
             )}
+          />
+          <Route
+          path = "/warehouse"
+          render = {() => (
+            <WarehousePage
+              orders = {orders} 
+              methods={methods}
+              logout={doLogOut}
+              />
+          )}
           />
           <Route
             path="/farmer"
