@@ -126,7 +126,7 @@ exports.insert_order_items = async (order_id, order_items) => {
 exports.addOrder = (t) => {
   return new Promise((resolve, reject) => {
     const sql =
-      'INSERT INTO orders( order_id, client_id, product_name, state, OrderPrice, id,address,city,zipcode,Nation ) VALUES ( ?, ?, ?, ?, ?, ?,?,?,?,? )';
+      'INSERT INTO orders( order_id, client_id, product_name, state, OrderPrice, id,address,city,zipcode,Nation,date,time ) VALUES ( ?, ?, ?, ?, ?, ?,?,?,?,?,?,? )';
     db.run(
       sql,
       [
@@ -140,6 +140,8 @@ exports.addOrder = (t) => {
         t.city,
         t.zipcode,
         t.Nation,
+        t.date,
+        t.time,
       ],
       function (err) {
         if (err) {

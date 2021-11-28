@@ -25,6 +25,8 @@ function Booking(props) {
   const [address, setAddress] = useState('');
   const [nation, setNation] = useState('');
   const [city, setCity] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
   const [zipCode, setZipCode] = useState('');
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
@@ -128,7 +130,9 @@ function Booking(props) {
           address,
           city,
           nation,
-          zipCode
+          zipCode,
+          date,
+          time
         );
         API.addOrder(order).then(() => {
           props.setRecharged(true);
@@ -449,6 +453,8 @@ function Booking(props) {
                   nation={nation}
                   city={city}
                   zipCode={zipCode}
+                  time={time}
+                  date={date}
                   setShowsuccess={setShowsuccess}
                   setShowdanger={setShowdanger}
                   showsuccess={showsuccess}
@@ -519,18 +525,49 @@ function Booking(props) {
                 />
               </Form.Group>
             </Row>
+            <Row>
+              <Col>
+                Date
+                <input
+                  style={{
+                    borderColor: '#ced4da',
+                    borderWidth: '1px',
+                    borderRadius: '3px',
+                    textAlign: 'center',
+                  }}
+                  className="m-2"
+                  type="date"
+                  onChange={(ev) => setDate(ev.target.value)}
+                />
+              </Col>
+              <Col>
+                Time
+                <input
+                  type="time"
+                  style={{
+                    borderColor: '#ced4da',
+                    borderWidth: '1px',
+                    borderRadius: '3px',
+                    textAlign: 'center',
+                  }}
+                  className="m-2"
+                  label="Time"
+                  id="start"
+                  onChange={(ev) => setTime(ev.target.value)}
+                />
+              </Col>
+            </Row>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <button
-            className="btn btn-secondary"
+          <Button
             onClick={() => {
               setShowCompletePurchase(false);
               setCompleteAddressing(true);
             }}
           >
             Confirm
-          </button>
+          </Button>
         </Modal.Footer>
       </Modal>
 

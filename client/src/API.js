@@ -540,6 +540,8 @@ function addOrder(S) {
         city: S.city,
         zipcode: S.zipcode,
         Nation: S.nation,
+        date: S.date,
+        time: S.time,
       }),
     })
       .then((response) => {

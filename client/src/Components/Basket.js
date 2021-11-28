@@ -64,7 +64,9 @@ function Basket(props) {
           {props.address !== '' &&
           props.nation !== '' &&
           props.city != '' &&
-          props.zipCode !== '' ? (
+          props.zipCode !== '' &&
+          props.date !== '' &&
+          props.time !== '' ? (
             <>
               <Container fluid>
                 <Row>
@@ -72,6 +74,8 @@ function Basket(props) {
                   <span>Nation: {props.nation}</span>
                   <span>City: {props.city}</span>
                   <span>ZipCode: {props.zipCode}</span>
+                  <span>Date: {props.date}</span>
+                  <span>Time: {props.time}</span>
                 </Row>
               </Container>
               <Row>

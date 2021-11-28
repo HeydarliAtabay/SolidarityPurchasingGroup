@@ -526,18 +526,19 @@ app.post('/api/orders', async (req, res) => {
     Nation: req.body.Nation,
     zipcode: req.body.zipcode,
     address: req.body.address,
+    date: req.body.date,
+    time: req.body.time,
   };
   try {
+    console.log(t);
     const result = await ordersDao.addOrder(t);
 
     res.status(201).end('Created order!');
   } catch (err) {
-    res
-      .status(503)
-      .json({
-        code: 503,
-        error: 'Unavailable service during the create of the order.',
-      });
+    res.status(503).json({
+      code: 503,
+      error: 'Unavailable service during the create of the order.',
+    });
   }
 });
 //DELETE ->order item
@@ -546,12 +547,10 @@ app.delete('/api/orders/:id', async (req, res) => {
     await ordersDao.deleteItem(req.params.id);
     res.status(204).end('order item deleted!');
   } catch (err) {
-    res
-      .status(503)
-      .json({
-        code: 503,
-        error: `Unavailable service error during the delete of the order item`,
-      });
+    res.status(503).json({
+      code: 503,
+      error: `Unavailable service error during the delete of the order item`,
+    });
   }
 });
 module.exports = app;

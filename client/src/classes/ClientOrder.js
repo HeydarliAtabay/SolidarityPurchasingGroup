@@ -8,7 +8,9 @@ function clientOrders(
   address,
   city,
   nation,
-  zipcode
+  zipcode,
+  date,
+  time
 ) {
   this.order_id = order_id;
   this.client_id = client_id;
@@ -20,5 +22,7 @@ function clientOrders(
   this.city = city;
   this.nation = nation;
   this.zipcode = zipcode;
+  this.date = date;
+  this.time = time;
 }
 export { clientOrders };
