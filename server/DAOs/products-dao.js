@@ -182,3 +182,26 @@ exports.insertNewExpectedProduct = (prod, provider_id) => {
     );
   });
 }
+
+exports.getBookedOrders = (provider_id, year, week_number) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      'SELECT products.product_id AS productID, products.product_name, SUM(quantity) AS TotQty, products.product_unit '+ 
+      'FROM products, order_items '+
+      'WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_id=order_items.product_id '+
+      'GROUP BY products.product_id, products.product_name, products.product_unit';
+    db.all(sql, [provider_id, year, week_number], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      console.log(rows);
+      const products = rows.map((p) => ({
+        id: p.productID,
+        name: p.product_name,
+        tot_quantity: p.TotQty,
+        unit: p.product_unit
+      }));
+      resolve(products);
+    });
+  });
+}

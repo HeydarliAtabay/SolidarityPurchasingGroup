@@ -15,6 +15,7 @@ import { LoginForm1 } from './Components/LoginForm';
 import ClientArea from './Components/ClientArea';
 import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
+import FarmerOrderPreparation from './Components/FarmerOrderPreparation';
 
 let r = [];
 
@@ -50,8 +51,8 @@ function App() {
     };
     checkAuth();
   }, []);
-  /* USEFFECT clients */
 
+  /* USEFFECT clients */
   useEffect(() => {
     const getAllClients = async () => {
       await API.getAllClients()
@@ -156,7 +157,6 @@ function App() {
     try {
       const user = await API.logIn(credentials);
       setLogged(true);
-
       setMessage('');
       setUserid(`${user.id}`);
     } catch (err) {
@@ -253,6 +253,12 @@ function App() {
             path="/declare-availability"
             render={() => (
               <FarmerProducts />
+            )}
+          />
+          <Route
+            path="/order-preparation"
+            render={() => (
+              <FarmerOrderPreparation />
             )}
           />
           <Route

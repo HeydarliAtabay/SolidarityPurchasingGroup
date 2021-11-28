@@ -80,9 +80,9 @@ function FarmerArea(props) {
                     </div>
                 </div>
                 <div className="row w-100">
-                    <div className="col-md-6">
+                    <div className="col-lg-12">
                         <div className="card m-3 w-100">
-                            <div className="row client-area-450px-width-custom no-gutters">
+                            <div className="row no-gutters">
                                 <div className="col-md-4 bg-secondary p-3 text-center">
                                     {walletIcon}
                                 </div>
@@ -103,9 +103,11 @@ function FarmerArea(props) {
                             </div>
                         </div>
                     </div>
-                    <div className="col-md-6">
+                </div>
+                <div className="row w-100">
+                    <div className="col-lg-12">
                         <div className="card m-3 w-100">
-                            <div className="row client-area-450px-width-custom no-gutters">
+                            <div className="row no-gutters">
                                 <div className="col-md-4 bg-secondary p-3 text-center">
                                     {cartIcon}
                                 </div>
@@ -113,12 +115,12 @@ function FarmerArea(props) {
                                     <div className="card-body">
                                         <h5 className="card-title">Confirm order preparation</h5>
                                         <p className="card-text">
-                                            • 
+                                            • Confirm the preparation of the booked orders to ship to the SPG shop
                                         </p>
                                         <div className="d-block text-end">
-                                            {/* <Link to="/orders"> */}
+                                            <Link to="/order-preparation">
                                                 <button className="btn btn-primary">Confirm preparation</button>
-                                            {/* </Link> */}
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>

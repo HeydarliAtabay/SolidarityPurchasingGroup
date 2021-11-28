@@ -4,22 +4,22 @@ import { Link, useHistory } from "react-router-dom"
 import ClientAlert from './ClientAlert'
 function ClientArea(props) {
 
- 
 
-    
+
+
     return (
 
         <div className="row w-100">
 
 
-            <div><Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button>
-</div>
-  
+            <div><Button variant="light" style={{ 'fontSize': 30, 'borderStyle': 'hidden', 'position': 'absolute', 'right': '30px' }} onClick={props.logout}><Link to="/">LOGOUT</Link></Button>
+            </div>
+
             <span className="d-block text-center mt-5 mb-2 display-2">
                 Client Area
             </span>
             <div className="d-block">
-                <ClientAlert clients={props.clients} clientid={props.clientid}/>
+                <ClientAlert clients={props.clients} clientid={props.clientid} />
             </div>
             <div className="col-lg-3">
                 <div className="card mx-3 my-2 shadow-sm">
@@ -58,7 +58,7 @@ function ClientArea(props) {
                                 <p className="card-text">
                                     • View &#38; search products<br />
                                     • Book products
-                                </p> 
+                                </p>
                                 <div className="d-block text-end">
                                     <Link to="/booking">
                                         <button className="btn btn-primary">Browse products</button>
@@ -103,9 +103,9 @@ function ClientArea(props) {
                                     • View your order history
                                 </p>
                                 <div className="d-block text-end">
-                                    <Link to="/orders"> 
+                                    <Link to="/orders">
                                         <button className="btn btn-primary" disabled={false}>View orders</button>
-                                    </Link> 
+                                    </Link>
                                 </div>
                             </div>
                         </div>

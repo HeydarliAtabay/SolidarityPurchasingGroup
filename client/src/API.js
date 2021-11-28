@@ -84,6 +84,16 @@ async function getAllExpectedProducts(year, week) {
   }
 }
 
+async function getOrderedProductsForProvider(year, week) {
+  const response = await fetch('/api/products/ordered/' + year + "/" + week);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
 //GET product by specific ID
 async function getProductById(product_id) {
   const response = await fetch(
@@ -579,6 +589,7 @@ const API = {
   updateDelivered,
   getAllConfirmedProducts,
   getAllExpectedProducts,
+  getOrderedProductsForProvider,
   getProductById,
   getAllProviders,
   getProviderById,

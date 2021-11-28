@@ -236,6 +236,20 @@ app.get('/api/product/:product_id', async (req, res) => {
   }
 });
 
+//GET all booked orders for a certain provider
+app.get('/api/products/ordered/:year/:week_number', async (req, res) => {
+  try {
+    const year = req.params.year;
+    const week_number = req.params.week_number;
+
+    const products = await productsDAO.getBookedOrders(1, year, week_number);
+    res.json(products);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
 //GET all categories
 app.get('/api/products/categories', async (req, res) => {
   try {
