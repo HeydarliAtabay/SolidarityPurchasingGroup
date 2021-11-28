@@ -77,9 +77,18 @@ function App() {
               x.order_id,
               x.client_id,
               x.product_name,
+              x.product_id,
+              x.order_quantity,
               x.state,
+              x.farmer_state,
               x.OrderPrice,
-              x.id
+              x.id,
+              x.address,
+              x.city,
+              x.zipcode,
+              x.Nation,
+              x.date,
+              x.time
             )
           );
         });

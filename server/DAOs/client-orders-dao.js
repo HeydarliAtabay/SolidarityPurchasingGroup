@@ -19,12 +19,21 @@ exports.getAllOrders = () => {
         return;
       }
       const o = rows.map((e) => ({
-        order_id: e.order_id,
-        client_id: e.client_id,
-        product_name: e.product_name,
-        state: e.state,
-        OrderPrice: e.OrderPrice,
-        id: e.id,
+        order_id:e.order_id,
+        client_id:e.client_id,
+        product_name:e.product_name,
+        product_id:e.product_id,
+        quantity:e.order_quantity,
+        state:e.state,
+        farmer_state:e.farmer_state,
+        OrderPrice:e.OrderPrice,
+        id:e.id,
+        address:e.address,
+        city:e.city,
+        zipcode:e.zipcode,
+        Nation:e.Nation,
+        date:e.date,
+        time:e.time
       }));
       resolve(o);
     });

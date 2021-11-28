@@ -68,6 +68,7 @@ show</Button></Col>
    <ExclamationDiamond color="red" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
     setShowClient(true);
     setClient(s.client_id)
+    console.log(s.client_id)
    }}/>
 
    }
