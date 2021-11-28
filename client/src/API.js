@@ -541,7 +541,7 @@ function addOrder(S) {
         order_id: S.order_id,
         client_id: S.client_id,
         product_name: S.product_name,
-        product_id: parseInt(S.product_id),
+        product_id: S.product_id,
         state: S.state,
         OrderPrice: S.OrderPrice,
         id: S.id,
