@@ -1,4 +1,5 @@
-import { Button, Modal, Row, Col, Form, FloatingLabel, Spinner, Alert } from 'react-bootstrap';
+import { Button, Spinner, Alert } from 'react-bootstrap';
+import { Link } from "react-router-dom"
 import API from '../API';
 const { useState, useEffect } = require("react");
 
@@ -9,33 +10,65 @@ function FarmerOrderPreparation(props) {
     /*products arrays*/
     const [bookedProducts, setBookedProducts] = useState([]);
 
-    /*modal show states*/
-    const [showNewProductModal, setShowNewProductModal] = useState(false);
-    const [modifyProductID, setModifyProductID] = useState(-1);
-    const [removeProductID, setRemoveProductID] = useState(-1);
-
-    /*save status alert*/
-    const [shipAlert, setShipAlert] = useState(null);
+    /*ship status alert*/
+    const [itemsAlreadyShipped, setItemsAlreadyShipped] = useState(false);
+    const [refreshData, setRefreshData] = useState(true);
+    const [shipError, setShipError] = useState('');
 
     /*spinning circle*/
     const [showLoading, setShowLoading] = useState(true);
 
     /*useEffect triggers*/
-    const [saveAvailability, setSaveAvailability] = useState(false);
-    const [refreshExpected, setRefreshExpected] = useState(true);
+    const [confirmShipment, setConfirmShipment] = useState(false);
 
     /*USEFFECTS*/
+    /*Get items that need to be shipped*/
     useEffect(() => {
+        if(!refreshData){
+            return;
+        }
         const getBookedOrders = async () => {
             setShowLoading(true);
-            const prods = (await API.getOrderedProductsForProvider(2021, 1)).map((p)=>({...p, prepared: 0}));
+            const itemsAlreadyShipped = await API.getProviderShipmentStatus(2021, 1);
+            if (itemsAlreadyShipped) {
+                setItemsAlreadyShipped(true);
+                setRefreshData(false);
+                setShowLoading(false);
+                return;
+            }
+            const prods = (await API.getOrderedProductsForProvider(2021, 1)).map((p) => ({ ...p, prepared: 0 }));
             setBookedProducts(prods);
+            setRefreshData(false);
             setShowLoading(false);
         }
         getBookedOrders();
-    }, [])
+    }, [refreshData])
+
+    /*Set order status as farmer-shipped*/
+    useEffect(() => {
+        if (!confirmShipment) {
+            return;
+        }
+        const shipItems = async () => {
+            const shippedIDs = bookedProducts.map((p) => (p.id));
+            await API.setProductsAsFarmerShipped(shippedIDs);
+            setRefreshData(true);
+        }
+        shipItems();
+    }, [confirmShipment]);
 
     /*Utility functions*/
+    const checkShipmentCorrectness = () => {
+        for (const prod of bookedProducts) {
+            if (prod.prepared === 0) {
+                setShipError('Please confirm all the products and then confirm the shipment.')
+                return;
+            }
+        }
+        setShipError('');
+        setConfirmShipment(true);
+    }
+
     const capitalizeEachFirstLetter = (str) => {
         return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
     }
@@ -50,9 +83,19 @@ function FarmerOrderPreparation(props) {
                     Select the items which you have prepared for shipping.<br />
                     After selecting all the items you can ship the order.
                 </h5>
-                {shipAlert &&
-                    <Alert variant={shipAlert.variant} dismissible={true} onClose={() => (setShipAlert(null))}>
-                        {shipAlert.msg}
+                {!showLoading && itemsAlreadyShipped &&
+                    <Alert show={itemsAlreadyShipped} variant="success">
+                        <Alert.Heading>Item shipment status</Alert.Heading>
+                        <p>
+                            You have successfully shipped your items!<br/>
+                            Next shipping window is from Sunday 23.00 until Tuesday 23.59.
+                        </p>
+                        <hr />
+                        <div className="d-flex justify-content-end">
+                            <Link to="/farmer">
+                                <Button variant="outline-success">Back to Farmer Area</Button>
+                            </Link>
+                        </div>
                     </Alert>
                 }
                 {showLoading &&
@@ -60,7 +103,7 @@ function FarmerOrderPreparation(props) {
                         <Spinner className="m-5" animation="grow" />
                     </div>
                 }
-                {!showLoading &&
+                {!itemsAlreadyShipped && !showLoading &&
                     <div className="d-block text-center">
                         {/*DISPLAYING NOTIFICATION IF NO PRODUCTS INSERTED YET*/
                             bookedProducts.length === 0 ?
@@ -71,13 +114,13 @@ function FarmerOrderPreparation(props) {
                                 ''
                         }
                         {/*DISPLAYING CURRENTLY INSERTED PRODUCTS*/}
-                        <ul class="list-group list-group-flush mx-auto w-75">
+                        <ul className="list-group list-group-flush mx-auto w-75">
                             {bookedProducts.map((product) => {
                                 return (
-                                    <li key={product.id} class="list-group-item">
+                                    <li key={product.id} className="list-group-item">
                                         <div className="row w-100">
-                                            <div className="col-md-1">
-                                                <img className="w-100 rounded-circle" 
+                                            <div className="col-md-1 my-auto">
+                                                <img className="w-100 rounded-circle"
                                                     src={process.env.PUBLIC_URL + 'products/' + product.id + '.jpg'}
                                                     alt="Product img"
                                                 />
@@ -86,15 +129,22 @@ function FarmerOrderPreparation(props) {
                                                 <h4>{capitalizeEachFirstLetter(product.name)}</h4>
                                             </div>
                                             <div className="col-md-3 text-start my-auto">
-                                                {stockIcon} {product.tot_quantity+' '+product.unit}
+                                                {stockIcon} {product.tot_quantity + ' ' + product.unit}
                                             </div>
                                             <div className="col-md-3 text-center my-auto">
-                                                {product.prepared===0 && <button className="btn btn-success" onClick={()=>(
-                                                    setBookedProducts((p)=>{
-                                                        
+                                                {product.prepared === 0 && <button className="btn btn-success" onClick={() => (
+                                                    setBookedProducts((prods) => {
+                                                        const newProds = [];
+                                                        for (const prod of prods) {
+                                                            if (prod.id === product.id) {
+                                                                prod.prepared = 1;
+                                                            }
+                                                            newProds.push(prod);
+                                                        }
+                                                        return newProds;
                                                     })
-                                                )}>Confirm prepared</button>}    
-                                                {product.prepared===1 && <span className="d-block text-center">{checkIcon}</span>}
+                                                )}>Confirm prepared</button>}
+                                                {product.prepared === 1 && <span className="d-block text-center text-success">{checkIcon} Prepared</span>}
                                             </div>
                                         </div>
                                     </li>
@@ -105,7 +155,10 @@ function FarmerOrderPreparation(props) {
                 }
                 <hr />
                 <div className="d-block mb-5 text-center">
-                    <button className="mx-2 p-3 btn btn-primary" onClick={() => (setSaveAvailability(true))}>Confirm items shipment</button>
+                    <small className="text-danger">{shipError}</small>
+                </div>
+                <div className="d-block mb-5 text-center">
+                    <button className="mx-2 p-3 btn btn-primary" onClick={() => (checkShipmentCorrectness())}>Confirm items shipment</button>
                 </div>
             </div>
         </>
@@ -143,9 +196,9 @@ const stockIcon = (
 );
 
 const checkIcon = (
-<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-</svg>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+    </svg>
 );
 
 export default FarmerOrderPreparation;

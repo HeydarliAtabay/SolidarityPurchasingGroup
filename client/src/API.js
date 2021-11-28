@@ -88,6 +88,7 @@ async function getAllExpectedProducts(year, week) {
   }
 }
 
+//GET all products in the booked or pending state of a certain provider
 async function getOrderedProductsForProvider(year, week) {
   const response = await fetch('/api/products/ordered/' + year + "/" + week);
   if (response.ok) {
@@ -95,6 +96,31 @@ async function getOrderedProductsForProvider(year, week) {
   } else {
     let err = { status: response.status, errObj: await response.json() };
     throw err; // An object with the error coming from the server
+  }
+}
+
+//GET farmer shipment status
+async function getProviderShipmentStatus(year, week) {
+  const response = await fetch('/api/provider/shipmentstatus/' + year + "/" + week);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//POST all products IDs that were shipped
+async function setProductsAsFarmerShipped(productIDS) {
+  const response = await fetch('/api/orders/farmershipped', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(productIDS), // Conversion in JSON format
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    throw response.json();
   }
 }
 
@@ -647,6 +673,8 @@ const API = {
   getAllConfirmedProducts,
   getAllExpectedProducts,
   getOrderedProductsForProvider,
+  getProviderShipmentStatus,
+  setProductsAsFarmerShipped,
   getProductById,
   getAllProviders,
   getProviderById,
@@ -670,4 +698,5 @@ const API = {
   addOrder,
   submitEmail,
 };
+
 export default API;

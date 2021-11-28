@@ -196,6 +196,20 @@ app.put(
   }
 );
 
+app.post('/api/orders/farmershipped', async (req, res)=>{
+  try{
+    const productIDS = req.body;
+
+    for(const product of productIDS){
+      await ordersDao.setOrderAsFarmerShipped(product);
+    }
+    res.json(true);
+  }catch(err){
+    console.log(err);
+    res.json(err);
+  }
+});
+
 //GET all confirmed for sale products
 app.get('/api/products/confirmed/:year/:week', async (req, res) => {
   try {
@@ -239,8 +253,7 @@ app.get('/api/products/ordered/:year/:week_number', async (req, res) => {
   try {
     const year = req.params.year;
     const week_number = req.params.week_number;
-
-    const products = await productsDAO.getBookedOrders(1, year, week_number);
+    const products = await ordersDao.getBookedOrders(1, year, week_number);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -332,6 +345,27 @@ app.get(
         week_number
       );
       res.json(expectedProducts);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  }
+);
+
+//GET providers shipment status
+app.get(
+  '/api/provider/shipmentstatus/:year/:week_number',
+  async (req, res) => {
+    try {
+      const year = req.params.year;
+      const week_number = req.params.week_number;
+
+      const shipmentStatus = await ordersDao.getProviderShipmentStatus(
+        1,
+        year,
+        week_number
+      );
+      res.json(shipmentStatus);
     } catch (err) {
       console.log(err);
       res.json(err);

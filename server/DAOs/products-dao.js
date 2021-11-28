@@ -182,27 +182,3 @@ exports.insertNewExpectedProduct = (prod, provider_id) => {
     );
   });
 }
-
-exports.getBookedOrders = (provider_id, year, week_number) => {
-  return new Promise((resolve, reject) => {
-    const sql =
-      'SELECT products.product_id AS productID, products.product_name, SUM(order_quantity) AS TotQty, products.product_unit, orders.state '+ 
-      'FROM products, orders '+
-      'WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_id=orders.product_id '+
-      'GROUP BY products.product_id, products.product_name, products.product_unit, orders.state';
-    db.all(sql, [provider_id, year, week_number], (err, rows) => {
-      if (err) {
-        reject(err);
-      }
-      console.log(rows);
-      const products = rows.map((p) => ({
-        id: p.productID,
-        name: p.product_name,
-        tot_quantity: p.TotQty,
-        unit: p.product_unit,
-        state: p.state
-      }));
-      resolve(products);
-    });
-  });
-}

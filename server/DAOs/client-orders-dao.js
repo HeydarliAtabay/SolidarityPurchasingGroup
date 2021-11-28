@@ -169,3 +169,56 @@ exports.deleteItem = (id) => {
     });
   });
 };
+
+exports.getBookedOrders = (provider_id, year, week_number) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      'SELECT products.product_id AS productID, products.product_name, SUM(order_quantity) AS TotQty, products.product_unit ' +
+      'FROM products, orders ' +
+      'WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_id=orders.product_id AND (orders.state="booked" OR orders.state="pending") AND orders.farmer_state IS NULL ' +
+      'GROUP BY products.product_id, products.product_name, products.product_unit';
+    db.all(sql, [provider_id, year, week_number], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      const products = rows.map((p) => ({
+        id: p.productID,
+        name: p.product_name,
+        tot_quantity: p.TotQty,
+        unit: p.product_unit,
+      }));
+      resolve(products);
+    });
+  });
+}
+
+exports.setOrderAsFarmerShipped = (product_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE orders SET farmer_state="farmer-shipped" WHERE product_id=?';
+    db.run(sql, [product_id], (err) => {
+      if (err) {
+        reject(err);
+        return;
+      } else resolve(null);
+    });
+  });
+};
+
+exports.getProviderShipmentStatus = (provider_id, year, week_number) => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      'SELECT COUNT(*) AS NumShipped ' +
+      'FROM products, orders ' +
+      'WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_id=orders.product_id AND orders.farmer_state="farmer-shipped"';
+    db.get(sql, [provider_id, year, week_number], (err, row) => {
+      if (err) {
+        reject(err);
+      }
+      console.log(row);
+      if(row.NumShipped>0){
+        resolve(true);
+      }
+      resolve(false);
+    });
+  });
+}
