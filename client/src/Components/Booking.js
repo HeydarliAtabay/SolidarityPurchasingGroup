@@ -119,7 +119,7 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-        console.log(p);
+       // console.log(p);
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
