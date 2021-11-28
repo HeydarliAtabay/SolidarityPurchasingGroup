@@ -222,6 +222,7 @@ function App() {
                 browsing={false}
                 logged={logged}
                 clients={clients}
+                orders={orders}
                 isEmployee={true}
                 products={confirmedProducts}
                 updateProps={updateProps}
