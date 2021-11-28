@@ -348,4 +348,87 @@ describe('test insertNewBookOrder(itemsOrdered)', () => {
       });
     });
   });
+const user = {
+    'id': 7,
+    'name': 'Clare',
+    'email': 'clare.mint@yahoo.it',
+    'role': 'client'
+};
+
+describe('test getUserInfo', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(user));
+        API.getUserInfo('7').then((data) => {
+          //  expect.assertions(4);
+            expect(data.userId).toEqual(7);
+            expect(data.name).toEqual('Clare');
+            expect(data.role).toEqual('client');
+            expect(data.email).toEqual('clare.mint@yahoo.it');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getUserInfo(7).catch((data) => {
+          //  expect.assertions(2);
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('API error');
+        });
+    })
+
+});
+
+describe('test login', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(user));
+        API.logIn(7, 'test').then( (data) => {
+           // expect.assertions(4);
+            expect(data.userId).toEqual(7);
+            expect(data.name).toEqual('Clare');
+            expect(data.role).toEqual('client');
+            expect(data.email).toEqual('clare.mint@yahoo.it');
+        });
+    });
+    test('response not ok, json ok', () => {
+        fetch.mockResponseOnce(JSON.stringify({err: 'API error'}), { status: 500});
+        API.logIn(7, 'test').catch( (data) => {
+          //  expect.assertions(1);
+            expect(data.err).toEqual('API error');
+        });
+    });
+    test('response not ok, json null', () => {
+        fetch.mockResponseOnce(null, { status: 500});
+        API.logIn(7, 'test').catch( (data) => {
+          //  expect.assertions(1);
+            expect(data.err).toEqual('API error');
+        });
+    });
+    test('fetch rejected', () => {
+        fetch.mockRejectOnce('error');
+        API.logIn(7, 'test').catch( (data) => {
+         //   expect.assertions(2);
+            expect(data.errors[0].param).toEqual('Server');
+            expect(data.errors[0].msg).toEqual('Cannot communicate');
+        });
+    });
+});
+
+describe('test delete order item', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+        API.deleteOrderItem(1).then( (data) => {
+          //  expect.assertions(1);
+            expect(data).toBeNull();
+        });
+    });
+   
+    test('fetch rejected', () => {
+        fetch.mockRejectOnce('error');
+        API.deleteOrderItem(1).catch( (data) => {
+            //expect.assertions(2);
+            expect(data.errors[0].param).toEqual('Server');
+            expect(data.errors[0].msg).toEqual('Cannot communicate');
+        });
+    });
+});
+
   
