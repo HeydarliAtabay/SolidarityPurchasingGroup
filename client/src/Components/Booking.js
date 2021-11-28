@@ -6,6 +6,7 @@ import {
   Container,
   Modal,
   Dropdown,
+  Form,
 } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import API from './../API';
@@ -20,6 +21,14 @@ function Booking(props) {
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
+  const [showCompletePurchase, setShowCompletePurchase] = useState(false);
+  const [address, setAddress] = useState('');
+  const [nation, setNation] = useState('');
+  const [city, setCity] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [zipCode, setZipCode] = useState('');
+  const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -110,14 +119,20 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-        console.log(p);
+       // console.log(p);
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
           a.name,
           'booked',
           p,
-          `${indice}`
+          `${indice}`,
+          address,
+          city,
+          nation,
+          zipCode,
+          date,
+          time
         );
         API.addOrder(order).then(() => {
           props.setRecharged(true);
@@ -125,28 +140,27 @@ function Booking(props) {
         });
         indice = indice + 1;
       }
-    } else {
-      let i = location.state.item.id;
-      API.deleteOrderItem(location.state.item.id).then(
-        setTimeout(() => {}, 3000)
-      );
-      for (const a of productsBasket) {
-        s = (a.price * a.qty).toFixed(2);
-        let order = new clientOrders(
-          location.state.item.order_id,
-          location.state.item.client_id,
-          a.name,
-          'booked',
-          s,
-          i
-        );
-        API.addOrder(order).then(() => {
-          props.setRecharged(true);
-          setTimeout(() => {}, 3000);
-        });
-        i = i + 1;
-      }
     }
+    else {
+      let i = location.state.item.id;
+      API.deleteOrderItem(location.state.item.id).then(setTimeout(() => { }, 3000));
+      let a = productsBasket[0];
+      s = (a.price * a.qty).toFixed(2);
+      let order = new clientOrders(
+        location.state.item.order_id,
+         location.state.item.client_id,
+          a.name,
+           "booked",
+           s,
+            i);
+      API.addOrder(order).then(() => {
+        props.setRecharged(true);
+        setTimeout(() => { }, 3000)
+      });
+    }
+
+
+
 
     setShowsuccess(true);
 
@@ -314,9 +328,18 @@ function Booking(props) {
         <span className="d-block text-center mt-5 mb-2 display-2">
           Product Booking
         </span>
-        <h5 className="d-block mx-auto mb-5 text-center text-muted">
-          Choose below the products you want to book for the client
-        </h5>
+        {props.browsing ? (
+          <h5 className="d-block mx-auto mb-5 text-center text-muted">
+            These are the products planned for the next week. They are not yet
+            purchasable
+          </h5>
+        ) : (
+          <>
+            <h5 className="d-block mx-auto mb-5 text-center text-muted">
+              Choose below the products you want to book for the client
+            </h5>
+          </>
+        )}
         {props.isEmployee ? (
           <div className="d-block text-center">
             <Dropdown className="d-block mb-3" value={selectedUser.client_id}>
@@ -419,27 +442,133 @@ function Booking(props) {
                 </div>
               )}
             </Col>
-            <Col lg={3} className="my-5 text-center px-5">
-              <Basket
-                clientid={props.clientid}
-                orders={props.orders}
-                setShowsuccess={setShowsuccess}
-                setShowdanger={setShowdanger}
-                showsuccess={showsuccess}
-                showdanger={showdanger}
-                productsBasket={productsBasket}
-                onAdd={onAdd}
-                onRemove={onRemove}
-                onConfirm={onConfirm}
-                capitalizeFirstLetter={capitalizeFirstLetter}
-                itemsPrice={itemsPrice}
-              />
-            </Col>
+            {!props.browsing ? (
+              <Col lg={3} className="my-5 px-5">
+                <Basket
+                  completeAddressing={false}
+                  clientid={props.clientid}
+                  setShowCompletePurchase={setShowCompletePurchase}
+                  address={address}
+                  nation={nation}
+                  city={city}
+                  zipCode={zipCode}
+                  time={time}
+                  date={date}
+                  setShowsuccess={setShowsuccess}
+                  setShowdanger={setShowdanger}
+                  showsuccess={showsuccess}
+                  showdanger={showdanger}
+                  productsBasket={productsBasket}
+                  onAdd={onAdd}
+                  onRemove={onRemove}
+                  onConfirm={onConfirm}
+                  capitalizeFirstLetter={capitalizeFirstLetter}
+                  itemsPrice={itemsPrice}
+                />
+              </Col>
+            ) : (
+              <></>
+            )}
           </Row>
         ) : (
           <YouAreNotLoggedScreen />
         )}
       </Container>
+      <Modal
+        size="lg"
+        show={showCompletePurchase}
+        onHide={() => setShowCompletePurchase(false)}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Complete the purchase</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="formGridAddress1">
+              <Form.Label>Address</Form.Label>
+              <Form.Control
+                value={address}
+                onChange={(ev) => {
+                  setAddress(ev.target.value);
+                }}
+              />
+            </Form.Group>
+            <Row className="mb-3">
+              <Form.Group as={Col} controlId="formGridCity">
+                <Form.Label>City</Form.Label>
+                <Form.Control
+                  value={city}
+                  onChange={(ev) => {
+                    setCity(ev.target.value);
+                  }}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridState">
+                <Form.Label>State</Form.Label>
+                <Form.Control
+                  value={nation}
+                  onChange={(ev) => {
+                    setNation(ev.target.value);
+                  }}
+                />
+              </Form.Group>
+
+              <Form.Group as={Col} controlId="formGridZip">
+                <Form.Label>Zip</Form.Label>
+                <Form.Control
+                  value={zipCode}
+                  onChange={(ev) => {
+                    setZipCode(ev.target.value);
+                  }}
+                />
+              </Form.Group>
+            </Row>
+            <Row>
+              <Col>
+                Date
+                <input
+                  style={{
+                    borderColor: '#ced4da',
+                    borderWidth: '1px',
+                    borderRadius: '3px',
+                    textAlign: 'center',
+                  }}
+                  className="m-2"
+                  type="date"
+                  onChange={(ev) => setDate(ev.target.value)}
+                />
+              </Col>
+              <Col>
+                Time
+                <input
+                  type="time"
+                  style={{
+                    borderColor: '#ced4da',
+                    borderWidth: '1px',
+                    borderRadius: '3px',
+                    textAlign: 'center',
+                  }}
+                  className="m-2"
+                  label="Time"
+                  id="start"
+                  onChange={(ev) => setTime(ev.target.value)}
+                />
+              </Col>
+            </Row>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            onClick={() => {
+              setShowCompletePurchase(false);
+              setCompleteAddressing(true);
+            }}
+          >
+            Confirm
+          </Button>
+        </Modal.Footer>
+      </Modal>
 
       <Modal
         size="lg"
