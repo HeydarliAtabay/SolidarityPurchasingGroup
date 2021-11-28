@@ -140,28 +140,27 @@ function Booking(props) {
         });
         indice = indice + 1;
       }
-    } else {
-      let i = location.state.item.id;
-      API.deleteOrderItem(location.state.item.id).then(
-        setTimeout(() => {}, 3000)
-      );
-      for (const a of productsBasket) {
-        s = (a.price * a.qty).toFixed(2);
-        let order = new clientOrders(
-          location.state.item.order_id,
-          location.state.item.client_id,
-          a.name,
-          'booked',
-          s,
-          i
-        );
-        API.addOrder(order).then(() => {
-          props.setRecharged(true);
-          setTimeout(() => {}, 3000);
-        });
-        i = i + 1;
-      }
     }
+    else {
+      let i = location.state.item.id;
+      API.deleteOrderItem(location.state.item.id).then(setTimeout(() => { }, 3000));
+      let a = productsBasket[0];
+      s = (a.price * a.qty).toFixed(2);
+      let order = new clientOrders(
+        location.state.item.order_id,
+         location.state.item.client_id,
+          a.name,
+           "booked",
+           s,
+            i);
+      API.addOrder(order).then(() => {
+        props.setRecharged(true);
+        setTimeout(() => { }, 3000)
+      });
+    }
+
+
+
 
     setShowsuccess(true);
 
