@@ -487,7 +487,7 @@ app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
       .status(500)
       .json(
         `Error while updating the balance of user with id: ${clientId}   ` +
-          error
+        error
       );
   }
 });
@@ -527,12 +527,14 @@ app.post(
     }
   }
 );
+
 //POST ->orders
-app.post('/api/orders', async (req, res) => {
+app.post('/api/order', async (req, res) => {
   const t = {
     order_id: req.body.order_id,
     client_id: req.body.client_id,
     product_name: req.body.product_name,
+    product_id: req.body.product_id,
     state: req.body.state,
     OrderPrice: req.body.OrderPrice,
     id: req.body.id,
@@ -555,6 +557,7 @@ app.post('/api/orders', async (req, res) => {
     });
   }
 });
+
 //DELETE ->order item
 app.delete('/api/orders/:id', async (req, res) => {
   try {

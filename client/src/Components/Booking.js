@@ -119,11 +119,12 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-       // console.log(p);
+        console.log(a);
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
           a.name,
+          a.id,
           'booked',
           p,
           `${indice}`,
@@ -134,9 +135,10 @@ function Booking(props) {
           date,
           time
         );
+        console.log(order);
         API.addOrder(order).then(() => {
           props.setRecharged(true);
-          setTimeout(() => {}, 3000);
+          setTimeout(() => { }, 3000);
         });
         indice = indice + 1;
       }
@@ -148,11 +150,12 @@ function Booking(props) {
       s = (a.price * a.qty).toFixed(2);
       let order = new clientOrders(
         location.state.item.order_id,
-         location.state.item.client_id,
-          a.name,
-           "booked",
-           s,
-            i);
+        location.state.item.client_id,
+        a.name,
+        a.id,
+        "booked",
+        s,
+        i);
       API.addOrder(order).then(() => {
         props.setRecharged(true);
         setTimeout(() => { }, 3000)

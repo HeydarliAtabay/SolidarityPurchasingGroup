@@ -534,15 +534,14 @@ function addUser(S) {
 //POST di un nuovo incontro
 function addOrder(S) {
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:3000/api/orders', {
+    fetch('/api/order', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
         order_id: S.order_id,
         client_id: S.client_id,
         product_name: S.product_name,
+        product_id: parseInt(S.product_id),
         state: S.state,
         OrderPrice: S.OrderPrice,
         id: S.id,
@@ -552,7 +551,7 @@ function addOrder(S) {
         Nation: S.nation,
         date: S.date,
         time: S.time,
-      }),
+      })
     })
       .then((response) => {
         if (response.ok) {
