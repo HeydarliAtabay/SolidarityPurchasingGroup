@@ -3,6 +3,8 @@ import API from '../API';
 import dayjs from 'dayjs';
 const { useState, useEffect } = require("react");
 
+dayjs.Ls.en.weekStart = 1;  //set week start as monday
+
 var weekOfYear  = require('dayjs/plugin/weekOfYear');
 dayjs.extend(weekOfYear)
 

@@ -4,6 +4,8 @@ import { Link } from "react-router-dom"
 import API from '../API';
 const { useState, useEffect } = require("react");
 
+dayjs.Ls.en.weekStart = 1;  //set week to start on monday
+
 function FarmerOrderPreparation(props) {
 
     /*products arrays*/
@@ -77,17 +79,17 @@ function FarmerOrderPreparation(props) {
         if (dayjs(props.time.date).day() === 0) {
             if (dayjs('01-01-2021 ' + props.time.hour).hour() === 23) {    //this week orders
                 const thisWeekDate = dayjs(props.time.date);
-                return ({ year: dayjs(thisWeekDate).year(), week_number: dayjs(thisWeekDate).subtract(1, 'day').week() });
+                return ({ year: dayjs(thisWeekDate).year(), week_number: dayjs(thisWeekDate).week() });
             }
         }
         //every other time get previos week
-        let previousWeekDate;
-        if (dayjs(props.time.date).day() === 0) {
+        let previousWeekDate = dayjs(props.time.date).subtract(1, 'week');
+        /*if (dayjs(props.time.date).day() === 0) {
             previousWeekDate = dayjs(props.time.date).subtract(1, 'day').subtract(1, 'week');
         }
         else {
-            previousWeekDate = dayjs(props.time.date).subtract(1, 'week');
-        }
+            
+        }*/
         if (dayjs(props.time.date).week() === 2) {
             return ({ year: dayjs(props.time.date).year(), week_number: dayjs(previousWeekDate).week() });
         }
@@ -125,7 +127,7 @@ function FarmerOrderPreparation(props) {
 
     return (
         <>
-            <div className="container-fluid mx-5 w-max100-custom">
+            <div className="container-fluid mx-5 w-100">
                 <span className="d-block text-center mt-5 mb-2 display-2">
                     Order preparation
                 </span>

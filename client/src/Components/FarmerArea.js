@@ -64,7 +64,7 @@ function FarmerArea(props) {
                                         <p>Here you can report the expected available product amounts for the next week</p>
                                         <p className="card-text">
                                             {confirmationStatus &&
-                                            <span className="text-success">Availability successfully confirmed. Product declaration will be available again next week.</span>
+                                            <span className="d-block text-success">Availability successfully confirmed. Product declaration will be available again next week.</span>
                                             }
                                             • You can declare items for the next week from Monday until Saturday 09.00AM <br />
                                         </p>
