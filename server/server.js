@@ -154,6 +154,7 @@ app.delete('/api/sessions/current', (req, res) => {
   req.logout();
   res.end('Logout completed!');
 });
+
 //GET all clients and budget
 app.get('/api/clients', async (req, res) => {
   try {

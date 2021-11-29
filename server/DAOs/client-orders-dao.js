@@ -182,6 +182,7 @@ exports.insert_order_items = async (order_id, order_items) => {
 // Add a new order
 exports.addOrder = (t) => {
   return new Promise((resolve, reject) => {
+    console.log(t);
     const sql =
       'INSERT INTO orders( order_id, client_id, product_name, product_id, order_quantity, state, OrderPrice, id,address,city,zipcode,Nation,date,time, pickup ) VALUES ( ?,?, ?,?, ?, ?, ?, ?, ?,?,?,?,?,?,? )';
     db.run(

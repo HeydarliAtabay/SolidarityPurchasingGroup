@@ -558,7 +558,7 @@ function NewProductModalBody(props) {
 
   const setProductPriceCheck = (price) => {
     setProductPrice(price);
-    if (parseFloat(price).isNaN()) {
+    if (isNaN(parseFloat(price))) {
       setFormPriceError('Product price must be a number');
       return;
     }
@@ -572,7 +572,7 @@ function NewProductModalBody(props) {
 
   const setProductQuantityCheck = (qty) => {
     setProductQuantity(qty);
-    if (parseFloat(qty).isNaN()) {
+    if (isNaN(parseFloat(qty))) {
       setFormQuantityError('Product quantity must be a number');
       return;
     }
@@ -599,14 +599,14 @@ function NewProductModalBody(props) {
       );
       errorFlag = true;
     }
-    if (parseFloat(productPrice).isNaN()) {
+    if (isNaN(parseFloat(productPrice))) {
       setFormPriceError('Product price must be a number');
       errorFlag = true;
     } else if (parseFloat(productPrice) <= 0.0) {
       setFormPriceError('Product price must greater than 0');
       errorFlag = true;
     }
-    if (parseFloat(productQuantity).isNaN()) {
+    if (isNaN(parseFloat(productQuantity))) {
       setFormPriceError('Product price must be a number');
       errorFlag = true;
     } else if (parseFloat(productQuantity) <= 0.0) {
@@ -1116,7 +1116,7 @@ function ModifyProductModalBody(props) {
 
   const setProductPriceCheck = (price) => {
     setProductPrice(price);
-    if (parseFloat(price).isNaN()) {
+    if (isNaN(parseFloat(price))) {
       setFormPriceError('Product price must be a number');
       return;
     }
@@ -1130,7 +1130,7 @@ function ModifyProductModalBody(props) {
 
   const setProductQuantityCheck = (qty) => {
     setProductQuantity(qty);
-    if (parseFloat(qty).isNaN()) {
+    if (isNaN(parseFloat(qty))) {
       setFormQuantityError('Product quantity must be a number');
       return;
     }
@@ -1161,14 +1161,14 @@ function ModifyProductModalBody(props) {
       );
       errorFlag = true;
     }
-    if (parseFloat(productPrice).isNaN()) {
+    if (isNaN(parseFloat(productPrice))) {
       setFormPriceError('Product price must be a number');
       errorFlag = true;
     } else if (parseFloat(productPrice) <= 0.0) {
       setFormPriceError('Product price must greater than 0');
       errorFlag = true;
     }
-    if (parseFloat(productQuantity).isNaN()) {
+    if (isNaN(parseFloat(productQuantity))) {
       setFormPriceError('Product price must be a number');
       errorFlag = true;
     } else if (parseFloat(productQuantity) <= 0.0) {

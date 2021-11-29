@@ -56,9 +56,11 @@ function Booking(props) {
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const [deliveryFlag, setDeliveryFlag] = useState([true]);
+  const [deliveryFlag, setDeliveryFlag] = useState('delivery');
   const [pickupDay, setPickupDay] = useState(2);
   const [pickupTime, setPickupTime] = useState('10:00');
+
+    console.log(time+' '+date);
 
   let rows = [
     ...Array(Math.ceil(products.filter((p) => p && p.active === 1).length / 3)),
@@ -197,14 +199,9 @@ function Booking(props) {
           city,
           nation,
           zipCode,
-          deliveryFlag
-            ? date
-            : dayjs(props.time.date)
-                .add(1, 'week')
-                .weekday(pickupDay)
-                .format('YYYY-MM-DD'),
-          deliveryFlag ? time : pickupTime,
-          deliveryFlag ? 0 : 1
+          deliveryFlag==='delivery' ? date : dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
+          deliveryFlag==='delivery' ? time : pickupTime,
+          deliveryFlag==='delivery' ? 0 : 1
         );
         API.addOrder(order).then(() => {
           props.setRecharged(true);
@@ -233,14 +230,9 @@ function Booking(props) {
         city,
         nation,
         zipCode,
-        deliveryFlag
-          ? date
-          : dayjs(props.time.date)
-              .add(1, 'week')
-              .weekday(pickupDay)
-              .format('YYYY-MM-DD'),
-        deliveryFlag ? time : pickupTime,
-        deliveryFlag ? 0 : 1
+        deliveryFlag==='delivery' ? date: dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
+        deliveryFlag==='delivery' ? time : pickupTime,
+        deliveryFlag==='delivery' ? 0 : 1
       );
 
       API.addOrder(order).then(() => {
@@ -534,6 +526,7 @@ function Booking(props) {
                 <Basket
                   completeAddressing={false}
                   clientid={props.clientid}
+                  clients={props.clients}
                   setShowCompletePurchase={setShowCompletePurchase}
                   deliveryFlag={deliveryFlag}
                   address={address}
@@ -576,13 +569,13 @@ function Booking(props) {
         <Modal.Body>
           <Tabs
             defaultActiveKey="delivery"
-            id="uncontrolled-tab-example"
             className="mb-3"
+            activeKey={deliveryFlag}
+            onSelect={(k) => {console.log(k); setDeliveryFlag(k)}}
           >
             <Tab
               eventKey="delivery"
               title="Home delivery"
-              onClick={() => setDeliveryFlag(true)}
             >
               <Form>
                 <Form.Group className="mb-3" controlId="formGridAddress1">
@@ -673,7 +666,6 @@ function Booking(props) {
             <Tab
               eventKey="pickup"
               title="In shop pickup"
-              onClick={() => setDeliveryFlag(false)}
             >
               <h5 className="text-center my-3">
                 Select the day and the time for the pickup

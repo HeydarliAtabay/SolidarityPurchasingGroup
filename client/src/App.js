@@ -22,7 +22,7 @@ import FarmerOrderConfirmation from './Components/FarmerOrderConfirmation';
 let r = [];
 
 function App() {
-  const [time, setTime] = useState({ date: '01-01-2021', hour: '10:00' });
+  const [time, setTime] = useState({ date: '11-30-2021', hour: '10:00' });
   const [recharged, setRecharged] = useState(true);
   const [recharged1, setRecharged1] = useState(true);
   const [orders, setOrders] = useState([]);

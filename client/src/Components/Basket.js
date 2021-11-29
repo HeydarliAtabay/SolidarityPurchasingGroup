@@ -24,8 +24,6 @@ function Basket(props) {
             
   }
 
-  console.log(props.clients)
-  console.log(props.clientid)
   return (
     <>
 
@@ -86,7 +84,7 @@ function Basket(props) {
             </Col>
           </Row>
 
-          {props.deliveryFlag &&
+          {props.deliveryFlag==='delivery' &&
           props.address !== '' &&
           props.nation !== '' &&
           props.city != '' &&
@@ -155,7 +153,7 @@ function Basket(props) {
             <></>
           )}
 
-          {!props.deliveryFlag &&
+          {props.deliveryFlag!=='delivery' &&
           (props.pickupDay === 2 || props.pickupDay === 3 || props.pickupDay === 4)  &&
           props.pickupTime !== '' ? (
             <>
