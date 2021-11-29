@@ -23,7 +23,7 @@ exports.getAllOrders = () => {
         client_id:e.client_id,
         product_name:e.product_name,
         product_id:e.product_id,
-        quantity:e.order_quantity,
+        order_quantity:e.order_quantity,
         state:e.state,
         farmer_state:e.farmer_state,
         OrderPrice:e.OrderPrice,
