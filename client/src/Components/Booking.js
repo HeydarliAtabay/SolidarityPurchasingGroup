@@ -58,7 +58,6 @@ function Booking(props) {
       ordine = Math.max(...f) + 1;
     }
   }
-
   /*USEFFECT products*/
   useEffect(() => {
     const getAllProducts = async () => {
@@ -468,6 +467,7 @@ function Booking(props) {
                   onConfirm={onConfirm}
                   capitalizeFirstLetter={capitalizeFirstLetter}
                   itemsPrice={itemsPrice}
+                  clients={props.clients}
                 />
               </Col>
             ) : (

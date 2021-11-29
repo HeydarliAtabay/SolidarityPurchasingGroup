@@ -191,6 +191,7 @@ function App() {
                 orders={orders}
                 isEmployee={false}
                 products={confirmedProducts}
+                clients={clients}
                 updateProps={updateProps}
                 time={time}
                 clientid={userid}
@@ -210,6 +211,7 @@ function App() {
                 time={time}
                 clientid={userid}
                 setRecharged={updateRech}
+                clients={clients}
               />
             )}
           />
@@ -232,6 +234,7 @@ function App() {
                 clients={clients}
                 orders={orders}
                 isEmployee={true}
+                clientid={userid}
                 products={confirmedProducts}
                 updateProps={updateProps}
                 time={time}

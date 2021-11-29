@@ -103,3 +103,12 @@ describe('Test the provider /api/neworder path', () => {
         done();
     });
 });
+
+
+describe('Test the provider /api/sendEmail', () => {
+    test('It should response the POST method', () => {
+        request(server).post('/api/sendEmail');
+        expect(response.statusCode).toBe(200);
+        done();
+    });
+});
