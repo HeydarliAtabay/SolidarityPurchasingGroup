@@ -201,6 +201,8 @@ app.post('/api/orders/farmershipped', async (req, res)=>{
   try{
     const productIDS = req.body;
 
+    console.log(productIDS);
+
     for(const product of productIDS){
       await ordersDao.setOrderAsFarmerShipped(product);
     }
@@ -613,7 +615,6 @@ app.post('/api/orderinsert', async (req, res) => {
       time: req.body.time,
       pickup: req.body.pickup
     };
-    console.log(t);
     const result = await ordersDao.addOrder(t);
     res.status(201).end('Created order!');
   } catch (err) {

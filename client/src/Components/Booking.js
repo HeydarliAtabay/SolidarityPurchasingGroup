@@ -89,7 +89,6 @@ function Booking(props) {
     // the week number should be changed after the 23 o'clock of sunday. It becomes a new week since the customer can not order anymore in this week
     //Sunday from 23.00 until 23.59 consider this week orders
 
-    console.log(dayjs('01/01/2021 ' + props.time.hour).hour());
     if (dayjs(timepassed.date).day() === 0) {
       if (dayjs('01/01/2021 ' + timepassed.hour).hour() === 23) {
         const addWeekTime = dayjs(timepassed.date).add(1, 'week');
@@ -127,7 +126,7 @@ function Booking(props) {
           });
       } else {
         await API.getAllConfirmedProducts(
-          dayjs(props.time.date).year(),
+          getRightWeek(props.time).year,
           getRightWeek(props.time).week_number
         )
           .then((res) => {
