@@ -42,7 +42,7 @@ function LoginForm1(props) {
 <Redirect to="/client"/>:<></>}
 {props.users.find(s=>(s.email===username&&s.role==="employee"))?
 <Redirect to="/employee"/>:<></>}
-{props.users.find(s=>(s.email===username&&s.role==="warehouse"))?
+{props.users.find(s=>(s.email===username&&s.role==="warehouse-employee"))?
 <Redirect to="/warehouse"/>:<></>}</>:
                     <Container fluid="sx">
                       <Row className="justify-content-md-center">
