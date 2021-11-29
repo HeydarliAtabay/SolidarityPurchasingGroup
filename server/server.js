@@ -9,6 +9,7 @@ const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
 const walletsDAO = require('./DAOs/wallet-dao');
+const warehouseDao = require('./DAOs/warehouse-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
@@ -180,8 +181,7 @@ app.get('/api/orders', async (req, res) => {
 });
 
 //PUT to update a product as delivered
-app.put(
-  '/api/orders/:order_id/:product_name',
+app.put('/api/orders/:order_id/:product_name',
 
   async (req, res) => {
     try {
@@ -196,6 +196,7 @@ app.put(
   }
 );
 
+//POST the product IDs to be set with state 'farmer_shipped'
 app.post('/api/orders/farmershipped', async (req, res)=>{
   try{
     const productIDS = req.body;
@@ -310,8 +311,7 @@ app.get('/api/provider/:provider_id/products', async (req, res) => {
 });
 
 //CHECK provider's confirmation status
-app.get(
-  '/api/provider/confirmationStatus/:year/:week_number',
+app.get('/api/provider/confirmationStatus/:year/:week_number',
   async (req, res) => {
     try {
       const year = req.params.year;
@@ -332,8 +332,7 @@ app.get(
 );
 
 //GET provider's expected production
-app.get(
-  '/api/products/provider/expected/:year/:week_number',
+app.get('/api/products/provider/expected/:year/:week_number',
   async (req, res) => {
     try {
       const year = req.params.year;
@@ -353,8 +352,7 @@ app.get(
 );
 
 //GET providers shipment status
-app.get(
-  '/api/provider/shipmentstatus/:year/:week_number',
+app.get('/api/provider/shipmentstatus/:year/:week_number',
   async (req, res) => {
     try {
       const year = req.params.year;
@@ -372,6 +370,25 @@ app.get(
     }
   }
 );
+
+//GET provider shipped orders
+app.get(
+  `/api/provider-orders/:id`,
+  async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const farmerShippedOrders = await warehouseDao.getProviderShippedOrders(id
+      );
+      
+      res.json(farmerShippedOrders);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  }
+);
+
 
 //Insert provider's expected production
 app.post('/api/products/expected/:year/:week_number', async (req, res) => {
@@ -577,29 +594,30 @@ app.post(
 );
 
 //POST ->orders
-app.post('/api/order', async (req, res) => {
-  const t = {
-    order_id: req.body.order_id,
-    client_id: req.body.client_id,
-    product_name: req.body.product_name,
-    product_id: req.body.product_id,
-    order_quantity: req.body.order_quantity,
-    state: req.body.state,
-    OrderPrice: req.body.OrderPrice,
-    id: req.body.id,
-    city: req.body.city,
-    Nation: req.body.Nation,
-    zipcode: req.body.zipcode,
-    address: req.body.address,
-    date: req.body.date,
-    time: req.body.time,
-  };
+app.post('/api/orderinsert', async (req, res) => {
   try {
+    const t = {
+      order_id: req.body.order_id,
+      client_id: req.body.client_id,
+      product_name: req.body.product_name,
+      product_id: req.body.product_id,
+      order_quantity: req.body.order_quantity,
+      state: req.body.state,
+      OrderPrice: req.body.OrderPrice,
+      id: req.body.id,
+      city: req.body.city,
+      Nation: req.body.Nation,
+      zipcode: req.body.zipcode,
+      address: req.body.address,
+      date: req.body.date,
+      time: req.body.time,
+      pickup: req.body.pickup
+    };
     console.log(t);
     const result = await ordersDao.addOrder(t);
-
     res.status(201).end('Created order!');
   } catch (err) {
+    console.log(err);
     res.status(503).json({
       code: 503,
       error: 'Unavailable service during the create of the order.',

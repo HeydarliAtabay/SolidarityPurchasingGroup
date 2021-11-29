@@ -1,6 +1,6 @@
 //GET ->retrieve clients and budget
 async function getAllClients() {
-  const response = await fetch('http://localhost:3000/api/clients');
+  const response = await fetch('/api/clients');
   if (response.ok) {
     const responseBody = await response.json();
     return responseBody;
@@ -15,7 +15,7 @@ async function getAllClients() {
 }
 //GET ->retrieve users 
 async function getAllUsers() {
-  const response = await fetch('http://localhost:3000/api/users');
+  const response = await fetch('/api/users');
   if (response.ok) {
     const responseBody = await response.json();
     return responseBody;
@@ -30,7 +30,7 @@ async function getAllUsers() {
 }
 //GET ->retrieve client orders
 async function getAllOrders() {
-  const response = await fetch('http://localhost:3000/api/orders');
+  const response = await fetch('/api/orders');
   if (response.ok) {
     const responseBody = await response.json();
     return responseBody;
@@ -43,10 +43,27 @@ async function getAllOrders() {
     }
   }
 }
+
+//GET ->retrieve client orders
+async function getProviderDeliveredOrders(id) {
+  const response = await fetch(`http://localhost:3000/api/provider-orders/${id}`);
+  if (response.ok) {
+    const responseBody = await response.json();
+    return responseBody;
+  } else {
+    try {
+      const err = await response.json();
+      throw err.message;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
+
 //PUT to update a product as delivered
 function updateDelivered(id, product_name) {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:3000/api/orders/${id}/${product_name}`, {
+    fetch(`/api/orders/${id}/${product_name}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +97,7 @@ function updateDelivered(id, product_name) {
 //GET all products
 async function getAllConfirmedProducts(year, week) {
   const response = await fetch(
-    'http://localhost:3000/api/products/confirmed/' + year + '/' + week
+    '/api/products/confirmed/' + year + '/' + week
   );
   if (response.ok) {
     return await response.json();
@@ -92,7 +109,7 @@ async function getAllConfirmedProducts(year, week) {
 
 async function getAllExpectedProducts(year, week) {
   const response = await fetch(
-    'http://localhost:3000/api/products/expected/' + year + '/' + week
+    '/api/products/expected/' + year + '/' + week
   );
   if (response.ok) {
     return await response.json();
@@ -134,14 +151,15 @@ async function setProductsAsFarmerShipped(productIDS) {
   if (response.ok) {
     return await response.json();
   } else {
-    throw response.json();
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
 
 //GET product by specific ID
 async function getProductById(product_id) {
   const response = await fetch(
-    'http://localhost:3000/api/product/' + product_id
+    '/api/product/' + product_id
   );
   if (response.ok) {
     return await response.json();
@@ -153,7 +171,7 @@ async function getProductById(product_id) {
 
 //GET all categories
 async function getAllCategories() {
-  const response = await fetch('http://localhost:3000/api/products/categories');
+  const response = await fetch('/api/products/categories');
   if (response.ok) {
     return await response.json();
   } else {
@@ -164,7 +182,7 @@ async function getAllCategories() {
 
 //GET all providers
 async function getAllProviders() {
-  const response = await fetch('http://localhost:3000/api/providers/all');
+  const response = await fetch('/api/providers/all');
   if (response.ok) {
     return await response.json();
   } else {
@@ -176,7 +194,7 @@ async function getAllProviders() {
 //GET provider by specific ID
 async function getProviderById(provider_id) {
   const response = await fetch(
-    'http://localhost:3000/api/provider/' + provider_id
+    '/api/provider/' + provider_id
   );
   if (response.ok) {
     return await response.json();
@@ -189,7 +207,7 @@ async function getProviderById(provider_id) {
 //GET provider products by providerID
 async function getProviderProducts(provider_id) {
   const response = await fetch(
-    'http://localhost:3000/api/provider/' + provider_id + '/products'
+    '/api/provider/' + provider_id + '/products'
   );
   if (response.ok) {
     return await response.json();
@@ -235,7 +253,8 @@ async function declareAvailability(products, year, week) {
   if (response.ok) {
     return await response.json();
   } else {
-    throw response.json();
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
 
@@ -251,14 +270,15 @@ async function uploadProductImage(formData, product_id) {
   if (response.ok) {
     return true;
   } else {
-    throw response;
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
 
 //Insert a new order
 function insertNewBookOrder(itemsOrdered) {
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:3000/api/neworder/', {
+    fetch('/api/neworder/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -294,7 +314,7 @@ function insertNewBookOrder(itemsOrdered) {
 //update quantity of products
 function updateQuantity(product_id, quantity) {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:3000/api/modifyquantity`, {
+    fetch(`/api/modifyquantity`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -334,7 +354,7 @@ async function insertNewOrder(client_id, orders) {
   let product_order = { order_items: orders };
 
   const order_response = await fetch(
-    'http://localhost:3000/api/insert-order?cid=' + client_id,
+    '/api/insert-order?cid=' + client_id,
     {
       method: 'POST',
       body: JSON.stringify(product_order),
@@ -356,7 +376,7 @@ async function insertNewOrder(client_id, orders) {
 
 function addClient(client) {
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:3000/api/clients', {
+    fetch('/api/clients', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -399,7 +419,7 @@ function addClient(client) {
 
 //GET ->retrieve payment methods
 async function getAllPaymentMethods() {
-  const response = await fetch('http://localhost:3000/api/methods');
+  const response = await fetch('/api/methods');
   if (response.ok) {
     const responseBody = await response.json();
     return responseBody;
@@ -417,7 +437,7 @@ async function getAllPaymentMethods() {
 
 function addTransaction(tr) {
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:3000/api/transactions', {
+    fetch('/api/transactions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -458,7 +478,7 @@ function addTransaction(tr) {
 function increaseBalance(amount, clientId) {
   return new Promise((resolve, reject) => {
     fetch(
-      'http://localhost:3000/api/clients/update/balance/' +
+      '/api/clients/update/balance/' +
         clientId +
         '/' +
         amount,
@@ -495,7 +515,7 @@ function increaseBalance(amount, clientId) {
 function confirmExpectedProducts(product,year,week) {
   return new Promise((resolve, reject) => {
     fetch(
-      'http://localhost:3000/api/farmerConfirm/' +
+      '/api/farmerConfirm/' +
         product +
         '/' +
         year +
@@ -531,7 +551,7 @@ function confirmExpectedProducts(product,year,week) {
 }
 //api login
 async function logIn(credentials) {
-  let response = await fetch('http://localhost:3000/api/sessions', {
+  let response = await fetch('/api/sessions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -552,13 +572,13 @@ async function logIn(credentials) {
 }
 
 async function logOut() {
-  await fetch('http://localhost:3000/api/sessions/current', {
+  await fetch('/api/sessions/current', {
     method: 'DELETE',
   });
 }
 
 async function getUserInfo() {
-  const response = await fetch('http://localhost:3000/api/sessions/current');
+  const response = await fetch('/api/sessions/current');
   const userInfo = await response.json();
   if (response.ok) {
     return userInfo;
@@ -570,7 +590,7 @@ async function getUserInfo() {
 //POST di un nuovo incontro
 function addUser(S) {
   return new Promise((resolve, reject) => {
-    fetch('http://localhost:3000/api/users', {
+    fetch('/api/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -613,7 +633,7 @@ function addUser(S) {
 //POST di un nuovo incontro
 function addOrder(S) {
   return new Promise((resolve, reject) => {
-    fetch('/api/order', {
+    fetch('/api/orderinsert', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -631,6 +651,7 @@ function addOrder(S) {
         Nation: S.nation,
         date: S.date,
         time: S.time,
+        pickup: S.pickup
       })
     })
       .then((response) => {
@@ -664,7 +685,7 @@ function addOrder(S) {
 //DELETE ->order item
 function deleteOrderItem(id) {
   return new Promise((resolve, reject) => {
-    fetch(`http://localhost:3000/api/orders/${id}`, {
+    fetch(`/api/orders/${id}`, {
       method: 'DELETE',
     })
       .then((response) => {
@@ -697,7 +718,7 @@ function deleteOrderItem(id) {
 }
 
 const submitEmail = async (e) => {
-  const response = await fetch('http://localhost:3000/api/sendEmail', {
+  const response = await fetch('/api/sendEmail', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
@@ -750,7 +771,9 @@ const API = {
   addUser,
   addOrder,
   submitEmail,
-  confirmExpectedProducts,getAllUsers
+  confirmExpectedProducts,
+  getProviderDeliveredOrders,
+  getAllUsers
 };
 
 export default API;

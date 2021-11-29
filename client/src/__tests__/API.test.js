@@ -4,89 +4,7 @@ import fetchMock from 'jest-fetch-mock';
 
 fetchMock.enableMocks();
 
-beforeEach( () => fetch.resetMocks() );
-
-const itemsOrder = {
-    client_id: 1,
-    order_items: {
-      id: 1,
-      name: 'Carrots',
-      description: 'Some description 1',
-      category: 'Vegetables',
-      price: 1.23,
-      unit: 'kg',
-      quantity: 110,
-      expiryDate: '2021-11-20',
-      providerId: 1,
-      providerName: 'Luca Bianchi',
-      active: 1,
-      qty: 1,
-    },
-    total: 1.23,
-  };
-
-describe('test AllPaymentMethods', () => {
-    test('no errors', () => {
-        const response=API.getAllPaymentMethods().then( (data) => {
-            console.log(response)
-            expect("hello").toEqual("hello")
-        });
-        
-    });
-});
-
-describe('test getAllClients', () => {
-    test('no errors', () => {
-        fetch.mockResponseOnce({ mockData: 'test' });
-        API.getAllClients().then( (data) => {
-            expect(data.mockData).toEqual('test');
-        });
-    });
-    test('error', () => {
-        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
-        API.getAllClients().catch((data) => {
-           
-            expect(data.status).toBe(500);
-            expect(data.errObj).toEqual('Communicate with server failed');
-        });
-   
-});});
-
-describe('test getAllOrders', () => {
-    test('no errors', () => {
-        fetch.mockResponseOnce({ mockData: 'test' });
-        API.getAllOrders().then( (data) => {
-            expect(data.mockData).toEqual('test');
-        });
-    });
-    test('error', () => {
-        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
-        API.getAllOrders().catch((data) => {
-           
-            expect(data.status).toBe(500);
-            expect(data.errObj).toEqual('Communicate with server failed');
-        });
-   
-});});
-
-
-describe('test updateDelivered(order_id)', () => {
-    test('no errors', () => {
-        fetch.mockResponseOnce({ mockData: 'test' });
-        API.updateDelivered(1).then( (data) => {
-            expect(data.mockData).toEqual('test');
-        });
-    });
-    test('error', () => {
-        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
-        API.updateDelivered(1).catch((data) => {
-           
-            expect(data.status).toBe(500);
-            expect(data.errObj).toEqual('Communicate with server failed');
-        });
-   
-});
-});
+beforeEach(() => fetch.resetMocks());
 
 /*______________________________________________________________________*/
 /*                      PRODUCTS API TESTING                            */
@@ -96,45 +14,6 @@ const products = [
     { id: 1, name: 'Carrots', description: 'Some description 1', category: 'Vegetables', price: 1.23, unit: 'kg', quantity: 110, expiryDate: '2021-11-20', providerId: 1, providerName: 'Luca Bianchi', active: 1 },
     { id: 2, name: 'Apples', description: 'Some description 2', category: 'Fruits', price: 0.89, unit: 'kg', quantity: 60, expiryDate: '2021-11-20', providerId: 1, providerName: 'Luca Bianchi', active: 1 },
 ]
-
-describe('test GetAllProducts', () => {
-    test('No errors', async () => {
-        fetch.mockResponseOnce(JSON.stringify(products));
-        API.getAllProducts().then((res) => {
-            expect.assertions(22);
-            expect(res[0].id).toBe(1);
-            expect(res[0].name).toEqual('Carrots');
-            expect(res[0].description).toEqual('Some description 1');
-            expect(res[0].category).toEqual('Vegetables');
-            expect(res[0].price).toBe(1.23);
-            expect(res[0].unit).toEqual('kg');
-            expect(res[0].quantity).toBe(110);
-            expect(res[0].expiryDate).toEqual('2021-11-20');
-            expect(res[0].providerId).toBe(1);
-            expect(res[0].providerName).toEqual('Luca Bianchi');
-            expect(res[0].active).toBe(1);
-            expect(res[1].id).toBe(2);
-            expect(res[1].name).toEqual('Apples');
-            expect(res[1].description).toEqual('Some description 2');
-            expect(res[1].category).toEqual('Fruits');
-            expect(res[1].price).toBe(0.89);
-            expect(res[1].unit).toEqual('kg');
-            expect(res[1].quantity).toBe(60);
-            expect(res[1].expiryDate).toEqual('2021-11-20');
-            expect(res[1].providerId).toBe(1);
-            expect(res[1].providerName).toEqual('Luca Bianchi');
-            expect(res[1].active).toBe(1);
-        });
-    });
-    test('Error', async () => {
-        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
-        API.getAllProducts().catch((res) => {
-            expect.assertions(2);
-            expect(res.status).toBe(500);
-            expect(res.errObj).toEqual('API error');
-        });
-    });
-});
 
 describe('test GetProductByID', () => {
     test('No errors', async () => {
@@ -157,6 +36,204 @@ describe('test GetProductByID', () => {
     test('Error', async () => {
         fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
         API.getProductById(1).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const expectedProducts = [
+    {
+        id: 1,
+        name: 'a',
+        description: 'a',
+        category: 'a',
+        price: 1.23,
+        unit: 'kg',
+        quantity: 100,
+        expiryDate: '',
+        providerId: 1,
+        providerName: 'a',
+        year: 2021,
+        week: 20,
+        status: 'expected',
+        active: 1
+    }
+];
+
+describe('test getAllExpectedProducts', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(expectedProducts));
+        API.getAllExpectedProducts(2021, 20).then((res) => {
+            expect.assertions(14);
+            expect(res[0].id).toBe(1);
+            expect(res[0].name).toEqual('a');
+            expect(res[0].description).toEqual('a');
+            expect(res[0].category).toEqual('a');
+            expect(res[0].price).toBe(1.23);
+            expect(res[0].unit).toEqual('kg');
+            expect(res[0].quantity).toBe(100);
+            expect(res[0].expiryDate).toEqual('');
+            expect(res[0].providerId).toBe(1);
+            expect(res[0].providerName).toEqual('a');
+            expect(res[0].year).toBe(2021),
+                expect(res[0].week).toBe(20)
+            expect(res[0].status).toEqual('expected');
+            expect(res[0].active).toBe(1);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getAllExpectedProducts(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const confirmedProducts = [
+    {
+        id: 1,
+        name: 'a',
+        description: 'a',
+        category: 'a',
+        price: 1.23,
+        unit: 'kg',
+        quantity: 100,
+        expiryDate: '',
+        providerId: 1,
+        providerName: 'a',
+        year: 2021,
+        week: 20,
+        status: 'confirmed',
+        active: 1
+    }
+];
+
+describe('test getAllConfirmedProducts', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(confirmedProducts));
+        API.getAllConfirmedProducts(2021, 20).then((res) => {
+            expect.assertions(14);
+            expect(res[0].id).toBe(1);
+            expect(res[0].name).toEqual('a');
+            expect(res[0].description).toEqual('a');
+            expect(res[0].category).toEqual('a');
+            expect(res[0].price).toBe(1.23);
+            expect(res[0].unit).toEqual('kg');
+            expect(res[0].quantity).toBe(100);
+            expect(res[0].expiryDate).toEqual('');
+            expect(res[0].providerId).toBe(1);
+            expect(res[0].providerName).toEqual('a');
+            expect(res[0].year).toBe(2021);
+            expect(res[0].week).toBe(20);
+            expect(res[0].status).toEqual('confirmed');
+            expect(res[0].active).toBe(1);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getAllConfirmedProducts(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const orderedProducts = [{ id: 1, name: 'a', tot_quantity: 100, unit: 'kg' },
+{ id: 3, name: 'b', tot_quantity: 10, unit: 'kg' },
+{ id: 5, name: 'c', tot_quantity: 1, unit: 'lt' }]
+
+describe('test getOrderedProductsForProvider', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(orderedProducts));
+        API.getOrderedProductsForProvider(2021, 20).then((res) => {
+            expect.assertions(12);
+            expect(res[0].id).toBe(1);
+            expect(res[0].name).toEqual('a');
+            expect(res[0].tot_quantity).toEqual(100);
+            expect(res[0].unit).toEqual('kg');
+            expect(res[1].id).toBe(3);
+            expect(res[1].name).toEqual('b');
+            expect(res[1].tot_quantity).toEqual(10);
+            expect(res[1].unit).toEqual('kg');
+            expect(res[2].id).toBe(5);
+            expect(res[2].name).toEqual('c');
+            expect(res[2].tot_quantity).toEqual(1);
+            expect(res[2].unit).toEqual('lt');
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getOrderedProductsForProvider(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+describe('test setProductsAsFarmerShipped', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(true));
+        API.setProductsAsFarmerShipped([1, 2]).then((res) => {
+            expect.assertions(1);
+            expect(res).toBe(true);
+        });
+    });
+    test('Error', async () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.setProductsAsFarmerShipped([1, 2]).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const availabilityIDS = [{ old_id: 1, new_id: 50 },
+{ old_id: 2, new_id: 51 },
+{ old_id: 3, new_id: 52 }]
+
+describe('test declareAvailability', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(availabilityIDS));
+        API.declareAvailability([], 2021, 20).then((res) => {
+            expect.assertions(6);
+            expect(res[0].old_id).toBe(1);
+            expect(res[0].new_id).toBe(50);
+            expect(res[1].old_id).toBe(2);
+            expect(res[1].new_id).toBe(51);
+            expect(res[2].old_id).toBe(3);
+            expect(res[2].new_id).toBe(52);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.declareAvailability(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const formData = new FormData();
+
+describe('test uploadProductImage', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(true));
+        API.uploadProductImage(formData, 50).then((res) => {
+            expect.assertions(1);
+            expect(res).toBe(true);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.uploadProductImage(formData, 50).catch((res) => {
             expect.assertions(2);
             expect(res.status).toBe(500);
             expect(res.errObj).toEqual('API error');
@@ -255,6 +332,230 @@ describe('test GetProviderByID', () => {
     });
 });
 
+describe('test getProviderShipmentStatus', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(true));
+        API.getProviderShipmentStatus(2021, 20).then((res) => {
+            expect.assertions(1);
+            expect(res).toBe(true);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getProviderShipmentStatus(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const providerExistingProducts = [
+    {
+        id: 1,
+        name: 'a',
+        description: 'a',
+        category: 1,
+        price: 1.23,
+        unit: 'kg',
+        quantity: 100,
+        expiryDate: '',
+        providerName: 'a',
+        providerId: 1,
+        year: 2021,
+        week: 20,
+        status: 'confirmed',
+        active: 1
+    }
+];
+
+describe('test getProviderProducts', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(providerExistingProducts));
+        API.getProviderProducts(1).then((res) => {
+            expect.assertions(14);
+            expect(res[0].id).toBe(1);
+            expect(res[0].name).toEqual('a');
+            expect(res[0].description).toEqual('a');
+            expect(res[0].category).toEqual(1);
+            expect(res[0].price).toBe(1.23);
+            expect(res[0].unit).toEqual('kg');
+            expect(res[0].quantity).toBe(100);
+            expect(res[0].expiryDate).toEqual('');
+            expect(res[0].providerId).toBe(1);
+            expect(res[0].providerName).toEqual('a');
+            expect(res[0].year).toBe(2021);
+            expect(res[0].week).toBe(20);
+            expect(res[0].status).toEqual('confirmed');
+            expect(res[0].active).toBe(1);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getProviderProducts(1).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+describe('test getProviderConfirmationStatus', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(true));
+        API.getProviderConfirmationStatus(2021, 20).then((res) => {
+            expect.assertions(1);
+            expect(res).toBe(true);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getProviderConfirmationStatus(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+const providerExpectedProducts = [
+    {
+        id: 1,
+        name: 'a',
+        description: 'a',
+        category: 1,
+        price: 1.23,
+        unit: 'kg',
+        quantity: 100,
+        expiryDate: '',
+        providerName: 'a',
+        providerId: 1,
+        year: 2021,
+        week: 20,
+        status: 'expected',
+        active: 1
+    }
+];
+
+describe('test getProviderExpectedProducts', () => {
+    test('No errors', () => {
+        fetch.mockResponseOnce(JSON.stringify(providerExpectedProducts));
+        API.getProviderExpectedProducts(2021, 20).then((res) => {
+            expect.assertions(14);
+            expect(res[0].id).toBe(1);
+            expect(res[0].name).toEqual('a');
+            expect(res[0].description).toEqual('a');
+            expect(res[0].category).toEqual(1);
+            expect(res[0].price).toBe(1.23);
+            expect(res[0].unit).toEqual('kg');
+            expect(res[0].quantity).toBe(100);
+            expect(res[0].expiryDate).toEqual('');
+            expect(res[0].providerId).toBe(1);
+            expect(res[0].providerName).toEqual('a');
+            expect(res[0].year).toBe(2021);
+            expect(res[0].week).toBe(20);
+            expect(res[0].status).toEqual('expected');
+            expect(res[0].active).toBe(1);
+        });
+    });
+    test('Error', () => {
+        fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+        API.getProviderExpectedProducts(2021, 20).catch((res) => {
+            expect.assertions(2);
+            expect(res.status).toBe(500);
+            expect(res.errObj).toEqual('API error');
+        });
+    });
+});
+
+/*______________________________________________________________________*/
+/*                      OTHER API TESTING                           */
+/*______________________________________________________________________*/
+
+const itemsOrder = {
+    client_id: 1,
+    order_items: {
+        id: 1,
+        name: 'Carrots',
+        description: 'Some description 1',
+        category: 'Vegetables',
+        price: 1.23,
+        unit: 'kg',
+        quantity: 110,
+        expiryDate: '2021-11-20',
+        providerId: 1,
+        providerName: 'Luca Bianchi',
+        active: 1,
+        qty: 1,
+    },
+    total: 1.23,
+};
+
+describe('test AllPaymentMethods', () => {
+    test('no errors', () => {
+        const response = API.getAllPaymentMethods().then((data) => {
+            console.log(response)
+            expect("hello").toEqual("hello")
+        });
+
+    });
+});
+
+describe('test getAllClients', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce({ mockData: 'test' });
+        API.getAllClients().then((data) => {
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        API.getAllClients().catch((data) => {
+
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('Communicate with server failed');
+        });
+
+    });
+});
+
+describe('test getAllOrders', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce({ mockData: 'test' });
+        API.getAllOrders().then((data) => {
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        API.getAllOrders().catch((data) => {
+
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('Communicate with server failed');
+        });
+
+    });
+});
+
+
+describe('test updateDelivered(order_id)', () => {
+    test('no errors', () => {
+        fetch.mockResponseOnce({ mockData: 'test' });
+        API.updateDelivered(1).then((data) => {
+            expect(data.mockData).toEqual('test');
+        });
+    });
+    test('error', () => {
+        fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), { status: 500 });
+        API.updateDelivered(1).catch((data) => {
+
+            expect(data.status).toBe(500);
+            expect(data.errObj).toEqual('Communicate with server failed');
+        });
+
+    });
+});
+
 describe('test getAllPaymentMethods', () => {
     test('no errors', () => {
         fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
@@ -287,7 +588,7 @@ describe('test addClient', () => {
             expect(data.err).toEqual('API error');
         });
     });
-    
+
     test('response not ok, json null', () => {
         fetch.mockResponseOnce(null, { status: 500 });
         API.addClient('client').catch( (data) => {
@@ -312,7 +613,7 @@ describe('test addTransaction', () => {
             expect(data.err).toEqual('API error');
         });
     });
-    
+
     test('response not ok, json null', () => {
         fetch.mockResponseOnce(null, { status: 500 });
         API.addTransaction('transaction').catch( (data) => {
@@ -420,7 +721,7 @@ describe('test delete order item', () => {
             expect(data).toBeNull();
         });
     });
-   
+
     test('fetch rejected', () => {
         fetch.mockRejectOnce('error');
         API.deleteOrderItem(1).catch( (data) => {
@@ -430,5 +731,3 @@ describe('test delete order item', () => {
         });
     });
 });
-
-  
