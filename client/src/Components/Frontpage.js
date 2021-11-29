@@ -5,22 +5,23 @@ function Frontpage(props) {
     const history = useHistory()
     return (
         <Row className="bg-color-frontpage">
-            <div className="col-lg-3">
+            <div className="col-lg-4">
                 <br />
                 <br />
                 <div className="card mx-3 my-2 shadow-sm">
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{userIcon} Clients area</h5>
                         <div>
-                            <button className="mx-2 btn btn-outline-primary"
-                             onClick={(event) => {
-                                history.push("/login")
-                            }}>Login</button>
-                            <button className="btn btn-outline-secondary"
+                        <button className="btn btn-outline-secondary"
                                 onClick={(event) => {
                                     history.push("/registration")
                                 }}
                             >Register</button>
+                            <button className="mx-2 btn btn-outline-primary"
+                             onClick={(event) => {
+                                history.push("/login")
+                            }}>Login</button>
+                            
                         </div>
                     </div>
                 </div>
@@ -112,7 +113,7 @@ function Frontpage(props) {
                     </ul>
                 </div>
             </div>
-            <div className="col-lg-9 vertical-separator-frontpage">
+            <div className="col-lg-8 vertical-separator-frontpage">
                 <div className="text-center mt-5 mb-3">
                     <h1>Solidarity Purchasing Group</h1>
                     <br></br>

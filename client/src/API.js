@@ -13,7 +13,21 @@ async function getAllClients() {
     }
   }
 }
-
+//GET ->retrieve users 
+async function getAllUsers() {
+  const response = await fetch('http://localhost:3000/api/users');
+  if (response.ok) {
+    const responseBody = await response.json();
+    return responseBody;
+  } else {
+    try {
+      const err = await response.json();
+      throw err.message;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
 //GET ->retrieve client orders
 async function getAllOrders() {
   const response = await fetch('http://localhost:3000/api/orders');
@@ -736,7 +750,7 @@ const API = {
   addUser,
   addOrder,
   submitEmail,
-  confirmExpectedProducts,
+  confirmExpectedProducts,getAllUsers
 };
 
 export default API;

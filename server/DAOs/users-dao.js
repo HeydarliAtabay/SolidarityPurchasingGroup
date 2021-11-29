@@ -18,6 +18,27 @@ exports.addclient= (t) => {
         });
     });
 };
+//get-> retrieve all users
+exports.getAllUsers = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * from users';
+
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const o = rows.map((e) => ({
+        id:e.id,
+        name:e.name,
+        email:e.email,
+        hash:e.hash,
+       role:e.role
+      }));
+      resolve(o);
+    });
+  });
+};
 
 //LOGIN
 

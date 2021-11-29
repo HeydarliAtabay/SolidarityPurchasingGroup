@@ -5,6 +5,7 @@ function LoginForm1(props) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+   
     
 
     const handleSubmit = (event) => {
@@ -13,7 +14,8 @@ function LoginForm1(props) {
         
         const credentials = { username, password };
 
-        
+       
+       
         let valid = true;
         if(username === '' || password === '' )
             valid = false;
@@ -35,7 +37,13 @@ function LoginForm1(props) {
     return (
         <>
             <br />
-            {!props.logged?
+            {props.logged?<>
+ {props.users.find(s=>(s.email===username&&s.role==="client"))?
+<Redirect to="/client"/>:<></>}
+{props.users.find(s=>(s.email===username&&s.role==="employee"))?
+<Redirect to="/employee"/>:<></>}
+{props.users.find(s=>(s.email===username&&s.role==="warehouse"))?
+<Redirect to="/warehouse"/>:<></>}</>:
                     <Container fluid="sx">
                       <Row className="justify-content-md-center">
 
@@ -56,8 +64,11 @@ function LoginForm1(props) {
                     <ToggleButton variant='primary'style={{ 'fontSize': 25}} onClick={handleSubmit}>Login</ToggleButton>
                 </ToggleButtonGroup>
 
-            </Form></Row></Container>:<>{props.clients.find(s=>(s.email===username))?<Redirect to="/client"/>:<Redirect to="/employee"/>}</>}
-        </>)}
+            </Form></Row></Container>
+
+
+
+        }</>);}
     
 
     export { LoginForm1 };

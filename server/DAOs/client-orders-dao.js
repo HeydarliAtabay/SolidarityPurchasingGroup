@@ -23,7 +23,7 @@ exports.getAllOrders = () => {
         client_id:e.client_id,
         product_name:e.product_name,
         product_id:e.product_id,
-        quantity:e.order_quantity,
+        order_quantity:e.order_quantity,
         state:e.state,
         farmer_state:e.farmer_state,
         OrderPrice:e.OrderPrice,
@@ -33,7 +33,8 @@ exports.getAllOrders = () => {
         zipcode:e.zipcode,
         Nation:e.Nation,
         date:e.date,
-        time:e.time
+        time:e.time,
+        pickup:e.pickup
       }));
       resolve(o);
     });
@@ -135,7 +136,7 @@ exports.insert_order_items = async (order_id, order_items) => {
 exports.addOrder = (t) => {
   return new Promise((resolve, reject) => {
     const sql =
-      'INSERT INTO orders( order_id, client_id, product_name, product_id, order_quantity, state, OrderPrice, id,address,city,zipcode,Nation,date,time ) VALUES ( ?, ?,?, ?, ?, ?, ?, ?,?,?,?,?,?,? )';
+      'INSERT INTO orders( order_id, client_id, product_name, product_id, order_quantity, state, OrderPrice, id,address,city,zipcode,Nation,date,time, pickup ) VALUES ( ?, ?,?, ?, ?, ?, ?, ?,?,?,?,?,?,? )';
     db.run(
       sql,
       [
@@ -153,6 +154,7 @@ exports.addOrder = (t) => {
         t.Nation,
         t.date,
         t.time,
+        t.pickup
       ],
       function (err) {
         if (err) {
@@ -165,12 +167,24 @@ exports.addOrder = (t) => {
     );
   });
 };
-//delete an order item
 
+//delete an order item
 exports.deleteItem = (id) => {
   return new Promise((resolve, reject) => {
     const sql = 'DELETE FROM orders WHERE id = ? ';
     db.run(sql, [id], (err) => {
+      if (err) {
+        reject(err);
+        return;
+      } else resolve(null);
+    });
+  });
+};
+
+exports.setOrderAsWarehousePrepared = (product_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE orders SET state="prepared" WHERE product_id=?';
+    db.run(sql, [product_id], (err) => {
       if (err) {
         reject(err);
         return;

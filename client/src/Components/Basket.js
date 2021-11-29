@@ -1,10 +1,30 @@
 import { Button, Row, Col, Card, Container, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 
+import API from '../API'
+
 function Basket(props) {
+  const [mailerState, setMailerState] = useState({
+    email: "",
+    message: ""
+  });
+  const [emailSent,setEmailSent]=useState(false)
+
+  const handleSubmitEmail = (event) => {
+
+   API.submitEmail(mailerState).then(()=>{
+    setEmailSent(true) 
+    });
+                 
+            
+  }
+
+  console.log(props.clients)
+  console.log(props.clientid)
   return (
     <>
-      <h2 className="text-center">Basket:</h2>
+
+      <h2 className="text-center">Basket: </h2>
       {props.productsBasket.length === 0 && (
         <div className="text-center">Cart is Empty</div>
       )}
@@ -79,9 +99,49 @@ function Basket(props) {
                 </Row>
               </Container>
               <Row>
-                <Button onClick={() => props.onConfirm()} className="mt-3">
-                  Confirm
-                </Button>{' '}
+              {props.clients.filter(x=>x.client_id===parseInt(props.clientid)).map((s)=>
+             
+              <>
+              
+               <Button onClick={() =>{
+                props.onConfirm()
+                setMailerState((prevState) => ({
+                  ...prevState,
+                  email: s.email,
+                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
+                  `
+          
+                  
+                }));
+              handleSubmitEmail();
+              setEmailSent(true)
+
+                } } className="mt-3">
+                Confirm
+              </Button>{' '}
+
+              {emailSent&& 
+              <>
+              <Button variant="secondary" onClick={() =>{
+                setMailerState((prevState) => ({
+                  ...prevState,
+                  email: s.email,
+                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
+                  `
+          
+                  
+                }));
+              handleSubmitEmail();
+              setEmailSent(true)
+
+                } } className="mt-3">
+                Resend Email
+              </Button>{' '}
+              </>
+              }
+              </>
+              )}
+               
               </Row>
             </>
           ) : (

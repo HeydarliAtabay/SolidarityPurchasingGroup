@@ -34,6 +34,8 @@ function App() {
   const [message, setMessage] = useState('');
   const [userid, setUserid] = useState();
   const [logged, setLogged] = useState(false);
+  const [providers, setProviders] = useState();
+  const [users, setUsers] = useState([]);
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -53,7 +55,20 @@ function App() {
     };
     checkAuth();
   }, []);
-
+/* USEFFECT users */
+  useEffect(() => {
+    const getAllUsers = async () => {
+      await API.getAllUsers()
+        .then((res) => {
+          setUsers(res);
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+   getAllUsers();
+  }, []);
   /* USEFFECT clients */
   useEffect(() => {
     const getAllClients = async () => {
@@ -68,6 +83,21 @@ function App() {
     };
     if (recharged1) getAllClients();
   }, [recharged1]);
+
+  /* USEFFECT providers */
+
+  useEffect(() => {
+    const getAllProviders = async () => {
+      await API.getAllProviders()
+        .then((res) => {
+          setProviders(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllProviders();
+  }, [update]);
 
   /* USEFFECT orders*/
   useEffect(() => {
@@ -90,7 +120,8 @@ function App() {
               x.zipcode,
               x.Nation,
               x.date,
-              x.time
+              x.time,
+              x.pickup
             )
           );
         });
@@ -176,7 +207,10 @@ function App() {
     await API.logOut();
 
     setLogged(false);
+
+    
   };
+  
   return (
     <Router>
       <MyNavbar time={time} setTime={setTime} />
@@ -191,6 +225,7 @@ function App() {
                 orders={orders}
                 isEmployee={false}
                 products={confirmedProducts}
+                clients={clients}
                 updateProps={updateProps}
                 time={time}
                 clientid={userid}
@@ -210,6 +245,7 @@ function App() {
                 time={time}
                 clientid={userid}
                 setRecharged={updateRech}
+                clients={clients}
               />
             )}
           />
@@ -232,6 +268,7 @@ function App() {
                 clients={clients}
                 orders={orders}
                 isEmployee={true}
+                clientid={userid}
                 products={confirmedProducts}
                 updateProps={updateProps}
                 time={time}
@@ -290,7 +327,7 @@ function App() {
           <Route
             path="/login"
             render={() => (
-              <LoginForm1 login={doLogIn} logged={logged} clients={clients} />
+              <LoginForm1 login={doLogIn} logged={logged} clients={clients} users={users}/>
             )}
           />
           <Route
