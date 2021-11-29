@@ -90,25 +90,115 @@ describe("Test increasing the balance of client", () => {
 
 describe('Test the provider /api/modifyquantity', () => {
     test('It should response the PUT method', () => {
-        request(server).put('/api/modifyquantity');
+        request(server).put('/api/modifyquantity').then(response => {
         expect(response.statusCode).toBe(200);
-        done();
+            done();
+        });
     });
 });
 
 describe('Test the provider /api/neworder path', () => {
     test('It should response the POST method', () => {
-        request(server).post('/api/neworder');
-        expect(response.statusCode).toBe(200);
-        done();
+        request(server).post('/api/neworder').then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
     });
 });
 
 
 describe('Test the provider /api/sendEmail', () => {
     test('It should response the POST method', () => {
-        request(server).post('/api/sendEmail');
-        expect(response.statusCode).toBe(200);
-        done();
+        request(server).post('/api/sendEmail').then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
     });
 });
+
+const productIDS = [];
+
+describe('Test the provider /api/orders/farmershipped', () => {
+    test('It should response the POST method', () => {
+        request(server).post('/api/orders/farmershipped').send(productIDS).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/products/confirmed/:year/:week', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/products/confirmed/' + 2021 + '/' + 20).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/products/expected/:year/:week', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/products/expected/' + 2021 + '/' + 20).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/products/ordered/:year/:week_number', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/products/ordered/:year/:week_number' + 2021 + '/' + 20).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/provider/:provider_id/products', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/provider/:provider_id/products').then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/provider/confirmationStatus/:year/:week_number', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/provider/confirmationStatus/' + 2021 + '/' + 20).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/products/provider/expected/:year/:week_number', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/products/provider/expected/' + 2021 + '/' + 20).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+describe('Test the provider /api/provider/shipmentstatus/:year/:week_number', () => {
+    test('It should response the GET method', () => {
+        request(server).get('/api/provider/shipmentstatus/' + 2021 + '/' + 20).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+const expectedProducts = [];
+
+describe('Test the provider /api/products/expected/:year/:week_number', () => {
+    test('It should response the POST method', () => {
+        request(server).post('/api/products/expected/' + 2021 + '/' + 20).send(expectedProducts).then(response => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+
+

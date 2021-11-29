@@ -180,8 +180,7 @@ app.get('/api/orders', async (req, res) => {
 });
 
 //PUT to update a product as delivered
-app.put(
-  '/api/orders/:order_id/:product_name',
+app.put('/api/orders/:order_id/:product_name',
 
   async (req, res) => {
     try {
@@ -196,6 +195,7 @@ app.put(
   }
 );
 
+//POST the product IDs to be set with state 'farmer_shipped'
 app.post('/api/orders/farmershipped', async (req, res)=>{
   try{
     const productIDS = req.body;
@@ -310,8 +310,7 @@ app.get('/api/provider/:provider_id/products', async (req, res) => {
 });
 
 //CHECK provider's confirmation status
-app.get(
-  '/api/provider/confirmationStatus/:year/:week_number',
+app.get('/api/provider/confirmationStatus/:year/:week_number',
   async (req, res) => {
     try {
       const year = req.params.year;
@@ -332,8 +331,7 @@ app.get(
 );
 
 //GET provider's expected production
-app.get(
-  '/api/products/provider/expected/:year/:week_number',
+app.get('/api/products/provider/expected/:year/:week_number',
   async (req, res) => {
     try {
       const year = req.params.year;
@@ -353,8 +351,7 @@ app.get(
 );
 
 //GET providers shipment status
-app.get(
-  '/api/provider/shipmentstatus/:year/:week_number',
+app.get('/api/provider/shipmentstatus/:year/:week_number',
   async (req, res) => {
     try {
       const year = req.params.year;
