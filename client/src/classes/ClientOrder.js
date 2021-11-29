@@ -5,6 +5,7 @@ function clientOrders(
   product_id,
   order_quantity,
   state,
+  farmer_state,
   OrderPrice,
   id,
   address,
@@ -20,8 +21,9 @@ function clientOrders(
   this.product_id = product_id;
   this.order_quantity = order_quantity;
   this.state = state;
+  this.farmer_state=farmer_state;
   this.OrderPrice = OrderPrice;
-  this.id = null;
+  this.id = id;
   this.address = address;
   this.city = city;
   this.nation = nation;
