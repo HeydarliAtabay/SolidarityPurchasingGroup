@@ -292,10 +292,22 @@ function App() {
             )}
           />
           <Route
-          path = "/warehouse"
+          path = "/warehouse-employee"
           render = {() => (
             <WarehousePage
               userRole = "warehouse-employee"
+              orders = {orders}
+              providers = {providers} 
+              methods={methods}
+              logout={doLogOut}
+              />
+          )}
+          />
+          <Route
+          path = "/warehouse-manager"
+          render = {() => (
+            <WarehousePage
+              userRole = "warehouse-manager"
               orders = {orders}
               providers = {providers} 
               methods={methods}
