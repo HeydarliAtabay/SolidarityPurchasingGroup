@@ -43,6 +43,23 @@ async function getAllOrders() {
     }
   }
 }
+
+//GET ->retrieve client orders
+async function getProviderDeliveredOrders(id) {
+  const response = await fetch(`http://localhost:3000/api/provider-orders/${id}`);
+  if (response.ok) {
+    const responseBody = await response.json();
+    return responseBody;
+  } else {
+    try {
+      const err = await response.json();
+      throw err.message;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
+
 //PUT to update a product as delivered
 function updateDelivered(id, product_name) {
   return new Promise((resolve, reject) => {
@@ -754,7 +771,9 @@ const API = {
   addUser,
   addOrder,
   submitEmail,
-  confirmExpectedProducts,getAllUsers
+  confirmExpectedProducts,
+  getProviderDeliveredOrders,
+  getAllUsers
 };
 
 export default API;

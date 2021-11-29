@@ -9,6 +9,7 @@ const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
 const walletsDAO = require('./DAOs/wallet-dao');
+const warehouseDao = require('./DAOs/warehouse-dao');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
@@ -369,6 +370,25 @@ app.get('/api/provider/shipmentstatus/:year/:week_number',
     }
   }
 );
+
+//GET provider shipped orders
+app.get(
+  `/api/provider-orders/:id`,
+  async (req, res) => {
+    try {
+      const id = req.params.id;
+
+      const farmerShippedOrders = await warehouseDao.getProviderShippedOrders(id
+      );
+      
+      res.json(farmerShippedOrders);
+    } catch (err) {
+      console.log(err);
+      res.json(err);
+    }
+  }
+);
+
 
 //Insert provider's expected production
 app.post('/api/products/expected/:year/:week_number', async (req, res) => {

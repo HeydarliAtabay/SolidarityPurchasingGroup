@@ -293,7 +293,8 @@ function App() {
           path = "/warehouse"
           render = {() => (
             <WarehousePage
-              orders = {orders} 
+              orders = {orders}
+              providers = {providers} 
               methods={methods}
               logout={doLogOut}
               />
