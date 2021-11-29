@@ -13,7 +13,8 @@ function clientOrders(
   nation,
   zipcode,
   date,
-  time
+  time,
+  pickup
 ) {
   this.order_id = order_id;
   this.client_id = client_id;
@@ -30,5 +31,6 @@ function clientOrders(
   this.zipcode = zipcode;
   this.date = date;
   this.time = time;
+  this.pickup = pickup;
 }
 export { clientOrders };

@@ -90,7 +90,8 @@ function App() {
               x.zipcode,
               x.Nation,
               x.date,
-              x.time
+              x.time,
+              x.pickup
             )
           );
         });
