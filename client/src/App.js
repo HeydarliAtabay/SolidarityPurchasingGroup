@@ -35,6 +35,7 @@ function App() {
   const [userid, setUserid] = useState();
   const [logged, setLogged] = useState(false);
   const [providers, setProviders] = useState();
+  const [users, setUsers] = useState([]);
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -54,7 +55,20 @@ function App() {
     };
     checkAuth();
   }, []);
-
+/* USEFFECT users */
+  useEffect(() => {
+    const getAllUsers = async () => {
+      await API.getAllUsers()
+        .then((res) => {
+          setUsers(res);
+          
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+   getAllUsers();
+  }, []);
   /* USEFFECT clients */
   useEffect(() => {
     const getAllClients = async () => {
@@ -313,7 +327,7 @@ function App() {
           <Route
             path="/login"
             render={() => (
-              <LoginForm1 login={doLogIn} logged={logged} clients={clients} />
+              <LoginForm1 login={doLogIn} logged={logged} clients={clients} users={users}/>
             )}
           />
           <Route
