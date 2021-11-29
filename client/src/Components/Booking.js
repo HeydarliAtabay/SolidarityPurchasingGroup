@@ -9,7 +9,7 @@ import {
   Form,
   Tabs,
   Tab,
-  ListGroup
+  ListGroup,
 } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import API from './../API';
@@ -19,10 +19,6 @@ import { useHistory } from 'react-router-dom';
 import { clientOrders } from '../classes/ClientOrder';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
-<<<<<<< HEAD
-function Booking(props) {
-  const history = useHistory();
-=======
 
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
@@ -32,27 +28,29 @@ dayjs.Ls.en.weekStart = 1;
 function Booking(props) {
   const history = useHistory();
   const location = useLocation();
->>>>>>> 0149378f8e0eb5de5456ceaffc3bdbd089f7f5d6
 
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
   const [showCompletePurchase, setShowCompletePurchase] = useState(false);
-<<<<<<< HEAD
-  const [address, setAddress] = useState('');
-  const [nation, setNation] = useState('');
-  const [city, setCity] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [zipCode, setZipCode] = useState('');
-=======
-  const [address, setAddress] = useState(location.state ? location.state.item.address : '');
-  const [nation, setNation] = useState(location.state ? location.state.item.nation : '');
-  const [city, setCity] = useState(location.state ? location.state.item.city : '');
-  const [date, setDate] = useState(location.state ? location.state.item.date : '');
-  const [time, setTime] = useState(location.state ? location.state.item.time : '');
-  const [zipCode, setZipCode] = useState(location.state ? location.state.item.zipcode : '');
->>>>>>> 0149378f8e0eb5de5456ceaffc3bdbd089f7f5d6
+  const [address, setAddress] = useState(
+    location.state ? location.state.item.address : ''
+  );
+  const [nation, setNation] = useState(
+    location.state ? location.state.item.nation : ''
+  );
+  const [city, setCity] = useState(
+    location.state ? location.state.item.city : ''
+  );
+  const [date, setDate] = useState(
+    location.state ? location.state.item.date : ''
+  );
+  const [time, setTime] = useState(
+    location.state ? location.state.item.time : ''
+  );
+  const [zipCode, setZipCode] = useState(
+    location.state ? location.state.item.zipcode : ''
+  );
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -60,7 +58,7 @@ function Booking(props) {
 
   const [deliveryFlag, setDeliveryFlag] = useState([true]);
   const [pickupDay, setPickupDay] = useState(2);
-  const [pickupTime, setPickupTime] = useState("10:00");
+  const [pickupTime, setPickupTime] = useState('10:00');
 
   let rows = [
     ...Array(Math.ceil(products.filter((p) => p && p.active === 1).length / 3)),
@@ -73,11 +71,6 @@ function Booking(props) {
   const [showdanger, setShowdanger] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
-<<<<<<< HEAD
-  const location = useLocation();
-=======
-
->>>>>>> 0149378f8e0eb5de5456ceaffc3bdbd089f7f5d6
   let indice, ordine;
   if (props.browsing === false) {
     if (props.orders.length === 0) indice = 1;
@@ -117,12 +110,11 @@ function Booking(props) {
   /*USEFFECT products*/
   useEffect(() => {
     const getAllProducts = async () => {
-      const tmp_dy = {
-        date: dayjs(props.time.date).add(1, 'week'),
-        hour: props.time.hour,
-      };
-
       if (props.browsing) {
+        const tmp_dy = {
+          date: dayjs(props.time.date).add(1, 'week'),
+          hour: props.time.hour,
+        };
         await API.getAllConfirmedProducts(
           dayjs(tmp_dy.date).year(),
           getRightWeek(tmp_dy).week_number
@@ -195,11 +187,6 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-<<<<<<< HEAD
-        console.log(p);
-=======
-
->>>>>>> 0149378f8e0eb5de5456ceaffc3bdbd089f7f5d6
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
@@ -211,14 +198,15 @@ function Booking(props) {
           city,
           nation,
           zipCode,
-          deliveryFlag ? date : dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
+          deliveryFlag
+            ? date
+            : dayjs(props.time.date)
+                .add(1, 'week')
+                .weekday(pickupDay)
+                .format('YYYY-MM-DD'),
           deliveryFlag ? time : pickupTime,
           deliveryFlag ? 0 : 1
         );
-<<<<<<< HEAD
-=======
-
->>>>>>> 0149378f8e0eb5de5456ceaffc3bdbd089f7f5d6
         API.addOrder(order).then(() => {
           props.setRecharged(true);
           setTimeout(() => {}, 3000);
@@ -227,28 +215,9 @@ function Booking(props) {
       }
     } else {
       let i = location.state.item.id;
-<<<<<<< HEAD
       API.deleteOrderItem(location.state.item.id).then(
         setTimeout(() => {}, 3000)
       );
-      for (const a of productsBasket) {
-        s = (a.price * a.qty).toFixed(2);
-        let order = new clientOrders(
-          location.state.item.order_id,
-          location.state.item.client_id,
-          a.name,
-          'booked',
-          s,
-          i
-        );
-        API.addOrder(order).then(() => {
-          props.setRecharged(true);
-          setTimeout(() => {}, 3000);
-        });
-        i = i + 1;
-      }
-=======
-      API.deleteOrderItem(location.state.item.id).then(setTimeout(() => { }, 3000));
       let a = productsBasket[0];
       s = (a.price * a.qty).toFixed(2);
       let order = new clientOrders(
@@ -257,7 +226,7 @@ function Booking(props) {
         a.name,
         a.id,
         a.qty,
-        "booked",
+        'booked',
         null,
         s,
         i,
@@ -265,15 +234,20 @@ function Booking(props) {
         city,
         nation,
         zipCode,
-        deliveryFlag ? date : dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
+        deliveryFlag
+          ? date
+          : dayjs(props.time.date)
+              .add(1, 'week')
+              .weekday(pickupDay)
+              .format('YYYY-MM-DD'),
         deliveryFlag ? time : pickupTime,
-        deliveryFlag ? 0 : 1);
+        deliveryFlag ? 0 : 1
+      );
 
       API.addOrder(order).then(() => {
         props.setRecharged(true);
-        setTimeout(() => { }, 3000)
+        setTimeout(() => {}, 3000);
       });
->>>>>>> 0149378f8e0eb5de5456ceaffc3bdbd089f7f5d6
     }
 
     setShowsuccess(true);
@@ -601,8 +575,16 @@ function Booking(props) {
           <Modal.Title>Complete the purchase</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Tabs defaultActiveKey="delivery" id="uncontrolled-tab-example" className="mb-3">
-            <Tab eventKey="delivery" title="Home delivery" onClick={() => (setDeliveryFlag(true))}>
+          <Tabs
+            defaultActiveKey="delivery"
+            id="uncontrolled-tab-example"
+            className="mb-3"
+          >
+            <Tab
+              eventKey="delivery"
+              title="Home delivery"
+              onClick={() => setDeliveryFlag(true)}
+            >
               <Form>
                 <Form.Group className="mb-3" controlId="formGridAddress1">
                   <Form.Label>Address</Form.Label>
@@ -689,18 +671,36 @@ function Booking(props) {
                 </div>
               </Form>
             </Tab>
-            <Tab eventKey="pickup" title="In shop pickup" onClick={() => (setDeliveryFlag(false))}>
-              <h5 className="text-center my-3">Select the day and the time for the pickup</h5>
+            <Tab
+              eventKey="pickup"
+              title="In shop pickup"
+              onClick={() => setDeliveryFlag(false)}
+            >
+              <h5 className="text-center my-3">
+                Select the day and the time for the pickup
+              </h5>
               <div className="row">
                 <div className="col-md-6 text-center">
                   <ListGroup as="ul">
-                    <ListGroup.Item as="li" active={pickupDay === 2} onClick={() => (setPickupDay(2))}>
+                    <ListGroup.Item
+                      as="li"
+                      active={pickupDay === 2}
+                      onClick={() => setPickupDay(2)}
+                    >
                       Next wednesday
                     </ListGroup.Item>
-                    <ListGroup.Item as="li" active={pickupDay === 3} onClick={() => (setPickupDay(3))}>
+                    <ListGroup.Item
+                      as="li"
+                      active={pickupDay === 3}
+                      onClick={() => setPickupDay(3)}
+                    >
                       Next thursday
                     </ListGroup.Item>
-                    <ListGroup.Item as="li" active={pickupDay === 4} onClick={() => (setPickupDay(4))}>
+                    <ListGroup.Item
+                      as="li"
+                      active={pickupDay === 4}
+                      onClick={() => setPickupDay(4)}
+                    >
                       Next friday
                     </ListGroup.Item>
                   </ListGroup>
@@ -716,13 +716,20 @@ function Booking(props) {
                       min="08:00"
                       max="18:00"
                       value={pickupTime}
-                      onChange={(event) => { setPickupTime(event.target.value) }}
+                      onChange={(event) => {
+                        setPickupTime(event.target.value);
+                      }}
                     />
                   </Form.Group>
                 </div>
               </div>
               <div className="d-block text-center my-3">
-                Selected pickup time: {dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('dddd, MMMM D, YYYY')} at {pickupTime}
+                Selected pickup time:{' '}
+                {dayjs(props.time.date)
+                  .add(1, 'week')
+                  .weekday(pickupDay)
+                  .format('dddd, MMMM D, YYYY')}{' '}
+                at {pickupTime}
               </div>
               <hr />
               <div className="d-block text-end">
@@ -737,7 +744,6 @@ function Booking(props) {
               </div>
             </Tab>
           </Tabs>
-
         </Modal.Body>
       </Modal>
 
