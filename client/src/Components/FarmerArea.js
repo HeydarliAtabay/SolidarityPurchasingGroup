@@ -91,12 +91,12 @@ function FarmerArea(props) {
                                         <h5 className="card-title">Confirm product availability</h5>
                                         <p className="card-text">
                                             • You can confirm items availability starting Saturday 09.00AM until Monday 09.00AM <br />
-                                            • Atabay part goes here<br/>
+                                            <br/>
                                         </p>
                                         <div className="d-block text-end">
-                                            {/*<Link to="/wallet">*/}
-                                            <button className="btn btn-primary" disabled={true}>Confirm availability</button>
-                                            {/* </Link> */}
+                                            <Link to="/order-confirmation-farmer">
+                                            <button className="btn btn-primary" >Confirm availability</button>
+                                             </Link> 
                                         </div>
                                     </div>
                                 </div>

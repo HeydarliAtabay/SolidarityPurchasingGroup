@@ -476,6 +476,45 @@ function increaseBalance(amount, clientId) {
       }); // connection errors
   });
 }
+
+// Confirm expexted product
+function confirmExpectedProducts(product,year,week) {
+  return new Promise((resolve, reject) => {
+    fetch(
+      'http://localhost:3000/api/farmerConfirm/' +
+        product +
+        '/' +
+        year +
+        '/' +
+        week,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({}),
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // analyze the cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            }) // error message in the response body
+            .catch(() => {
+              reject({ error: 'Cannot parse server response.' });
+            }); // something else
+        }
+      })
+      .catch(() => {
+        reject({ error: 'Cannot communicate with the server.' });
+      }); // connection errors
+  });
+}
 //api login
 async function logIn(credentials) {
   let response = await fetch('http://localhost:3000/api/sessions', {
@@ -697,6 +736,7 @@ const API = {
   addUser,
   addOrder,
   submitEmail,
+  confirmExpectedProducts,
 };
 
 export default API;

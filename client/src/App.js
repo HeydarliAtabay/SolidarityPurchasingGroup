@@ -7,6 +7,7 @@ import Orders from './Components/Orders';
 import { clientOrders } from './classes/ClientOrder';
 import API from './API';
 import EmployeePage from './Components/EmployeePage';
+import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect, Row, Alert } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
@@ -16,6 +17,7 @@ import ClientArea from './Components/ClientArea';
 import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
 import FarmerOrderPreparation from './Components/FarmerOrderPreparation';
+import FarmerOrderConfirmation from './Components/FarmerOrderConfirmation';
 
 let r = [];
 
@@ -251,6 +253,16 @@ function App() {
             )}
           />
           <Route
+          path = "/warehouse"
+          render = {() => (
+            <WarehousePage
+              orders = {orders} 
+              methods={methods}
+              logout={doLogOut}
+              />
+          )}
+          />
+          <Route
             path="/farmer"
             render={() => (
               <FarmerArea time={time}/>
@@ -266,6 +278,13 @@ function App() {
             path="/order-preparation"
             render={() => (
               <FarmerOrderPreparation time={time}/>
+            )}
+          />
+
+          <Route
+            path="/order-confirmation-farmer"
+            render={() => (
+              <FarmerOrderConfirmation />
             )}
           />
           <Route
