@@ -151,11 +151,13 @@ function WarehousePage(props) {
 
        { props.providerOrd.map((p => {return(
           <ListGroupItem>
+              <Row>
               <Col xs={2} md={2}>{p.ord_id}</Col>
               <Col xs={2} md={2}>{p.cli_id}</Col>
               <Col xs={3} md={3}>
 <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ props.setShowM(true); props.setIdM(p.ord_id);}}>
 show</Button></Col>
+</Row>
           </ListGroupItem>
 );}))}
 

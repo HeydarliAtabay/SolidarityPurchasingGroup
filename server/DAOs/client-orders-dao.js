@@ -92,6 +92,45 @@ exports.delivered = async (order_id, product_name) => {
     );
   });
 };
+
+//update prepared order
+exports.prepared = async (order_id, product_name) => {
+  const test = await this.getO(order_id, product_name);
+
+  return new Promise((resolve, reject) => {
+    const sql =
+      'UPDATE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE order_id=? AND product_name=?';
+    db.run(
+      sql,
+      [
+        test.order_id,
+        test.client_id,
+        test.product_name,
+        test.product_id,
+        test.order_quantity,
+        'prepared',
+        test.OrderPrice,
+        test.id,
+        test.address,
+        test.city,
+        test.zipcode,
+        test.Nation,
+        test.date,
+        test.time,
+        order_id,
+        product_name,
+      ],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(null);
+      }
+    );
+  });
+};
+
 // insert a new order
 exports.insert_order = async (client_id, totalorderprice) => {
   return new Promise((resolve, reject) => {

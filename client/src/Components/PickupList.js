@@ -53,7 +53,7 @@ function onlyUnique(value,index,self){
      {s.pickup===1 && 
       <BoxSeam color="green" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               for(const a of array2){
-             API.updateOrdered(id, a).then(()=>{
+             API.updateWHPrepared(id, a).then(()=>{
                 
          props.setRecharged(true); setTimeout(()=>{},3000)});
                     

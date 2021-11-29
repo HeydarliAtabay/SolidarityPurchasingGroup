@@ -299,6 +299,7 @@ function App() {
               orders = {orders}
               providers = {providers} 
               methods={methods}
+              setRecharged={updateRech}
               logout={doLogOut}
               />
           )}

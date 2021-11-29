@@ -196,6 +196,22 @@ app.put('/api/orders/:order_id/:product_name',
   }
 );
 
+//PUT to update a product as prepared
+app.put('/api/orders/:order_id/:product_name',
+
+  async (req, res) => {
+    try {
+      await ordersDao.prepared(req.params.order_id, req.params.product_name);
+      res.status(200).end('Update Completed!');
+    } catch (err) {
+      res.status(503).json({
+        code: 503,
+        error: `Unavailable service during the update of order`,
+      });
+    }
+  }
+);
+
 //POST the product IDs to be set with state 'farmer_shipped'
 app.post('/api/orders/farmershipped', async (req, res)=>{
   try{

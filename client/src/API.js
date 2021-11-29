@@ -94,6 +94,40 @@ function updateDelivered(id, product_name) {
   });
 }
 
+// PUT to update a product as prepared
+function updateWHPrepared(id, product_name) {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/orders/${id}/${product_name}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+        });
+      });
+  });
+}//
+
 //GET all products
 async function getAllConfirmedProducts(year, week) {
   const response = await fetch(
@@ -744,6 +778,7 @@ const API = {
   getAllClients,
   getAllOrders,
   updateDelivered,
+  updateWHPrepared,
   getAllConfirmedProducts,
   getAllExpectedProducts,
   getOrderedProductsForProvider,
