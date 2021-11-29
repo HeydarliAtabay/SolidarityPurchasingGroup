@@ -111,15 +111,16 @@ function WarehousePage(props) {
 
       return(<>
       <Table>
-        <Row><h4>MANAGER DASHBOARD</h4></Row>
-        <Row><h2>providers avaiable on the platform</h2></Row>
+        <Row><h1>MANAGER DASHBOARD</h1></Row>
+        <Row><h4>providers avaiable on the platform</h4></Row>
         <Row>
-        {providers.map((p) => { return(<Col><Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button></Col>)})}
+        {providers.map((p) => { return(<Col>{selectedProvider.id == p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
+                                              <Button  variant="secondary" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button>}</Col>)})}
         </Row>
         <Row>
-        <Col><h4>PROVIDER SCELTO: {selectedProvider.name}</h4></Col>
+        
       {showSearchButton ? 
-      <Button id = {selectedProvider.id} onClick = {handleClick} >CLicca per vedere ordini venditore </Button> :
+      <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {selectedProvider.id} onClick = {handleClick} >Click to check the farmer-shipped order</Button> :
       <></>}</Row>
       </Table>
       

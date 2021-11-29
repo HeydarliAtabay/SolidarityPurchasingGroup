@@ -13,7 +13,7 @@ exports.getProviderShippedOrders = (provider_id) => {
     return new Promise((resolve, reject) => {
         const product_status = 'confirmed';
         const farmer_state = 'farmer-shipped';
-        const sql = 'SELECT provider_id, order_id, client_id FROM products, orders  WHERE products.product_id = orders.product_id AND orders.farmer_state==? AND products.provider_id==?';
+        const sql = 'SELECT DISTINCT provider_id, order_id, client_id FROM products, orders  WHERE products.product_id = orders.product_id AND orders.farmer_state==? AND products.provider_id==?';
         
         db.all(sql, [farmer_state, provider_id, ], (err, rows) => {
             if (err) {
