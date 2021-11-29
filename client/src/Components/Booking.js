@@ -15,20 +15,20 @@ import ProductPage from './ProductPage';
 import { useHistory } from 'react-router-dom';
 import { clientOrders } from '../classes/ClientOrder';
 import { useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
 function Booking(props) {
   const history = useHistory();
-  const location = useLocation();
-  
+
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
   const [showCompletePurchase, setShowCompletePurchase] = useState(false);
-  const [address, setAddress] = useState(location.state?location.state.item.address:'');
-  const [nation, setNation] = useState(location.state?location.state.item.nation:'');
-  const [city, setCity] = useState(location.state?location.state.item.city:'');
-  const [date, setDate] = useState(location.state?location.state.item.date:'');
-  const [time, setTime] = useState(location.state?location.state.item.time:'');
-  const [zipCode, setZipCode] = useState(location.state?location.state.item.zipcode:'');
+  const [address, setAddress] = useState('');
+  const [nation, setNation] = useState('');
+  const [city, setCity] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [zipCode, setZipCode] = useState('');
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -45,7 +45,7 @@ function Booking(props) {
   const [showdanger, setShowdanger] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
-  
+  const location = useLocation();
   let indice, ordine;
   if (props.browsing === false) {
     if (props.orders.length === 0) indice = 1;
@@ -59,19 +59,63 @@ function Booking(props) {
       ordine = Math.max(...f) + 1;
     }
   }
+
+  function getRightWeek(timepassed) {
+    // the week number should be changed after the 23 o'clock of sunday. It becomes a new week since the customer can not order anymore in this week
+    //Sunday from 23.00 until 23.59 consider this week orders
+
+    console.log(dayjs('01/01/2021 ' + props.time.hour).hour());
+    if (dayjs(timepassed.date).day() === 0) {
+      if (dayjs('01/01/2021 ' + timepassed.hour).hour() === 23) {
+        const addWeekTime = dayjs(timepassed.date).add(1, 'week');
+        //this week orders
+        return {
+          year: dayjs(addWeekTime).year(),
+          week_number: dayjs(addWeekTime).week(),
+        };
+      }
+    }
+    console.log(dayjs(timepassed.date).week());
+    return {
+      year: dayjs(timepassed.date).year(),
+      week_number: dayjs(timepassed.date).week(),
+    };
+  }
+
   /*USEFFECT products*/
   useEffect(() => {
     const getAllProducts = async () => {
-      await API.getAllConfirmedProducts(2021, 1)
-        .then((res) => {
-          setProducts(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      const tmp_dy = {
+        date: dayjs(props.time.date).add(1, 'week'),
+        hour: props.time.hour,
+      };
+
+      if (props.browsing) {
+        await API.getAllConfirmedProducts(
+          dayjs(tmp_dy.date).year(),
+          getRightWeek(tmp_dy).week_number
+        )
+          .then((res) => {
+            setProducts(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } else {
+        await API.getAllConfirmedProducts(
+          dayjs(props.time.date).year(),
+          getRightWeek(props.time).week_number
+        )
+          .then((res) => {
+            setProducts(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     };
     getAllProducts();
-  }, []);
+  }, [props.time]);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -119,15 +163,12 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-       
+        console.log(p);
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
           a.name,
-          a.id,
-          a.qty,
           'booked',
-          null,
           p,
           `${indice}`,
           address,
@@ -137,44 +178,34 @@ function Booking(props) {
           date,
           time
         );
-       
         API.addOrder(order).then(() => {
           props.setRecharged(true);
-          setTimeout(() => { }, 3000);
+          setTimeout(() => {}, 3000);
         });
         indice = indice + 1;
       }
-    }
-    else {
+    } else {
       let i = location.state.item.id;
-      API.deleteOrderItem(location.state.item.id).then(setTimeout(() => { }, 3000));
-      let a = productsBasket[0];
-      s = (a.price * a.qty).toFixed(2);
-      let order = new clientOrders(
-        location.state.item.order_id,
-        location.state.item.client_id,
-        a.name,
-        a.id,
-       a.qty,
-        "booked",
-        null,
-        s,
-        i, 
-        address,
-          city,
-          nation,
-          zipCode,
-          date,
-          time);
-
-      API.addOrder(order).then(() => {
-        props.setRecharged(true);
-        setTimeout(() => { }, 3000)
-      });
+      API.deleteOrderItem(location.state.item.id).then(
+        setTimeout(() => {}, 3000)
+      );
+      for (const a of productsBasket) {
+        s = (a.price * a.qty).toFixed(2);
+        let order = new clientOrders(
+          location.state.item.order_id,
+          location.state.item.client_id,
+          a.name,
+          'booked',
+          s,
+          i
+        );
+        API.addOrder(order).then(() => {
+          props.setRecharged(true);
+          setTimeout(() => {}, 3000);
+        });
+        i = i + 1;
+      }
     }
-
-
-
 
     setShowsuccess(true);
 
@@ -478,7 +509,6 @@ function Booking(props) {
                   onConfirm={onConfirm}
                   capitalizeFirstLetter={capitalizeFirstLetter}
                   itemsPrice={itemsPrice}
-                  clients={props.clients}
                 />
               </Col>
             ) : (
