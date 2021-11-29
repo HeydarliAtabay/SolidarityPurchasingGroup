@@ -17,17 +17,18 @@ import { clientOrders } from '../classes/ClientOrder';
 import { useLocation } from 'react-router-dom';
 function Booking(props) {
   const history = useHistory();
-
+  const location = useLocation();
+  
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
   const [showCompletePurchase, setShowCompletePurchase] = useState(false);
-  const [address, setAddress] = useState('');
-  const [nation, setNation] = useState('');
-  const [city, setCity] = useState('');
-  const [date, setDate] = useState('');
-  const [time, setTime] = useState('');
-  const [zipCode, setZipCode] = useState('');
+  const [address, setAddress] = useState(location.state?location.state.item.address:'');
+  const [nation, setNation] = useState(location.state?location.state.item.nation:'');
+  const [city, setCity] = useState(location.state?location.state.item.city:'');
+  const [date, setDate] = useState(location.state?location.state.item.date:'');
+  const [time, setTime] = useState(location.state?location.state.item.time:'');
+  const [zipCode, setZipCode] = useState(location.state?location.state.item.zipcode:'');
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -44,7 +45,7 @@ function Booking(props) {
   const [showdanger, setShowdanger] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
-  const location = useLocation();
+  
   let indice, ordine;
   if (props.browsing === false) {
     if (props.orders.length === 0) indice = 1;
@@ -118,7 +119,7 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-        console.log(a);
+       
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
@@ -126,6 +127,7 @@ function Booking(props) {
           a.id,
           a.qty,
           'booked',
+          null,
           p,
           `${indice}`,
           address,
@@ -135,7 +137,7 @@ function Booking(props) {
           date,
           time
         );
-        console.log(order);
+       
         API.addOrder(order).then(() => {
           props.setRecharged(true);
           setTimeout(() => { }, 3000);
@@ -153,9 +155,18 @@ function Booking(props) {
         location.state.item.client_id,
         a.name,
         a.id,
+       a.qty,
         "booked",
+        null,
         s,
-        i);
+        i, 
+        address,
+          city,
+          nation,
+          zipCode,
+          date,
+          time);
+
       API.addOrder(order).then(() => {
         props.setRecharged(true);
         setTimeout(() => { }, 3000)
