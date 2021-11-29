@@ -10,7 +10,12 @@ import EmployeePage from './Components/EmployeePage';
 import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect, Row, Alert } from 'react';
-import { Redirect, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  Redirect,
+  BrowserRouter as Router,
+  Switch,
+  Route,
+} from 'react-router-dom';
 import { LoginForm1 } from './Components/LoginForm';
 import ClientArea from './Components/ClientArea';
 import FarmerArea from './Components/FarmerArea';
@@ -61,7 +66,6 @@ function App() {
       await API.getAllUsers()
         .then((res) => {
           setUsers(res);
-
         })
         .catch((err) => {
           console.log(err);
@@ -201,24 +205,13 @@ function App() {
       setUserRole(`${user.role}`);
       console.log(user.role);
       if (user.role === 'client') {
-        return (
-          <Redirect to="/client" />
-        );
-      }
-      else if (user.role === 'employee') {
-        return (
-          <Redirect to="/employee" />
-        );
-      }
-      else if (user.role === 'warehouse-employee') {
-        return (
-          <Redirect to="/warehouse-employee" />
-        );
-      }
-      else if (user.role === 'warehouse-manager') {
-        return (
-          <Redirect to="/warehouse-manager" />
-        );
+        return <Redirect to="/client" />;
+      } else if (user.role === 'employee') {
+        return <Redirect to="/employee" />;
+      } else if (user.role === 'warehouse-employee') {
+        return <Redirect to="/warehouse-employee" />;
+      } else if (user.role === 'warehouse-manager') {
+        return <Redirect to="/warehouse-manager" />;
       }
     } catch (err) {
       setMessage(`"${err}"`);
@@ -232,15 +225,17 @@ function App() {
     setUserRole('');
     setUserid(-1);
 
-    return(
-      <Redirect to="/" />
-    )
-
+    return <Redirect to="/" />;
   };
 
   return (
     <Router>
-      <MyNavbar time={time} loggedIn={logged} userRole={userRole} setTime={setTime} />
+      <MyNavbar
+        time={time}
+        loggedIn={logged}
+        userRole={userRole}
+        setTime={setTime}
+      />
       <div className="container-fluid">
         <Switch>
           <Route
@@ -351,44 +346,47 @@ function App() {
           <Route
             path="/farmer"
             exact
-            render={() => (
-              <FarmerArea time={time} />
-            )}
+            render={() => <FarmerArea time={time} />}
           />
           <Route
             path="/declare-availability"
             exact
-            render={() => (
-              <FarmerProducts time={time} />
-            )}
+            render={() => <FarmerProducts time={time} />}
           />
           <Route
             path="/order-preparation"
             exact
-            render={() => (
-              <FarmerOrderPreparation time={time} />
-            )}
+            render={() => <FarmerOrderPreparation time={time} />}
           />
 
           <Route
             path="/order-confirmation-farmer"
             exact
-            render={() => (
-              <FarmerOrderConfirmation />
-            )}
+            render={() => <FarmerOrderConfirmation time={time} />}
           />
           <Route
             path="/login"
             exact
             render={() => (
-              <LoginForm1 login={doLogIn} logged={logged} userID={userid} userRole={userRole} clients={clients} users={users} />
+              <LoginForm1
+                login={doLogIn}
+                logged={logged}
+                userID={userid}
+                userRole={userRole}
+                clients={clients}
+                users={users}
+              />
             )}
           />
           <Route
             path="/client"
             exact
             render={() => (
-              <ClientArea logout={doLogOut} clients={clients} clientid={userid} />
+              <ClientArea
+                logout={doLogOut}
+                clients={clients}
+                clientid={userid}
+              />
             )}
           />
           <Route
@@ -398,8 +396,7 @@ function App() {
               <UserRegistration clients={clients} setRecharged={updateRech1} />
             )}
           />
-          <Route path="/" exact
-            render={() => <Frontpage />} />
+          <Route path="/" exact render={() => <Frontpage />} />
         </Switch>
       </div>
     </Router>

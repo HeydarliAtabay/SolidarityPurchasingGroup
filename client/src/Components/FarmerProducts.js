@@ -160,7 +160,7 @@ function FarmerProducts(props) {
   const getNextWeek = () => {
     //Saturday
     if (dayjs(props.time.date).day() === 6) {
-      if (dayjs(props.time.hour).hour() < 9) {
+      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 9) {
         //next week = week + 1
         const nextWeekDate = dayjs(props.time.date).add(1, 'week');
         return {
