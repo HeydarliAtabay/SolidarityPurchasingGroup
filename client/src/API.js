@@ -128,6 +128,41 @@ function updateWHPrepared(id, product_name) {
   });
 }//
 
+//update order state
+function updateState(id, product_name, state) {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/modifyState`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: id, product_name: product_name, state: state }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+        });
+      });
+  });
+}
+
 //GET all products
 async function getAllConfirmedProducts(year, week) {
   const response = await fetch(
@@ -379,6 +414,8 @@ function updateQuantity(product_id, quantity) {
       });
   });
 }
+
+
 
 /* 
    Place a new order.
@@ -808,7 +845,8 @@ const API = {
   submitEmail,
   confirmExpectedProducts,
   getProviderDeliveredOrders,
-  getAllUsers
+  getAllUsers,
+  updateState
 };
 
 export default API;

@@ -37,6 +37,7 @@ function onlyUnique(value,index,self){
   let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
   let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
   let sum=0;
+  let state = "prova";
   for (const a of array)
   {sum=sum+a;}
   m.pop();
@@ -53,7 +54,7 @@ function onlyUnique(value,index,self){
      {s.pickup===1 && 
       <BoxSeam color="green" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               for(const a of array2){
-             API.updateWHPrepared(id, a).then(()=>{
+             API.updateState(id, a,state).then(()=>{
                 
          props.setRecharged(true); setTimeout(()=>{},3000)});
                     
