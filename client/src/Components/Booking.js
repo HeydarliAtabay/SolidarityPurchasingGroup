@@ -7,6 +7,9 @@ import {
   Modal,
   Dropdown,
   Form,
+  Tabs,
+  Tab,
+  ListGroup
 } from 'react-bootstrap';
 import { useEffect, useState } from 'react';
 import API from './../API';
@@ -15,24 +18,35 @@ import ProductPage from './ProductPage';
 import { useHistory } from 'react-router-dom';
 import { clientOrders } from '../classes/ClientOrder';
 import { useLocation } from 'react-router-dom';
+import dayjs from 'dayjs';
+
+var weekday = require('dayjs/plugin/weekday');
+dayjs.extend(weekday);
+
+dayjs.Ls.en.weekStart = 1;
+
 function Booking(props) {
   const history = useHistory();
   const location = useLocation();
-  
+
   const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
   const [showCompletePurchase, setShowCompletePurchase] = useState(false);
-  const [address, setAddress] = useState(location.state?location.state.item.address:'');
-  const [nation, setNation] = useState(location.state?location.state.item.nation:'');
-  const [city, setCity] = useState(location.state?location.state.item.city:'');
-  const [date, setDate] = useState(location.state?location.state.item.date:'');
-  const [time, setTime] = useState(location.state?location.state.item.time:'');
-  const [zipCode, setZipCode] = useState(location.state?location.state.item.zipcode:'');
+  const [address, setAddress] = useState(location.state ? location.state.item.address : '');
+  const [nation, setNation] = useState(location.state ? location.state.item.nation : '');
+  const [city, setCity] = useState(location.state ? location.state.item.city : '');
+  const [date, setDate] = useState(location.state ? location.state.item.date : '');
+  const [time, setTime] = useState(location.state ? location.state.item.time : '');
+  const [zipCode, setZipCode] = useState(location.state ? location.state.item.zipcode : '');
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+
+  const [deliveryFlag, setDeliveryFlag] = useState([true]);
+  const [pickupDay, setPickupDay] = useState(2);
+  const [pickupTime, setPickupTime] = useState("10:00");
 
   let rows = [
     ...Array(Math.ceil(products.filter((p) => p && p.active === 1).length / 3)),
@@ -45,7 +59,7 @@ function Booking(props) {
   const [showdanger, setShowdanger] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
-  
+
   let indice, ordine;
   if (props.browsing === false) {
     if (props.orders.length === 0) indice = 1;
@@ -119,7 +133,7 @@ function Booking(props) {
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
-       
+
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
@@ -134,10 +148,11 @@ function Booking(props) {
           city,
           nation,
           zipCode,
-          date,
-          time
+          deliveryFlag ? date : dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
+          deliveryFlag ? time : pickupTime,
+          deliveryFlag ? 0 : 1
         );
-       
+
         API.addOrder(order).then(() => {
           props.setRecharged(true);
           setTimeout(() => { }, 3000);
@@ -155,17 +170,18 @@ function Booking(props) {
         location.state.item.client_id,
         a.name,
         a.id,
-       a.qty,
+        a.qty,
         "booked",
         null,
         s,
-        i, 
+        i,
         address,
-          city,
-          nation,
-          zipCode,
-          date,
-          time);
+        city,
+        nation,
+        zipCode,
+        deliveryFlag ? date : dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
+        deliveryFlag ? time : pickupTime,
+        deliveryFlag ? 0 : 1);
 
       API.addOrder(order).then(() => {
         props.setRecharged(true);
@@ -462,12 +478,15 @@ function Booking(props) {
                   completeAddressing={false}
                   clientid={props.clientid}
                   setShowCompletePurchase={setShowCompletePurchase}
+                  deliveryFlag={deliveryFlag}
                   address={address}
                   nation={nation}
                   city={city}
                   zipCode={zipCode}
                   time={time}
                   date={date}
+                  pickupDay={pickupDay}
+                  pickupTime={pickupTime}
                   setShowsuccess={setShowsuccess}
                   setShowdanger={setShowdanger}
                   showsuccess={showsuccess}
@@ -489,6 +508,7 @@ function Booking(props) {
           <YouAreNotLoggedScreen />
         )}
       </Container>
+
       <Modal
         size="lg"
         show={showCompletePurchase}
@@ -498,91 +518,144 @@ function Booking(props) {
           <Modal.Title>Complete the purchase</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="formGridAddress1">
-              <Form.Label>Address</Form.Label>
-              <Form.Control
-                value={address}
-                onChange={(ev) => {
-                  setAddress(ev.target.value);
-                }}
-              />
-            </Form.Group>
-            <Row className="mb-3">
-              <Form.Group as={Col} controlId="formGridCity">
-                <Form.Label>City</Form.Label>
-                <Form.Control
-                  value={city}
-                  onChange={(ev) => {
-                    setCity(ev.target.value);
-                  }}
-                />
-              </Form.Group>
+          <Tabs defaultActiveKey="delivery" id="uncontrolled-tab-example" className="mb-3">
+            <Tab eventKey="delivery" title="Home delivery" onClick={() => (setDeliveryFlag(true))}>
+              <Form>
+                <Form.Group className="mb-3" controlId="formGridAddress1">
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    value={address}
+                    onChange={(ev) => {
+                      setAddress(ev.target.value);
+                    }}
+                  />
+                </Form.Group>
+                <Row className="mb-3">
+                  <Form.Group as={Col} controlId="formGridCity">
+                    <Form.Label>City</Form.Label>
+                    <Form.Control
+                      value={city}
+                      onChange={(ev) => {
+                        setCity(ev.target.value);
+                      }}
+                    />
+                  </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>State</Form.Label>
-                <Form.Control
-                  value={nation}
-                  onChange={(ev) => {
-                    setNation(ev.target.value);
-                  }}
-                />
-              </Form.Group>
+                  <Form.Group as={Col} controlId="formGridState">
+                    <Form.Label>State</Form.Label>
+                    <Form.Control
+                      value={nation}
+                      onChange={(ev) => {
+                        setNation(ev.target.value);
+                      }}
+                    />
+                  </Form.Group>
 
-              <Form.Group as={Col} controlId="formGridZip">
-                <Form.Label>Zip</Form.Label>
-                <Form.Control
-                  value={zipCode}
-                  onChange={(ev) => {
-                    setZipCode(ev.target.value);
+                  <Form.Group as={Col} controlId="formGridZip">
+                    <Form.Label>Zip</Form.Label>
+                    <Form.Control
+                      value={zipCode}
+                      onChange={(ev) => {
+                        setZipCode(ev.target.value);
+                      }}
+                    />
+                  </Form.Group>
+                </Row>
+                <Row>
+                  <Col>
+                    Date
+                    <input
+                      style={{
+                        borderColor: '#ced4da',
+                        borderWidth: '1px',
+                        borderRadius: '3px',
+                        textAlign: 'center',
+                      }}
+                      className="m-2"
+                      type="date"
+                      onChange={(ev) => setDate(ev.target.value)}
+                    />
+                  </Col>
+                  <Col>
+                    Time
+                    <input
+                      type="time"
+                      style={{
+                        borderColor: '#ced4da',
+                        borderWidth: '1px',
+                        borderRadius: '3px',
+                        textAlign: 'center',
+                      }}
+                      className="m-2"
+                      label="Time"
+                      id="start"
+                      onChange={(ev) => setTime(ev.target.value)}
+                    />
+                  </Col>
+                </Row>
+                <hr />
+                <div className="d-block text-end">
+                  <Button
+                    onClick={() => {
+                      setShowCompletePurchase(false);
+                      setCompleteAddressing(true);
+                    }}
+                  >
+                    Confirm
+                  </Button>
+                </div>
+              </Form>
+            </Tab>
+            <Tab eventKey="pickup" title="In shop pickup" onClick={() => (setDeliveryFlag(false))}>
+              <h5 className="text-center my-3">Select the day and the time for the pickup</h5>
+              <div className="row">
+                <div className="col-md-6 text-center">
+                  <ListGroup as="ul">
+                    <ListGroup.Item as="li" active={pickupDay === 2} onClick={() => (setPickupDay(2))}>
+                      Next wednesday
+                    </ListGroup.Item>
+                    <ListGroup.Item as="li" active={pickupDay === 3} onClick={() => (setPickupDay(3))}>
+                      Next thursday
+                    </ListGroup.Item>
+                    <ListGroup.Item as="li" active={pickupDay === 4} onClick={() => (setPickupDay(4))}>
+                      Next friday
+                    </ListGroup.Item>
+                  </ListGroup>
+                </div>
+                <div className="col-md-6 text-center my-auto">
+                  <div className="d-block text-center fw-bold">
+                    Shop times: 08:00 - 18:00
+                  </div>
+                  <Form.Group>
+                    <Form.Control
+                      required
+                      type="time"
+                      min="08:00"
+                      max="18:00"
+                      value={pickupTime}
+                      onChange={(event) => { setPickupTime(event.target.value) }}
+                    />
+                  </Form.Group>
+                </div>
+              </div>
+              <div className="d-block text-center my-3">
+                Selected pickup time: {dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('dddd, MMMM D, YYYY')} at {pickupTime}
+              </div>
+              <hr />
+              <div className="d-block text-end">
+                <Button
+                  onClick={() => {
+                    setShowCompletePurchase(false);
+                    setCompleteAddressing(true);
                   }}
-                />
-              </Form.Group>
-            </Row>
-            <Row>
-              <Col>
-                Date
-                <input
-                  style={{
-                    borderColor: '#ced4da',
-                    borderWidth: '1px',
-                    borderRadius: '3px',
-                    textAlign: 'center',
-                  }}
-                  className="m-2"
-                  type="date"
-                  onChange={(ev) => setDate(ev.target.value)}
-                />
-              </Col>
-              <Col>
-                Time
-                <input
-                  type="time"
-                  style={{
-                    borderColor: '#ced4da',
-                    borderWidth: '1px',
-                    borderRadius: '3px',
-                    textAlign: 'center',
-                  }}
-                  className="m-2"
-                  label="Time"
-                  id="start"
-                  onChange={(ev) => setTime(ev.target.value)}
-                />
-              </Col>
-            </Row>
-          </Form>
+                >
+                  Confirm
+                </Button>
+              </div>
+            </Tab>
+          </Tabs>
+
         </Modal.Body>
-        <Modal.Footer>
-          <Button
-            onClick={() => {
-              setShowCompletePurchase(false);
-              setCompleteAddressing(true);
-            }}
-          >
-            Confirm
-          </Button>
-        </Modal.Footer>
       </Modal>
 
       <Modal

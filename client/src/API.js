@@ -613,7 +613,7 @@ function addUser(S) {
 //POST di un nuovo incontro
 function addOrder(S) {
   return new Promise((resolve, reject) => {
-    fetch('/api/order', {
+    fetch('/api/orderinsert', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({
@@ -631,6 +631,7 @@ function addOrder(S) {
         Nation: S.nation,
         date: S.date,
         time: S.time,
+        pickup: S.pickup
       })
     })
       .then((response) => {

@@ -577,29 +577,30 @@ app.post(
 );
 
 //POST ->orders
-app.post('/api/order', async (req, res) => {
-  const t = {
-    order_id: req.body.order_id,
-    client_id: req.body.client_id,
-    product_name: req.body.product_name,
-    product_id: req.body.product_id,
-    order_quantity: req.body.order_quantity,
-    state: req.body.state,
-    OrderPrice: req.body.OrderPrice,
-    id: req.body.id,
-    city: req.body.city,
-    Nation: req.body.Nation,
-    zipcode: req.body.zipcode,
-    address: req.body.address,
-    date: req.body.date,
-    time: req.body.time,
-  };
+app.post('/api/orderinsert', async (req, res) => {
   try {
+    const t = {
+      order_id: req.body.order_id,
+      client_id: req.body.client_id,
+      product_name: req.body.product_name,
+      product_id: req.body.product_id,
+      order_quantity: req.body.order_quantity,
+      state: req.body.state,
+      OrderPrice: req.body.OrderPrice,
+      id: req.body.id,
+      city: req.body.city,
+      Nation: req.body.Nation,
+      zipcode: req.body.zipcode,
+      address: req.body.address,
+      date: req.body.date,
+      time: req.body.time,
+      pickup: req.body.pickup
+    };
     console.log(t);
     const result = await ordersDao.addOrder(t);
-
     res.status(201).end('Created order!');
   } catch (err) {
+    console.log(err);
     res.status(503).json({
       code: 503,
       error: 'Unavailable service during the create of the order.',

@@ -1,7 +1,12 @@
 import { Button, Row, Col, Card, Container, Alert } from 'react-bootstrap';
 import { useState } from 'react';
-
 import API from '../API'
+import dayjs from 'dayjs';
+
+var weekday = require('dayjs/plugin/weekday');
+dayjs.extend(weekday);
+
+dayjs.Ls.en.weekStart = 1;
 
 function Basket(props) {
   const [mailerState, setMailerState] = useState({
@@ -29,8 +34,8 @@ function Basket(props) {
         <div className="text-center">Cart is Empty</div>
       )}
       {props.productsBasket.map((item) => (
-        <Container className="text-center">
-          <Row key={item.id} className="pt-3">
+        <Container key={item.id} className="text-center">
+          <Row className="pt-3">
             <Col xs="4">
               <div>{props.capitalizeFirstLetter(item.name)}</div>
             </Col>
@@ -81,7 +86,8 @@ function Basket(props) {
             </Col>
           </Row>
 
-          {props.address !== '' &&
+          {props.deliveryFlag &&
+          props.address !== '' &&
           props.nation !== '' &&
           props.city != '' &&
           props.zipCode !== '' &&
@@ -90,6 +96,7 @@ function Basket(props) {
             <>
               <Container fluid>
                 <Row>
+                  <h5 className="d-block text-center">Delivery at home</h5>
                   <span>Address: {props.address}</span>
                   <span>Nation: {props.nation}</span>
                   <span>City: {props.city}</span>
@@ -127,6 +134,67 @@ function Basket(props) {
                   ...prevState,
                   email: s.email,
                   message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
+                  `
+          
+                  
+                }));
+              handleSubmitEmail();
+              setEmailSent(true)
+
+                } } className="mt-3">
+                Resend Email
+              </Button>{' '}
+              </>
+              }
+              </>
+              )}
+               
+              </Row>
+            </>
+          ) : (
+            <></>
+          )}
+
+          {!props.deliveryFlag &&
+          (props.pickupDay === 2 || props.pickupDay === 3 || props.pickupDay === 4)  &&
+          props.pickupTime !== '' ? (
+            <>
+              <Container fluid>
+                <Row>
+                  <h5 className="d-block text-center">Pickup in shop</h5>
+                  <span><b>Date</b>: {dayjs(props.time.date).add(1, 'week').weekday(props.pickupDay).format('dddd, MMMM D, YYYY')}</span>
+                  <span><b>Time</b>: {props.pickupTime}</span>
+                </Row>
+              </Container>
+              <Row>
+              {props.clients.filter(x=>x.client_id===parseInt(props.clientid)).map((s)=>
+             
+              <>
+              
+               <Button onClick={() =>{
+                props.onConfirm()
+                setMailerState((prevState) => ({
+                  ...prevState,
+                  email: s.email,
+                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
+                  `
+          
+                  
+                }));
+              handleSubmitEmail();
+              setEmailSent(true)
+
+                } } className="mt-3">
+                Confirm
+              </Button>{' '}
+
+              {emailSent&& 
+              <>
+              <Button variant="secondary" onClick={() =>{
+                setMailerState((prevState) => ({
+                  ...prevState,
+                  email: s.email,
+                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
                   `
           
                   

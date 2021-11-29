@@ -19,22 +19,22 @@ exports.getAllOrders = () => {
         return;
       }
       const o = rows.map((e) => ({
-        order_id:e.order_id,
-        client_id:e.client_id,
-        product_name:e.product_name,
-        product_id:e.product_id,
-        order_quantity:e.order_quantity,
-        state:e.state,
-        farmer_state:e.farmer_state,
-        OrderPrice:e.OrderPrice,
-        id:e.id,
-        address:e.address,
-        city:e.city,
-        zipcode:e.zipcode,
-        Nation:e.Nation,
-        date:e.date,
-        time:e.time,
-        pickup:e.pickup
+        order_id: e.order_id,
+        client_id: e.client_id,
+        product_name: e.product_name,
+        product_id: e.product_id,
+        order_quantity: e.order_quantity,
+        state: e.state,
+        farmer_state: e.farmer_state,
+        OrderPrice: e.OrderPrice,
+        id: e.id,
+        address: e.address,
+        city: e.city,
+        zipcode: e.zipcode,
+        Nation: e.Nation,
+        date: e.date,
+        time: e.time,
+        pickup: e.pickup
       }));
       resolve(o);
     });
@@ -136,7 +136,7 @@ exports.insert_order_items = async (order_id, order_items) => {
 exports.addOrder = (t) => {
   return new Promise((resolve, reject) => {
     const sql =
-      'INSERT INTO orders( order_id, client_id, product_name, product_id, order_quantity, state, OrderPrice, id,address,city,zipcode,Nation,date,time, pickup ) VALUES ( ?, ?,?, ?, ?, ?, ?, ?,?,?,?,?,?,? )';
+      'INSERT INTO orders( order_id, client_id, product_name, product_id, order_quantity, state, OrderPrice, id,address,city,zipcode,Nation,date,time, pickup ) VALUES ( ?,?, ?,?, ?, ?, ?, ?, ?,?,?,?,?,?,? )';
     db.run(
       sql,
       [
@@ -238,7 +238,7 @@ exports.getProviderShipmentStatus = (provider_id, year, week_number) => {
         reject(err);
       }
       console.log(row);
-      if(row.NumShipped>0){
+      if (row.NumShipped > 0) {
         resolve(true);
       }
       resolve(false);
