@@ -34,6 +34,7 @@ function App() {
   const [message, setMessage] = useState('');
   const [userid, setUserid] = useState();
   const [logged, setLogged] = useState(false);
+  const [providers, setProviders] = useState();
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -68,6 +69,21 @@ function App() {
     };
     if (recharged1) getAllClients();
   }, [recharged1]);
+
+  /* USEFFECT providers */
+
+  useEffect(() => {
+    const getAllProviders = async () => {
+      await API.getAllProviders()
+        .then((res) => {
+          setProviders(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+    getAllProviders();
+  }, [update]);
 
   /* USEFFECT orders*/
   useEffect(() => {
@@ -177,7 +193,10 @@ function App() {
     await API.logOut();
 
     setLogged(false);
+
+    
   };
+  
   return (
     <Router>
       <MyNavbar time={time} setTime={setTime} />
