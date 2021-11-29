@@ -24,6 +24,8 @@ function WarehousePage(props) {
        <span className="d-block text-center mt-5 mb-2 display-2">
             Warehouse Personnel Area
           </span>
+          { (props.userRole == "warehouse-employee") ? 
+          <>
           <Row>
             <Col xs={3} md={2}>
             <ListGroup variant="flush">
@@ -37,8 +39,9 @@ function WarehousePage(props) {
         </Col></Row>
              
           <br/>
+          </>
 
-          <WarehouseManagerDashboard providers = {props.providers} orders = {props.orders}></WarehouseManagerDashboard>
+         : <WarehouseManagerDashboard providers = {props.providers} orders = {props.orders}></WarehouseManagerDashboard> }
     
         </Container>
     

@@ -36,6 +36,7 @@ function App() {
   const [logged, setLogged] = useState(false);
   const [providers, setProviders] = useState();
   const [users, setUsers] = useState([]);
+  const [userRole, setUserRole] = useState();
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -198,6 +199,7 @@ function App() {
       setLogged(true);
       setMessage('');
       setUserid(`${user.id}`);
+      setUserRole(`${user.role}`);
     } catch (err) {
       setMessage(`"${err}"`);
     }
@@ -290,9 +292,22 @@ function App() {
             )}
           />
           <Route
-          path = "/warehouse"
+          path = "/warehouse-employee"
           render = {() => (
             <WarehousePage
+              userRole = "warehouse-employee"
+              orders = {orders}
+              providers = {providers} 
+              methods={methods}
+              logout={doLogOut}
+              />
+          )}
+          />
+          <Route
+          path = "/warehouse-manager"
+          render = {() => (
+            <WarehousePage
+              userRole = "warehouse-manager"
               orders = {orders}
               providers = {providers} 
               methods={methods}
