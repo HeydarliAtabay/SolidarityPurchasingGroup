@@ -1,5 +1,5 @@
 import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
-import {ExclamationDiamond,Telephone, Envelope} from 'react-bootstrap-icons';
+import {BoxSeam} from 'react-bootstrap-icons';
 import ris from './reply-all-fill.svg';
 import API from '../API'
 import { useState } from "react";
@@ -50,15 +50,15 @@ function onlyUnique(value,index,self){
       
       <Col xs={3} md={3}>{sum}{' '}€</Col>
       <Col xs={2} md={2}> 
-     {s.state===props.b && 
-     <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-      for(const a of array2){
-             API.updateDelivered(id, a).then(()=>{
+     {s.pickup===1 && 
+      <BoxSeam color="green" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+              for(const a of array2){
+             API.updateOrdered(id, a).then(()=>{
                 
          props.setRecharged(true); setTimeout(()=>{},3000)});
                     
                }}
-          }></Image>
+          }/>
   
      }
     
