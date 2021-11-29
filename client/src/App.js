@@ -36,6 +36,7 @@ function App() {
   const [logged, setLogged] = useState(false);
   const [providers, setProviders] = useState();
   const [users, setUsers] = useState([]);
+  const [userRole, setUserRole] = useState();
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -198,6 +199,7 @@ function App() {
       setLogged(true);
       setMessage('');
       setUserid(`${user.id}`);
+      setUserRole(`${user.role}`);
     } catch (err) {
       setMessage(`"${err}"`);
     }
@@ -293,6 +295,7 @@ function App() {
           path = "/warehouse"
           render = {() => (
             <WarehousePage
+              userRole = "warehouse-employee"
               orders = {orders}
               providers = {providers} 
               methods={methods}
