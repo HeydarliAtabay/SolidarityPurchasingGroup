@@ -619,6 +619,18 @@ app.delete('/api/orders/:id', async (req, res) => {
     });
   }
 });
+//GET all users
+app.get('/api/users', async (req, res) => {
+  try {
+    const m = await dbt.getAllUsers();
+    return res.status(200).json(m);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      error: 'Database error during the retrieve of the list of users.',
+    });
+  }
+});
 module.exports = app;
 
 /* CONNECTION */
