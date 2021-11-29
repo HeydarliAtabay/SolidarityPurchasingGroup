@@ -115,7 +115,7 @@ function Booking(props) {
           hour: props.time.hour,
         };
         await API.getAllConfirmedProducts(
-          dayjs(tmp_dy.date).year(),
+          getRightWeek(tmp_dy).year,
           getRightWeek(tmp_dy).week_number
         )
           .then((res) => {
