@@ -296,6 +296,7 @@ function App() {
                 isEmployee={true}
                 clientid={userid}
                 products={confirmedProducts}
+                setRecharged={updateRech}
                 updateProps={updateProps}
                 time={time}
               />
