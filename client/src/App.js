@@ -154,9 +154,6 @@ function App() {
         console.log(err);
       });
   }
-  console.log(time);
-  /* local objects to be deleted once we have a backend */
-  const imgNames = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg'];
 
   function updateProps() {
     setUpdate(!update);
@@ -256,19 +253,19 @@ function App() {
           <Route
             path="/farmer"
             render={() => (
-              <FarmerArea />
+              <FarmerArea time={time}/>
             )}
           />
           <Route
             path="/declare-availability"
             render={() => (
-              <FarmerProducts />
+              <FarmerProducts time={time}/>
             )}
           />
           <Route
             path="/order-preparation"
             render={() => (
-              <FarmerOrderPreparation />
+              <FarmerOrderPreparation time={time}/>
             )}
           />
           <Route

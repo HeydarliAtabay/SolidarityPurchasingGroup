@@ -1,8 +1,10 @@
 import { Button, Modal, Row, Col, Form, FloatingLabel, Spinner, Alert } from 'react-bootstrap';
 import API from '../API';
+import dayjs from 'dayjs';
 const { useState, useEffect } = require("react");
 
-
+var weekOfYear  = require('dayjs/plugin/weekOfYear');
+dayjs.extend(weekOfYear)
 
 function FarmerProducts(props) {
 
@@ -34,10 +36,12 @@ function FarmerProducts(props) {
         }
         const getExpectedProducts = async () => {
 
+            const nextWeek = getNextWeek();
+
             setShowLoading(true);
             setRefreshExpected(false);
 
-            let prods = await API.getProviderExpectedProducts(2021, 2);
+            let prods = await API.getProviderExpectedProducts(nextWeek.year, nextWeek.week_number);
             let expectedProds = [];
 
             for (let i = 0; i < prods.length; i++) {
@@ -45,7 +49,6 @@ function FarmerProducts(props) {
                 expectedProds.push({ image: img, ...prods[i] });
             }
 
-            console.log(expectedProds);
             setExpectedProducts(expectedProds);
 
             setShowLoading(false);
@@ -78,6 +81,8 @@ function FarmerProducts(props) {
         const saveProductAvailability = async () => {
             setShowLoading(true);
 
+            const nextWeek = getNextWeek();
+
             const productData = [];
             expectedProducts.forEach((prod) => (productData.push({
                 id: prod.id,
@@ -87,23 +92,19 @@ function FarmerProducts(props) {
                 price: prod.price,
                 unit: prod.unit,
                 quantity: prod.quantity,
-                year: 2021,
-                week_number: 2
+                year: getNextWeek().year,
+                week_number: getNextWeek().week_number
             })));
 
             setSaveAvailability(false);
-            const productIDs = await API.declareAvailability(productData, 2021, 2);
-
-            console.log(productIDs);
+            const productIDs = await API.declareAvailability(productData, nextWeek.year, nextWeek.week_number);
 
             for (let i = 0; i < productIDs.length; i++) {
-                console.log(expectedProducts[i].image);
                 let formData = new FormData();
                 formData.append('product_image', expectedProducts[i].image);
-                console.log(formData);
-                console.log(await API.uploadProductImage(formData, productIDs[i].new_id));
+                await API.uploadProductImage(formData, productIDs[i].new_id);
             }
-            setSaveAlert({variant: 'success', msg: 'Product availability successfully recorded'});
+            setSaveAlert({ variant: 'success', msg: 'Product availability successfully recorded' });
             setRefreshExpected(true);
 
         }
@@ -125,10 +126,35 @@ function FarmerProducts(props) {
         setRemoveProductID(-1);
     }
 
+    /*utility functions*/
     async function srcToFile(src, fileName, mimeType) {
         const res = await fetch(src);
         const buf = await res.arrayBuffer();
         return new File([buf], fileName, { type: mimeType });
+    }
+
+    const getNextWeek = () => {
+        //Saturday
+        if (dayjs(props.time.date).day() === 6) {
+            if (dayjs(props.time.hour).hour() < 9) {    //next week = week + 1
+                const nextWeekDate = dayjs(props.time.date).add(1, 'week');
+                return ({ year: dayjs(nextWeekDate).year(), week_number: dayjs(nextWeekDate).week() });
+            }
+            else {   //next week = week + 2
+                const nextWeekDate = dayjs(props.time.date).add(2, 'week');
+                return ({ year: dayjs(nextWeekDate).year(), week_number: dayjs(nextWeekDate).week() });
+            }
+        }
+        //Sunday
+        else if (dayjs(props.time.date).day() === 0) {
+            const nextWeekDate = dayjs(props.time.date).add(2, 'week');
+            return ({ year: dayjs(nextWeekDate).year(), week_number: dayjs(nextWeekDate).week() });
+        }
+        //from Monday up to Saturday 9am
+        else {
+            const nextWeekDate = dayjs(props.time.date).add(1, 'week');
+            return ({ year: dayjs(nextWeekDate).year(), week_number: dayjs(nextWeekDate).week() });
+        }
     }
 
     return (
@@ -141,7 +167,7 @@ function FarmerProducts(props) {
                     Insert below the expected products for next week
                 </h5>
                 {saveAlert &&
-                    <Alert variant={saveAlert.variant} dismissible={true} onClose={()=>(setSaveAlert(null))}>
+                    <Alert variant={saveAlert.variant} dismissible={true} onClose={() => (setSaveAlert(null))}>
                         {saveAlert.msg}
                     </Alert>
                 }
@@ -503,8 +529,6 @@ function NewProductModalBody(props) {
                 expiry: ''
             }
 
-            console.log(newProduct);
-
             products.push(newProduct);
             return products;
         });
@@ -765,8 +789,6 @@ function ModifyProductModalBody(props) {
     const capitalizeEachFirstLetter = (str) => {
         return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.substring(1)).join(' ');
     }
-
-    console.log(props.expectedProducts.find(p => p.id === props.productID));
 
     /*new product data*/
     const [file, setFile] = useState(props.productID !== -1 ? props.expectedProducts.find((p) => (p.id === props.productID)).image : null);

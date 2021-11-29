@@ -36,12 +36,12 @@ function ProductPage(props) {
             />
           </div>
           <div className="col-lg-6">
-            <div class="form-row align-items-center">
+            <div className="form-row align-items-center">
               <div className="row">
-                <div class="col-sm-7">
-                  <div class="input-group mb-2">
-                    <div class="input-group-prepend">
-                      <div class="input-group-text">Quantity</div>
+                <div className="col-sm-7">
+                  <div className="input-group mb-2">
+                    <div className="input-group-prepend">
+                      <div className="input-group-text">Quantity</div>
                     </div>
                     <input
                       className="form-control text-center"
@@ -52,7 +52,7 @@ function ProductPage(props) {
                     />
                   </div>
                 </div>
-                <div class="col-sm-5 text-center">
+                <div className="col-sm-5 text-center">
                   {!props.browsing ? (
                     <>
                       <button
@@ -132,9 +132,9 @@ function ProductPage(props) {
         <div className="d-block">
           <div className="d-inline-block">{producerIconBig}</div>
           <div className="d-inline-block mx-3 mb-4">
-            <blockquote class="blockquote">
+            <blockquote className="blockquote">
               <p class>{props.prod.providerName}</p>
-              <footer class="blockquote-footer">
+              <footer className="blockquote-footer">
                 <cite title="Source Title">Torino</cite>
               </footer>
             </blockquote>

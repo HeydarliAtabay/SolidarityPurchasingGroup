@@ -61,8 +61,9 @@ function ClientArea(props) {
               <div className="card-body">
                 <h5 className="card-title">Browse products</h5>
                 <p className="card-text">
-                  • View &#38; search products
-                  <br />• Book products
+                  • View &#38; search products<br />
+                  • Book products<br/>
+                  • Explore next week products
                 </p>
                 <div className="d-block text-end">
                   <Link to="/booking">

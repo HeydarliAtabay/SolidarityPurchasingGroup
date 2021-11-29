@@ -1,9 +1,8 @@
+import dayjs from 'dayjs';
 import { Button, Spinner, Alert } from 'react-bootstrap';
 import { Link } from "react-router-dom"
 import API from '../API';
 const { useState, useEffect } = require("react");
-
-
 
 function FarmerOrderPreparation(props) {
 
@@ -12,6 +11,7 @@ function FarmerOrderPreparation(props) {
 
     /*ship status alert*/
     const [itemsAlreadyShipped, setItemsAlreadyShipped] = useState(false);
+    const [shipmentWindowValidity, setShipmentWindowValidity] = useState(true);
     const [refreshData, setRefreshData] = useState(true);
     const [shipError, setShipError] = useState('');
 
@@ -24,25 +24,39 @@ function FarmerOrderPreparation(props) {
     /*USEFFECTS*/
     /*Get items that need to be shipped*/
     useEffect(() => {
-        if(!refreshData){
+        if (!refreshData) {
             return;
         }
         const getBookedOrders = async () => {
             setShowLoading(true);
-            const itemsAlreadyShipped = await API.getProviderShipmentStatus(2021, 1);
+
+            const previousWeek = getPreviousWeek();
+
+            const timeWindowValid = checkShipmentTimeWindow();
+            if (!timeWindowValid) {
+                setShipmentWindowValidity(false);
+            }
+            else {
+                setShipmentWindowValidity(true);
+            }
+
+            console.log(timeWindowValid);
+
+            const itemsAlreadyShipped = await API.getProviderShipmentStatus(previousWeek.year, previousWeek.week_number);
+            console.log(itemsAlreadyShipped);
             if (itemsAlreadyShipped) {
                 setItemsAlreadyShipped(true);
                 setRefreshData(false);
                 setShowLoading(false);
                 return;
             }
-            const prods = (await API.getOrderedProductsForProvider(2021, 1)).map((p) => ({ ...p, prepared: 0 }));
+            const prods = (await API.getOrderedProductsForProvider(previousWeek.year, previousWeek.week_number)).map((p) => ({ ...p, prepared: 0 }));
             setBookedProducts(prods);
             setRefreshData(false);
             setShowLoading(false);
         }
         getBookedOrders();
-    }, [refreshData])
+    }, [refreshData, props.time.date, props.time.hour])
 
     /*Set order status as farmer-shipped*/
     useEffect(() => {
@@ -58,6 +72,42 @@ function FarmerOrderPreparation(props) {
     }, [confirmShipment]);
 
     /*Utility functions*/
+    const getPreviousWeek = () => {
+        //Sunday from 23.00 until 23.59 consider this week orders
+        if (dayjs(props.time.date).day() === 0) {
+            if (dayjs('01-01-2021 ' + props.time.hour).hour() === 23) {    //this week orders
+                const thisWeekDate = dayjs(props.time.date);
+                return ({ year: dayjs(thisWeekDate).year(), week_number: dayjs(thisWeekDate).subtract(1, 'day').week() });
+            }
+        }
+        //every other time get previos week
+        let previousWeekDate;
+        if (dayjs(props.time.date).day() === 0) {
+            previousWeekDate = dayjs(props.time.date).subtract(1, 'day').subtract(1, 'week');
+        }
+        else {
+            previousWeekDate = dayjs(props.time.date).subtract(1, 'week');
+        }
+        if (dayjs(props.time.date).week() === 2) {
+            return ({ year: dayjs(props.time.date).year(), week_number: dayjs(previousWeekDate).week() });
+        }
+        return ({ year: dayjs(previousWeekDate).year(), week_number: dayjs(previousWeekDate).week() });
+
+    }
+
+    const checkShipmentTimeWindow = () => {
+        const dayOfWeek = dayjs(props.time.date).day();
+        //if not sunday,monday or tuesday window is expired
+        if (dayOfWeek !== 0 && dayOfWeek !== 1 && dayOfWeek !== 2) {
+            return false;
+        }
+        //sunday only from 23.00 onwards
+        if (dayOfWeek === 0 && dayjs(props.time.hour).hour() < 23) {
+            return false;
+        }
+        return true;
+    }
+
     const checkShipmentCorrectness = () => {
         for (const prod of bookedProducts) {
             if (prod.prepared === 0) {
@@ -83,11 +133,27 @@ function FarmerOrderPreparation(props) {
                     Select the items which you have prepared for shipping.<br />
                     After selecting all the items you can ship the order.
                 </h5>
+                {!showLoading && !shipmentWindowValidity && !itemsAlreadyShipped &&
+                    <Alert show={true} variant="danger">
+                        <Alert.Heading>Item shipment missed</Alert.Heading>
+                        <p>
+                            It seems that you have missed the orders shipment time window!<br />
+                            Contact the shop as soon as possible to get more information.<br />
+                            Next shipping window is from Sunday 23.00 until Tuesday 23.59.
+                        </p>
+                        <hr />
+                        <div className="d-flex justify-content-end">
+                            <Link to="/farmer">
+                                <Button variant="outline-danger">Back to Farmer Area</Button>
+                            </Link>
+                        </div>
+                    </Alert>
+                }
                 {!showLoading && itemsAlreadyShipped &&
                     <Alert show={itemsAlreadyShipped} variant="success">
                         <Alert.Heading>Item shipment status</Alert.Heading>
                         <p>
-                            You have successfully shipped your items!<br/>
+                            You have successfully shipped your items!<br />
                             Next shipping window is from Sunday 23.00 until Tuesday 23.59.
                         </p>
                         <hr />
@@ -103,7 +169,7 @@ function FarmerOrderPreparation(props) {
                         <Spinner className="m-5" animation="grow" />
                     </div>
                 }
-                {!itemsAlreadyShipped && !showLoading &&
+                {!itemsAlreadyShipped && shipmentWindowValidity && !showLoading &&
                     <div className="d-block text-center">
                         {/*DISPLAYING NOTIFICATION IF NO PRODUCTS INSERTED YET*/
                             bookedProducts.length === 0 ?
@@ -120,7 +186,7 @@ function FarmerOrderPreparation(props) {
                                     <li key={product.id} className="list-group-item">
                                         <div className="row w-100">
                                             <div className="col-md-1 my-auto">
-                                                <img className="w-100 rounded-circle"
+                                                <img className="w-100 shadow rounded-circle"
                                                     src={process.env.PUBLIC_URL + 'products/' + product.id + '.jpg'}
                                                     alt="Product img"
                                                 />
@@ -132,7 +198,7 @@ function FarmerOrderPreparation(props) {
                                                 {stockIcon} {product.tot_quantity + ' ' + product.unit}
                                             </div>
                                             <div className="col-md-3 text-center my-auto">
-                                                {product.prepared === 0 && <button className="btn btn-success" onClick={() => (
+                                                {product.prepared === 0 && <button className="btn btn-success shadow" onClick={() => (
                                                     setBookedProducts((prods) => {
                                                         const newProds = [];
                                                         for (const prod of prods) {
