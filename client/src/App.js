@@ -10,9 +10,8 @@ import EmployeePage from './Components/EmployeePage';
 import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect, Row, Alert } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Redirect, BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { LoginForm1 } from './Components/LoginForm';
-//import ProductGallery from './Components/Gallery';
 import ClientArea from './Components/ClientArea';
 import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
@@ -56,19 +55,19 @@ function App() {
     };
     checkAuth();
   }, []);
-/* USEFFECT users */
+  /* USEFFECT users */
   useEffect(() => {
     const getAllUsers = async () => {
       await API.getAllUsers()
         .then((res) => {
           setUsers(res);
-          
+
         })
         .catch((err) => {
           console.log(err);
         });
     };
-   getAllUsers();
+    getAllUsers();
   }, []);
   /* USEFFECT clients */
   useEffect(() => {
@@ -200,6 +199,27 @@ function App() {
       setMessage('');
       setUserid(`${user.id}`);
       setUserRole(`${user.role}`);
+      console.log(user.role);
+      if (user.role === 'client') {
+        return (
+          <Redirect to="/client" />
+        );
+      }
+      else if (user.role === 'employee') {
+        return (
+          <Redirect to="/employee" />
+        );
+      }
+      else if (user.role === 'warehouse-employee') {
+        return (
+          <Redirect to="/warehouse-employee" />
+        );
+      }
+      else if (user.role === 'warehouse-manager') {
+        return (
+          <Redirect to="/warehouse-manager" />
+        );
+      }
     } catch (err) {
       setMessage(`"${err}"`);
     }
@@ -209,17 +229,23 @@ function App() {
     await API.logOut();
 
     setLogged(false);
+    setUserRole('');
+    setUserid(-1);
 
-    
+    return(
+      <Redirect to="/" />
+    )
+
   };
-  
+
   return (
     <Router>
-      <MyNavbar time={time} setTime={setTime} />
+      <MyNavbar time={time} loggedIn={logged} userRole={userRole} setTime={setTime} />
       <div className="container-fluid">
         <Switch>
           <Route
             path="/booking"
+            exact
             render={() => (
               <Booking
                 browsing={false}
@@ -237,6 +263,7 @@ function App() {
           />
           <Route
             path="/products-next-week"
+            exact
             render={() => (
               <Booking
                 browsing={true}
@@ -253,6 +280,7 @@ function App() {
           />
           <Route
             path="/orders"
+            exact
             render={() => (
               <Orders
                 orders={orders}
@@ -263,6 +291,7 @@ function App() {
           />
           <Route
             path="/staff-booking"
+            exact
             render={() => (
               <Booking
                 browsing={false}
@@ -279,6 +308,7 @@ function App() {
           />
           <Route
             path="/employee"
+            exact
             render={() => (
               <EmployeePage
                 orders={orders}
@@ -292,74 +322,84 @@ function App() {
             )}
           />
           <Route
-          path = "/warehouse-employee"
-          render = {() => (
-            <WarehousePage
-              userRole = "warehouse-employee"
-              orders = {orders}
-              providers = {providers} 
-              methods={methods}
-              setRecharged={updateRech}
-              logout={doLogOut}
+            path="/warehouse-employee"
+            exact
+            render={() => (
+              <WarehousePage
+                userRole="warehouse-employee"
+                orders={orders}
+                providers={providers}
+                methods={methods}
+                setRecharged={updateRech}
+                logout={doLogOut}
               />
-          )}
+            )}
           />
           <Route
-          path = "/warehouse-manager"
-          render = {() => (
-            <WarehousePage
-              userRole = "warehouse-manager"
-              orders = {orders}
-              providers = {providers} 
-              methods={methods}
-              logout={doLogOut}
+            path="/warehouse-manager"
+            exact
+            render={() => (
+              <WarehousePage
+                userRole="warehouse-manager"
+                orders={orders}
+                providers={providers}
+                methods={methods}
+                logout={doLogOut}
               />
-          )}
+            )}
           />
           <Route
             path="/farmer"
+            exact
             render={() => (
-              <FarmerArea time={time}/>
+              <FarmerArea time={time} />
             )}
           />
           <Route
             path="/declare-availability"
+            exact
             render={() => (
-              <FarmerProducts time={time}/>
+              <FarmerProducts time={time} />
             )}
           />
           <Route
             path="/order-preparation"
+            exact
             render={() => (
-              <FarmerOrderPreparation time={time}/>
+              <FarmerOrderPreparation time={time} />
             )}
           />
 
           <Route
             path="/order-confirmation-farmer"
+            exact
             render={() => (
               <FarmerOrderConfirmation />
             )}
           />
           <Route
             path="/login"
+            exact
             render={() => (
-              <LoginForm1 login={doLogIn} logged={logged} clients={clients} users={users}/>
+              <LoginForm1 login={doLogIn} logged={logged} userID={userid} userRole={userRole} clients={clients} users={users} />
             )}
           />
           <Route
             path="/client"
+            exact
             render={() => (
               <ClientArea logout={doLogOut} clients={clients} clientid={userid} />
             )}
           />
           <Route
             path="/registration"
+            exact
             render={() => (
               <UserRegistration clients={clients} setRecharged={updateRech1} />
             )}
           />
-          <Route path="/" render={() => <Frontpage />} />
+          <Route path="/" exact
+            render={() => <Frontpage />} />
         </Switch>
       </div>
     </Router>

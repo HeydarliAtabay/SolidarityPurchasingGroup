@@ -35,16 +35,18 @@ const Navbar = function (props) {
                 Home
               </Link>
             </li>
-            <li className="nav-item">
+            {(props.userRole === 'client' || !props.loggedIn) && <li className="nav-item">
               <Link to="/login" className="nav-link active">
                 Client
               </Link>
             </li>
-            <li className="nav-item">
+            }
+            {(props.userRole === 'employee' || !props.loggedIn) && <li className="nav-item">
               <Link to="/login" className="nav-link active">
                 Staff
               </Link>
             </li>
+            }
             <li className="nav-item">
               <Link to="/farmer" className="nav-link active">
                 Farmer
