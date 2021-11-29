@@ -200,5 +200,36 @@ describe('Test the provider /api/products/expected/:year/:week_number', () => {
         });
     });
 });
-
+describe("Test the delete path", () => {
+    test("It should response the delete method", () => {
+        request(server).delete("/api/orders").then((response) => {
+            expect(response.statusCode).toBe(204);
+            done();
+        });
+    });
+});
+describe("Test the add of order item", () => {
+    test("It should response the post method", () => {
+        request(server).post("/api/orders").then((response) => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+describe("Test the login path", () => {
+    test("It should response the get method", () => {
+        request(server).get("/api/sessions/current").then((response) => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
+describe("Test the login path", () => {
+    test("It should response the delete method", () => {
+        request(server).delete("/api/sessions/current").then((response) => {
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+    });
+});
 
