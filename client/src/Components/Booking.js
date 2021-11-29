@@ -60,7 +60,8 @@ function Booking(props) {
   const [pickupDay, setPickupDay] = useState(2);
   const [pickupTime, setPickupTime] = useState('10:00');
 
-    console.log(time+' '+date);
+  console.log(time + ' ' + date);
+  console.log(pickupDay + ' ' + pickupTime);
 
   let rows = [
     ...Array(Math.ceil(products.filter((p) => p && p.active === 1).length / 3)),
@@ -116,7 +117,7 @@ function Booking(props) {
           date: dayjs(props.time.date).add(1, 'week'),
           hour: props.time.hour,
         };
-        await API.getAllConfirmedProducts(
+        await API.getAllExpectedProducts(
           getRightWeek(tmp_dy).year,
           getRightWeek(tmp_dy).week_number
         )
@@ -184,36 +185,67 @@ function Booking(props) {
       setShowdanger(true);
       return;
     }
+
+    console.log(deliveryFlag + ' ' + time + ' ' + date + ' ' + pickupDay + ' ' + pickupTime)
+
     let p, s;
     if (!location.state) {
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
+
+        let _time, _date, _pickup;
+        if (deliveryFlag === 'delivery') {
+          _date = date;
+          _time = time;
+          _pickup = 0;
+        }
+        else {
+          _date = dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD');
+          _time = pickupTime;
+          _pickup = 1;
+        }
+
         let order = new clientOrders(
           `${ordine}`,
           parseInt(props.clientid),
           a.name,
+          a.id,
+          a.qty,
           'booked',
+          null,
           p,
           `${indice}`,
           address,
           city,
           nation,
           zipCode,
-          deliveryFlag==='delivery' ? date : dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
-          deliveryFlag==='delivery' ? time : pickupTime,
-          deliveryFlag==='delivery' ? 0 : 1
+          _date,
+          _time,
+          _pickup
         );
+        console.log(order);
         API.addOrder(order).then(() => {
           props.setRecharged(true);
-          setTimeout(() => {}, 3000);
+          setTimeout(() => { }, 3000);
         });
         indice = indice + 1;
       }
     } else {
       let i = location.state.item.id;
       API.deleteOrderItem(location.state.item.id).then(
-        setTimeout(() => {}, 3000)
+        setTimeout(() => { }, 3000)
       );
+      let _time, _date, _pickup;
+      if (deliveryFlag === 'delivery') {
+        _date = date;
+        _time = time;
+        _pickup = 0;
+      }
+      else {
+        _date = dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD');
+        _time = pickupTime;
+        _pickup = 1;
+      }
       let a = productsBasket[0];
       s = (a.price * a.qty).toFixed(2);
       let order = new clientOrders(
@@ -230,14 +262,14 @@ function Booking(props) {
         city,
         nation,
         zipCode,
-        deliveryFlag==='delivery' ? date: dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD'),
-        deliveryFlag==='delivery' ? time : pickupTime,
-        deliveryFlag==='delivery' ? 0 : 1
+        _date,
+        _time,
+        _pickup
       );
 
       API.addOrder(order).then(() => {
         props.setRecharged(true);
-        setTimeout(() => {}, 3000);
+        setTimeout(() => { }, 3000);
       });
     }
 
@@ -571,7 +603,7 @@ function Booking(props) {
             defaultActiveKey="delivery"
             className="mb-3"
             activeKey={deliveryFlag}
-            onSelect={(k) => {console.log(k); setDeliveryFlag(k)}}
+            onSelect={(k) => { console.log(k); setDeliveryFlag(k) }}
           >
             <Tab
               eventKey="delivery"

@@ -16,6 +16,9 @@ function clientOrders(
   time,
   pickup
 ) {
+
+  console.log(date,time,pickup);
+
   this.order_id = order_id;
   this.client_id = client_id;
   this.product_name = product_name;
