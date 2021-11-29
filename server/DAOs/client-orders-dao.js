@@ -61,16 +61,24 @@ exports.delivered = async (order_id, product_name) => {
 
   return new Promise((resolve, reject) => {
     const sql =
-      'UPDATE orders SET order_id=?, client_id=?, product_name=?, state=?, OrderPrice=? , id=? WHERE order_id=? AND product_name=?';
+      'UPDATE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=? WHERE order_id=? AND product_name=?';
     db.run(
       sql,
       [
         test.order_id,
         test.client_id,
         test.product_name,
+        test.product_id,
+        test.order_quantity,
         'delivered',
         test.OrderPrice,
         test.id,
+        test.address,
+        test.city,
+        test.zipcode,
+        test.Nation,
+        test.date,
+        test.time,
         order_id,
         product_name,
       ],
