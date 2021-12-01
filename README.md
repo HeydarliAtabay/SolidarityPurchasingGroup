@@ -8,6 +8,8 @@
 | :--------------- | :-------: |
 | antonio@spg.it | ant111 |
 | elnurs.shabanov@gmail.com  | elnur111  |
+| sara.bekkari@yahoo.it | sara |
+| clare.mint@yahoo.it | sara |
 
 
 ### Shop employee
