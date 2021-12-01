@@ -1,4 +1,4 @@
-# RETROSPECTIVE of FIRST SPRINT (Team R02)
+# RETROSPECTIVE of SECOND SPRINT (Team R02)
 
 The retrospective should include _at least_ the following
 sections:
@@ -11,9 +11,9 @@ sections:
 
 ### Macro statistics
 
-- Committed Stories: 8 ; Stories Done: 8
-- Committed Points: 43; Points Done: 43
-- Planned Hours: 99h 15m ; Spent Hours: 97h 55m
+- Committed Stories: 12 ; Stories Done: 10
+- Committed Points: 53; Points Done: 15
+- Planned Hours: 99h 30m ; Spent Hours: 102h 10m
 
 **Remember** a story is done ONLY if it fits the Definition of Done:
 
@@ -28,26 +28,30 @@ sections:
 
 | Story | # Tasks | Points | Hours est. | Hours actual     |
 | ----- | ------- | ------ | ---------- | ---------------- |
-| _#0_  | 8       | -      | 55h 15m    | 50h 55m          |
-| _#1_  | 2       | 8      | 8h         | 8h               |
-| _#2_  | 2       | 3      | 3h         | 45m              |
-| _#3_  | 2       | 13     | 12h        | 18h              |
-| _#4_  | 2       | 5      | 4h         | 4h               |
-| _#5_  | 2       | 2      | 4h         | 4h 30m           |
-| _#6_  | 2       | 2      | 3h         | 4h 30m           |
-| _#7_  | 2       | 8      | 6h         | 7h               |
-| _#8_  | 2       | 2      | 4h         | 3h               |
+| _#0_  | 13       | -      | 53h 30m    | 49h 30m          |
+| _#9_  | 2       | 8      | 5h         | 5h 30m              |
+| _#10_  | 2       | 2      | 4h 30m         | 45m              |
+| _#11_  | 2       | 8     | 5h        | 3h 30m             |
+| _#12_  | 2       | 5      | 5h         | 5h               |
+| _#13_  | 2       | 2      | 1h 30m         | 1h 10m           |
+| _#17_  | 2       | 2      | 3h         | 3h           |
+| _#15_  | 2       | 2      | 4h         | 7h               |
+| _#16_  | 2       | 13      | 5h         | 5h               |
+| _#14_  | 2       | 2      | 2h         | 2h 30m           |
+| _#18_  | 2       | 2      | 5h         | 3h           |
+| _#19_  | 1       | 2      | 2h         | 2h               |
+| _#20_  | 2       | 5      | 4h         | 12h               |
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
-- Average hour per task: 97.9(hours)/19(#tasks)= 4.07 hours; 
-- Standard deviation: 0.28
-- Total task estimation error ratio: 1.013
+- Average hour per task: 102.15(hours)/36(#tasks)= 2.83 hours; 
+- Standard deviation: [ IDK how to calculate this hahahah ]
+- Total task estimation error ratio: 0.97
 
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated: 30h (6h of studying unit testing methods & 24 hours for implementing tests) 
+  - Total hours estimated: 30h ( 30 hours for implementing unit tests) 
   - Total hours spent: 33h (9h of studying unit testing methods & 24 hours of testing)
   - Nr of automated unit test cases : 17(for BackEnd)+36(for FrontEnd) = 53 unit test cases
 
