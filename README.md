@@ -19,3 +19,16 @@
 | employee1@shop.it | shop |
 | employee2@shop.it  | shop  |
 | employee3@shop.it  | shop  |
+
+### Warehouse manager
+
+| Email address    | Password  |
+| :--------------- | :-------: |
+| whmanager@shop.it | whmanager |
+
+
+### Warehouse employee
+
+| Email address    | Password  |
+| :--------------- | :-------: |
+| warehouse1@shop.it | warehouse1 |
