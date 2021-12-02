@@ -45,29 +45,29 @@ sections:
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
 - Average hour per task: 102.15(hours)/36(#tasks)= 2.83 hours; 
-- Standard deviation: [ IDK how to calculate this hahahah ]
+- Standard deviation: 0.46
 - Total task estimation error ratio: 0.97
 
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated: 30h ( 30 hours for implementing unit tests) 
-  - Total hours spent: 33h (9h of studying unit testing methods & 24 hours of testing)
-  - Nr of automated unit test cases : 17(for BackEnd)+36(for FrontEnd) = 53 unit test cases
+  - Total hours estimated: h ( hours for implementing unit tests) 
+  - Total hours spent: 19h 30m 
+  - Nr of automated unit test cases : (for BackEnd)+(for FrontEnd) =  unit test cases
 
 - E2E testing:
-  - Total hours estimated: 8h (1h per story) - included inside each story
-  - Total hours spent: 6h
+  - Total hours estimated: 12h (1h per story) - included inside each story
+  - Total hours spent: h
 - Code review
-  - Total hours estimated: 8h (1h per story) - included inside each story
-  - Total hours spent: 10h
+  - Total hours estimated: 12h (1h per story) - included inside each story
+  - Total hours spent: h
 - Technical Debt management:
-  - Total hours estimated: 6h
-  - Total hours spent: 3h
-  - Hours estimated for remediation by SonarQube: 1d3h (only in Maintainability - fixing code smells)
+  - Total hours estimated: h
+  - Total hours spent: h
+  - Hours estimated for remediation by SonarQube: h (only in Maintainability - fixing code smells)
   - Hours estimated for remediation by SonarQube only for the selected and planned issues: 1d3h (only in Maintainability - fixing code smells)
-  - Hours spent on remediation: 3h
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.7%
+  - Hours spent on remediation: h
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): %
   - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
 
 ## ASSESSMENT
