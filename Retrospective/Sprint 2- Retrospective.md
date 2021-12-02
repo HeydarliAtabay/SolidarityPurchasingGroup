@@ -74,31 +74,34 @@ sections:
 
 - What caused your errors in estimation (if any)?
   - FE development time was underestimated. We ended up reallocating time from the BE tasks to deliver a good UI for the tasks.
-  - We included also SonarQube analysis under the "Implement test" task, but since the actual JEST testing proved a lot tougher, we ended up not having enough time to properly do the SonarQube analysis.
   - We lost some time in interpreting the meaning of some stories and estimate correctly the time to implement them.
+  - We underestimated the time needed to update the database with the correct tables and columns to support the stories.
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
   - Comment more our code to let the other group mates understand what we did.
-  - Write a general documentation in de readme file (for example write the users credentials).
+  - Write a general documentation in the readme file (for example write the users credentials).
   - A good FE needs more development time allocated.
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-  - We allocated more time for testing.
-  - Tasks were much better divided this time, which in turn decreased a lot the continuous communication efforts needed.
-- Which ones you were not able to achieve? Why?
-  - We did not succeed in increasing the code documentation size since by better dividing the tasks, the need for very detailed documentation decreased. This may well prove problematic in the future if we will need to do incremental work on already implemented features. 
+  - We allocated more time for implementing tests.
+  - Remediation effort on new code decreased considerably since we had the chance to learn from SonarCloud how to write better code.
+  - We created an appropriate task for the Technical debt remediation and the result was much better in terms of remediation efforts needed on new code.
+
+Which ones you were not able to achieve? Why?
+  - We achieved all of the goals set in the previous retrospective.
+
 
 - Improvement goals for the next sprint and how to achieve them (technical tasks, team coordination, etc.)
-  - More time for testing.
-  - By better understanding the current suggestions of Sonarcloud, in the future we can write better code and in turn reduce the remediation efforts.
-  - Testing needs to be treated differently from Technical debt and more time needs to be dedicated to the Technical debt part.
+  - We need to increase the technical debt remediation time and to increase the number of technical tasks needed to refactor our code and make the UI responsive.
+  - We plan to develop less stories and focus more on the currently open issues and app visual improvements.
+
 
 
 - One thing you are proud of as a Team!!
-  - Everyone finished all of their tasks and delivered working code.
-  - Team members communication and availability was outstanding. 
+  - We supported each other on any difficulty that appeared.
+
 
 
 
