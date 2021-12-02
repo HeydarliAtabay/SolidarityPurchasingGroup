@@ -38,9 +38,9 @@ sections:
 | _#15_  | 2       | 2      | 4h         | 7h               |
 | _#16_  | 2       | 13      | 5h         | 5h               |
 | _#14_  | 2       | 2      | 2h         | 2h 30m           |
-| _#18_  | 2       | 2      | 5h         | 3h           |
+| _#18_  | 2       | 2      | 5h         | 7h30m           |
 | _#19_  | 1       | 2      | 2h         | 2h               |
-| _#20_  | 2       | 5      | 4h         | 12h               |
+| _#20_  | 2       | 5      | 4h         | 4h               |
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
@@ -53,7 +53,7 @@ sections:
 - Unit Testing:
   - Total hours estimated: 3d 6h ( hours for implementing unit tests) 
   - Total hours spent: 19h 30m 
-  - Nr of automated unit test cases : (for BackEnd)+(for FrontEnd) =  unit test cases
+  - Nr of automated unit test cases : 30(for BackEnd) + 42(for FrontEnd) = 72 unit test cases
 
 - E2E testing:
   - Total hours estimated: 12h (1h per story) - included inside each story
