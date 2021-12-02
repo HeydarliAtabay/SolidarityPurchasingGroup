@@ -62,11 +62,11 @@ sections:
   - Total hours estimated: 12h (1h per story) - included inside each story
   - Total hours spent: h
 - Technical Debt management:
-  - Total hours estimated: h
-  - Total hours spent: h
+  - Total hours estimated: 1d 1h
+  - Total hours spent: 6h
   - Hours estimated for remediation by SonarQube: h (only in Maintainability - fixing code smells)
   - Hours estimated for remediation by SonarQube only for the selected and planned issues: 1d3h (only in Maintainability - fixing code smells)
-  - Hours spent on remediation: h
+  - Hours spent on remediation: 6h
   - debt ratio (as reported by SonarQube under "Measures-Maintainability"): %
   - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
 
