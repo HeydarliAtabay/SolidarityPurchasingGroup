@@ -51,7 +51,7 @@ sections:
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated: h ( hours for implementing unit tests) 
+  - Total hours estimated: 3d 6h ( hours for implementing unit tests) 
   - Total hours spent: 19h 30m 
   - Nr of automated unit test cases : (for BackEnd)+(for FrontEnd) =  unit test cases
 
