@@ -57,35 +57,35 @@ sections:
 
 - E2E testing:
   - Total hours estimated: 12h (1h per story) - included inside each story
-  - Total hours spent: h
+  - Total hours spent: 12 h
 - Code review
   - Total hours estimated: 12h (1h per story) - included inside each story
-  - Total hours spent: h
+  - Total hours spent:12 h
 - Technical Debt management:
   - Total hours estimated: 1d 1h
   - Total hours spent: 6h
-  - Hours estimated for remediation by SonarQube: h (only in Maintainability - fixing code smells)
-  - Hours estimated for remediation by SonarQube only for the selected and planned issues: 1d3h (only in Maintainability - fixing code smells)
+  - Hours estimated for remediation by SonarQube: 3h (only in Maintainability - fixing code smells)
+  - Hours estimated for remediation by SonarQube only for the selected and planned issues: 3h (only in Maintainability - fixing code smells)
   - Hours spent on remediation: 6h
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): %
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.5%
   - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
 
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
   - FE development time was underestimated. We ended up reallocating time from the BE tasks to deliver a good UI for the tasks.
-  - JEST testing proved much more difficult and tricky than we thought
   - We included also SonarQube analysis under the "Implement test" task, but since the actual JEST testing proved a lot tougher, we ended up not having enough time to properly do the SonarQube analysis.
-  - We forgot to include in the DB task the fact that we needed a certain number of dummy data to be inserted (as requested by the project PDF).
+  - We lost some time in interpreting the meaning of some stories and estimate correctly the time to implement them.
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
-  - Testing, especially the Technical dept part needs more time to be properly done.
-  - The testing and technical debt tasks need to separated.
+  - Comment more our code to let the other group mates understand what we did.
+  - Write a general documentation in de readme file (for example write the users credentials).
   - A good FE needs more development time allocated.
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
+  - We allocated more time for testing.
   - Tasks were much better divided this time, which in turn decreased a lot the continuous communication efforts needed.
 - Which ones you were not able to achieve? Why?
   - We did not succeed in increasing the code documentation size since by better dividing the tasks, the need for very detailed documentation decreased. This may well prove problematic in the future if we will need to do incremental work on already implemented features. 
