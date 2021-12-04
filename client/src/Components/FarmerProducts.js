@@ -56,13 +56,13 @@ function FarmerProducts(props) {
       );
       let expectedProds = [];
 
-      for (let i = 0; i < prods.length; i++) {
+      for (const prod of prods) {
         const img = await srcToFile(
-          process.env.PUBLIC_URL + 'products/' + prods[i].id + '.jpg',
+          process.env.PUBLIC_URL + 'products/' + prod.id + '.jpg',
           'product_image',
           'image/jpg'
         );
-        expectedProds.push({ image: img, ...prods[i] });
+        expectedProds.push({ image: img, ...prod });
       }
 
       setExpectedProducts(expectedProds);
@@ -413,7 +413,6 @@ function NewProductModalBody(props) {
   const [productPrice, setProductPrice] = useState('');
   const [productUnit, setProductUnit] = useState('');
   const [productQuantity, setProductQuantity] = useState('');
-  //const [productExpiry, setProductExpiry] = useState('');
   const [file, setFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
