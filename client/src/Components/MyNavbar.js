@@ -31,27 +31,28 @@ const Navbar = function (props) {
             style={{ fontSize: 22 }}
           >
             <li className="nav-item">
-              <Link to="/" className="nav-link active">
+              <Link to="/" className="nav-link">
                 Home
               </Link>
             </li>
             {(props.userRole === 'client' || !props.loggedIn) && <li className="nav-item">
-              <Link to="/login" className="nav-link active">
+              <Link to="/login" className="nav-link">
                 Client
               </Link>
             </li>
             }
             {(props.userRole === 'employee' || !props.loggedIn) && <li className="nav-item">
-              <Link to="/login" className="nav-link active">
+              <Link to="/login" className="nav-link">
                 Staff
               </Link>
             </li>
             }
-            <li className="nav-item">
-              <Link to="/farmer" className="nav-link active">
+            {(props.userRole === 'employee' || !props.loggedIn) && <li className="nav-item">
+              <Link to="/login" className="nav-link">
                 Farmer
               </Link>
             </li>
+            }
           </ul>
 
 

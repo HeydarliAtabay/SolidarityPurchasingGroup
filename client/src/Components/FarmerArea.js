@@ -1,8 +1,7 @@
-import { Button, Row, Carousel, Alert } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import API from '../API';
+
 var isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
 var isSameOrBefore = require('dayjs/plugin/isSameOrBefore');
@@ -11,7 +10,6 @@ var isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 dayjs.extend(isSameOrAfter);
 
 function FarmerArea(props) {
-  const [confirmationStatus, setConfirmationStatus] = useState();
 
   function intervalTimeBoolean() {
     if (dayjs(props.time.date).day() === 1) {
@@ -31,14 +29,6 @@ function FarmerArea(props) {
     }
     return false;
   }
-
-  useEffect(() => {
-    const getConfirmationStatus = async () => {
-      const status = await API.getProviderConfirmationStatus(2021, 2);
-      setConfirmationStatus(status);
-    };
-    getConfirmationStatus();
-  }, []);
 
   return (
     <div className="row w-100">

@@ -71,6 +71,7 @@ function FarmerProducts(props) {
     };
     getExpectedProducts();
   }, [refreshExpected]);
+
   //Get provider products
   useEffect(() => {
     const getExistingProducts = async () => {
@@ -404,7 +405,6 @@ function NewProductModalBody(props) {
   const [templateInsertType, setTemplateInsertType] = useState(false);
   const [newInsertType, setNewInsertType] = useState(false);
   const [templateInsertForm, setTemplateInsertForm] = useState(false);
-  const [newInsertForm, setNewInsertForm] = useState(false);
 
   /*new product data*/
   const [productName, setProductName] = useState('');
@@ -413,7 +413,7 @@ function NewProductModalBody(props) {
   const [productPrice, setProductPrice] = useState('');
   const [productUnit, setProductUnit] = useState('');
   const [productQuantity, setProductQuantity] = useState('');
-  const [productExpiry, setProductExpiry] = useState('');
+  //const [productExpiry, setProductExpiry] = useState('');
   const [file, setFile] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
 
@@ -448,7 +448,6 @@ function NewProductModalBody(props) {
     setNewInsertType(false);
     setTemplateInsertType(true);
     setTemplateInsertForm(false);
-    setNewInsertForm(false);
     setTemplateProductChoiceError('');
   };
 
@@ -457,7 +456,6 @@ function NewProductModalBody(props) {
     setNewInsertType(false);
     setTemplateInsertType(false);
     setTemplateInsertForm(true);
-    setNewInsertForm(false);
   };
 
   const switchToNewInsertForm = () => {
@@ -486,7 +484,6 @@ function NewProductModalBody(props) {
     setNewInsertType(false);
     setTemplateInsertType(false);
     setTemplateInsertForm(false);
-    setNewInsertForm(false);
   };
 
   const goBackToChooseTemplateType = () => {
@@ -494,7 +491,6 @@ function NewProductModalBody(props) {
     setNewInsertType(false);
     setTemplateInsertType(true);
     setTemplateInsertForm(false);
-    setNewInsertForm(false);
     setTemplateProductChoiceError('');
   };
 
@@ -696,13 +692,12 @@ function NewProductModalBody(props) {
     return (
       <div className="d-block">
         <div className="d-block text-start">
-          <a
-            href="#"
+          <span
             className="link-primary"
             onClick={() => goBackToChooseInsertType()}
           >
             {'< Go Back'}
-          </a>
+          </span>
         </div>
         <div className="d-block text-center">
           <h4>Choose the product</h4>
@@ -712,9 +707,8 @@ function NewProductModalBody(props) {
             {
               /*LIST OF THE FARMER PRODUCTS*/
               props.providerProducts.map((product) => (
-                <a
+                <div
                   key={product.id}
-                  href="#"
                   className="list-group-item list-group-item-action"
                   onClick={() => selectTemplateProduct(product.id)}
                 >
@@ -728,7 +722,7 @@ function NewProductModalBody(props) {
                           '.jpg'
                         }
                         className="img-fluid rounded-start"
-                        alt="Product image"
+                        alt="Product"
                       />
                     </div>
                     <div className="col-sm-10">
@@ -741,7 +735,7 @@ function NewProductModalBody(props) {
                       </small>
                     </div>
                   </div>
-                </a>
+                </div>
               ))
             }
           </div>
@@ -755,13 +749,12 @@ function NewProductModalBody(props) {
     return (
       <div className="d-block ">
         <div className="d-block text-start">
-          <a
-            href="#"
+          <span
             className="link-primary"
             onClick={() => goBackToChooseInsertType()}
           >
             {'< Go Back'}
-          </a>
+          </span>
         </div>
         <div className="d-block text-center">
           <h4>Fill in the product details</h4>
@@ -895,13 +888,12 @@ function NewProductModalBody(props) {
     return (
       <div className="d-block">
         <div className="d-block text-start">
-          <a
-            href="#"
+          <span
             className="link-primary"
             onClick={() => goBackToChooseTemplateType()}
           >
             {'< Go Back'}
-          </a>
+          </span>
         </div>
         <div className="d-block text-center">
           <h4>Fill in the product details</h4>
@@ -1055,15 +1047,15 @@ function ModifyProductModalBody(props) {
   const [previewImage, setPreviewImage] = useState(
     props.productID !== -1
       ? URL.createObjectURL(
-          props.expectedProducts.find((p) => p.id === props.productID).image
-        )
+        props.expectedProducts.find((p) => p.id === props.productID).image
+      )
       : null
   );
   const [productName, setProductName] = useState(
     props.productID !== -1
       ? capitalizeEachFirstLetter(
-          props.expectedProducts.find((p) => p.id === props.productID).name
-        )
+        props.expectedProducts.find((p) => p.id === props.productID).name
+      )
       : ''
   );
   const [productDescription, setProductDescription] = useState(
@@ -1363,37 +1355,6 @@ const priceIcon = (
   </svg>
 );
 
-const producerIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    fill="currentColor"
-    className="bi bi-person-badge"
-    viewBox="0 0 16 16"
-  >
-    <path d="M6.5 2a.5.5 0 0 0 0 1h3a.5.5 0 0 0 0-1h-3zM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-    <path d="M4.5 0A2.5 2.5 0 0 0 2 2.5V14a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2.5A2.5 2.5 0 0 0 11.5 0h-7zM3 2.5A1.5 1.5 0 0 1 4.5 1h7A1.5 1.5 0 0 1 13 2.5v10.795a4.2 4.2 0 0 0-.776-.492C11.392 12.387 10.063 12 8 12s-3.392.387-4.224.803a4.2 4.2 0 0 0-.776.492V2.5z" />
-  </svg>
-);
-
-const producerIconBig = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="64"
-    height="64"
-    fill="currentColor"
-    className="bi bi-person-circle"
-    viewBox="0 0 16 16"
-  >
-    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
-    <path
-      fillRule="evenodd"
-      d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"
-    />
-  </svg>
-);
-
 const stockIcon = (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -1407,20 +1368,6 @@ const stockIcon = (
       fillRule="evenodd"
       d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"
     />
-  </svg>
-);
-
-const expiryDateIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="32"
-    height="32"
-    fill="currentColor"
-    className="bi bi-calendar3"
-    viewBox="0 0 16 16"
-  >
-    <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
-    <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
   </svg>
 );
 

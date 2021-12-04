@@ -1,4 +1,4 @@
-import { Button, Row, Col, Card, Container, Alert } from 'react-bootstrap';
+import { Button, Row, Col, Container, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 import API from '../API'
 import dayjs from 'dayjs';
@@ -87,7 +87,7 @@ function Basket(props) {
           {props.deliveryFlag==='delivery' &&
           props.address !== '' &&
           props.nation !== '' &&
-          props.city != '' &&
+          props.city !== '' &&
           props.zipCode !== '' &&
           props.date !== '' &&
           props.time !== '' ? (

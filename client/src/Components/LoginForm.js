@@ -1,4 +1,4 @@
-import { Form, Alert, Col, ToggleButtonGroup, ToggleButton, Container, Row } from 'react-bootstrap';
+import { Form, Alert, ToggleButtonGroup, ToggleButton, Container, Row } from 'react-bootstrap';
 import { useState } from 'react';
 import { Redirect } from 'react-router-dom';
 
@@ -34,6 +34,11 @@ function LoginForm1(props) {
         else if (props.userRole === 'employee') {
             return (
                 <Redirect to="/employee" />
+            );
+        }
+        else if (props.userRole === 'farmer') {
+            return (
+                <Redirect to="/farmer" />
             );
         }
         else if (props.userRole === 'warehouse-employee') {

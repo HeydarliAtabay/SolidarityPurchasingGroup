@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Row, Col, Button, Image } from 'react-bootstrap';
 
 function ProductPage(props) {
   let imgName = props.prod.id + '.jpg';
@@ -32,7 +31,7 @@ function ProductPage(props) {
             <img
               className="product-image-size-custom rounded-pill shadow my-auto"
               src={process.env.PUBLIC_URL + 'products/' + imgName}
-              alt="Product image"
+              alt="Product"
             />
           </div>
           <div className="col-lg-6">

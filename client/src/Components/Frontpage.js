@@ -12,16 +12,16 @@ function Frontpage(props) {
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{userIcon} Clients area</h5>
                         <div>
-                        <button className="btn btn-outline-secondary"
+                            <button className="btn btn-outline-secondary"
                                 onClick={(event) => {
                                     history.push("/registration")
                                 }}
                             >Register</button>
                             <button className="mx-2 btn btn-outline-primary"
-                             onClick={(event) => {
-                                history.push("/login")
-                            }}>Login</button>
-                            
+                                onClick={(event) => {
+                                    history.push("/login")
+                                }}>Login</button>
+
                         </div>
                     </div>
                 </div>
@@ -29,7 +29,7 @@ function Frontpage(props) {
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{producerIcon} Producers area</h5>
                         <div>
-                            <button className="mx-2 btn btn-outline-primary">Login</button>
+                            <button className="mx-2 btn btn-outline-primary" onClick={() => (history.push("/login"))}>Login</button>
                         </div>
                     </div>
                 </div>
@@ -42,9 +42,9 @@ function Frontpage(props) {
                             <div className="d-inline my-auto">Store personnel</div>
                             <div className="d-inline">
                                 <button className="mx-2 btn btn-outline-primary"
-                                 onClick={(event) => {
-                                    history.push("/login")
-                                }}>Login</button>
+                                    onClick={() => {
+                                        history.push("/login")
+                                    }}>Login</button>
                             </div>
                         </li>
                         <li className="list-group-item d-flex justify-content-between">
@@ -58,7 +58,7 @@ function Frontpage(props) {
                         <li className="list-group-item d-flex justify-content-between">
                             <div className="d-inline my-auto">Delivery personnel</div>
                             <div className="d-inline">
-                                <button className="mx-2 btn btn-outline-primary">Login</button>
+                                <button className="mx-2 btn btn-outline-primary" onClick={() => (history.push("/login"))}>Login</button>
                             </div>
                         </li>
                     </ul>
@@ -68,9 +68,9 @@ function Frontpage(props) {
                         <h5 className="d-inline my-auto">{joinUsIcon} Want to work with us?</h5>
                     </div>
                     <div className="mx-3 text-center">
-                        <p className="mt-2"><a href="#">Apply</a> as a producer</p>
+                        <p className="mt-2"><Link to="/farmer-apply">Apply</Link> as a producer</p>
                         <hr />
-                        <p><a href="#">Apply</a> as a delivery worker</p>
+                        <p><Link to="/">Apply</Link> as a delivery worker</p>
                     </div>
                 </div>
                 <hr></hr>
@@ -124,7 +124,7 @@ function Frontpage(props) {
                             <img
                                 className="d-block w-100"
                                 src={process.env.PUBLIC_URL + "Frontpage/1.jpg"}
-                                alt="Products image"
+                                alt="Products"
                             />
                             <Carousel.Caption className="carousel-custom-background">
                                 <h3>Fresh, local and bio produce</h3>
@@ -135,7 +135,7 @@ function Frontpage(props) {
                             <img
                                 className="d-block w-100"
                                 src={process.env.PUBLIC_URL + "Frontpage/2.jpg"}
-                                alt="Farmers image"
+                                alt="Farmers"
                             />
                             <Carousel.Caption className="carousel-custom-background">
                                 <h3>These are our heroes</h3>
@@ -146,7 +146,7 @@ function Frontpage(props) {
                             <img
                                 className="d-block w-100"
                                 src={process.env.PUBLIC_URL + "Frontpage/3.jpg"}
-                                alt="Delivery image"
+                                alt="Delivery"
                             />
                             <Carousel.Caption className="carousel-custom-background">
                                 <h3>Fresh, right at your doorstep</h3>
@@ -169,7 +169,7 @@ function Frontpage(props) {
                             <img
                                 className="w-100 my-auto d-block"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-products-image.png"}
-                                alt="Product image"
+                                alt="Product"
                             />
                         </div>
                     </div>
@@ -186,7 +186,7 @@ function Frontpage(props) {
                             <img
                                 className="farmer-img-custom-dimensions my-auto d-block"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-farmers-image.png"}
-                                alt="Product image"
+                                alt="Product"
                             />
                         </div>
                         <div className="d-block w-50">
@@ -218,7 +218,7 @@ function Frontpage(props) {
                             <img
                                 className="farmer-img-custom-dimensions my-auto d-block"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-products-image.png"}
-                                alt="Product image"
+                                alt="Product"
                             />
                         </div>
                     </div>

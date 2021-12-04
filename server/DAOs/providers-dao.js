@@ -1,6 +1,7 @@
 'use strict';
 
 const sqlite = require('sqlite3');
+const bcrypt = require('bcrypt');
 
 const db = new sqlite.Database('spg.db', (err) => {
     if (err) {
@@ -85,6 +86,18 @@ exports.checkProviderAvailabilityConfirmation = (provider_id, year, week_number)
                 resolve(true);
             }
             resolve(false);
+        });
+    });
+}
+
+exports.insertFarmerApplication = (farmer) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'INSERT INTO farmer_applications VALUES(NULL,?,?,?,?,?,?,?,?,?,?,0)';
+        db.run(sql, [farmer.name, farmer.surname, farmer.email, farmer.phone, farmer.password, farmer.country, farmer.region, farmer.city, farmer.address, farmer.zip], (err) => {
+            if (err) {
+                reject(err);
+            }
+            resolve(true);
         });
     });
 }

@@ -228,17 +228,17 @@ app.put('/api/orders/:order_id/:product_name',
 );
 
 //POST the product IDs to be set with state 'farmer_shipped'
-app.post('/api/orders/farmershipped', async (req, res)=>{
-  try{
+app.post('/api/orders/farmershipped', async (req, res) => {
+  try {
     const productIDS = req.body;
 
     console.log(productIDS);
 
-    for(const product of productIDS){
+    for (const product of productIDS) {
       await ordersDao.setOrderAsFarmerShipped(product);
     }
     res.json(true);
-  }catch(err){
+  } catch (err) {
     console.log(err);
     res.json(err);
   }
@@ -413,7 +413,7 @@ app.get(
 
       const farmerShippedOrders = await warehouseDao.getProviderShippedOrders(id
       );
-      
+
       res.json(farmerShippedOrders);
     } catch (err) {
       console.log(err);
@@ -476,6 +476,29 @@ app.post('/api/products/upload/expected/:img_id', (req, res) => {
   });
 });
 
+app.get('/users/email-availability/:email', async (req, res) => {
+  try {
+    const email = req.params.email;
+    res.json(await dbt.checkIfEmailExists(email));
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+app.post('/provider/apply', async (req, res) => {
+  try {
+    let farmer = req.body;
+    console.log(farmer)
+    var salt = bcrypt.genSaltSync(10);
+    farmer.password = await bcrypt.hash(farmer.password, salt);
+    res.json(await providersDAO.insertFarmerApplication(farmer));
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
 app.post('/api/neworder', async (req, res) => {
   try {
     const client_id = req.body.client_id;
@@ -516,7 +539,7 @@ app.put('/api/modifyquantity', async (req, res) => {
 //update quantity
 app.put('/api/farmerConfirm/:product_id/:year/:week', async (req, res) => {
   productsDAO
-    .confirmExpectedProduct(1,req.params.product_id, req.params.year,req.params.week)
+    .confirmExpectedProduct(1, req.params.product_id, req.params.year, req.params.week)
     .then(() => {
       res.status(200).json();
       return res;

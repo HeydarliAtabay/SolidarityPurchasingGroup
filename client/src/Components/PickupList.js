@@ -1,6 +1,5 @@
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, ListGroupItem, Image, Modal } from 'react-bootstrap';
 import {BoxSeam} from 'react-bootstrap-icons';
-import ris from './reply-all-fill.svg';
 import API from '../API'
 import { useState } from "react";
 import p from './circle-fill.svg';

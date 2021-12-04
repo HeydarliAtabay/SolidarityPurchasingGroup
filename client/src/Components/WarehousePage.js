@@ -1,9 +1,8 @@
 import API from '../API';
 import PickupList from './PickupList';
-import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown} from 'react-bootstrap';
+import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Modal} from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 
 
 function WarehousePage(props) {
@@ -24,7 +23,7 @@ function WarehousePage(props) {
        <span className="d-block text-center mt-5 mb-2 display-2">
             Warehouse Personnel Area
           </span>
-          { (props.userRole == "warehouse-employee") ? 
+          { (props.userRole === "warehouse-employee") ? 
           <>
           <Row>
             <Col xs={3} md={2}>
@@ -114,7 +113,7 @@ function WarehousePage(props) {
         <Row><h1>MANAGER DASHBOARD</h1></Row>
         <Row><h4>providers avaiable on the platform</h4></Row>
         <Row>
-        {providers.map((p) => { return(<Col>{selectedProvider.id == p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
+        {providers.map((p) => { return(<Col>{selectedProvider.id === p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
                                               <Button  variant="secondary" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button>}</Col>)})}
         </Row>
         <Row>

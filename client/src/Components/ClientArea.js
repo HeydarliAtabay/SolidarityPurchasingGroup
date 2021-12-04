@@ -1,6 +1,5 @@
-import { Button, Row, Carousel, Alert } from 'react-bootstrap';
-import { useState, useEffect } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import ClientAlert from './ClientAlert';
 function ClientArea(props) {
   return (

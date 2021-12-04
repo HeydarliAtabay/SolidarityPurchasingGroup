@@ -18,6 +18,7 @@ import {
 } from 'react-router-dom';
 import { LoginForm1 } from './Components/LoginForm';
 import ClientArea from './Components/ClientArea';
+import FarmerRegistration from './Components/FarmerRegistration'
 import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
 import FarmerOrderPreparation from './Components/FarmerOrderPreparation';
@@ -208,6 +209,8 @@ function App() {
         return <Redirect to="/client" />;
       } else if (user.role === 'employee') {
         return <Redirect to="/employee" />;
+      } else if (user.role === 'farmer') {
+        return <Redirect to="/farmer" />;
       } else if (user.role === 'warehouse-employee') {
         return <Redirect to="/warehouse-employee" />;
       } else if (user.role === 'warehouse-manager') {
@@ -343,6 +346,11 @@ function App() {
                 logout={doLogOut}
               />
             )}
+          />
+          <Route
+            path="/farmer-apply"
+            exact
+            render={() => <FarmerRegistration />}
           />
           <Route
             path="/farmer"

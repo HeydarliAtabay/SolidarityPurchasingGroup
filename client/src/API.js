@@ -344,6 +344,34 @@ async function uploadProductImage(formData, product_id) {
   }
 }
 
+//Check if email already exists
+async function checkEmailAvailability(email) {
+  const response = await fetch('/users/email-availability/'+email);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//POST a farmer application
+async function sendFarmerApplication(farmerApplication) {
+  console.log(farmerApplication);
+  const response = await fetch('/provider/apply',{
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(farmerApplication),
+    }
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
 //Insert a new order
 function insertNewBookOrder(itemsOrdered) {
   return new Promise((resolve, reject) => {
@@ -421,7 +449,10 @@ function updateQuantity(product_id, quantity) {
    Place a new order.
    orders = [(product_id, quantity), ...]
 */
-async function insertNewOrder(client_id, orders) {
+//////////////////////////////////////////////////////////////////////
+//'insertNewOrder' is defined but never used => comment to reduce TD//
+//////////////////////////////////////////////////////////////////////
+/*async function insertNewOrder(client_id, orders) {
   let product_order = { order_items: orders };
 
   const order_response = await fetch(
@@ -441,7 +472,7 @@ async function insertNewOrder(client_id, orders) {
 
   let ex = { status: order_response.status, errObj: order_response };
   throw ex;
-}
+}*/
 
 // Adding new client
 
@@ -829,6 +860,8 @@ const API = {
   getProviderConfirmationStatus,
   declareAvailability,
   uploadProductImage,
+  checkEmailAvailability,
+  sendFarmerApplication,
   addClient,
   getAllPaymentMethods,
   addTransaction,

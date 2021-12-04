@@ -1,6 +1,5 @@
-import API from '../API';
 import DeliverList from './DeliverList';
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown} from 'react-bootstrap';
+import { Container, Button, Row, Col, ListGroup, ListGroupItem, Modal, Form, Dropdown} from 'react-bootstrap';
 import{ Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
