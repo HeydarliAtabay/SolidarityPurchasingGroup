@@ -42,12 +42,12 @@ function FarmerOrderPreparation(props) {
 
       console.log(timeWindowValid);
 
-      const itemsAlreadyShipped = await API.getProviderShipmentStatus(
+      const checkItemsAlreadyShipped = await API.getProviderShipmentStatus(
         previousWeek.year,
         previousWeek.week_number
       );
-      console.log(itemsAlreadyShipped);
-      if (itemsAlreadyShipped) {
+      console.log(checkItemsAlreadyShipped);
+      if (checkItemsAlreadyShipped) {
         setItemsAlreadyShipped(true);
         setRefreshData(false);
         setShowLoading(false);
@@ -94,12 +94,6 @@ function FarmerOrderPreparation(props) {
     }
     //every other time get previos week
     let previousWeekDate = dayjs(props.time.date).subtract(1, 'week');
-    /*if (dayjs(props.time.date).day() === 0) {
-            previousWeekDate = dayjs(props.time.date).subtract(1, 'day').subtract(1, 'week');
-        }
-        else {
-            
-        }*/
     if (dayjs(props.time.date).week() === 2) {
       return {
         year: dayjs(props.time.date).year(),
