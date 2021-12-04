@@ -236,24 +236,24 @@ function FarmerRegistration(props) {
                 <div className="col-md-4">
                   <Form.Select size="lg" value={country} onChange={(event) => (setCountry(event.target.value))}>
                     <option value="-1">Country</option>
-                    {Country.getAllCountries().map((country) => (
-                      <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                    {Country.getAllCountries().map((c) => (
+                      <option key={c.isoCode} value={c.isoCode}>{c.name}</option>
                     ))}
                   </Form.Select>
                 </div>
                 <div className="col-md-4">
                   <Form.Select size="lg" value={region} onChange={(event) => (setRegion(event.target.value))}>
                     <option value="-1">Region</option>
-                    {country !== -1 && State.getStatesOfCountry(country).map((region) => (
-                      <option key={region.isoCode} value={region.isoCode}>{region.name}</option>
+                    {country !== -1 && State.getStatesOfCountry(country).map((r) => (
+                      <option key={r.isoCode} value={r.isoCode}>{r.name}</option>
                     ))}
                   </Form.Select>
                 </div>
                 <div className="col-md-4">
                   <Form.Select size="lg" value={city} onChange={(event) => (setCity(event.target.value))}>
                     <option value="-1">City</option>
-                    {country !== -1 && region !== -1 && City.getCitiesOfState(country, region).map((city) => (
-                      <option key={city.name} value={city.name}>{city.name}</option>
+                    {country !== -1 && region !== -1 && City.getCitiesOfState(country, region).map((c) => (
+                      <option key={c.name} value={c.name}>{c.name}</option>
                     ))}
                   </Form.Select>
                 </div>
