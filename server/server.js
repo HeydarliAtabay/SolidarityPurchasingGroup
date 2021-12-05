@@ -704,6 +704,21 @@ app.get('/api/users', async (req, res) => {
     });
   }
 });
+// PUT item order
+app.put('/api/orders/:id', 
+ async (req, res) => {
+
+  const order = req.body;
+
+  
+  try {
+    await ordersDao.changeItem(order);
+    res.status(200).send(order);
+  } catch(err) {
+    res.status(503).json({error: `Database error during the update of order .`});
+  }
+
+});
 module.exports = app;
 
 /* CONNECTION */
