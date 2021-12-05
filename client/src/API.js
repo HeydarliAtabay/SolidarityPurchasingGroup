@@ -841,7 +841,45 @@ const submitEmail = async (e) => {
       }
     });
 };
+function updateItem(order) {
+ 
+  return new Promise((resolve, reject) => {
+    fetch(`/api/orders/`+ order.id , {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+        body: JSON.stringify({
+order_id:order.order_id,
+client_id:order.client_id,
+product_name:order.product_name,
+product_id:order.product_id,
+order_quantity:order.order_quantity,
+state:order.state,
+farmer_state:order.farmer_state,
+OrderPrice:order.OrderPrice,
+id:order.id,
+address:order.address,
+city:order.city,
+zipcode:order.zipcode,
+Nation:order.Nation,
+date:order.date,
+time:order.time,
+pickup:order.pickup
 
+}),
+    }).then((response) => {
+      if (response.ok) {
+        resolve(null);
+      } else {
+        // analyze the cause of error
+        response.json()
+          .then((obj) => { reject(obj); }) // error message in the response body
+          .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
+      }
+    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+  });
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -879,7 +917,7 @@ const API = {
   confirmExpectedProducts,
   getProviderDeliveredOrders,
   getAllUsers,
-  updateState
+  updateState,updateItem
 };
 
 export default API;
