@@ -1,5 +1,17 @@
 # SE2-SPG
 
+## Running Docker for Demo2
+
+### Pull the image
+(sudo) docker pull fridanco/spg-r2-se2:demo2
+- if on linux, use "sudo" otherwise commands will fail
+
+### Run the image
+(sudo) docker run -p xxxx:3000 fridanco/spg-r2-se2:demo2
+- if on linux, use "sudo" otherwise commands will fail
+- xxxx can be any free port on your PC: e.g 5000, 10000, 50000 etc
+- open your favourite browser and access the project at the url: http://localhost:xxxx
+
 ## Users Credentials
 
 ### Clients
