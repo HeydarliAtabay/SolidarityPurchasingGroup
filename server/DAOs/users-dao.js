@@ -1,8 +1,12 @@
 'use strict';
 
 const sqlite = require('sqlite3');
-const db = new sqlite.Database('spg.db', (err) => { if (err) throw err; });
+let db = new sqlite.Database('spg.db', (err) => { if (err) throw err; });
 const bcrypt = require('bcrypt');
+
+exports.setTestDB = (db_name) => {
+    db = new sqlite.Database(db_name, (err) => { if (err) throw err; });
+}
 
 // Add a new client
 exports.addclient = (t) => {
@@ -104,7 +108,7 @@ exports.checkIfEmailExists = (email) => {
                         else
                             resolve(false);
                     });
-                }).then((status)=>(resolve(status))).catch((err)=>(reject(err)));
+                }).then((status) => (resolve(status))).catch((err) => (reject(err)));
             }
         });
     });

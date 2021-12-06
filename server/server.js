@@ -30,6 +30,18 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(fileUpload());
 
+
+app.setTestingMode = (test_db_name) => {
+  clientsDao.setTestDB(test_db_name);
+  ordersDao.setTestDB(test_db_name);
+  productsDAO.setTestDB(test_db_name);
+  providersDAO.setTestDB(test_db_name);
+  walletsDAO.setTestDB(test_db_name);
+  warehouseDao.setTestDB(test_db_name);
+  dbt.setTestDB(test_db_name);
+}
+
+
 let transporter = nodemailer.createTransport({
   service: 'hotmail',
   auth: {
@@ -228,6 +240,8 @@ app.put('/api/orders/:order_id/:product_name',
 //POST the product IDs to be set with state 'farmer_shipped'
 app.post('/api/orders/farmershipped', async (req, res) => {
   try {
+    console.log(req.body);
+
     const productIDS = req.body;
 
     console.log(productIDS);
@@ -739,20 +753,21 @@ app.get('/api/users', async (req, res) => {
   }
 });
 // PUT item order
-app.put('/api/orders/:id', 
- async (req, res) => {
+app.put('/api/orders/:id',
+  async (req, res) => {
 
-  const order = req.body;
+    const order = req.body;
 
-  
-  try {
-    await ordersDao.changeItem(order);
-    res.status(200).send(order);
-  } catch(err) {
-    res.status(503).json({error: `Database error during the update of order .`});
-  }
 
-});
+    try {
+      await ordersDao.changeItem(order);
+      res.status(200).send(order);
+    } catch (err) {
+      res.status(503).json({ error: `Database error during the update of order .` });
+    }
+
+  });
+
 module.exports = app;
 
 /* CONNECTION */

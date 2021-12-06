@@ -2,11 +2,15 @@
 
 const sqlite = require('sqlite3');
 
-const db = new sqlite.Database('spg.db', (err) => {
+let db = new sqlite.Database('spg.db', (err) => {
   if (err) {
     throw err;
   }
 });
+
+exports.setTestDB = (db_name) => {
+  db = new sqlite.Database(db_name, (err) => { if (err) throw err; });
+}
 
 //get-> retrieve clients and their budget 
 exports.getAllClients = () => {

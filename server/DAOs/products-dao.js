@@ -2,11 +2,15 @@
 
 const sqlite = require('sqlite3');
 
-const db = new sqlite.Database('spg.db', (err) => {
+let db = new sqlite.Database('spg.db', (err) => {
   if (err) {
     throw err;
   }
 });
+
+exports.setTestDB = (db_name) => {
+  db = new sqlite.Database(db_name, (err) => { if (err) throw err; });
+}
 
 exports.getAllConfirmedProducts = (year, week) => {
   return new Promise((resolve, reject) => {
@@ -184,10 +188,10 @@ exports.insertNewExpectedProduct = (prod, provider_id) => {
 }
 
 
-exports.confirmExpectedProduct = (provider_id,product_id, year, week_number) => {
+exports.confirmExpectedProduct = (provider_id, product_id, year, week_number) => {
   return new Promise((resolve, reject) => {
     const sql = 'UPDATE products SET product_status="confirmed" WHERE provider_id = ? AND product_id=? AND year=? AND week_number=?';
-    db.run(sql, [provider_id, product_id, year, week_number ], function (err) {
+    db.run(sql, [provider_id, product_id, year, week_number], function (err) {
       if (err) {
         console.log(err)
         reject(err);

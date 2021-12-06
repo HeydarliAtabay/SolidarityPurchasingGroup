@@ -1,16 +1,10 @@
 import API from '../API';
 import PickupList from './PickupList';
-<<<<<<< Updated upstream
-import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Modal} from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useState, useEffect } from "react";
-=======
 import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown} from 'react-bootstrap';
 import { NavLink} from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {BoxSeam} from 'react-bootstrap-icons';
->>>>>>> Stashed changes
 
 
 function WarehousePage(props) {

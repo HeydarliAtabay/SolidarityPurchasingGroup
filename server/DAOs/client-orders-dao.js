@@ -2,11 +2,15 @@
 
 const sqlite = require('sqlite3');
 
-const db = new sqlite.Database('spg.db', (err) => {
+let db = new sqlite.Database('spg.db', (err) => {
   if (err) {
     throw err;
   }
 });
+
+exports.setTestDB = (db_name) => {
+  db = new sqlite.Database(db_name, (err) => { if (err) throw err; });
+}
 
 //get-> retrieve all client orders
 exports.getAllOrders = () => {
@@ -333,8 +337,8 @@ exports.getProviderShipmentStatus = (provider_id, year, week_number) => {
   });
 };
 //update a booked item
-exports.changeItem = async ( item) => {
-  
+exports.changeItem = async (item) => {
+
 
   return new Promise((resolve, reject) => {
     const sql =

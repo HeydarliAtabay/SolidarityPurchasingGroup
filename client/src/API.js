@@ -996,12 +996,9 @@ const API = {
   confirmExpectedProducts,
   getProviderDeliveredOrders,
   getAllUsers,
-<<<<<<< Updated upstream
-  updateState,updateItem
-=======
+  updateItem,
   updateState,
   updateStateFarmer
->>>>>>> Stashed changes
 };
 
 export default API;
