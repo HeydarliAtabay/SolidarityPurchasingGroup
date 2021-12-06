@@ -46,7 +46,7 @@ async function getAllOrders() {
 
 //GET ->retrieve client orders
 async function getProviderDeliveredOrders(id) {
-  const response = await fetch(`http://localhost:3000/api/provider-orders/${id}`);
+  const response = await fetch(`/api/provider-orders/${id}`);
   if (response.ok) {
     const responseBody = await response.json();
     return responseBody;
@@ -137,6 +137,41 @@ function updateState(id, product_name, state) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: id, product_name: product_name, state: state }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+        });
+      });
+  });
+}
+
+//update farmer state of a product of an order
+function updateStateFarmer(id, product_name) {
+  return new Promise((resolve, reject) => {
+    fetch(`/api/modifyStateFarmer`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ id: id, product_name: product_name}),
     })
       .then((response) => {
         if (response.ok) {
@@ -961,7 +996,12 @@ const API = {
   confirmExpectedProducts,
   getProviderDeliveredOrders,
   getAllUsers,
+<<<<<<< Updated upstream
   updateState,updateItem
+=======
+  updateState,
+  updateStateFarmer
+>>>>>>> Stashed changes
 };
 
 export default API;

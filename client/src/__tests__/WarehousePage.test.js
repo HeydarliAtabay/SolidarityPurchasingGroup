@@ -8,3 +8,13 @@ test('Renders WarehousePage correctly', () => {
     
 
 });
+
+test('Renders WarehousePage correctly', () => {
+    const renderResult = render(<WarehouseManagerDashboard></WarehouseManagerDashboard>);
+    expect(renderResult.getByText("MANAGER DASHBOARD")).toBeInTheDocument();
+    expect(renderResult.getByText("providers avaiable on the platform")).toBeInTheDocument();
+    
+    
+
+});
+

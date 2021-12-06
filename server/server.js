@@ -179,6 +179,20 @@ app.put('/api/modifyState', async (req, res) => {
     });
 });
 
+// PUT update state
+app.put('/api/modifyStateFarmer', async (req, res) => {
+  warehouseDao
+    .changeStateFarmer(req.body.id, req.body.product_name)
+    .then(() => {
+      res.status(200).json();
+      return res;
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
+
 //PUT to update a product as delivered
 app.put('/api/orders/:order_id/:product_name',
 
