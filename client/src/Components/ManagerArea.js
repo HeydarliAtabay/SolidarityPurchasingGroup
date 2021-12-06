@@ -1,8 +1,7 @@
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import ClientAlert from './ClientAlert';
 
-function ClientArea(props) {
+function ManagerArea(props) {
   return (
     <div className="row w-100">
       <div>
@@ -21,11 +20,8 @@ function ClientArea(props) {
       </div>
 
       <span className="d-block text-center mt-5 mb-2 display-2">
-        Client Area
+        Shop Manager Area
       </span>
-      <div className="d-block">
-        <ClientAlert clients={props.clients} clientid={props.clientid} />
-      </div>
       <div className="col-lg-3">
         <div className="card mx-3 my-2 shadow-sm">
           <div className="card-header d-flex justify-content-between">
@@ -33,20 +29,10 @@ function ClientArea(props) {
           </div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item d-flex justify-content-between">
-              Client data here
+              Manager data here
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              Client data here
-            </li>
-          </ul>
-        </div>
-        <div className="card mx-3 my-2 shadow-sm">
-          <div className="card-header d-flex justify-content-between">
-            <h5 className="d-inline my-auto">Your wallet</h5>
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item d-flex justify-content-between">
-              Wallet data here
+              Manager data here
             </li>
           </ul>
         </div>
@@ -59,22 +45,14 @@ function ClientArea(props) {
             </div>
             <div className="col-md-8">
               <div className="card-body">
-                <h5 className="card-title">Browse products</h5>
+                <h5 className="card-title">Pending farmer applications</h5>
                 <p className="card-text">
-                  • View &#38; search products<br />
-                  • Book products<br/>
-                  • Explore next week products
+                  • View &#38; browse farmer applications<br />
+                  • Accept or decline a farmer application<br />
                 </p>
                 <div className="d-block text-end">
-                  <Link to="/booking">
-                    <button className="btn btn-primary">Browse products</button>
-                  </Link>
-                </div>
-                <div className="d-block text-end">
-                  <Link to="/products-next-week">
-                    <button className="btn btn-primary mt-2">
-                      Products available next week
-                    </button>
+                  <Link to="/manager/pending-applications">
+                    <button className="btn btn-primary">Browse applications</button>
                   </Link>
                 </div>
               </div>
@@ -88,40 +66,15 @@ function ClientArea(props) {
             </div>
             <div className="col-md-8">
               <div className="card-body">
-                <h5 className="card-title">My wallet</h5>
+                <h5 className="card-title">SPG Farmers</h5>
                 <p className="card-text">
-                  • View balance
-                  <br />• Wallet top-up
+                  • View the active farmers
+                  <br />• Revoke farmer accounts
                 </p>
                 <div className="d-block text-end">
-                  {/*<Link to="/wallet">*/}
-                  <button className="btn btn-primary" disabled={true}>
-                    Wallet
-                  </button>
-                  {/* </Link> */}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="card m-3 d-inline-block">
-          <div className="row client-area-450px-width-custom no-gutters">
-            <div className="col-md-4 bg-secondary p-3 text-center">
-              {cartIcon}
-            </div>
-            <div className="col-md-8">
-              <div className="card-body">
-                <h5 className="card-title">My orders</h5>
-                <p className="card-text">
-                  • View scheduled deliveries
-                  <br />
-                  • View scheduled pick-ups
-                  <br />• View your order history
-                </p>
-                <div className="d-block text-end">
-                  <Link to="/orders">
-                    <button className="btn btn-primary" disabled={false}>
-                      View orders
+                  <Link to="/manager/farmers">
+                    <button className="btn btn-primary" disabled={true}>
+                      Browse farmers
                     </button>
                   </Link>
                 </div>
@@ -160,4 +113,4 @@ const walletIcon = (
   </svg>
 );
 
-export default ClientArea;
+export default ManagerArea;

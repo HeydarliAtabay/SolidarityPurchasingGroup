@@ -38,21 +38,6 @@ let transporter = nodemailer.createTransport({
   },
 });
 
-/*let mailOptions = {
-  from: "se2_r02team@outlook.com",
-  to: "heydarli.atabay@gmail.com",
-  subject: "It is the test message",
-  text: "Hello Atabay, it is the test",
- }; */
-
-/* transporter.sendMail(mailOptions, function (err, data) {
-  if (err) {
-    console.log("Error " + err);
-  } else {
-    console.log("Email sent successfully");
-  }
- }); */
-
 app.post('/api/sendEmail', function (req, res) {
   let mailOptions = {
     from: 'se2_r02team@outlook.com',
@@ -125,31 +110,30 @@ app.use(
 app.use(passport.initialize());
 /*** Users APIs ***/
 
-// POST /sessions
-// login
+// user login
 app.post('/api/sessions', function (req, res, next) {
   passport.authenticate('local', (err, user, info) => {
     if (err) return next(err);
     if (!user) {
       return res.status(401).json(info);
     }
-    req.login(user, (err) => {
-      if (err) return next(err);
+    req.login(user, (error) => {
+      if (error) return next(error);
 
       return res.json(req.user);
     });
   })(req, res, next);
 });
 
-// GET /sessions/current
+// GET currently logged user information
 app.get('/api/sessions/current', (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json(req.user);
   } else res.status(401).json({ code: 401, error: 'Unauthenticated user!' });
 });
 
-// DELETE /sessions/current
-// logout
+
+// user logout
 app.delete('/api/sessions/current', (req, res) => {
   req.logout();
   res.end('Logout completed!');
@@ -443,9 +427,9 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
         fs.unlinkSync(__dirname + '/../client/public/products/' + p + '.jpg');
       }
     });
-    for (let i = 0; i < products.length; i++) {
-      const newID = await productsDAO.insertNewExpectedProduct(products[i], 1);
-      productIDs.push({ old_id: products[i].id, new_id: newID });
+    for (const product of products) {
+      const newID = await productsDAO.insertNewExpectedProduct(product, 1);
+      productIDs.push({ old_id: product.id, new_id: newID });
     }
     console.log(productIDs);
     res.json(productIDs);
@@ -466,13 +450,13 @@ app.post('/api/products/upload/expected/:img_id', (req, res) => {
   let file = req.files.product_image;
 
   file.name = filename + '.jpg';
-  const path = __dirname + '/../client/public/products/' + file.name;
+  const imgpath = __dirname + '/../client/public/products/' + file.name;
 
-  file.mv(path, (err) => {
+  file.mv(imgpath, (err) => {
     if (err) {
       return res.status(500).send(err);
     }
-    return res.send({ status: 'success', path: path });
+    return res.send({ status: 'success', path: imgpath });
   });
 });
 
@@ -493,6 +477,44 @@ app.post('/provider/apply', async (req, res) => {
     var salt = bcrypt.genSaltSync(10);
     farmer.password = await bcrypt.hash(farmer.password, salt);
     res.json(await providersDAO.insertFarmerApplication(farmer));
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+app.get('/manager/applications/pending', async (req, res) => {
+  try {
+    res.json(await providersDAO.getPendingApplications());
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+app.get('/manager/applications/accepted', async (req, res) => {
+  try {
+    res.json(await providersDAO.getAcceptedApplications());
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+app.get('/manager/applications/accept/:application_id', async (req, res) => {
+  try {
+    const application_id = req.params.application_id;
+    res.json(await providersDAO.acceptApplication(application_id));
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+app.get('/manager/applications/reject/:application_id', async (req, res) => {
+  try {
+    const application_id = req.params.application_id;
+    res.json(await providersDAO.rejectApplication(application_id));
   } catch (err) {
     console.log(err);
     res.json(err);
@@ -554,7 +576,6 @@ app.put('/api/farmerConfirm/:product_id/:year/:week', async (req, res) => {
 
 app.post('/api/clients', async (req, res) => {
   try {
-    //const hashedPassword = await bcrypt.hash(req.body.hash,10)
     var salt = bcrypt.genSaltSync(10);
     const oldPassword = req.body.hash;
     const hashedPassword = await bcrypt.hash(oldPassword, salt);
@@ -601,7 +622,7 @@ app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
   const clientId = req.params.clientId;
   const amount = req.params.amount;
   try {
-    let task = await walletsDAO.increaseBalance(amount, clientId);
+    await walletsDAO.increaseBalance(amount, clientId);
     res.json(`Balance of client : ${clientId} was increased`);
   } catch (error) {
     res
@@ -640,8 +661,7 @@ app.post(
       role: req.body.role,
     };
     try {
-      const result = await dbt.addclient(t);
-
+      await dbt.addclient(t);
       res.status(201).end('Added client as a user!');
     } catch (err) {
       res.status(503).json({ code: 503, error: 'Unavailable service.' });
@@ -669,7 +689,7 @@ app.post('/api/orderinsert', async (req, res) => {
       time: req.body.time,
       pickup: req.body.pickup
     };
-    const result = await ordersDao.addOrder(t);
+    await ordersDao.addOrder(t);
     res.status(201).end('Created order!');
   } catch (err) {
     console.log(err);

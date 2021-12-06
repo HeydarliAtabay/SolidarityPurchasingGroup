@@ -346,7 +346,7 @@ async function uploadProductImage(formData, product_id) {
 
 //Check if email already exists
 async function checkEmailAvailability(email) {
-  const response = await fetch('/users/email-availability/'+email);
+  const response = await fetch('/users/email-availability/' + email);
   if (response.ok) {
     return await response.json();
   } else {
@@ -358,12 +358,52 @@ async function checkEmailAvailability(email) {
 //POST a farmer application
 async function sendFarmerApplication(farmerApplication) {
   console.log(farmerApplication);
-  const response = await fetch('/provider/apply',{
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(farmerApplication),
-    }
+  const response = await fetch('/provider/apply', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(farmerApplication),
+  }
   );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+async function getFarmerPendingApplications() {
+  const response = await fetch('/manager/applications/pending');
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+async function getFarmerAcceptedApplications() {
+  const response = await fetch('/manager/applications/accepted');
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+async function acceptFarmerApplication(application_id) {
+  const response = await fetch('/manager/applications/accept/' + application_id);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+async function rejectFarmerApplication(application_id) {
+  const response = await fetch('/manager/applications/reject/' + application_id);
   if (response.ok) {
     return await response.json();
   } else {
@@ -581,9 +621,9 @@ function increaseBalance(amount, clientId) {
   return new Promise((resolve, reject) => {
     fetch(
       '/api/clients/update/balance/' +
-        clientId +
-        '/' +
-        amount,
+      clientId +
+      '/' +
+      amount,
       {
         method: 'PUT',
         headers: {
@@ -614,15 +654,15 @@ function increaseBalance(amount, clientId) {
 }
 
 // Confirm expexted product
-function confirmExpectedProducts(product,year,week) {
+function confirmExpectedProducts(product, year, week) {
   return new Promise((resolve, reject) => {
     fetch(
       '/api/farmerConfirm/' +
-        product +
-        '/' +
-        year +
-        '/' +
-        week,
+      product +
+      '/' +
+      year +
+      '/' +
+      week,
       {
         method: 'PUT',
         headers: {
@@ -737,7 +777,7 @@ function addOrder(S) {
   return new Promise((resolve, reject) => {
     fetch('/api/orderinsert', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         order_id: S.order_id,
         client_id: S.client_id,
@@ -862,6 +902,10 @@ const API = {
   uploadProductImage,
   checkEmailAvailability,
   sendFarmerApplication,
+  getFarmerPendingApplications,
+  getFarmerAcceptedApplications,
+  acceptFarmerApplication,
+  rejectFarmerApplication,
   addClient,
   getAllPaymentMethods,
   addTransaction,

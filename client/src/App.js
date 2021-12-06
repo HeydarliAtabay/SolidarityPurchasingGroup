@@ -23,11 +23,14 @@ import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
 import FarmerOrderPreparation from './Components/FarmerOrderPreparation';
 import FarmerOrderConfirmation from './Components/FarmerOrderConfirmation';
+import ManagerFarmers from './Components/ManagerFarmers';
+import ManagerArea from './Components/ManagerArea';
+import dayjs from 'dayjs';
 
 let r = [];
 
 function App() {
-  const [time, setTime] = useState({ date: '11-30-2021', hour: '10:00' });
+  const [time, setTime] = useState({ date: dayjs().format('MM-DD-YYYY'), hour: dayjs().format('HH:mm') });
   const [recharged, setRecharged] = useState(true);
   const [recharged1, setRecharged1] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -348,14 +351,28 @@ function App() {
             )}
           />
           <Route
+            path="/manager"
+            exact
+            render={() => (
+              <ManagerArea time={time} />
+            )}
+          />
+          <Route
+            path="/manager/applications"
+            exact
+            render={() => (
+              <ManagerFarmers pendingOnly={true} acceptedOnly={false} time={time} />
+            )}
+          />
+          <Route
             path="/farmer-apply"
             exact
-            render={() => <FarmerRegistration />}
+            render={() => <FarmerRegistration time={time} />}
           />
           <Route
             path="/farmer"
             exact
-            render={() => <FarmerArea time={time} />}
+            render={() => <FarmerArea time={time} logout={doLogOut}/>}
           />
           <Route
             path="/declare-availability"

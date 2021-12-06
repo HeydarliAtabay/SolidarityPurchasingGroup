@@ -5,6 +5,7 @@ import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/bootstrap.css'
 import { Country, State, City } from 'country-state-city';
 import API from '../API'
+import dayjs from 'dayjs'
 
 function FarmerRegistration(props) {
 
@@ -23,6 +24,7 @@ function FarmerRegistration(props) {
   const [zip, setZip] = useState("")
   const [password, setPassword] = useState("")
   const [passwordConfirm, setPasswordConfirm] = useState("")
+  const [description, setDescription] = useState("");
 
   const [nameError, setNameError] = useState("")
   const [surnameError, setSurnameError] = useState("")
@@ -66,7 +68,9 @@ function FarmerRegistration(props) {
           city: city,
           address: address,
           zip: zip,
-          password: password
+          password: password,
+          description: description,
+          submit_date: dayjs(props.time.date + ' ' + props.time.hour).format("MM-DD-YYYY HH:mm")
         }
 
         console.log(application);
@@ -140,6 +144,8 @@ function FarmerRegistration(props) {
       errorFlag = true;
     }
 
+    setDescription((descr) => (descr.trim()));
+
     if (!errorFlag) {
       setNameError("");
       setSurnameError("");
@@ -157,6 +163,23 @@ function FarmerRegistration(props) {
     }
 
   }
+
+  const handleClear = () => {
+    setName("");
+    setSurname("");
+    setEmail("");
+    setPhone("");
+    setDescription("");
+    setCountry("");
+    setRegion("");
+    setCity("");
+    setAddress("");
+    setZip("");
+    setPassword("");
+    setPasswordConfirm("");
+  }
+
+
 
   return (
     <>
@@ -270,6 +293,18 @@ function FarmerRegistration(props) {
                   </FloatingLabel>
                 </div>
               </Row>
+              <h4 className="text-start mb-3">Let us know you better</h4>
+              <div className="d-block">
+                <FloatingLabel controlId="floatingTextarea2" label="Describe yourself">
+                  <Form.Control
+                    as="textarea"
+                    placeholder="Leave your description here"
+                    value={description}
+                    onChange={(event) => (setDescription(event.target.value))}
+                    style={{ height: '200px' }}
+                  />
+                </FloatingLabel>
+              </div>
               <div className="d-block text-center">
                 <small className="text-danger d-block">{nameError}</small>
                 <small className="text-danger d-block">{surnameError}</small>
@@ -287,12 +322,10 @@ function FarmerRegistration(props) {
               <hr />
 
               <div className="subBtn">
-                <Button variant="danger" type="submit" size="lg"
-
-                >
+                <Button variant="danger" type="button" size="lg" onClick={() => (handleClear())}>
                   Clear form
                 </Button>
-                <Button variant="primary" type="button" size="lg" className="mx-2" onClick={()=>(handleSubmit())}>
+                <Button variant="primary" type="button" size="lg" className="mx-2" onClick={() => (handleSubmit())}>
                   Submit application
                 </Button>
               </div>
