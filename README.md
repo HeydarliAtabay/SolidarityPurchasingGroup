@@ -2,6 +2,8 @@
 
 ## Running Docker for Demo2
 
+Dockerhub: https://hub.docker.com/r/fridanco/spg-r2-se2
+
 ### Pull the image
 (sudo) docker pull fridanco/spg-r2-se2:demo2
 - if on linux, use "sudo" otherwise commands will fail
