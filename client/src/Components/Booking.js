@@ -29,27 +29,22 @@ function Booking(props) {
   const history = useHistory();
   const location = useLocation();
 
-  const [productsBasket, setProductsBasket] = useState([]);
+ const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
   const [showCompletePurchase, setShowCompletePurchase] = useState(false);
-  const [address, setAddress] = useState(
-    location.state ? location.state.item.address : ''
+  const [address, setAddress] = useState( ''
   );
   const [nation, setNation] = useState(
-    location.state ? location.state.item.nation : ''
+     ''
   );
-  const [city, setCity] = useState(
-    location.state ? location.state.item.city : ''
+  const [city, setCity] = useState( ''
   );
-  const [date, setDate] = useState(
-    location.state ? location.state.item.date : ''
+  const [date, setDate] = useState( ''
   );
-  const [time, setTime] = useState(
-    location.state ? location.state.item.time : ''
+  const [time, setTime] = useState( ''
   );
-  const [zipCode, setZipCode] = useState(
-    location.state ? location.state.item.zipcode : ''
+  const [zipCode, setZipCode] = useState(''
   );
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
@@ -180,7 +175,7 @@ function Booking(props) {
       .slice(idx * 3, idx * 3 + 3);
   });
 
-  const onConfirm = async () => {
+ const onConfirm = async () => {
     if (props.isEmployee && selectedUser.client_id === -1) {
       setShowdanger(true);
       return;
@@ -230,11 +225,56 @@ function Booking(props) {
         });
         indice = indice + 1;
       }
-    } else {
-      let i = location.state.item.id;
-      API.deleteOrderItem(location.state.item.id).then(
-        setTimeout(() => { }, 3000)
-      );
+    } 
+else if(location.state.status==="add")
+{
+
+for (const a of productsBasket) {
+        p = (a.price * a.qty).toFixed(2);
+
+        let _time, _date, _pickup;
+        if (deliveryFlag === 'delivery') {
+          _date = date;
+          _time = time;
+          _pickup = 0;
+        }
+        else {
+          _date = dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD');
+          _time = pickupTime;
+          _pickup = 1;
+        }
+
+        let order = new clientOrders(
+          location.state.item.order_id,
+          parseInt(props.clientid),
+          a.name,
+          a.id,
+          a.qty,
+          'booked',
+          null,
+          p,
+          `${indice}`,
+          address,
+          city,
+          nation,
+          zipCode,
+          _date,
+          _time,
+          _pickup
+        );
+        console.log(order);
+        API.addOrder(order).then(() => {
+          props.setRecharged(true);
+          setTimeout(() => { }, 3000);
+        });
+        indice = indice + 1;
+      }
+
+}
+
+ else {
+       let i = location.state.item.id;
+    
       let _time, _date, _pickup;
       if (deliveryFlag === 'delivery') {
         _date = date;
@@ -267,7 +307,7 @@ function Booking(props) {
         _pickup
       );
 
-      API.addOrder(order).then(() => {
+      API.updateItem(order).then(() => {
         props.setRecharged(true);
         setTimeout(() => { }, 3000);
       });

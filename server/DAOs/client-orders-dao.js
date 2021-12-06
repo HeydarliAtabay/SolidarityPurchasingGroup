@@ -331,4 +331,42 @@ exports.getProviderShipmentStatus = (provider_id, year, week_number) => {
       resolve(false);
     });
   });
-}
+};
+//update a booked item
+exports.changeItem = async ( item) => {
+  
+
+  return new Promise((resolve, reject) => {
+    const sql =
+      'UPDATE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, farmer_state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE id=? ';
+    db.run(
+      sql,
+      [
+        item.order_id,
+        item.client_id,
+        item.product_name,
+        item.product_id,
+        item.order_quantity,
+        item.state,
+        item.farmer_state,
+        item.OrderPrice,
+        item.id,
+        item.address,
+        item.city,
+        item.zipcode,
+        item.Nation,
+        item.date,
+        item.time,
+        item.pickup,
+        item.id
+      ],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(null);
+      }
+    );
+  });
+};
