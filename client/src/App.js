@@ -26,6 +26,7 @@ import FarmerOrderConfirmation from './Components/FarmerOrderConfirmation';
 import ManagerFarmers from './Components/ManagerFarmers';
 import ManagerArea from './Components/ManagerArea';
 import dayjs from 'dayjs';
+import DeliveryPage from './Components/DeliveryPage';
 
 let r = [];
 
@@ -45,6 +46,7 @@ function App() {
   const [providers, setProviders] = useState();
   const [users, setUsers] = useState([]);
   const [userRole, setUserRole] = useState();
+  const [email, setMail] = useState();
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -207,6 +209,7 @@ function App() {
       setMessage('');
       setUserid(`${user.id}`);
       setUserRole(`${user.role}`);
+      setMail(`${user.email}`);
       console.log(user.role);
       if (user.role === 'client') {
         return <Redirect to="/client" />;
@@ -218,6 +221,8 @@ function App() {
         return <Redirect to="/warehouse-employee" />;
       } else if (user.role === 'warehouse-manager') {
         return <Redirect to="/warehouse-manager" />;
+      } else if (user.role === 'delivery-personnel') {
+        return <Redirect to="/delivery" />;
       }
     } catch (err) {
       setMessage(`"${err}"`);
@@ -316,6 +321,7 @@ function App() {
                 orders={orders}
                 clients={clients}
                 methods={methods}
+                mail={email}
                 addTr={addTransaction}
                 topUp={topUpBalance}
                 setRecharged={updateRech}
@@ -346,6 +352,19 @@ function App() {
                 orders={orders}
                 providers={providers}
                 methods={methods}
+                logout={doLogOut}
+              />
+            )}
+          />
+          <Route
+            path="/delivery"
+            exact
+            render={() => (
+              <DeliveryPage
+                orders={orders}
+                providers={providers}
+                methods={methods}
+                mail={email}
                 logout={doLogOut}
               />
             )}

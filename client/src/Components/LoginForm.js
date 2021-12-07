@@ -51,6 +51,12 @@ function LoginForm1(props) {
                 <Redirect to="/warehouse-manager" />
             );
         }
+        else if (props.userRole === 'delivery-personnel') {
+            return (
+                <Redirect to="/delivery" />
+            );
+        }
+
     }
 
     return (
