@@ -209,8 +209,9 @@ function App() {
       setMessage('');
       setUserid(`${user.id}`);
       setUserRole(`${user.role}`);
-      setMail(`${user.email}`);
-      console.log(user.role);
+      setMail(`${user.username}`);
+      
+     console.log(user);
       if (user.role === 'client') {
         return <Redirect to="/client" />;
       } else if (user.role === 'employee') {
@@ -365,7 +366,9 @@ function App() {
                 providers={providers}
                 methods={methods}
                 mail={email}
+                userRole={userRole}
                 logout={doLogOut}
+                delivererId={userid}
               />
             )}
           />

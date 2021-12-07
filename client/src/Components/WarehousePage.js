@@ -1,7 +1,7 @@
 import API from '../API';
 import PickupList from './PickupList';
 import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown, DropdownButton} from 'react-bootstrap';
-import { NavLink} from 'react-bootstrap';
+import { Link} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {BoxSeam} from 'react-bootstrap-icons';
@@ -17,8 +17,9 @@ function WarehousePage(props) {
     return (<>
         <br/>
     <div>
-    <Button variant="light"style = {{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><NavLink to="/">LOGOUT</NavLink></Button></div>
-       
+    
+    <Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
+  
 
         <Container fluid>
        <span className="d-block text-center mt-5 mb-2 display-2">
