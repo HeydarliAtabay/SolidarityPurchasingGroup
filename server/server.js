@@ -10,6 +10,7 @@ const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
 const walletsDAO = require('./DAOs/wallet-dao');
 const warehouseDao = require('./DAOs/warehouse-dao');
+const deliverersDao = require('./DAOs/deliverers-dao.js');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
@@ -767,6 +768,19 @@ app.put('/api/orders/:id',
     }
 
   });
+
+  //GET all deliverers
+app.get('/api/deliverers', async (req, res) => {
+  try {
+    const m = await deliverersDao.getAllDeliverers();
+    return res.status(200).json(m);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      error: 'Database error during the retrieve of the list of orders.',
+    });
+  }
+});
 
 module.exports = app;
 

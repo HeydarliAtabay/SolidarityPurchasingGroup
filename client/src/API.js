@@ -955,6 +955,22 @@ pickup:order.pickup
     }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
   });
 }
+
+//GET ->retrieve all deliverers
+async function getAllDeliverers() {
+  const response = await fetch('/api/deliverers');
+  if (response.ok) {
+    const responseBody = await response.json();
+    return responseBody;
+  } else {
+    try {
+      const err = await response.json();
+      throw err.message;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -996,9 +1012,10 @@ const API = {
   confirmExpectedProducts,
   getProviderDeliveredOrders,
   getAllUsers,
-  updateItem,
   updateState,
-  updateStateFarmer
+  updateItem,
+  updateStateFarmer,
+  getAllDeliverers
 };
 
 export default API;
