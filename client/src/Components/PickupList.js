@@ -36,7 +36,7 @@ function onlyUnique(value,index,self){
   let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
   let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
   let sum=0;
-  let state = "prova";
+  let state = 'prepared';
   for (const a of array)
   {sum=sum+a;}
   m.pop();

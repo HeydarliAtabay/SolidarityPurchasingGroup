@@ -104,3 +104,22 @@ exports.changeState = async (id, product_name, state) => {
     );
   });
 };
+// get deliverer by id
+exports.getDelivererByMail = (deliverer_mail) => {
+  return new Promise((resolve, reject) => {
+      const sql = 'SELECT * FROM deliverers WHERE username=?';
+      db.get(sql, [deliverer_mail], (err, row) => {
+          if (err) {
+              reject(err);
+          }
+          const deliverer = {
+              id: row.id,
+              username: row.username,
+              name: row.name,
+              city: row.city
+              
+          }
+          resolve(deliverer);
+      });
+  });
+};

@@ -808,6 +808,18 @@ app.put('/api/modifyStato', async (req, res) => {
     });
 });
 
+//GET deliverer by its mail
+app.get('/api/deliverer/:deliverer_mail', async (req, res) => {
+  try {
+    const deliverer_mail = req.params.deliverer_mail;
+    const deliverer = await deliverersDao.getDelivererByMail(deliverer_mail);
+    res.json(deliverer);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
 module.exports = app;
 
 /* CONNECTION */

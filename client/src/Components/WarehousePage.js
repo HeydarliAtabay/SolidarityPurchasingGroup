@@ -1,11 +1,10 @@
 import API from '../API';
 import PickupList from './PickupList';
-import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown} from 'react-bootstrap';
+import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown, DropdownButton} from 'react-bootstrap';
 import { NavLink} from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import {BoxSeam} from 'react-bootstrap-icons';
-
 
 function WarehousePage(props) {
 
@@ -66,6 +65,7 @@ function WarehousePage(props) {
       const [idPM,setIdPM] = useState([]);
       const [products,setProducts] = useState([]);
 
+      
       useEffect(() => {
         const getAllProducts = async () => {
           await API.getAllConfirmedProducts()
@@ -117,22 +117,38 @@ function WarehousePage(props) {
 
         useEffect(() => {
           const pr = () => {
-            API.getProviderDeliveredOrders(selectedProvider).then((res) => {
+            API.getProviderDeliveredOrders(selectedProvider.id).then((res) => {
               setProviderOrders(res);
-              setShowSearchButton(false);
-              setShow(true);
-              setRecharged(false)
+
+              //setShowSearchButton(false);
+              //setShow(true);
             });
           };
-          if (recharged) pr();
+          if (recharged){ 
+              pr();
+              setRecharged(false)};
         }, [recharged]);
 
       
 
-        const handleProviderPick = ev => {
+        const handleProviderPick = async(ev) => {
           setShow(false);
           setSelectedProvider({id: ev.target.id,name: ev.target.name});
           setShowSearchButton(true);
+
+          setShow(true);
+        
+        await API.getProviderDeliveredOrders(ev.target.id)
+            .then((res) => {
+              setProviderOrders(res);
+              setShowSearchButton(false);
+              setShow(true);
+              
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+            
           
         }
         const handleClose = ev => {
@@ -154,12 +170,16 @@ function WarehousePage(props) {
         <Row>
           <FarmersListChoice providers={providers}></FarmersListChoice>
         </Row>
-
         <Row>
-        
+          <FarmersListChoice2 providers={providers}></FarmersListChoice2>
+        </Row>
+         {/*
+        <Row>
       {showSearchButton ? 
       <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {selectedProvider.id} onClick = {handleClick} >Click to check the farmer-shipped order</Button> :
-      <></>}</Row>
+      <></>}
+      
+      </Row> */}
       </Table>
       
       
@@ -167,8 +187,11 @@ function WarehousePage(props) {
 
       <Finestra show={showM}handleClose={handleClose}id={idM}orders={props.orders}/>
 
-      <h1>Orders sent  to the warehouse</h1>
+      {show ? <><h1>Orders sent to the warehouse from {selectedProvider.name}</h1>
       <FarmerShippedOrderTable setShowM = {setShowM} setIdM = {setIdM} providerOrd = {providerOrders} idM = {idM} setIdPM={setIdPM} idPM={idPM} products = {products} setRecharged={setRecharged}></FarmerShippedOrderTable>
+      </> : <></>}
+
+      
       </>);
       }
 
@@ -184,16 +207,31 @@ function WarehousePage(props) {
           
         );
       }
+
+      function FarmersListChoice2(props){
+        return(
+          <DropdownButton id="dropdown-item-button" title="Farmers">
+  
+  {props.providers.map((p) =>{return(<Dropdown.Item as="button" value={p.id} >{p.name}</Dropdown.Item>
+  )})}
+  
+</DropdownButton>
+        )
+      }
     
       function FarmerShippedOrderTable(props){
+
+        let farmerState = 'received';
 
         return(<ListGroup variant="flush">
         <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
             <Row>
-        <Col xs={2} md={2}>ORDER_ID</Col>
-        <Col xs={2} md={2}>CLIENT_ID</Col>
-        <Col xs={3} md={3}>ORDER PRODUCTS</Col>
-        <Col xs={3} md={3}>PRODUCT</Col>
+        <Col xs={2} md={2}>ORDER ID</Col>
+        <Col xs={2} md={2}>CLIENT ID</Col>
+        <Col xs={2} md={2}>CLIENT NAME</Col>
+        <Col xs={2} md={2}>ORDER PRODUCTS</Col>
+        <Col xs={2} md={2}>PRODUCT</Col>
+        <Col xs={2} md={2}>CONFIRM</Col>
         </Row></ListGroupItem>
 
        { props.providerOrd.map((p => {return(
@@ -201,14 +239,15 @@ function WarehousePage(props) {
               <Row>
               <Col xs={2} md={2}>{p.ord_id}</Col>
               <Col xs={2} md={2}>{p.cli_id}</Col>
-              <Col xs={3} md={3}>
+              <Col xs={2} md={2}>{p.client_name} {p.client_surname}</Col>
+              <Col xs={2} md={2}>
 <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ props.setShowM(true); props.setIdM(p.ord_id); props.setIdPM(p.prod_id)}}>
 show</Button></Col>
-              <Col xs={3} md={3}>{p.prod_name}</Col>
+              <Col xs={2} md={2}>{p.prod_name}</Col>
               <Col><BoxSeam color="green" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               alert("Shipment Received confirmed");
             
-             API.updateStateFarmer(p.ord_id, p.prod_name,"received").then(()=>{     
+             API.updateStateFarmer(p.ord_id, p.prod_name,farmerState).then(()=>{     
          props.setRecharged(true); setTimeout(()=>{},3000)});
                     
                }

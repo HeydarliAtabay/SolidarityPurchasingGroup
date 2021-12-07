@@ -164,14 +164,14 @@ function updateState(id, product_name, state) {
 }
 
 //update farmer state of a product of an order
-function updateStateFarmer(id, product_name) {
+function updateStateFarmer(id, product_name, state) {
   return new Promise((resolve, reject) => {
     fetch(`/api/modifyStateFarmer`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: id, product_name: product_name}),
+      body: JSON.stringify({ id: id, product_name: product_name, state: state}),
     })
       .then((response) => {
         if (response.ok) {
@@ -986,6 +986,19 @@ async function getDeliverableOrders(city) {
     }
   }
 }
+
+//GET provider by specific ID
+async function getDelivererByMail(id) {
+  const response = await fetch(
+    '/api/provider/' + id
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -1031,7 +1044,8 @@ const API = {
   updateItem,
   updateStateFarmer,
   getAllDeliverers,
-  getDeliverableOrders
+  getDeliverableOrders,
+  getDelivererByMail
 };
 
 export default API;
