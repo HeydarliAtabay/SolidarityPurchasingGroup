@@ -150,7 +150,7 @@ exports.changeState = async (id, product_name, state) => {
         test.product_name,
         test.product_id,
         test.order_quantity,
-        "prepared",
+        state,
         test.OrderPrice,
         test.id,
         test.address,

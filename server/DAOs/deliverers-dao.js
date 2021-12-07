@@ -39,7 +39,7 @@ exports.getAllDeliverers = () => {
       const product_status = 'expected';
       const sql =
         'SELECT * FROM orders WHERE city =? AND pickup=? AND state=?';
-      db.all(sql, [city,0,'booked'], (err, rows) => {
+      db.all(sql, [city,0,''], (err, rows) => {
         if (err) {
           reject(err);
         }
