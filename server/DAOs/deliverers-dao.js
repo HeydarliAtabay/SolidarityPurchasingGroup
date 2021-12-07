@@ -36,10 +36,10 @@ exports.getAllDeliverers = () => {
 
   exports.getAllDeliverableOrders = (city) => {
     return new Promise((resolve, reject) => {
-      const product_status = 'expected';
+      const product_status = 'booked';
       const sql =
         'SELECT * FROM orders WHERE city =? AND pickup=? AND state=?';
-      db.all(sql, [city,0,''], (err, rows) => {
+      db.all(sql, [city,0,product_status], (err, rows) => {
         if (err) {
           reject(err);
         }

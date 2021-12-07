@@ -5,7 +5,50 @@ import { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {BoxSeam} from 'react-bootstrap-icons';
 
+
 function DeliveryPage(props){
+
+    const [delivererData, setDelivererData] = useState();
+    const [avaiableOrders, setAvaiableOrders] = useState();
+    const [flag, setFlag] = useState(false);
+
+    /*
+    useEffect(() => {
+        const getDelivererByEmail = async () => {
+          await API.getDelivererByMail(props.mail)
+            .then((res) => {
+              setDelivererData(res);
+              console.log(delivererData.city);
+              setFlag(true);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        };
+        getDelivererByEmail();
+      }, []);
+
+      */
+      // useeffect that loads all the avaiable orders in the city of the deliverer
+      /*
+      useEffect(() => {
+        const getDeliverableOrders = async () => {
+          await API.getAllDeliverableOrders('deliverer1@shop.it')
+            .then((res) => {
+              setAvaiableOrders(res);
+              console.log(avaiableOrders.order_id);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        };
+        if(flag){
+        getDeliverableOrders();}
+      }, [flag]);
+      */
+
+
+
     return (<>
         <br/>
     <div>
