@@ -25,8 +25,8 @@ function onlyUnique(value,index,self){
       <Col xs={2} md={2}>Order ID</Col>
       <Col xs={2} md={2}>Client ID</Col>
       <Col xs={3} md={3}>Products</Col>
-       <Col xs={3} md={3}>TOTAL</Col>
-      <Col xs={2} md={2}>Confirm Preparation</Col>
+      <Col xs={3} md={3}>TOTAL</Col>
+      {(props.userRole === "warehouse-employee")? <></> : <Col xs={2} md={2}>Confirm Preparation</Col> }
       </Row></ListGroupItem>
       {props.orders.filter(x=>x.pickup===props.b).map((s)=>{
        if (!m.find(x => (parseInt(x) === parseInt(s.order_id)))) {
@@ -50,7 +50,7 @@ function onlyUnique(value,index,self){
       
       <Col xs={3} md={3}>{sum}{' '}€</Col>
       <Col xs={2} md={2}> 
-     {s.pickup===1 && 
+     {(props.userRole === "warehouse-employee")? <></> :
       <BoxSeam color="green" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               alert("Preparation confirmed");
               for(const a of array2){

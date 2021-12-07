@@ -36,7 +36,7 @@ function WarehousePage(props) {
             </Col>
             <Col xs={9} md={9}>
           {show ?   
-                  <PickupList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />: <></>}
+                  <PickupList setRecharged={props.setRecharged} orders={props.orders} userRole={props.userRole} setShow={setShow} b={b} />: <></>}
         </Col></Row>
              
           <br/>
@@ -65,6 +65,9 @@ function WarehousePage(props) {
       const [idM, setIdM] = useState([]);
       const [idPM,setIdPM] = useState([]);
       const [products,setProducts] = useState([]);
+      const [show2, setShow2] = useState(false);
+
+      let b = 1;
 
       
       useEffect(() => {
@@ -158,10 +161,33 @@ function WarehousePage(props) {
         
 
 
-
       return(<>
-      <Table>
         <Row><h1>MANAGER DASHBOARD</h1></Row>
+        <>
+          <Row>
+            <Col xs={3} md={2}>
+            <ListGroup variant="flush">
+            <ListGroupItem>
+              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered for pick-up</Button>
+            </ListGroupItem></ListGroup>
+            </Col>
+            <Col xs={9} md={9}>
+          {show ?   
+                  <PickupList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />: <></>}
+        </Col>
+        <Col xs={3} md={2}>
+            <ListGroup variant="flush">
+            <ListGroupItem>
+              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow2(true)}>Show the providers available on the platform</Button>
+            </ListGroupItem></ListGroup>
+            </Col>
+            <Col xs={9} md={9}>
+          {show2 ?
+           <FarmersListChoice setRecharged={props.setRecharged} orders={props.orders} providers = {providers} setShow2={setShow2} b={b} />: <></>} 
+        </Col></Row>
+             
+          <br/>
+          </>
         <Row><h4>providers avaiable on the platform</h4></Row>
         <Row>
         {providers.map((p) => { return(<Col>{selectedProvider.id === p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
@@ -181,7 +207,6 @@ function WarehousePage(props) {
       <></>}
       
       </Row> */}
-      </Table>
       
       
      

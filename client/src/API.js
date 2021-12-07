@@ -987,10 +987,10 @@ async function getDeliverableOrders(city) {
   }
 }
 
-//GET provider by specific ID
+//GET provider by specific mail
 async function getDelivererByMail(id) {
   const response = await fetch(
-    '/api/provider/' + id
+    '/api/deliverer/' + id
   );
   if (response.ok) {
     return await response.json();
