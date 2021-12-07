@@ -76,7 +76,7 @@ exports.getProviderShippedOrders = (provider_id) => {
   });
 }
 
-exports.changeStateFarmer = async (id, product_name) => {
+exports.changeStateFarmer = async (id, product_name, state) => {
   const test = await this.getO(id, product_name);
 
   return new Promise((resolve, reject) => {
@@ -91,7 +91,7 @@ exports.changeStateFarmer = async (id, product_name) => {
         test.product_id,
         test.order_quantity,
         test.state,
-        "received",
+        state,
         test.OrderPrice,
         test.id,
         test.address,
