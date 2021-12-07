@@ -18,17 +18,23 @@ code {
 }
 
 .nav-link{
-  color: black!important;
   border-bottom: 1px solid transparent;
 }
 
 .nav-link:hover{
-  color: white!important;
+  border-bottom: 1px solid white;
+}
+
+.nav-accessory{
+  border-bottom: 1px solid transparent;
+}
+
+.nav-accessory:hover{
+  cursor: pointer;
   border-bottom: 1px solid white;
 }
 
 .navbar-brand{
-  color:black!important;
   font-size: larger;
   font-style: normal;
   letter-spacing: 3px;

@@ -9,7 +9,7 @@ import API from './API';
 import EmployeePage from './Components/EmployeePage';
 import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
-import { useState, useEffect, Row, Alert } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Redirect,
   BrowserRouter as Router,
@@ -45,8 +45,9 @@ function App() {
   const [logged, setLogged] = useState(false);
   const [providers, setProviders] = useState();
   const [users, setUsers] = useState([]);
-  const [userRole, setUserRole] = useState();
-  const [email, setMail] = useState();
+  const [userRole, setUserRole] = useState('');
+  const [userMail, setUserMail] = useState('');
+  const [userName, setUserName] = useState('');
 
   const updateRech = (x) => {
     setRecharged(x);
@@ -207,9 +208,10 @@ function App() {
       const user = await API.logIn(credentials);
       setLogged(true);
       setMessage('');
-      setUserid(`${user.id}`);
-      setUserRole(`${user.role}`);
-      setMail(`${user.username}`);
+      setUserid(user.id);
+      setUserRole(user.role);
+      setUserMail(user.username);
+      setUserName(user.name);
       
      console.log(user);
       if (user.role === 'client') {
@@ -235,6 +237,8 @@ function App() {
 
     setLogged(false);
     setUserRole('');
+    setUserMail('');
+    setUserName('');
     setUserid(-1);
 
     return <Redirect to="/" />;
@@ -245,7 +249,11 @@ function App() {
       <MyNavbar
         time={time}
         loggedIn={logged}
+        logout={doLogOut}
+        login={doLogIn}
         userRole={userRole}
+        userName={userName}
+        userMail={userMail}
         setTime={setTime}
       />
       <div className="container-fluid">
@@ -322,7 +330,7 @@ function App() {
                 orders={orders}
                 clients={clients}
                 methods={methods}
-                mail={email}
+                mail={userMail}
                 addTr={addTransaction}
                 topUp={topUpBalance}
                 setRecharged={updateRech}
@@ -365,7 +373,7 @@ function App() {
                 orders={orders}
                 providers={providers}
                 methods={methods}
-                mail={email}
+                mail={userMail}
                 userRole={userRole}
                 logout={doLogOut}
                 delivererId={userid}
