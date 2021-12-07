@@ -782,6 +782,32 @@ app.get('/api/deliverers', async (req, res) => {
   }
 });
 
+//GET deliverable orders
+app.get('/api/deliverableOrders/:city', async (req, res) => {
+  try {
+    const city = req.params.city;
+    const orders = await deliverersDao.getAllDeliverableOrders(city);
+    res.json(orders);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+// PUT update state
+app.put('/api/modifyStato', async (req, res) => {
+  deliverersDao
+    .changeState(req.body.id, req.body.product, req.body.state)
+    .then(() => {
+      res.status(200).json();
+      return res;
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json(error);
+    });
+});
+
 module.exports = app;
 
 /* CONNECTION */

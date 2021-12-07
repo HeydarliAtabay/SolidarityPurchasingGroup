@@ -1,6 +1,7 @@
 'use strict';
 
 const sqlite = require('sqlite3');
+const ordersDao = require('./client-orders-dao');
 
 let db = new sqlite.Database('spg.db', (err) => {
   if (err) {
@@ -32,3 +33,74 @@ exports.getAllDeliverers = () => {
       });
     });
   };
+
+  exports.getAllDeliverableOrders = (city) => {
+    return new Promise((resolve, reject) => {
+      const product_status = 'expected';
+      const sql =
+        'SELECT * FROM orders WHERE city =? AND pickup=? AND state=?';
+      db.all(sql, [city,0,'booked'], (err, rows) => {
+        if (err) {
+          reject(err);
+        }
+        const orders = rows.map((e) => ({
+        order_id: e.order_id,
+        client_id: e.client_id,
+        product_name: e.product_name,
+        product_id: e.product_id,
+        order_quantity: e.order_quantity,
+        state: e.state,
+        farmer_state: e.farmer_state,
+        OrderPrice: e.OrderPrice,
+        id: e.id,
+        address: e.address,
+        city: e.city,
+        zipcode: e.zipcode,
+        Nation: e.Nation,
+        date: e.date,
+        time: e.time,
+        pickup: e.pickup
+        }));
+        resolve(orders);
+      });
+    });
+  };
+
+  //update state order
+exports.changeState = async (id, product_name, state) => {
+  const test = await ordersDao.getO(id, product_name);
+
+  return new Promise((resolve, reject) => {
+    const sql =
+      'UPDATE or REPLACE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE order_id=? AND product_name=?';
+    db.run(
+      sql,
+      [
+        test.order_id,
+        test.client_id,
+        test.product_name,
+        test.product_id,
+        test.order_quantity,
+        state,
+        test.OrderPrice,
+        test.id,
+        test.address,
+        test.city,
+        test.zipcode,
+        test.Nation,
+        test.date,
+        test.time,
+        1,
+        id,
+        product_name
+      ],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(null);
+      }
+    );
+  });
+};

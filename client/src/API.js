@@ -971,6 +971,21 @@ async function getAllDeliverers() {
     }
   }
 }
+//GET ->retrieve deliverable orders
+async function getDeliverableOrders(city) {
+  const response = await fetch(`/api/deliverableOrders/${city}`);
+  if (response.ok) {
+    const responseBody = await response.json();
+    return responseBody;
+  } else {
+    try {
+      const err = await response.json();
+      throw err.message;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -1015,7 +1030,8 @@ const API = {
   updateState,
   updateItem,
   updateStateFarmer,
-  getAllDeliverers
+  getAllDeliverers,
+  getDeliverableOrders
 };
 
 export default API;
