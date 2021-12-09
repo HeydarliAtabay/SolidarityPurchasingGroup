@@ -67,6 +67,7 @@ function Booking(props) {
 
   const [showsuccess, setShowsuccess] = useState(false);
   const [showdanger, setShowdanger] = useState(false);
+   const[showUpdateError,setShowUpdateError]=useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
   let indice, ordine;
@@ -273,6 +274,10 @@ for (const a of productsBasket) {
 }
 
  else {
+
+if(productsBasket.length===1)
+
+{
        let i = location.state.item.id;
     
       let _time, _date, _pickup;
@@ -311,11 +316,18 @@ for (const a of productsBasket) {
         props.setRecharged(true);
         setTimeout(() => { }, 3000);
       });
-    }
+    }}
 
+if(!location.state||location.state.status==="add"){
     setShowsuccess(true);
 
-    props.updateProps();
+    props.updateProps();}
+else if(location.state.status==="update"&&productsBasket.length>1)
+setShowUpdateError(true);
+else{
+    setShowsuccess(true);
+
+    props.updateProps();}
   };
   function handleClick() {
     history.push('/registration');
@@ -403,6 +415,7 @@ for (const a of productsBasket) {
                         variant="primary"
                         className="mb-1 align-middle"
                         disabled
+                   
                       >
                         {cartIcon} Add to Basket
                       </Button>
@@ -610,9 +623,11 @@ for (const a of productsBasket) {
                   pickupDay={pickupDay}
                   pickupTime={pickupTime}
                   setShowsuccess={setShowsuccess}
+                  setShowUpdateError={setShowUpdateError}
                   setShowdanger={setShowdanger}
                   showsuccess={showsuccess}
                   showdanger={showdanger}
+                  showUpdateError={showUpdateError}
                   productsBasket={productsBasket}
                   onAdd={onAdd}
                   onRemove={onRemove}
