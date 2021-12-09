@@ -104,7 +104,7 @@ open your favourite browser and access the project at the url: http://localhost:
              "code":503
              "error": "Unavailable service during the create of the order."
          } `
-   * POST `/api/users `
+* POST `/api/users `
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
     * Body of the content:
@@ -201,7 +201,7 @@ open your favourite browser and access the project at the url: http://localhost:
            error: 'Database error during the retrieve of the list of users.',
          } `
 
-   * PUT `/api/orders/:id `
+* PUT `/api/orders/:id `
     * Request parameter: id 
     * Request body:  An object representing (Content-Type: `application/json`).
     * Body of the content:
@@ -240,7 +240,7 @@ open your favourite browser and access the project at the url: http://localhost:
         `{
             "error": `Database error during the update of order .`
          } `
-   * PUT `/api/orders/:order_id/:product_name `
+* PUT `/api/orders/:order_id/:product_name `
     * Request parameter: order_id , product_name
     * Request body: 
     * Body of the content:
@@ -253,7 +253,7 @@ open your favourite browser and access the project at the url: http://localhost:
          } `
   
 
-  * DELETE`/api/orders/:id `
+* DELETE`/api/orders/:id `
     * Request parameter:id
     * Request body: 
     * Body of the content:
