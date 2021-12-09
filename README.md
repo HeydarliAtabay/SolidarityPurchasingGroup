@@ -259,7 +259,7 @@ open your favourite browser and access the project at the url: http://localhost:
     * Body of the content:
           
     * Response: `204 OK (success) or 503 
-    * Response body: 'order item deleted!'
+    * Response body: 'order item deleted!' or
 
         `{
                 "code": 503,
