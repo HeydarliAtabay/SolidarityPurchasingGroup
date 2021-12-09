@@ -514,7 +514,7 @@ function App() {
             path="/registration"
             exact
             render={() => (
-              <UserRegistration users={users} setRecharged={updateRech1} />
+              <UserRegistration clients={clients} setRecharged={updateRech1} />
             )}
           />
           <Route path="/" render={() => <Frontpage />} />
