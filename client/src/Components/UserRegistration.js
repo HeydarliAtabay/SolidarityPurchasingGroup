@@ -24,9 +24,9 @@ function UserRegistration(props) {
   const [passwordEqual, setPasswordEqual] = useState(0)
 
   let j, v;
-  if (props.users.length === 0) v = 1;
+  if (props.clients.length === 0) v = 1;
   else {
-    j = props.users.map(x => x.id);
+    j = props.clients.map(x => x.client_id);
     v = Math.max(...j) + 1;
   }
   const okayStyle = { color: "green" }
