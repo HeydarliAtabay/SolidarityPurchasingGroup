@@ -296,7 +296,7 @@ app.get('/api/product/:product_id', async (req, res) => {
 //GET all booked orders for a certain provider
 app.get('/api/products/ordered/:year/:week_number', async (req, res) => {
   try {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
 
@@ -348,7 +348,7 @@ app.get('/api/provider/:provider_id', async (req, res) => {
 
 //Get provider products
 app.get('/api/provider-products', async (req, res) => {
-  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
   }
 
@@ -366,7 +366,7 @@ app.get('/api/provider-products', async (req, res) => {
 //CHECK provider's confirmation status
 app.get('/api/provider/confirmationStatus/:year/:week_number',
   async (req, res) => {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
     try {
@@ -391,7 +391,7 @@ app.get('/api/provider/confirmationStatus/:year/:week_number',
 //GET provider's expected production
 app.get('/api/products/provider/expected/:year/:week_number',
   async (req, res) => {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
 
@@ -416,7 +416,7 @@ app.get('/api/products/provider/expected/:year/:week_number',
 //GET providers shipment status
 app.get('/api/provider/shipmentstatus/:year/:week_number',
   async (req, res) => {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
 
@@ -460,7 +460,7 @@ app.get(
 
 //Insert provider's expected production
 app.post('/api/products/expected/:year/:week_number', async (req, res) => {
-  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
   }
 
@@ -498,6 +498,10 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
 
 //UPLOAD image
 app.post('/api/products/upload/expected/:img_id', (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -541,6 +545,10 @@ app.post('/provider/apply', async (req, res) => {
 });
 
 app.get('/manager/applications/pending', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     res.json(await providersDAO.getPendingApplications());
   } catch (err) {
@@ -550,6 +558,10 @@ app.get('/manager/applications/pending', async (req, res) => {
 });
 
 app.get('/manager/applications/accepted', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     res.json(await providersDAO.getAcceptedApplications());
   } catch (err) {
@@ -559,6 +571,10 @@ app.get('/manager/applications/accepted', async (req, res) => {
 });
 
 app.get('/manager/applications/accept/:application_id', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     const application_id = req.params.application_id;
     res.json(await providersDAO.acceptApplication(application_id));
@@ -569,6 +585,10 @@ app.get('/manager/applications/accept/:application_id', async (req, res) => {
 });
 
 app.get('/manager/applications/reject/:application_id', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     const application_id = req.params.application_id;
     res.json(await providersDAO.rejectApplication(application_id));
@@ -617,7 +637,7 @@ app.put('/api/modifyquantity', async (req, res) => {
 
 //update quantity
 app.put('/api/farmerConfirm/:product_id/:year/:week', async (req, res) => {
-  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
   }
 

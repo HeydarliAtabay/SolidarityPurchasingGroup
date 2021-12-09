@@ -404,7 +404,7 @@ function App() {
             path="/manager"
             exact
             render={() => (logged ?
-              <ManagerArea time={time} />
+              <ManagerArea userName={userName} userMail={userMail} logout={doLogOut} time={time} />
               :
               <Redirect to="/login" />
             )}

@@ -1,8 +1,11 @@
 import { Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import ClientAlert from './ClientAlert';
 
 function ClientArea(props) {
+  
+  const history = useHistory();
+
   return (
     <div className="row w-100">
 
@@ -36,11 +39,14 @@ function ClientArea(props) {
             </li>
           </ul>
         </div>
+        <div className="d-block mx-3 my-4">
+          <button className="btn btn-outline-secondary w-100" onClick={() => { props.logout(); history.push("/") }}>Logout</button>
+        </div>
       </div>
       <div className="col-lg-9 ">
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 bg-secondary p-3 text-center">
+            <div className="col-md-4 p-3 text-center" style={{background: "linear-gradient(to right, #C15FE8 70%, #FFFFFF)"}}>
               {cartIcon}
             </div>
             <div className="col-md-8">
@@ -53,10 +59,10 @@ function ClientArea(props) {
                 </p>
                 <div className="d-block text-end">
                   <Link to="/booking">
-                    <button className="btn btn-primary me-2 mt-3">Browse products</button>
+                    <button className="btn me-2 mt-3" style={{backgroundColor: "#C15FE8", color: "white"}}>Browse products</button>
                   </Link>
                   <Link to="/products-next-week">
-                    <button className="btn btn-secondary mt-3">
+                    <button className="btn mt-3" style={{backgroundColor: "#C15FE8", color: "white"}}>
                       Products available next week
                     </button>
                   </Link>
@@ -67,7 +73,7 @@ function ClientArea(props) {
         </div>
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 bg-secondary p-3 text-center">
+            <div className="col-md-4 p-3 text-center" style={{background: "linear-gradient(to right, #A263F2 70%, #FFFFFF)"}}>
               {walletIcon}
             </div>
             <div className="col-md-8">
@@ -79,7 +85,7 @@ function ClientArea(props) {
                 </p>
                 <div className="d-block text-end">
                   {/*<Link to="/wallet">*/}
-                  <button className="btn btn-primary mt-3" disabled={true}>
+                  <button className="btn mt-3" disabled={true} style={{backgroundColor: "#A263F2", color: "white"}}>
                     Wallet
                   </button>
                   {/* </Link> */}
@@ -90,7 +96,7 @@ function ClientArea(props) {
         </div>
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 bg-secondary p-3 text-center">
+            <div className="col-md-4 p-3 text-center" style={{background: "linear-gradient(to right, #7764DB 70%, #FFFFFF)"}}>
               {cartIcon}
             </div>
             <div className="col-md-8">
@@ -103,7 +109,7 @@ function ClientArea(props) {
                 </p>
                 <div className="d-block text-end">
                   <Link to="/orders">
-                    <button className="btn btn-primary mt-3" disabled={false}>
+                    <button className="btn mt-3" disabled={false} style={{backgroundColor: "#7764DB", color: "white"}}>
                       View orders
                     </button>
                   </Link>
