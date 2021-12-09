@@ -14,6 +14,7 @@ return self.indexOf(value)===index;
 
 function Orders(props) {
 const[show,setShow]= useState(false);
+const[show2,setShow2]= useState(false);
 const [id,setId]= useState();
 const [order,setOrder]= useState();
 
@@ -22,9 +23,13 @@ const history = useHistory();
 
 let t=parseInt(props.clientid);
 
-let m=props.orders.filter(x=>x.state==="booked"&& parseInt(x.client_id) === t).map(s=>s.order_id).filter(onlyUnique);
+let m=props.orders.filter(x=> parseInt(x.client_id) === t).map(s=>s.order_id).filter(onlyUnique);
+
+
 m.reverse();
 const handleClose = (x) => setShow(x);
+
+const handleClose2 = (x) => setShow2(x);
     return(<>
       <span className="d-block text-center mt-5 mb-2 display-2">
                 My Orders
@@ -32,6 +37,7 @@ const handleClose = (x) => setShow(x);
 <Row>
 
 <Col xs={3} md={2}>
+
           <ListGroup variant="flush">
             <ListGroupItem>
             <Button variant="light" style={{ 'fontSize': 25, 'borderColor': 'black'}}
@@ -39,22 +45,22 @@ const handleClose = (x) => setShow(x);
                   history.push("/booking")
                 }}
               > Make a new Order </Button>
-            </ListGroupItem>
+            </ListGroupItem> 
             <ListGroupItem>
               <Button variant="light" style={{ 'fontSize': 25, 'borderColor': 'black'}}
                 onClick={(event) => {
                   history.push("/client")
                 }}
               >Back to my Area{'   '}  </Button></ListGroupItem></ListGroup>
-</Col><Col xs={10} md={10}>
+</Col><Col xs={10} md={10}><div class="container">
     <ListGroup variant="flush">
      <ListGroupItem key={"ciao7"}variant ={"light"}style={{ 'fontSize': 25,'borderColor': 'black'}}></ListGroupItem>
-   <ListGroupItem key={"ciao"}variant ={"light"}style={{ 'fontSize': 25,'borderColor': 'black'}}>
+   <ListGroupItem key={"ciao"}variant ={"light"}style={{ 'borderColor': 'black'}}>
 <Row>
-    <Col xs={3} md={3}style={{'fontSize': 25}}>ORDER_ID</Col>
-    <Col xs={3} md={3}style={{'fontSize': 25}}>PRODUCTS</Col>
-    <Col xs={3} md={3}style={{'fontSize': 25}}>TOTAL</Col>
-    <Col xs={3} md={3}style={{'fontSize': 25}}>STATE</Col>
+    <Col xs={3} md={3}>ORDER_ID</Col>
+    <Col xs={3} md={3}>PRODUCTS</Col>
+    <Col xs={3} md={3}>TOTAL</Col>
+    <Col xs={3} md={3}>STATE</Col>
    
     </Row>
 
@@ -77,8 +83,15 @@ m.pop();
       <Row><Col xs={3} md={3}>{s.order_id}</Col>
    
     <Col xs={3} md={3}>
+{s.state==="booked"?
+
 <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setOrder(s);setId(s.order_id);}}>
-show{' / '}edit </Button></Col>
+show{' / '}edit </Button>:
+<Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow2(true); setOrder(s);setId(s.order_id);}}>
+show </Button>
+
+}
+</Col>
     
     <Col xs={3} md={3}>
 
@@ -94,14 +107,14 @@ show{' / '}edit </Button></Col>
     }}
     )}
   
-  </ListGroup></Col></Row>
+  </ListGroup></div></Col></Row>
 
 <Modal show={show} onHide={handleClose} animation={false}>
   <Modal.Header closeButton>
     <Modal.Title >
 <Row>
     <Col xs={4} md={4}style={{'fontSize': 24}}>Product</Col>
-    <Col xs={2} md={2}style={{'fontSize': 24}}>Qty</Col>
+    <Col xs={2} md={2}style={{'fontSize': 24}}>Kilos</Col>
     <Col xs={2} md={2}style={{'fontSize': 24}}>Price</Col>
     <Col xs={2} md={2}style={{'fontSize': 24}}>Edit</Col>
     <Col xs={2} md={2}style={{'fontSize': 24}}>Delete</Col>
@@ -115,7 +128,7 @@ show{' / '}edit </Button></Col>
 <Col xs={4} md={4}><Image src={p}style={{ width: '5px', height: '5px'}}></Image>{' '}{s.product_name.toUpperCase()}
 </Col>
 <Col xs={1} md={1}style={{'fontSize': 20}}> {s.order_quantity}</Col>
-<Col xs={2} md={2}style={{'fontSize': 20}}>{' '} {s.OrderPrice}</Col>
+<Col xs={2} md={2}style={{'fontSize': 20}}>{' '} {s.OrderPrice}€</Col>
 <Col xs={2} md={2}> <Link to={{pathname:"/booking",state:{item: s, status: 'update'}}}><Image src={im}style={{'cursor':'pointer',width: '20px', height: '20px'}}></Image></Link></Col>
 <Col xs={2} md={2}> <Image src={d} style={{'cursor':'pointer',width: '20px', height: '20px'}} onClick={()=>{
 
@@ -125,12 +138,39 @@ API.deleteOrderItem(s.id).then(()=>{props.setRecharged(true);});
 </Modal.Body>)}
   <Modal.Footer> 
 <Link to={{pathname:"/booking",state:{item: order, status: 'add'}}}>
-<Button variant={"primary"}>Add</Button></Link>
+<Button variant={"primary"}>Add new products</Button></Link>
 
     <Button variant={"secondary"}onClick={()=>{setShow(false);}}>Close</Button>
   
 
 </Modal.Footer>
+  </Modal>
+
+{/*modal number 2*/}
+<Modal show={show2} onHide={handleClose2} animation={false}>
+  <Modal.Header closeButton>
+    <Modal.Title >
+<Row>
+    <Col xs={3} md={3}>Product</Col>
+    <Col xs={3} md={3}>{' '}</Col>
+    <Col xs={2} md={2}>Kilos</Col>
+<Col xs={1} md={1}>{' '}</Col>
+    <Col xs={2} md={2}>Price</Col>
+   
+    </Row>
+</Modal.Title>
+  </Modal.Header>
+
+ {props.orders.filter(x=>(x.order_id===id)&&(x.client_id===parseInt(props.clientid))).map((s)=>
+  <Modal.Body key={s.id}>
+ <Row>
+<Col xs={4} md={4}><Image src={p}style={{ width: '5px', height: '5px'}}></Image>{' '}{s.product_name.toUpperCase()}
+</Col>
+<Col xs={2} md={2}style={{'fontSize': 20}}> {s.order_quantity}</Col>
+<Col xs={4} md={4}style={{'fontSize': 20}}>{' '} {s.OrderPrice}€</Col>
+</Row>
+</Modal.Body>)}
+ 
   </Modal>
 
 
