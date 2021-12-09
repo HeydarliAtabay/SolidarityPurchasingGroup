@@ -73,6 +73,69 @@ open your favourite browser and access the project at the url: http://localhost:
 | warehouse1@shop.it | warehouse1 |
 
 ## API Server
+*LOGIN 
+----------------------------------------------------------------------------------------------------------------------------------------
+* POST `/api/sessions `
+    * Request parameter:
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+          `{
+              "id": e.id, 
+              "name": e.name, 
+               "email": e.email,
+              "hash": e.hash, 
+              "role": e.role
+      
+         }
+         `     
+    * Response: `201 OK (success) or 401 
+    * Response body: 
+
+        `{
+              "id": e.id, 
+              "name": e.name, 
+               "email": e.email,
+              "hash": e.hash, 
+              "role": e.role
+      
+         }   or
+         `     
+          `{ 'User not found.' } `
+
+* GET `/api/sessions/current `
+    * Request parameter: 
+    * Request body:  
+    * Body of the content: 
+      `{
+              
+               "email": e.email,
+               "password": e.password
+      
+         }   
+    * Response: `200 OK (success) or 401
+    * Response body:
+      `{
+               "id": e.id, 
+              "name": e.name, 
+               "email": e.email,
+               "hash": e.hash, 
+               "role": e.role
+      
+         }       or
+         `
+      `{
+           "code": 401,
+           "error": 'Unauthenticated user!'',
+         } `
+
+* DELETE `/api/sessions/current `
+    * Request parameter:
+    * Request body: 
+    * Body of the content:
+    * Response: 
+    * Response body:'Logout completed!'
+    
+-------------------------------------------------------------------------------------------------------------------------------------------------------------   
 * POST `/api/orderinsert `
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
