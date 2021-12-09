@@ -79,6 +79,7 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
     * Body of the content:
+          
           `{
               "id": e.id, 
               "name": e.name, 
@@ -106,7 +107,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request parameter: 
     * Request body:  
     * Body of the content: 
-      `{
+     
+     `{
               
                "email": e.email,
                "password": e.password
@@ -114,7 +116,8 @@ open your favourite browser and access the project at the url: http://localhost:
          }` 
     * Response: `200 OK (success) or 401`
     * Response body:
-      `{
+     
+     `{
                "id": e.id, 
               "name": e.name, 
                "email": e.email,
@@ -123,7 +126,8 @@ open your favourite browser and access the project at the url: http://localhost:
       
          }`       or
          
-      `{
+    
+    `{
            "code": 401,
            "error": 'Unauthenticated user!',
          } `
@@ -133,7 +137,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request body: 
     * Body of the content:
     * Response: 
-    * Response body:`Logout completed!`
+    * Response body:
+    `Logout completed!`
     
 -------------------------------------------------------------------------------------------------------------------------------------------------------------   
 * POST `/api/orderinsert `
@@ -171,7 +176,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
     * Body of the content:
-          `{
+         
+         `{
               "id": e.id, 
               "name": e.name, 
                "email": e.email,
@@ -181,7 +187,9 @@ open your favourite browser and access the project at the url: http://localhost:
          }
          `     
     * Response: `201 OK (success) or 503 
-    * Response body: `Added client as a user!` or
+    * Response body:
+     
+     `Added client as a user!` or
 
         `{
              "code":503
@@ -195,7 +203,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Body of the content: 
     * Response: `200 OK (success) or 500
     * Response body:
-      `{
+     
+     `{
              "order_id":S.order_id,
              "client_id":S.client_id,
              "product_name": S.product_name,
@@ -211,8 +220,8 @@ open your favourite browser and access the project at the url: http://localhost:
             "date": S.date,
             "time": S.time,
             "pickup": S.pickup
-         }or
-         `
+         }`   or
+         
       `{  
             code: 500,
              error: 'Database error during the retrieve of the list of orders.'
@@ -223,7 +232,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Body of the content: 
     * Response: `200 OK (success) or 500
     * Response body:
-      `{
+    
+       `{
               "client_id": e.client_id, 
               "budget": e.budget, 
               "name": e.name, 
@@ -237,8 +247,8 @@ open your favourite browser and access the project at the url: http://localhost:
                "phone": e.phone,
                "email": e.email
       
-         } or
-         `
+         }` or 
+         
       `{
            code: 500,
            error: `Database error during the retrieve of the list of clients.`
@@ -250,6 +260,7 @@ open your favourite browser and access the project at the url: http://localhost:
     * Body of the content: 
     * Response: `200 OK (success) or 500
     * Response body:
+      
       `{
               "id": e.id, 
               "name": e.name, 
@@ -257,8 +268,8 @@ open your favourite browser and access the project at the url: http://localhost:
               "hash": e.hash, 
               "role": e.role
       
-         }       or
-         `
+         } `      or
+         
       `{
            code: 500,
            error: 'Database error during the retrieve of the list of users.'
@@ -268,7 +279,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request parameter: id 
     * Request body:  An object representing (Content-Type: `application/json`).
     * Body of the content:
-         `{
+       
+       `{
               "client_id": e.client_id, 
               "budget": e.budget, 
               "name": e.name, 
@@ -282,10 +294,11 @@ open your favourite browser and access the project at the url: http://localhost:
                "phone": e.phone,
                "email": e.email
       
-         } 
+         } `
     * Response: `200 OK (success) or 503 
     * Response body:  
-        `{
+      
+      `{
               "client_id": e.client_id, 
               "budget": e.budget, 
               "name": e.name, 
@@ -299,7 +312,7 @@ open your favourite browser and access the project at the url: http://localhost:
                "phone": e.phone,
                "email": e.email
       
-         } or
+         } ` or
         `{
             "error": "Database error during the update of order. " 
          } `
@@ -307,8 +320,8 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request parameter: order_id , product_name
     * Request body: 
     * Body of the content:
-    * Response: `200 OK (success) or 503 
-    * Response body: 'Update Completed!' or
+    * Response: `200 OK (success) or 503` 
+    * Response body: `Update Completed!` or
 
         `{
              "code":503
@@ -322,7 +335,7 @@ open your favourite browser and access the project at the url: http://localhost:
     * Body of the content:
           
     * Response: `204 OK (success) or 503 
-    * Response body: 'order item deleted!' or
+    * Response body: `order item deleted!` or
 
         `{
                 "code": 503,
