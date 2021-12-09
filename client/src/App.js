@@ -27,6 +27,7 @@ import ManagerFarmers from './Components/ManagerFarmers';
 import ManagerArea from './Components/ManagerArea';
 import dayjs from 'dayjs';
 import DeliveryPage from './Components/DeliveryPage';
+import Fbookings from './Components/FarmerPageOrders';
 
 let r = [];
 
@@ -437,6 +438,18 @@ function App() {
             render={() => (logged ?
               <FarmerArea userName={userName} userMail={userMail} time={time} logout={doLogOut} />
               :
+              <Redirect to="/login" />
+            )}
+          />
+           <Route
+            path="/see-bookings"
+            exact
+            render={() => (logged ?
+              <Fbookings
+                orders={orders}
+                time={time}
+                setRecharged={updateRech}
+              /> :
               <Redirect to="/login" />
             )}
           />
