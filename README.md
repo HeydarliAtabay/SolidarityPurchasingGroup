@@ -74,7 +74,7 @@ open your favourite browser and access the project at the url: http://localhost:
 
 ## API Server
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-* LOGIN api
+* login api:
 * POST `/api/sessions `
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
