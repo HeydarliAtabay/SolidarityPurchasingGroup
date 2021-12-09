@@ -73,8 +73,8 @@ open your favourite browser and access the project at the url: http://localhost:
 | warehouse1@shop.it | warehouse1 |
 
 ## API Server
-*LOGIN 
-----------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+* LOGIN api
 * POST `/api/sessions `
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
