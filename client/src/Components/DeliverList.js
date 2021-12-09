@@ -1,4 +1,4 @@
-import { Button, Row, Col, ListGroup, ListGroupItem, Image, Modal } from 'react-bootstrap';
+import { Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Table } from 'react-bootstrap';
 import {ExclamationDiamond,Telephone, Envelope} from 'react-bootstrap-icons'
 import ris from './reply-all-fill.svg';
 import API from '../API'
@@ -23,7 +23,8 @@ const handleClose = (x) => {
 
 }
     return(<>
-    <ListGroup variant="flush">
+  {/*  
+  <ListGroup variant="flush">
     <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
         <Row>
     <Col xs={2} md={2}>ORDER_ID</Col>
@@ -84,8 +85,78 @@ show</Button></Col>
     <Button variant={"light"}style={{'fontSize': 20,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'15px'}}onClick={()=>{props.setShow(false);}}>Close</Button></ListGroupItem>
   
   </ListGroup>
+
+  */}  
+    
+
     <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
     <ClientModal show={showClient}handleClose={handleClose} client={client} clients={props.clients}/>
+    <Table striped bordered hover variant="light" responsive="lg" size="lg">
+  <thead>
+    <tr>
+      <th>Order id</th>
+      <th>Client id</th>
+      <th>Products</th>
+      <th>Total</th>
+      <th>Deliver</th>
+    </tr>
+  </thead>
+  <tbody>
+    {props.orders.map((s)=>{
+      if(!m.find(x=>(parseInt(x)=== parseInt(s.order_id)))){
+        return <td key={s.id} style={{display:"none"}}> </td>
+      }
+      else {
+        let id=m[m.length-1];
+let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
+let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+let sum=0;
+for (const a of array)
+{sum=sum+a;}
+m.pop();
+
+        return (
+          <>
+          <tr key={s.id}>
+            <td> {s.order_id}</td>
+            <td>{s.client_id}</td>
+            <td> 
+            <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setId(s.order_id);}}>show</Button>
+            </td>
+            <td>{sum}{' '} €</td>
+            <td>
+            {s.state===props.b && 
+             <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+           for(const a of array2){
+               API.updateDelivered(id, a).then(()=>{
+               props.setRecharged(true); setTimeout(()=>{},3000)});
+            }}
+        }></Image>
+
+   }  
+            </td>
+          </tr>
+          </>
+        )
+      }
+    })}
+
+ {/*
+
+    <Col xs={2} md={2}> 
+   {s.state===props.b && 
+   <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+    for(const a of array2){
+           API.updateDelivered(id, a).then(()=>{
+              
+       props.setRecharged(true); setTimeout(()=>{},3000)});
+                  
+             }}
+        }></Image>
+
+   }*/}
+  </tbody>
+</Table>
     </>
     );}
 
