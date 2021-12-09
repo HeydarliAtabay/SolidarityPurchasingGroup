@@ -59,7 +59,7 @@ exports.getUser = (email, password) => {
                 const user = { id: row.id, username: row.email, name: row.name, role: row.role };
                 bcrypt.compare(password, row.hash).then(result => {
                     if (result)
-                        resolve(user);
+                        resolve(user); 
                     else
                         resolve(false);
                 }).catch();
@@ -109,6 +109,22 @@ exports.checkIfEmailExists = (email) => {
                             resolve(false);
                     });
                 }).then((status) => (resolve(status))).catch((err) => (reject(err)));
+            }
+        });
+    });
+}
+
+exports.getProviderIDfromUserID = (user_id) => {
+    return new Promise((resolve, reject) => {
+        const sql = 'SELECT provider_id FROM providers WHERE user_id=?';
+        db.get(sql, [user_id], (err, row) => {
+            if (err)
+                reject(err);
+            else if (row === undefined)
+                reject({ error: 'Provider not found.' });
+            else {
+                console.log("Provider_id "+row.provider_id)
+                resolve(row.provider_id);
             }
         });
     });

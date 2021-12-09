@@ -232,6 +232,7 @@ function FarmerRegistration(props) {
                 </div>
                 <div className="col-md-6">
                   <PhoneInput
+                    containerClass="mb-3"
                     inputClass="w-100 rounded"
                     inputStyle={{ height: "99%" }}
                     placeholder="Phone number"
@@ -255,9 +256,9 @@ function FarmerRegistration(props) {
               </Row>
 
               <h4 className="text-start mb-3">Your address</h4>
-              <Row className="mb-3">
+              <Row>
                 <div className="col-md-4">
-                  <Form.Select size="lg" value={country} onChange={(event) => (setCountry(event.target.value))}>
+                  <Form.Select size="lg" value={country} className="mb-3" onChange={(event) => (setCountry(event.target.value))}>
                     <option value="-1">Country</option>
                     {Country.getAllCountries().map((c) => (
                       <option key={c.isoCode} value={c.isoCode}>{c.name}</option>
@@ -265,7 +266,7 @@ function FarmerRegistration(props) {
                   </Form.Select>
                 </div>
                 <div className="col-md-4">
-                  <Form.Select size="lg" value={region} onChange={(event) => (setRegion(event.target.value))}>
+                  <Form.Select size="lg" value={region} className="mb-3" onChange={(event) => (setRegion(event.target.value))}>
                     <option value="-1">Region</option>
                     {country !== -1 && State.getStatesOfCountry(country).map((r) => (
                       <option key={r.isoCode} value={r.isoCode}>{r.name}</option>
@@ -273,7 +274,7 @@ function FarmerRegistration(props) {
                   </Form.Select>
                 </div>
                 <div className="col-md-4">
-                  <Form.Select size="lg" value={city} onChange={(event) => (setCity(event.target.value))}>
+                  <Form.Select size="lg" value={city} className="mb-3" onChange={(event) => (setCity(event.target.value))}>
                     <option value="-1">City</option>
                     {country !== -1 && region !== -1 && City.getCitiesOfState(country, region).map((c) => (
                       <option key={c.name} value={c.name}>{c.name}</option>
@@ -322,10 +323,10 @@ function FarmerRegistration(props) {
               <hr />
 
               <div className="subBtn">
-                <Button variant="danger" type="button" size="lg" onClick={() => (handleClear())}>
+                <Button variant="danger" type="button" size="lg" className="mb-3" onClick={() => (handleClear())}>
                   Clear form
                 </Button>
-                <Button variant="primary" type="button" size="lg" className="mx-2" onClick={() => (handleSubmit())}>
+                <Button variant="primary" type="button" size="lg" className="mx-2 mb-3" onClick={() => (handleSubmit())}>
                   Submit application
                 </Button>
               </div>

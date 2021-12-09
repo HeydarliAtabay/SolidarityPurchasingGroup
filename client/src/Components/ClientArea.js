@@ -5,20 +5,6 @@ import ClientAlert from './ClientAlert';
 function ClientArea(props) {
   return (
     <div className="row w-100">
-      <div>
-        <Button
-          variant="light"
-          style={{
-            fontSize: 30,
-            borderStyle: 'hidden',
-            position: 'absolute',
-            right: '30px',
-          }}
-          onClick={props.logout}
-        >
-          <Link to="/">LOGOUT</Link>
-        </Button>
-      </div>
 
       <span className="d-block text-center mt-5 mb-2 display-2">
         Client Area
@@ -33,10 +19,10 @@ function ClientArea(props) {
           </div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item d-flex justify-content-between">
-              Client data here
+              {props.userName}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              Client data here
+              {props.userMail}
             </li>
           </ul>
         </div>
@@ -52,8 +38,8 @@ function ClientArea(props) {
         </div>
       </div>
       <div className="col-lg-9 ">
-        <div className="card m-3 d-inline-block">
-          <div className="row client-area-450px-width-custom no-gutters">
+        <div className="card m-3 d-block shadow">
+          <div className="row no-gutters">
             <div className="col-md-4 bg-secondary p-3 text-center">
               {cartIcon}
             </div>
@@ -62,17 +48,15 @@ function ClientArea(props) {
                 <h5 className="card-title">Browse products</h5>
                 <p className="card-text">
                   • View &#38; search products<br />
-                  • Book products<br/>
+                  • Book products<br />
                   • Explore next week products
                 </p>
                 <div className="d-block text-end">
                   <Link to="/booking">
-                    <button className="btn btn-primary">Browse products</button>
+                    <button className="btn btn-primary me-2 mt-3">Browse products</button>
                   </Link>
-                </div>
-                <div className="d-block text-end">
                   <Link to="/products-next-week">
-                    <button className="btn btn-primary mt-2">
+                    <button className="btn btn-secondary mt-3">
                       Products available next week
                     </button>
                   </Link>
@@ -81,8 +65,8 @@ function ClientArea(props) {
             </div>
           </div>
         </div>
-        <div className="card m-3 d-inline-block">
-          <div className="row client-area-450px-width-custom no-gutters">
+        <div className="card m-3 d-block shadow">
+          <div className="row no-gutters">
             <div className="col-md-4 bg-secondary p-3 text-center">
               {walletIcon}
             </div>
@@ -95,7 +79,7 @@ function ClientArea(props) {
                 </p>
                 <div className="d-block text-end">
                   {/*<Link to="/wallet">*/}
-                  <button className="btn btn-primary" disabled={true}>
+                  <button className="btn btn-primary mt-3" disabled={true}>
                     Wallet
                   </button>
                   {/* </Link> */}
@@ -104,8 +88,8 @@ function ClientArea(props) {
             </div>
           </div>
         </div>
-        <div className="card m-3 d-inline-block">
-          <div className="row client-area-450px-width-custom no-gutters">
+        <div className="card m-3 d-block shadow">
+          <div className="row no-gutters">
             <div className="col-md-4 bg-secondary p-3 text-center">
               {cartIcon}
             </div>
@@ -116,11 +100,10 @@ function ClientArea(props) {
                   • View scheduled deliveries
                   <br />
                   • View scheduled pick-ups
-                  <br />• View your order history
                 </p>
                 <div className="d-block text-end">
                   <Link to="/orders">
-                    <button className="btn btn-primary" disabled={false}>
+                    <button className="btn btn-primary mt-3" disabled={false}>
                       View orders
                     </button>
                   </Link>

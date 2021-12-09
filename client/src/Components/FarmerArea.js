@@ -32,21 +32,7 @@ function FarmerArea(props) {
 
   return (
     <div className="row w-100">
-      <div>
-        <Button
-          variant="light"
-          style={{
-            fontSize: 30,
-            borderStyle: 'hidden',
-            position: 'absolute',
-            right: '30px',
-          }}
-          onClick={props.logout}
-        >
-          <Link to="/">LOGOUT</Link>
-        </Button>
-      </div>
-      ]
+      
       <span className="d-block text-center mt-5 mb-2 display-2">
         Farmer Area
       </span>
@@ -57,20 +43,10 @@ function FarmerArea(props) {
           </div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item d-flex justify-content-between">
-              Farmer data here
+              {props.userName}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              Farmer data here
-            </li>
-          </ul>
-        </div>
-        <div className="card mx-3 my-2 shadow-sm">
-          <div className="card-header d-flex justify-content-between">
-            <h5 className="d-inline my-auto">Farmer data</h5>
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item d-flex justify-content-between">
-              Farmer data here
+              {props.userMail}
             </li>
           </ul>
         </div>

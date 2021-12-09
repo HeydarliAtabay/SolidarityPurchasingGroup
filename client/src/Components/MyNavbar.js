@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, OverlayTrigger, Popover, Navbar, Container, Nav } from 'react-bootstrap'
+import { Form, OverlayTrigger, Popover, Navbar, Container, Nav, NavDropdown, Row } from 'react-bootstrap'
 import dayjs from 'dayjs';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -40,10 +40,10 @@ const MyNavbar = function (props) {
   }
 
   return (
-    <Navbar variant="light" expand="lg" className="menu-bar p-1 shadow" >
-      <Container className="text-light mx-0">
+    <Navbar variant="light" expand="lg" className="menu-bar p-1 w-100 shadow" >
+      <Container className="text-light w-100-custom">
         {/*toggleNavbarBrand() === "SPG_logo" &&*/
-          <Navbar.Brand className="p-0 pe-4 ms-0 my-auto border-end text-light fs-1" href="/">
+          <Navbar.Brand className="p-0 pe-4 my-auto border-end text-light fs-1" href="#home" onClick={() => (history.push("/"))}>
             <div className="d-inline my-auto">{shopIcon}</div>
             <div className="d-inline mt-auto"> S P G</div>
           </Navbar.Brand>
@@ -52,8 +52,7 @@ const MyNavbar = function (props) {
           <Navbar.Brand className="p-0 pe-4 ms-0 my-auto border-end text-light fs-4" href="/">
             <div className="d-inline my-auto">{backIcon}</div>
             <div className="d-inline mt-auto" onClick={() => (history.goBack())}> Back</div>
-          </Navbar.Brand>
-      */}
+          </Navbar.Brand>*/}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto my-auto">
@@ -63,33 +62,108 @@ const MyNavbar = function (props) {
                   Home
                 </Link>
               </li>}
-              {(props.userRole === 'client') && <li className="nav-item">
-                <Link to="/login" className="nav-link text-light">
-                  Client area
-                </Link>
-              </li>
+
+              {/* CLIENT NAVBAR */}
+              {(props.userRole === 'client') &&
+                <li className="nav-item">
+                  <Link to="/login" className="nav-link text-light">
+                    Client area
+                  </Link>
+                </li>
               }
+              {(props.userRole === 'client') &&
+                <NavDropdown className="text-light" title="Shopping" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Book products</NavDropdown.Item>
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/products-next-week"))}>Explore next week products</NavDropdown.Item>
+                </NavDropdown>
+              }
+              {(props.userRole === 'client') &&
+                <li className="nav-item">
+                  <Link to="/orders" className="nav-link text-light">
+                    My orders
+                  </Link>
+                </li>
+              }
+
+              {/* SHOP EMPLOYEE NAVBAR */}
               {(props.userRole === 'employee') && <li className="nav-item">
                 <Link to="/login" className="nav-link text-light">
                   Staff area
                 </Link>
               </li>
               }
-              {(props.userRole === 'employee') && <li className="nav-item">
+              {(props.userRole === 'employee') &&
+                <NavDropdown className="text-light" title="Products" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Products to be delivered</NavDropdown.Item>
+                </NavDropdown>
+              }
+              {(props.userRole === 'employee') &&
+                <NavDropdown className="text-light" title="Clients" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Register new client</NavDropdown.Item>
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Make order for client</NavDropdown.Item>
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Top-up client wallet</NavDropdown.Item>
+                </NavDropdown>
+              }
+
+              {/* SHOP MANAGER NAVBAR */}
+              {(props.userRole === 'shop-manager') && <li className="nav-item">
+                <Link to="/login" className="nav-link text-light">
+                  Manager area
+                </Link>
+              </li>
+              }
+              {(props.userRole === 'shop-manager') &&
+                <NavDropdown className="text-light" title="Applications" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/manager/applications/pending"))}>Pending applications</NavDropdown.Item>
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/manager/applications/processed"))}>Accepted/rejected applications</NavDropdown.Item>
+                </NavDropdown>
+              }
+
+              {/* FARMER NAVBAR */}
+              {(props.userRole === 'farmer') && <li className="nav-item">
                 <Link to="/login" className="nav-link text-light">
                   Farmer area
                 </Link>
               </li>
               }
+              {(props.userRole === 'farmer') &&
+                <NavDropdown className="text-light" title="Products" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/declare-availability"))}>Declare product availability</NavDropdown.Item>
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/order-confirmation-farmer"))}>Confirm product availability</NavDropdown.Item>
+                </NavDropdown>
+              }
+              {(props.userRole === 'farmer') &&
+                <NavDropdown className="text-light" title="Orders" id="basic-nav-dropdown">
+                  <NavDropdown.Item href="#" onClick={() => (history.push("/order-preparation"))}>Confirm order preparation</NavDropdown.Item>
+                </NavDropdown>
+              }
+
+              {/* WHMANAGER NAVBAR */}
+              {(props.userRole === 'warehouse-manager') && <li className="nav-item">
+                <Link to="/login" className="nav-link text-light">
+                  Warehouse area
+                </Link>
+              </li>
+              }
+
+              {/* WHEMPLOYEE NAVBAR */}
+              {(props.userRole === 'warehouse-employee') && <li className="nav-item">
+                <Link to="/login" className="nav-link text-light">
+                  Warehouse area
+                </Link>
+              </li>
+              }
             </ul>
-            {!props.loggedIn && <div>
-              <div className="d-block fs-4">Solidarity Purchase Group</div>
+
+            {/* HOMEPAGE NAVBAR */}
+            {!props.loggedIn && <div className="ps-2">
+              <div className="d-block fs-3">Solidarity Purchase Group</div>
               Your ultimate fresh and bio food destination
             </div>
             }
           </Nav>
 
-          <Nav className="me-0">
+          <Nav className="ms-auto me-0">
             {props.loggedIn &&
               <div className="py-2 my-auto nav-accessory">
                 <OverlayTrigger
@@ -103,7 +177,7 @@ const MyNavbar = function (props) {
                         <h5 className="mb-2 mx-3">{props.userMail}</h5>
                         <div className="d-block text-center">Account type: {getUserRole()}</div>
                         <hr />
-                        <button className="btn btn-danger d-block ms-auto" onClick={() => (props.logout())}>Logout</button>
+                        <button className="btn btn-danger d-block ms-auto" onClick={() => { props.logout(); history.push("/") }}>Logout</button>
                       </Popover.Body>
                     </Popover>
                   }
@@ -176,26 +250,9 @@ const MyNavbar = function (props) {
         </Navbar.Collapse>
       </Container>
     </Navbar >
-
-  )
-
-  return (
-    <nav className="navbar navbar-expand-md navbar-dark menu-bar">
-      <div className="container-fluid">
-
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-
-        <div className="collapse navbar-collapse my-auto" id="navbarSupportedContent">
-
-
-        </div>
-
-      </div >
-    </nav >
   );
-};
+
+}
 
 const shopIcon = <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" className="bi bi-shop" viewBox="0 0 16 16">
   <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h1v-5a1 1 0 0 1 1-1h3a1 1 0 0 1 1 1v5h6V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zM4 15h3v-5H4v5zm5-5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-3zm3 0h-2v3h2v-3z" />

@@ -4,21 +4,7 @@ import { Link } from 'react-router-dom';
 function ManagerArea(props) {
   return (
     <div className="row w-100">
-      <div>
-        <Button
-          variant="light"
-          style={{
-            fontSize: 30,
-            borderStyle: 'hidden',
-            position: 'absolute',
-            right: '30px',
-          }}
-          onClick={props.logout}
-        >
-          <Link to="/">LOGOUT</Link>
-        </Button>
-      </div>
-
+      
       <span className="d-block text-center mt-5 mb-2 display-2">
         Shop Manager Area
       </span>
@@ -38,8 +24,8 @@ function ManagerArea(props) {
         </div>
       </div>
       <div className="col-lg-9 ">
-        <div className="card m-3 d-inline-block">
-          <div className="row client-area-450px-width-custom no-gutters">
+        <div className="card m-3 d-block">
+          <div className="row no-gutters">
             <div className="col-md-4 bg-secondary p-3 text-center">
               {cartIcon}
             </div>
@@ -47,35 +33,35 @@ function ManagerArea(props) {
               <div className="card-body">
                 <h5 className="card-title">Pending farmer applications</h5>
                 <p className="card-text">
-                  • View &#38; browse farmer applications<br />
+                  • View &#38; browse pending farmer applications<br />
                   • Accept or decline a farmer application<br />
                 </p>
                 <div className="d-block text-end">
-                  <Link to="/manager/pending-applications">
-                    <button className="btn btn-primary">Browse applications</button>
+                  <Link to="/manager/applications/pending">
+                    <button className="btn btn-primary">Browse pending applications</button>
                   </Link>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className="card m-3 d-inline-block">
-          <div className="row client-area-450px-width-custom no-gutters">
+
+        <div className="card m-3 d-block">
+          <div className="row no-gutters">
             <div className="col-md-4 bg-secondary p-3 text-center">
-              {walletIcon}
+              {cartIcon}
             </div>
             <div className="col-md-8">
               <div className="card-body">
-                <h5 className="card-title">SPG Farmers</h5>
+                <h5 className="card-title">Accepted/rejected farmer applications</h5>
                 <p className="card-text">
-                  • View the active farmers
-                  <br />• Revoke farmer accounts
+                  • View &#38; browse accepted or rejected farmer applications<br />
+                  • Inspect a farmer application<br />
+                  • Accept a previously rejected application<br/>
                 </p>
                 <div className="d-block text-end">
-                  <Link to="/manager/farmers">
-                    <button className="btn btn-primary" disabled={true}>
-                      Browse farmers
-                    </button>
+                  <Link to="/manager/applications/processed">
+                    <button className="btn btn-primary">Browse processed applications</button>
                   </Link>
                 </div>
               </div>

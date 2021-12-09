@@ -309,9 +309,9 @@ async function getProviderById(provider_id) {
 }
 
 //GET provider products by providerID
-async function getProviderProducts(provider_id) {
+async function getProviderProducts() {
   const response = await fetch(
-    '/api/provider/' + provider_id + '/products'
+    '/api/provider-products'
   );
   if (response.ok) {
     return await response.json();

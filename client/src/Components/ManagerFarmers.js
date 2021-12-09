@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, Badge, Button, Spinner, Form, FloatingLabel, Row, Alert } from 'react-bootstrap';
+import { useHistory } from "react-router";
 import dayjs from 'dayjs';
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/bootstrap.css'
@@ -19,6 +20,8 @@ function ManagerFarmers(props) {
 
   const [operationAlert, setOperationAlert] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const history = useHistory();
 
   /*retrieve pending applications only if props.pendingOnly is set to TRUE*/
   useEffect(() => {
@@ -63,6 +66,7 @@ function ManagerFarmers(props) {
       setInspectApplication(null);
       return;
     }
+    history.push("/manager");
   }
 
   /*Utility functions*/
@@ -216,6 +220,7 @@ function ManagerFarmers(props) {
                 setInspectApplication={setInspectApplication}
                 setAlert={setOperationAlert}
                 setRefreshPendingApplications={setRefreshPendingApplications}
+                setRefreshAcceptedApplications={setRefreshAcceptedApplications}
               />}
           </div>
           <div className="col-lg-2" />
@@ -246,7 +251,6 @@ function ApplicationInspector(props) {
         const response = await API.acceptFarmerApplication(props.application.id);
         if (response) {
           props.setAlert({ type: 'success', msg: 'The farmer application has been successfully accepted.' });
-          props.setRefreshPendingApplications(true);
         }
         else {
           props.setAlert({ type: 'danger', msg: 'Oops! An error occurred and the application status could not be changed. Please try again later.' });
@@ -256,13 +260,18 @@ function ApplicationInspector(props) {
         const response = await API.rejectFarmerApplication(props.application.id);
         if (response) {
           props.setAlert({ type: 'success', msg: 'The farmer application has been successfully rejected.' });
-          props.setRefreshPendingApplications(true);
         }
         else {
           props.setAlert({ type: 'danger', msg: 'Oops! An error occurred and the application status could not be changed. Please try again later.' });
         }
       }
       props.setInspectApplication(null);
+      if(props.pendingOnly){
+        props.setRefreshPendingApplications(true);
+      }
+      else{
+        props.setRefreshAcceptedApplications(true);
+      }
     }
     update();
   }, [updateApplication])
@@ -384,6 +393,11 @@ function ApplicationInspector(props) {
             <Button variant="primary" type="button" size="lg" className="mx-2" onClick={() => (props.setInspectApplication(null))}>
               Finish inspection and go back
             </Button>
+            {props.application.status === 'rejected' &&
+              <Button variant="success" type="button" size="lg" className="mx-2" onClick={() => (setUpdateApplication('accept'))}>
+                Accept appplication
+              </Button>
+            }
           </div >
         }
 

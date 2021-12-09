@@ -108,7 +108,7 @@ exports.insertFarmerApplication = (farmer) => {
 
 exports.getPendingApplications = () => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM farmer_applications WHERE application_approved="pending" ORDER BY application_id DESC';
+        const sql = 'SELECT * FROM farmer_applications WHERE application_status="pending" ORDER BY application_id DESC';
         db.all(sql, [], (err, rows) => {
             if (err) {
                 reject(err);
@@ -127,7 +127,8 @@ exports.getPendingApplications = () => {
                 zip: p.farmer_zipcode,
                 location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
                 complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
-                date: p.application_date
+                date: p.application_date,
+                status: p.application_status
             }));
             resolve(pendingApplications);
         });
@@ -136,7 +137,7 @@ exports.getPendingApplications = () => {
 
 exports.getAcceptedApplications = () => {
     return new Promise((resolve, reject) => {
-        const sql = 'SELECT * FROM farmer_applications WHERE application_approved NOT "pending" ORDER BY application_id DESC';
+        const sql = 'SELECT * FROM farmer_applications WHERE application_status != "pending" ORDER BY application_id DESC';
         db.all(sql, [], (err, rows) => {
             if (err) {
                 reject(err);
@@ -155,7 +156,8 @@ exports.getAcceptedApplications = () => {
                 zip: p.farmer_zipcode,
                 location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
                 complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
-                date: p.application_date
+                date: p.application_date,
+                status: p.application_status
             }));
             resolve(acceptedApplications);
         });
@@ -175,6 +177,7 @@ exports.acceptApplication = (applicationID) => {
                     name: row.farmer_name + ' ' + row.farmer_surname,
                     email: row.farmer_email,
                     password: row.farmer_password,
+                    description: row.farmer_description,
                     phone: row.farmer_phone,
                     location: row.farmer_city + ', ' + row.farmer_region + ', ' + row.farmer_country,
                     complete_address: row.farmer_address + ', ' + row.farmer_zipcode,
@@ -183,8 +186,8 @@ exports.acceptApplication = (applicationID) => {
 
                 return new Promise((resolve, reject) => {
                     /*SET farmer application status to "accepted*/
-                    const sql = 'UPDATE farmer_applications SET application_approved="accepted" WHERE application_id=?';
-                    db.run(sql, [applicationID], (err, row) => {
+                    const sql = 'UPDATE farmer_applications SET application_status="accepted" WHERE application_id=?';
+                    db.run(sql, [applicationID], (err) => {
                         if (err) {
                             reject(err);
                         }
@@ -193,11 +196,11 @@ exports.acceptApplication = (applicationID) => {
                             /*insert new farmer user*/
                             const dummy_user_id = null;
                             const sql = 'INSERT INTO users( id, name, email, hash, role ) VALUES ( ?, ?, ?, ?, "farmer" )';
-                            db.run(sql, [dummy_user_id, application.name, application.email, application.password], (err, row) => {
+                            db.run(sql, [dummy_user_id, application.name, application.email, application.password], function (err) {
                                 if (err) {
                                     reject(err);
                                 }
-                                const user_id = this.lastID;
+                                const user_id = this.lastID;    //userID from this insertion 
 
                                 return new Promise((resolve, reject) => {
                                     /*insert new provider*/
@@ -221,7 +224,7 @@ exports.acceptApplication = (applicationID) => {
 exports.rejectApplication = (applicationID) => {
     return new Promise((resolve, reject) => {
         /*SET farmer application status to "accepted*/
-        const sql = 'UPDATE farmer_applications SET application_approved="rejected" WHERE application_id=?';
+        const sql = 'UPDATE farmer_applications SET application_status="rejected" WHERE application_id=?';
         db.run(sql, [applicationID], (err) => {
             if (err) {
                 reject(err);

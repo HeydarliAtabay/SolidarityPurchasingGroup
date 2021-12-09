@@ -206,14 +206,15 @@ function App() {
   const doLogIn = async (credentials) => {
     try {
       const user = await API.logIn(credentials);
+
       setLogged(true);
       setMessage('');
       setUserid(user.id);
       setUserRole(user.role);
       setUserMail(user.username);
       setUserName(user.name);
-      
-     console.log(user);
+
+      console.log(user);
       if (user.role === 'client') {
         return <Redirect to="/client" />;
       } else if (user.role === 'employee') {
@@ -226,6 +227,8 @@ function App() {
         return <Redirect to="/warehouse-manager" />;
       } else if (user.role === 'delivery-personnel') {
         return <Redirect to="/delivery" />;
+      } else if (user.role === 'shop-manager') {
+        return <Redirect to="/manager" />;
       }
     } catch (err) {
       setMessage(`"${err}"`);
@@ -241,7 +244,7 @@ function App() {
     setUserName('');
     setUserid(-1);
 
-    return <Redirect to="/" />;
+    return <Redirect to="/" />
   };
 
   return (
@@ -261,7 +264,7 @@ function App() {
           <Route
             path="/booking"
             exact
-            render={() => (
+            render={() => (logged ?
               <Booking
                 browsing={false}
                 logged={logged}
@@ -274,12 +277,14 @@ function App() {
                 clientid={userid}
                 setRecharged={updateRech}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/products-next-week"
             exact
-            render={() => (
+            render={() => (logged ?
               <Booking
                 browsing={true}
                 logged={logged}
@@ -291,23 +296,27 @@ function App() {
                 setRecharged={updateRech}
                 clients={clients}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/orders"
             exact
-            render={() => (
+            render={() => (logged ?
               <Orders
                 orders={orders}
                 clientid={userid}
                 setRecharged={updateRech}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/staff-booking"
             exact
-            render={() => (
+            render={() => (logged ?
               <Booking
                 browsing={false}
                 logged={logged}
@@ -320,12 +329,14 @@ function App() {
                 updateProps={updateProps}
                 time={time}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/employee"
             exact
-            render={() => (
+            render={() => (logged ?
               <EmployeePage
                 orders={orders}
                 clients={clients}
@@ -336,12 +347,14 @@ function App() {
                 setRecharged={updateRech}
                 logout={doLogOut}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/warehouse-employee"
             exact
-            render={() => (
+            render={() => (logged ?
               <WarehousePage
                 userRole="warehouse-employee"
                 orders={orders}
@@ -350,12 +363,14 @@ function App() {
                 setRecharged={updateRech}
                 logout={doLogOut}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/warehouse-manager"
             exact
-            render={() => (
+            render={() => (logged ?
               <WarehousePage
                 userRole="warehouse-manager"
                 orders={orders}
@@ -363,12 +378,14 @@ function App() {
                 methods={methods}
                 logout={doLogOut}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/delivery"
             exact
-            render={() => (
+            render={() => (logged ?
               <DeliveryPage
                 orders={orders}
                 providers={providers}
@@ -378,47 +395,78 @@ function App() {
                 logout={doLogOut}
                 delivererId={userid}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/manager"
             exact
-            render={() => (
+            render={() => (logged ?
               <ManagerArea time={time} />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
-            path="/manager/applications"
+            path="/manager/applications/pending"
             exact
-            render={() => (
+            render={() => (logged ?
               <ManagerFarmers pendingOnly={true} acceptedOnly={false} time={time} />
+              :
+              <Redirect to="/login" />
+            )}
+          />
+          <Route
+            path="/manager/applications/processed"
+            exact
+            render={() => (logged ?
+              <ManagerFarmers pendingOnly={false} acceptedOnly={true} time={time} />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
             path="/farmer-apply"
             exact
-            render={() => <FarmerRegistration time={time} />}
+            render={() => (<FarmerRegistration time={time} />)}
           />
           <Route
             path="/farmer"
             exact
-            render={() => <FarmerArea time={time} logout={doLogOut}/>}
+            render={() => (logged ?
+              <FarmerArea userName={userName} userMail={userMail} time={time} logout={doLogOut} />
+              :
+              <Redirect to="/login" />
+            )}
           />
           <Route
             path="/declare-availability"
             exact
-            render={() => <FarmerProducts time={time} />}
+            render={() => (logged ?
+              <FarmerProducts time={time} />
+              :
+              <Redirect to="/login" />
+            )}
           />
           <Route
             path="/order-preparation"
             exact
-            render={() => <FarmerOrderPreparation time={time} />}
+            render={() => (logged ?
+              <FarmerOrderPreparation time={time} />
+              :
+              <Redirect to="/login" />
+            )}
           />
 
           <Route
             path="/order-confirmation-farmer"
             exact
-            render={() => <FarmerOrderConfirmation time={time} />}
+            render={() => (logged ?
+              <FarmerOrderConfirmation time={time} />
+              :
+              <Redirect to="/login" />
+            )}
           />
           <Route
             path="/login"
@@ -437,12 +485,16 @@ function App() {
           <Route
             path="/client"
             exact
-            render={() => (
+            render={() => (logged ?
               <ClientArea
                 logout={doLogOut}
+                userName={userName}
+                userMail={userMail}
                 clients={clients}
                 clientid={userid}
               />
+              :
+              <Redirect to="/login" />
             )}
           />
           <Route
@@ -452,7 +504,7 @@ function App() {
               <UserRegistration clients={clients} setRecharged={updateRech1} />
             )}
           />
-          <Route path="/" exact render={() => <Frontpage />} />
+          <Route path="/" render={() => <Frontpage />} />
         </Switch>
       </div>
     </Router>

@@ -75,7 +75,7 @@ function FarmerProducts(props) {
   //Get provider products
   useEffect(() => {
     const getExistingProducts = async () => {
-      const prods = await API.getProviderProducts(1);
+      const prods = await API.getProviderProducts();
       setProviderProducts(prods);
     };
     getExistingProducts();
@@ -196,8 +196,8 @@ function FarmerProducts(props) {
   };
 
   return (
-    <>
-      <div className="container-fluid mx-5 w-max100-custom">
+    <div className="row w-100">
+      <div className="container px-5">
         <span className="d-block text-center mt-5 mb-2 display-2">
           Expected Production
         </span>
@@ -395,7 +395,7 @@ function FarmerProducts(props) {
           </Button>
         </Modal.Footer>
       </Modal>
-    </>
+    </div>
   );
 }
 

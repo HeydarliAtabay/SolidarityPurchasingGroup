@@ -74,18 +74,18 @@ app.post('/api/sendEmail', function (req, res) {
 });
 
 /*** Set up Passport ***/
-passport.use(
-  new passportLocal(function (username, password, done) {
-    dbt.getUser(username, password).then((user) => {
-      if (!user)
-        return done(null, false, {
-          message: 'Incorrect username and/or password.',
-        });
-
-      return done(null, user);
-    });
-  })
-);
+passport.use(new passportLocal.Strategy((username, password, done) => {
+  dbt.getUser(username, password).then((user) => {
+    if (user) {               //Authentication successful, db returned user
+      done(null, user);
+    }
+    else {                   //Authentication failed (wrong credentials)
+      done(null, false, { message: 'Wrong username and/or password' });
+    }
+  }).catch((err) => {
+    done(err);              //DB error
+  });
+}));
 
 // serialize and de-serialize the user
 passport.serializeUser((user, done) => {
@@ -93,14 +93,11 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  dbt
-    .getUserById(id)
-    .then((user) => {
-      done(null, user);
-    })
-    .catch((err) => {
-      done(err, null);
-    });
+  dbt.getUserById(id).then((user) => {
+    done(null, user);   //make user available in req.user
+  }).catch((err) => {
+    done(err, null);    //user authorization failed (user with that id not existing)    
+  });
 });
 
 const isLoggedIn = (req, res, next) => {
@@ -121,6 +118,8 @@ app.use(
 
 // then, init passport
 app.use(passport.initialize());
+app.use(passport.session());
+
 /*** Users APIs ***/
 
 // user login
@@ -132,7 +131,6 @@ app.post('/api/sessions', function (req, res, next) {
     }
     req.login(user, (error) => {
       if (error) return next(error);
-
       return res.json(req.user);
     });
   })(req, res, next);
@@ -298,9 +296,15 @@ app.get('/api/product/:product_id', async (req, res) => {
 //GET all booked orders for a certain provider
 app.get('/api/products/ordered/:year/:week_number', async (req, res) => {
   try {
+    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+      res.status(401).json({ error: 'Unauthorized user' });
+    }
+
     const year = req.params.year;
     const week_number = req.params.week_number;
-    const products = await ordersDao.getBookedOrders(1, year, week_number);
+    const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
+
+    const products = await ordersDao.getBookedOrders(provider_id, year, week_number);
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -343,12 +347,15 @@ app.get('/api/provider/:provider_id', async (req, res) => {
 });
 
 //Get provider products
-app.get('/api/provider/:provider_id/products', async (req, res) => {
+app.get('/api/provider-products', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
-    const provider_id = req.params.provider_id;
-    const providerProducts = await providersDAO.getProviderExistingProducts(
-      provider_id
-    );
+    const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
+    console.log(provider_id);
+    const providerProducts = await providersDAO.getProviderExistingProducts(provider_id);
     res.json(providerProducts);
   } catch (err) {
     console.log(err);
@@ -359,13 +366,17 @@ app.get('/api/provider/:provider_id/products', async (req, res) => {
 //CHECK provider's confirmation status
 app.get('/api/provider/confirmationStatus/:year/:week_number',
   async (req, res) => {
+    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+      res.status(401).json({ error: 'Unauthorized user' });
+    }
     try {
       const year = req.params.year;
       const week_number = req.params.week_number;
+      const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
 
       const confirmationStatus =
         await providersDAO.checkProviderAvailabilityConfirmation(
-          1,
+          provider_id,
           year,
           week_number
         );
@@ -380,12 +391,17 @@ app.get('/api/provider/confirmationStatus/:year/:week_number',
 //GET provider's expected production
 app.get('/api/products/provider/expected/:year/:week_number',
   async (req, res) => {
+    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+      res.status(401).json({ error: 'Unauthorized user' });
+    }
+
     try {
       const year = req.params.year;
       const week_number = req.params.week_number;
+      const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
 
       const expectedProducts = await productsDAO.getProviderExpectedProducts(
-        1,
+        provider_id,
         year,
         week_number
       );
@@ -400,12 +416,18 @@ app.get('/api/products/provider/expected/:year/:week_number',
 //GET providers shipment status
 app.get('/api/provider/shipmentstatus/:year/:week_number',
   async (req, res) => {
+    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+      res.status(401).json({ error: 'Unauthorized user' });
+    }
+
     try {
       const year = req.params.year;
       const week_number = req.params.week_number;
 
+      const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
+
       const shipmentStatus = await ordersDao.getProviderShipmentStatus(
-        1,
+        provider_id,
         year,
         week_number
       );
@@ -438,17 +460,23 @@ app.get(
 
 //Insert provider's expected production
 app.post('/api/products/expected/:year/:week_number', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     const products = req.body;
     const year = req.params.year;
     const week_number = req.params.week_number;
 
+    const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
+
     const oldProductIDs = (
-      await productsDAO.getProviderExpectedProducts(1, year, week_number)
+      await productsDAO.getProviderExpectedProducts(provider_id, year, week_number)
     ).map((p) => p.id);
     const productIDs = [];
 
-    await productsDAO.deleteExpectedProducts(1, year, week_number);
+    await productsDAO.deleteExpectedProducts(provider_id, year, week_number);
     oldProductIDs.forEach((p) => {
       if (
         fs.existsSync(__dirname + '/../client/public/products/' + p + '.jpg')
@@ -457,7 +485,7 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
       }
     });
     for (const product of products) {
-      const newID = await productsDAO.insertNewExpectedProduct(product, 1);
+      const newID = await productsDAO.insertNewExpectedProduct(product, provider_id);
       productIDs.push({ old_id: product.id, new_id: newID });
     }
     console.log(productIDs);
@@ -589,8 +617,13 @@ app.put('/api/modifyquantity', async (req, res) => {
 
 //update quantity
 app.put('/api/farmerConfirm/:product_id/:year/:week', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
+  const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
   productsDAO
-    .confirmExpectedProduct(1, req.params.product_id, req.params.year, req.params.week)
+    .confirmExpectedProduct(provider_id, req.params.product_id, req.params.year, req.params.week)
     .then(() => {
       res.status(200).json();
       return res;
@@ -769,7 +802,7 @@ app.put('/api/orders/:id',
 
   });
 
-  //GET all deliverers
+//GET all deliverers
 app.get('/api/deliverers', async (req, res) => {
   try {
     const m = await deliverersDao.getAllDeliverers();
