@@ -1,5 +1,5 @@
 import { Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Table } from 'react-bootstrap';
-import {ExclamationDiamond,Telephone, Envelope} from 'react-bootstrap-icons'
+import {ExclamationDiamond,Telephone, Envelope, ChatRightText} from 'react-bootstrap-icons'
 import ris from './reply-all-fill.svg';
 import API from '../API'
 import { useState } from "react";
@@ -98,7 +98,9 @@ show</Button></Col>
       <th>Client id</th>
       <th>Products</th>
       <th>Total</th>
-      <th>Deliver</th>
+      <th>Purchase Type</th>
+      <th>Date & Time</th>
+      <th>Status</th>
     </tr>
   </thead>
   <tbody>
@@ -124,6 +126,8 @@ m.pop();
             <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setId(s.order_id);}}>show</Button>
             </td>
             <td>{sum}{' '} €</td>
+            {s.pickup===0 ? <td>Delivery</td> : <td>Pick up</td>  }
+            <td>{s.date}{' '}{s.time} </td>
             <td>
             {s.state===props.b && 
              <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
@@ -134,6 +138,14 @@ m.pop();
         }></Image>
 
    }  
+    {s.state==="pending" && 
+   <ExclamationDiamond color="red" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+    setShowClient(true);
+    setClient(s.client_id)
+    console.log(s.client_id)
+   }}/>
+  }
+  <ChatRightText size={32}  style={{ 'cursor':'pointer'}} />
             </td>
           </tr>
           </>
