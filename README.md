@@ -321,7 +321,9 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request body: 
     * Body of the content:
     * Response: `200 OK (success) or 503` 
-    * Response body: `Update Completed!` or
+    * Response body:
+     
+     `Update Completed!` or
 
         `{
              "code":503
