@@ -1,5 +1,6 @@
 import DeliverList from './DeliverList';
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Modal, Form, Dropdown} from 'react-bootstrap';
+import { Container, Button, Row, Col, ListGroup, ListGroupItem, Modal, Form, Dropdown, Card} from 'react-bootstrap';
+import {MenuApp, List, ThreeDotsVertical} from 'react-bootstrap-icons'
 import{ Link } from 'react-router-dom';
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
@@ -367,10 +368,13 @@ function EmployeePage(props) {
   const history = useHistory()
   const MODAL = { CLOSED: -2, ADD: -1 };
   const [selectedTask, setSelectedTask] = useState(MODAL.CLOSED);
+  const [clicked, setClicked] = useState(false)
+  const [clickedButtonText, setClickedButtonText] = useState("")
 
   const handleClose = () => {
     setSelectedTask(MODAL.CLOSED);
-
+    setClicked(false)
+    setClickedButtonText("")
   }
 
   const handleSave = (tr, amount, client) => {
@@ -392,49 +396,112 @@ function EmployeePage(props) {
   let b = "booked";
   return (<>
     <br/>
-<div>
-<Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
-   
+
+{// <div><Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
+   }
     <Container fluid>
-   <span className="d-block text-center mt-5 mb-2 display-2">
-        Shop Personnel Area
-      </span>
-      <Row>
-        <Col xs={3} md={2}>
-          <ListGroup variant="flush">
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered</Button>
-            </ListGroupItem>
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
-                onClick={(event) => {
+    <div className="d-block mx-auto my-5 w-75">
+    <h3 className="regText">Shop Personnel Area</h3>
+    {/* When one of the cards were pressed */}
+
+   {!clicked && 
+   <>
+   <Row className="mb-3">
+          <div className="col-md-6">
+            <Card className="text-center">
+  <Card.Header>Orders</Card.Header>
+  <Card.Body>
+    <Card.Title>Check orders status</Card.Title>
+    <Card.Text>
+     By clicking this button you can check the list of orders with ordered products and status
+    </Card.Text>
+    <Button variant="primary" onClick={() => {
+      setShow(true)
+      setClicked(true)
+      setClickedButtonText("Orders")
+      }}>Show orders</Button>
+  </Card.Body>
+  <Card.Footer className="text-muted"></Card.Footer>
+</Card>
+                 </div>
+                 <div className="col-md-6">
+            <Card className="text-center">
+  <Card.Header>Client Registration</Card.Header>
+  <Card.Body>
+    <Card.Title>Make a registration of the new Client</Card.Title>
+    <Card.Text>
+     By clicking this button you will be redirected to the Registration page, for registering new client
+    </Card.Text>
+    <Button variant="primary"onClick={(event) => {
                   history.push("/registration")
-                }}
-              > Make a registration for the new client </Button>
-            </ListGroupItem >
-            {/*Button for opening a modal form for making a wallet top up */}
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
-                onClick={() => { setShow(false); setSelectedTask(MODAL.ADD) }}
-              > Make a top-up of the client wallet </Button>
-            </ListGroupItem >
-            
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }}
-                onClick={(event) => {
+                  setClicked(true)
+                  setClickedButtonText("Client Registration")
+                }}>Go to registration page</Button>
+  </Card.Body>
+  <Card.Footer className="text-muted"></Card.Footer>
+</Card>
+           
+            </div>
+            </Row>
+            <Row className="mb-3">
+            <div className="col-md-6">
+            <Card className="text-center">
+  <Card.Header>Balance Top-up</Card.Header>
+  <Card.Body>
+    <Card.Title>Top-up the balance of the client's wallet</Card.Title>
+    <Card.Text>
+     By clicking this button the wallet top-up form will be opened, where you can modify the balance of the client
+    </Card.Text>
+    <Button variant="primary"onClick={() => { setShow(false); setSelectedTask(MODAL.ADD);  setClicked(true); setClickedButtonText("Balance Top-up") }}>Open top-up form</Button>
+  </Card.Body>
+  <Card.Footer className="text-muted"></Card.Footer>
+</Card>
+            </div>
+
+            <div className="col-md-6">
+            <Card className="text-center">
+  <Card.Header>Ordering on behalf of the Client</Card.Header>
+  <Card.Body>
+    <Card.Title>Make an order for a specific client</Card.Title>
+    <Card.Text>
+     By clicking this button you will be redirected to the page where you can select the client and make an order on behalf of him/her
+    </Card.Text>
+    <Button variant="primary"onClick={(event) => {
                   history.push("/staff-booking")
-                }}
-              > Make a new order for client </Button>
-            </ListGroupItem >
-          </ListGroup></Col>
+                  setClicked(true)
+                  setClickedButtonText("Ordering on behalf of the Client")
+                }}>Open order page</Button>
+  </Card.Body>
+  <Card.Footer className="text-muted"></Card.Footer>
+</Card>
+            </div>  
+            </Row>
+   </>
+   } 
+   
+   {clicked && 
+   <>
+   <Row>
+     <Col md={4}>  <List size={52} onClick={()=>{
+    setClicked(false)
+    setShow(false)
+  }}></List> </Col>
+  <Col md={8} > <h3>{clickedButtonText} </h3></Col>
+   </Row>
+ 
+  </>
+   }
+
+      
+            
         {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
 
         <Col xs={9} md={9}>
           {show ?   //set recharged della tabella ordini-clienti
                   <DeliverList setRecharged={props.setRecharged} orders={props.orders} clients={clients} setShow={setShow} b={b} />: <></>}
-        </Col></Row>
+        </Col>
       <br />
-
+    </div>
     </Container>
 
   </>

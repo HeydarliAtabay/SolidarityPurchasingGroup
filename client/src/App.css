@@ -19,12 +19,7 @@
   margin-top: 10px;
   text-align: center;
 }
-.countReg{
-  width: 200px;
-}
-.countReg1{
-  width: 200px;
-}
+
 
 .pet{
   margin-left: 110px;
@@ -38,3 +33,11 @@
   align-self: center;
   text-align: center;
 }
+/* 
+.countReg{
+  width: 200px;
+}
+.countReg1{
+  width: 200px;
+}
+*/ 
