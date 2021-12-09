@@ -400,7 +400,7 @@ function EmployeePage(props) {
 {// <div><Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
    }
     <Container fluid>
-    <div className="d-block mx-auto my-5 w-75">
+    <div >
     <h3 className="regText">Shop Personnel Area</h3>
     {/* When one of the cards were pressed */}
 
@@ -482,11 +482,11 @@ function EmployeePage(props) {
    {clicked && 
    <>
    <Row>
-     <Col md={4}>  <List size={52} onClick={()=>{
+     <Col sm={4}>  <List size={52} onClick={()=>{
     setClicked(false)
     setShow(false)
   }}></List> </Col>
-  <Col md={8} > <h3>{clickedButtonText} </h3></Col>
+  <Col sm={8} > <h3>{clickedButtonText} </h3></Col>
    </Row>
  
   </>
@@ -496,7 +496,7 @@ function EmployeePage(props) {
             
         {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
 
-        <Col xs={9} md={9}>
+        <Col >
           {show ?   //set recharged della tabella ordini-clienti
                   <DeliverList setRecharged={props.setRecharged} orders={props.orders} clients={clients} setShow={setShow} b={b} />: <></>}
         </Col>
