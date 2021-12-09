@@ -104,6 +104,180 @@ open your favourite browser and access the project at the url: http://localhost:
              "code":503
              "error": "Unavailable service during the create of the order."
          } `
+   * POST `/api/users `
+    * Request parameter:
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+          `{
+              "id": e.id, 
+              "name": e.name, 
+               "email": e.email,
+              "hash": e.hash, 
+              "role": e.role
+      
+         }
+         `     
+    * Response: `201 OK (success) or 503 
+    * Response body: 'Added client as a user!' or
+
+        `{
+             "code":503
+             "error": "Unavailable service during the create of the order."
+         } `
+
+
+* GET `/api/orders `
+    * Request parameter: 
+    * Request body:  
+    * Body of the content: 
+    * Response: `200 OK (success) or 500
+    * Response body:
+      `{
+             "order_id":S.order_id,
+             "client_id":S.client_id,
+             "product_name": S.product_name,
+             "product_id": S.product_id,
+             "order_quantity": S.order_quantity,
+             "state": S.state,
+             "OrderPrice": S.OrderPrice,
+             "id": S.id,
+             "address": S.address,
+             "city": S.city,
+             "zipcode": S.zipcode,
+             "Nation": S.nation,
+            "date": S.date,
+            "time": S.time,
+            "pickup": S.pickup
+         }or
+         `
+      `{  
+            code: 500,
+             error: 'Database error during the retrieve of the list of orders.',
+         } `
+* GET `/api/clients `
+    * Request parameter: 
+    * Request body:  
+    * Body of the content: 
+    * Response: `200 OK (success) or 500
+    * Response body:
+      `{
+              "client_id": e.client_id, 
+              "budget": e.budget, 
+              "name": e.name, 
+              "surname": e.surname, 
+              "gender": e.gender, 
+              "birthdate": e.birthdate,
+              "country": e.country,
+               "region": e.region,
+               "address": e.address,
+               "city": e.city, 
+               "phone": e.phone,
+               "email": e.email
+      
+         } or
+         `
+      `{
+           code: 500,
+           error: `Database error during the retrieve of the list of clients.`,
+         } `
+        
+ * GET `/api/users `
+    * Request parameter: 
+    * Request body:  
+    * Body of the content: 
+    * Response: `200 OK (success) or 500
+    * Response body:
+      `{
+              "id": e.id, 
+              "name": e.name, 
+               "email": e.email,
+              "hash": e.hash, 
+              "role": e.role
+      
+         }       or
+         `
+      `{
+           code: 500,
+           error: 'Database error during the retrieve of the list of users.',
+         } `
+
+   * PUT `/api/orders/:id `
+    * Request parameter: id 
+    * Request body:  An object representing (Content-Type: `application/json`).
+    * Body of the content:
+         `{
+              "client_id": e.client_id, 
+              "budget": e.budget, 
+              "name": e.name, 
+              "surname": e.surname, 
+              "gender": e.gender, 
+              "birthdate": e.birthdate,
+              "country": e.country,
+               "region": e.region,
+               "address": e.address,
+               "city": e.city, 
+               "phone": e.phone,
+               "email": e.email
+      
+         } 
+    * Response: `200 OK (success) or 503 
+    * Response body:  
+        `{
+              "client_id": e.client_id, 
+              "budget": e.budget, 
+              "name": e.name, 
+              "surname": e.surname, 
+              "gender": e.gender, 
+              "birthdate": e.birthdate,
+              "country": e.country,
+               "region": e.region,
+               "address": e.address,
+               "city": e.city, 
+               "phone": e.phone,
+               "email": e.email
+      
+         } or
+        `{
+            "error": `Database error during the update of order .`
+         } `
+   * PUT `/api/orders/:order_id/:product_name `
+    * Request parameter: order_id , product_name
+    * Request body: 
+    * Body of the content:
+    * Response: `200 OK (success) or 503 
+    * Response body: 'Update Completed!' or
+
+        `{
+             "code":503
+             "error": "Unavailable service during the update of the order."
+         } `
+  
+
+  * DELETE`/api/orders/:id `
+    * Request parameter:id
+    * Request body: 
+    * Body of the content:
+          
+    * Response: `204 OK (success) or 503 
+    * Response body: 'order item deleted!'
+
+        `{
+                "code": 503,
+                "error": `Unavailable service error during the delete of the order item`,
+         } `
+
+
+
+
+
+
+
+
+
+
+
+
+
         
 
 
