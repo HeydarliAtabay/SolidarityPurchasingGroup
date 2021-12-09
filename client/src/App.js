@@ -10,6 +10,7 @@ import EmployeePage from './Components/EmployeePage';
 import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect } from 'react';
+import { Container, Alert,Row, Button} from 'react-bootstrap';
 import {
   Redirect,
   BrowserRouter as Router,
@@ -260,6 +261,9 @@ function App() {
         userMail={userMail}
         setTime={setTime}
       />
+          <Container fluid="sx"> {message!==''?  <Row className="justify-content-md-center" >
+        <Alert style={{'fontSize':25,'backgroundColor':"#dc143c", 'width':"600px"}} onClose={() => setMessage('')} dismissible>{message}</Alert>
+      </Row>:<></>}</Container>
       <div className="container-fluid">
         <Switch>
           <Route
