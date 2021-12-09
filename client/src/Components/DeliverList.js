@@ -115,6 +115,7 @@ let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
 let sum=0;
 for (const a of array)
 {sum=sum+a;}
+       sum=sum.toFixed(2);
 m.pop();
 
         return (
