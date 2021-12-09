@@ -243,6 +243,23 @@ function Basket(props) {
                 </Button>
               </div>
             </Alert>
+              <Alert
+              className="m-3"
+              show={props.showUpdateError}
+              onClose={() => props.setShowUpdateError(false)}
+              variant="warning"
+            >
+              <Alert.Heading  style={{'fontSize':20}}class="text-danger">You must choose only one product type to do the change</Alert.Heading>
+              <hr />
+              <div className="d-flex justify-content-end">
+                <Button
+                  onClick={() => props.setShowUpdateError(false)}
+                  variant="outline-danger"
+                >
+                  Close
+                </Button>
+              </div>
+            </Alert>
           </Row>
         </>
       )}
