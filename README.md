@@ -88,7 +88,7 @@ open your favourite browser and access the project at the url: http://localhost:
       
          }
          `     
-    * Response: `201 OK (success) or 401 
+    * Response: `201 OK (success) or 401` 
     * Response body: 
 
         `{
@@ -98,8 +98,8 @@ open your favourite browser and access the project at the url: http://localhost:
               "hash": e.hash, 
               "role": e.role
       
-         }   or
-         `     
+         }`  or
+              
           `{ 'User not found.' } `
 
 * GET `/api/sessions/current `
@@ -112,7 +112,7 @@ open your favourite browser and access the project at the url: http://localhost:
                "password": e.password
       
          }` 
-    * Response: `200 OK (success) or 401
+    * Response: `200 OK (success) or 401`
     * Response body:
       `{
                "id": e.id, 
@@ -121,8 +121,8 @@ open your favourite browser and access the project at the url: http://localhost:
                "hash": e.hash, 
                "role": e.role
       
-         }       or
-         `
+         }`       or
+         
       `{
            "code": 401,
            "error": 'Unauthenticated user!',
@@ -133,7 +133,7 @@ open your favourite browser and access the project at the url: http://localhost:
     * Request body: 
     * Body of the content:
     * Response: 
-    * Response body:'Logout completed!'
+    * Response body:`Logout completed!`
     
 -------------------------------------------------------------------------------------------------------------------------------------------------------------   
 * POST `/api/orderinsert `
@@ -181,7 +181,7 @@ open your favourite browser and access the project at the url: http://localhost:
          }
          `     
     * Response: `201 OK (success) or 503 
-    * Response body: 'Added client as a user!' or
+    * Response body: `Added client as a user!` or
 
         `{
              "code":503
@@ -215,7 +215,7 @@ open your favourite browser and access the project at the url: http://localhost:
          `
       `{  
             code: 500,
-             error: 'Database error during the retrieve of the list of orders.',
+             error: 'Database error during the retrieve of the list of orders.'
          } `
 * GET `/api/clients `
     * Request parameter: 
@@ -241,7 +241,7 @@ open your favourite browser and access the project at the url: http://localhost:
          `
       `{
            code: 500,
-           error: `Database error during the retrieve of the list of clients.`,
+           error: `Database error during the retrieve of the list of clients.`
          } `
         
  * GET `/api/users `
@@ -261,7 +261,7 @@ open your favourite browser and access the project at the url: http://localhost:
          `
       `{
            code: 500,
-           error: 'Database error during the retrieve of the list of users.',
+           error: 'Database error during the retrieve of the list of users.'
          } `
 
 * PUT `/api/orders/:id `
@@ -301,7 +301,7 @@ open your favourite browser and access the project at the url: http://localhost:
       
          } or
         `{
-            "error": `Database error during the update of order .`
+            "error": "Database error during the update of order. " 
          } `
 * PUT `/api/orders/:order_id/:product_name `
     * Request parameter: order_id , product_name
