@@ -111,7 +111,7 @@ open your favourite browser and access the project at the url: http://localhost:
                "email": e.email,
                "password": e.password
       
-         }   
+         }` 
     * Response: `200 OK (success) or 401
     * Response body:
       `{
@@ -125,7 +125,7 @@ open your favourite browser and access the project at the url: http://localhost:
          `
       `{
            "code": 401,
-           "error": 'Unauthenticated user!'',
+           "error": 'Unauthenticated user!',
          } `
 
 * DELETE `/api/sessions/current `
@@ -160,13 +160,13 @@ open your favourite browser and access the project at the url: http://localhost:
             "pickup": S.pickup
          }
          `
-    * Response: `201 OK (success) or 503 
+    * Response: `201 OK (success) or 503`
     * Response body:
 
         `{
              "code":503
              "error": "Unavailable service during the create of the order."
-         } `
+         }`
 * POST `/api/users `
     * Request parameter:
     * Request body: An object representing (Content-Type: `application/json`).
@@ -186,7 +186,7 @@ open your favourite browser and access the project at the url: http://localhost:
         `{
              "code":503
              "error": "Unavailable service during the create of the order."
-         } `
+         }`
 
 
 * GET `/api/orders `
