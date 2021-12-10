@@ -211,7 +211,11 @@ function App() {
 
       setLogged(true);
       setMessage('');
-      setUserid(user.id);
+      
+      let index=clients.filter(x=>x.email===user.username&&x.name===user.name).map(x=>x.client_id);
+      let id=index[0];
+      
+      setUserid(id);
       setUserRole(user.role);
       setUserMail(user.username);
       setUserName(user.name);
@@ -519,7 +523,7 @@ function App() {
             path="/registration"
             exact
             render={() => (
-              <UserRegistration clients={clients} setRecharged={updateRech1} />
+              <UserRegistration users={users} setRecharged={updateRech1} />
             )}
           />
           <Route path="/" render={() => <Frontpage />} />
