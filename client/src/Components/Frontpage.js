@@ -1,4 +1,4 @@
-import { Button, Row, Carousel } from "react-bootstrap";
+import { Button, Row, Carousel, Container } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom"
 
 function Frontpage(props) {
@@ -8,32 +8,55 @@ function Frontpage(props) {
             <div className="col-lg-4">
                 <br />
                 <br />
-                <div className="card mx-3 my-2 shadow-sm">
-                    <div className="card-header d-flex justify-content-between">
-                        <h5 className="d-inline my-auto">{userIcon} Clients area</h5>
-                        <div>
-                            <button className="btn btn-outline-secondary"
-                                onClick={(event) => {
+                <div className="card mx-3 my-2 shadow">
+                    <div className="card-header">
+                        <h5 className="my-auto">{userIcon} Clients</h5>
+                    </div>
+                    <ul className="list-group list-group-flush">
+                        <li className="list-group-item d-flex justify-content-between">
+                            <div className="d-inline my-auto">Client area</div>
+                            <div className="d-inline">
+                                <button className="mx-2 btn btn-outline-primary"
+                                    onClick={() => {
+                                        history.push("/login")
+                                    }}>Login</button>
+                            </div>
+                        </li>
+                        <li className="list-group-item d-flex justify-content-between">
+                            <div className="d-inline my-auto">Don't have an account? </div>
+                            <div className="d-inline">
+                                <button className="mx-2 btn btn-outline-secondary" onClick={(event) => {
                                     history.push("/registration")
-                                }}
-                            >Register</button>
-                            <button className="mx-2 btn btn-outline-primary"
-                                onClick={(event) => {
-                                    history.push("/login")
-                                }}>Login</button>
-
-                        </div>
-                    </div>
+                                }}>Register</button>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div className="card mx-3 my-2 shadow-sm">
+                <div className="card mx-3 my-2 shadow">
                     <div className="card-header d-flex justify-content-between">
-                        <h5 className="d-inline my-auto">{producerIcon} Producers area</h5>
-                        <div>
-                            <button className="mx-2 btn btn-outline-primary" onClick={() => (history.push("/login"))}>Login</button>
-                        </div>
+                        <h5 className="d-inline my-auto">{producerIcon} Farmers</h5>
                     </div>
+                    <ul className="list-group list-group-flush">
+                        <li className="list-group-item d-flex justify-content-between">
+                            <div className="d-inline my-auto">Farmer area</div>
+                            <div className="d-inline">
+                                <button className="mx-2 btn btn-outline-primary"
+                                    onClick={() => {
+                                        history.push("/login")
+                                    }}>Login</button>
+                            </div>
+                        </li>
+                        <li className="list-group-item d-flex justify-content-between">
+                            <div className="d-inline my-auto">Want to work with us?</div>
+                            <div className="d-inline">
+                                <button className="mx-2 btn btn-outline-secondary" onClick={(event) => {
+                                    history.push("/registration")
+                                }}>Apply here</button>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-                <div className="card mx-3 my-2 shadow-sm">
+                <div className="card mx-3 my-2 shadow">
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{staffIcon} Staff area</h5>
                     </div>
@@ -63,7 +86,7 @@ function Frontpage(props) {
                         </li>
                     </ul>
                 </div>
-                <div className="card mx-3 my-5 shadow-sm">
+                <div className="card mx-3 my-5 shadow">
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{joinUsIcon} Want to work with us?</h5>
                     </div>
@@ -74,7 +97,7 @@ function Frontpage(props) {
                     </div>
                 </div>
                 <hr></hr>
-                <div className="card mx-3 my-5 shadow-sm">
+                <div className="card mx-3 my-5 shadow">
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{aboutUs} A little bit more about us</h5>
                     </div>
@@ -100,7 +123,7 @@ function Frontpage(props) {
                     </ul>
                 </div>
                 <hr />
-                <div className="card mx-3 my-5 shadow-sm">
+                <div className="card mx-3 my-5 shadow">
                     <div className="card-header d-flex justify-content-between">
                         <h5 className="d-inline my-auto">{ourLocation} Where to find us</h5>
                     </div>
@@ -156,40 +179,41 @@ function Frontpage(props) {
                     </Carousel>
 
                 </div>
-                <div className="d-block w-100 pt-5 pb-3 px-5 mt-5 bg-warning rounded">
-                    <div className="d-flex justify-content-between">
-                        <div className="d-block w-50">
+                <div className="d-block w-100 pt-5 pb-3 px-5 mt-5 rounded-top" style={{ backgroundColor: '#A69C98' }}>
+                    <div className="row">
+                        <div className="col-md-8">
                             <h2 className="d-block">Meet our products</h2>
                             <p className="d-block text-justify-custom">
                                 With more than 250 products weekly we ensure that you will find everything you need to prepare all your healthy dishes.
                                 We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
                             </p>
+                            <br />
+                            <div className="d-block w-100">
+                                <Button onClick={() => {
+                                    history.push("/booking")
+                                }}>Explore our products</Button>
+                            </div>
                         </div>
-                        <div className="w-35-custom">
+                        <div className="col-md-4 text-center">
                             <img
-                                className="w-100 my-auto d-block"
+                                className="w-100 my-auto mx-auto"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-products-image.png"}
                                 alt="Product"
                             />
                         </div>
                     </div>
                     <br />
-                    <div className="d-block w-100">
-                        <Button onClick={(event) => {
-                            history.push("/booking")
-                        }}>Explore our products</Button>
-                    </div>
                 </div>
-                <div className="d-block w-100 pt-5 pb-0 px-5 bg-secondary rounded">
-                    <div className="d-flex justify-content-between">
-                        <div className="w-35-custom">
+                <div className="d-block w-100 pt-5 pb-0 px-5" style={{ backgroundImage: 'linear-gradient(to bottom, #A69C98 90%, #D98C5F)' }}>
+                    <div className="row">
+                        <div className="col-lg-4 text-center">
                             <img
-                                className="farmer-img-custom-dimensions my-auto d-block"
+                                className="farmer-img-custom-dimensions mx-auto my-auto"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-farmers-image.png"}
                                 alt="Product"
                             />
                         </div>
-                        <div className="d-block w-50">
+                        <div className="col-lg-8">
                             <h2 className="d-block">The producers</h2>
                             <p className="d-block text-justify-custom">
                                 With more than 250 products weekly we ensure that you will find everything you need to prepare all your healthy dishes.
@@ -202,24 +226,47 @@ function Frontpage(props) {
                     </div>
                     <br />
                 </div>
-                <div className="d-block w-100 pt-5 pb-0 px-5 bg-primary rounded">
-                    <div className="d-flex justify-content-between">
-                        <div className="d-block w-50">
+                <div className="d-block w-100 pt-5 pb-0 px-5 rounded-bottom" style={{ backgroundImage: 'linear-gradient(to bottom, #D98C5F 20%, #D98C5F 80%)' }}>
+                    <div className="row">
+                        <div className="col-lg-8">
                             <h2 className="d-block text-light">Lorem ipsum</h2>
                             <p className="d-block text-light text-justify-custom">
                                 With more than 250 products weekly we ensure that you will find everything you need to prepare all your healthy dishes.
                                 We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
                             </p>
-                            <div className="d-block w-100 mt-5 text-center align-bottom-custom">
+                            <div className="d-block w-100 mt-2 text-center align-bottom-custom">
                                 <Button variant="secondary">This is a button</Button>
                             </div>
                         </div>
-                        <div className="w-35-custom">
+                        <div className="col-lg-4 text-center">
                             <img
-                                className="farmer-img-custom-dimensions my-auto d-block"
+                                className="w-100 my-auto mx-auto d-block"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-products-image.png"}
                                 alt="Product"
                             />
+                        </div>
+                    </div>
+                    <br />
+                </div>
+                <div className="d-block w-100 pt-5 pb-0 px-5 mb-5 rounded-bottom" style={{ backgroundImage: 'linear-gradient(to bottom, #D98C5F 20%, #D98C5F 80%)' }}>
+                    <div className="row">
+                        <div className="col-lg-4 text-center">
+                            <img
+                                className="farmer-img-custom-dimensions mx-auto my-auto"
+                                src={process.env.PUBLIC_URL + "Frontpage/browse-farmers-image.png"}
+                                alt="Product"
+                            />
+                        </div>
+                        <div className="col-lg-8">
+                            <h2 className="d-block text-light">Working with us</h2>
+                            <p className="d-block text-light text-justify-custom">
+                                With more than 250 products weekly we ensure that you will find everything you need to prepare all your healthy dishes.
+                                We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
+                            </p>
+                            <div className="d-block w-100 mt-5 text-center align-bottom-custom">
+                                <Button variant="light me-3">Apply as farmer</Button>
+                                <Button variant="secondary">Apply as deliverer</Button>
+                            </div>
                         </div>
                     </div>
                     <br />

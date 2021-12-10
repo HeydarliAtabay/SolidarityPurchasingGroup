@@ -31,7 +31,7 @@ function ManagerArea(props) {
       <div className="col-lg-9 ">
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #7C5CED 70%, #FFFFFF)" }}>
+            <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #A6896F 80%, #FFFFFF)" }}>
               {pendingApps}
             </div>
             <div className="col-md-8">
@@ -43,7 +43,7 @@ function ManagerArea(props) {
                 </p>
                 <div className="d-block text-end">
                   <Link to="/manager/applications/pending">
-                    <button className="btn" style={{ backgroundColor: "#7C5CED", color: "white" }}>Browse pending applications</button>
+                    <button className="btn" style={{ backgroundColor: "#A6896F", color: "black" }}>Browse pending applications</button>
                   </Link>
                 </div>
               </div>
@@ -53,7 +53,7 @@ function ManagerArea(props) {
 
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #C463E0 70%, #FFFFFF)" }}>
+            <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #D9C9BA 80%, #FFFFFF)" }}>
               {acceptedApps}
             </div>
             <div className="col-md-8">
@@ -66,7 +66,7 @@ function ManagerArea(props) {
                 </p>
                 <div className="d-block text-end">
                   <Link to="/manager/applications/processed">
-                    <button className="btn" style={{ backgroundColor: "#C463E0", color: "white" }}>Browse processed applications</button>
+                    <button className="btn" style={{ backgroundColor: "#D9C9BA", color: "black" }}>Browse processed applications</button>
                   </Link>
                 </div>
               </div>

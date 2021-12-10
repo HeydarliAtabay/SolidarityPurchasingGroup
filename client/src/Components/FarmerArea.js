@@ -61,7 +61,7 @@ function FarmerArea(props) {
           <div className="col-lg-12">
             <div className="card m-3 w-100 shadow">
               <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #BB73EB 70%, #FFFFFF)" }}>
+                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #4A5B8C 80%, #FFFFFF)" }}>
                   {declareIcon}
                 </div>
                 <div className="col-md-8">
@@ -80,7 +80,7 @@ function FarmerArea(props) {
                     <div className="d-block text-end">
                       {intervalTimeBoolean() ? (
                         <Link to="/declare-availability">
-                          <button className="btn" style={{ backgroundColor: "#BB73EB", color: "white" }}>
+                          <button className="btn" style={{ backgroundColor: "#4A5B8C", color: "white" }}>
                             Declare availability
                           </button>
                         </Link>
@@ -100,7 +100,7 @@ function FarmerArea(props) {
           <div className="col-lg-12">
             <div className="card m-3 w-100 shadow">
               <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #876DE3 70%, #FFFFFF)" }}>
+                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #8697A6 80%, #FFFFFF)" }}>
                   {availabilityIcon}
                 </div>
                 <div className="col-md-8">
@@ -114,12 +114,12 @@ function FarmerArea(props) {
                     <div className="d-block text-end">
                       {!intervalTimeBoolean() ? (
                         <Link to="/order-confirmation-farmer">
-                          <button className="btn" style={{ backgroundColor: "#876DE3", color: "white" }}>
+                          <button className="btn" style={{ backgroundColor: "#8697A6", color: "black" }}>
                             Confirm availability
                           </button>
                         </Link>
                       ) : (
-                        <button disabled className="btn" style={{ backgroundColor: "#876DE3", color: "white" }}>
+                        <button disabled className="btn" style={{ backgroundColor: "#8697A6", color: "black" }}>
                           Confirm availability
                         </button>
                       )}
@@ -134,7 +134,7 @@ function FarmerArea(props) {
           <div className="col-lg-12">
             <div className="card m-3 w-100 shadow">
               <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #6980DB 70%, #FFFFFF)" }}>
+                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #BFCDD9 80%, #FFFFFF)" }}>
                   {perparationIcon}
                 </div>
                 <div className="col-md-8">
@@ -146,7 +146,7 @@ function FarmerArea(props) {
                     </p>
                     <div className="d-block text-end">
                       <Link to="/order-preparation">
-                        <button className="btn" style={{ backgroundColor: "#6980DB", color: "white" }}>
+                        <button className="btn" style={{ backgroundColor: "#BFCDD9", color: "black" }}>
                           Confirm preparation
                         </button>
                       </Link>
@@ -161,7 +161,7 @@ function FarmerArea(props) {
           <div className="col-lg-12">
             <div className="card m-3 w-100 shadow">
               <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #64C4E8 70%, #FFFFFF)" }}>
+                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #BF8756 80%, #FFFFFF)" }}>
                   {walletIcon}
                 </div>
                 <div className="col-md-8">
@@ -172,7 +172,7 @@ function FarmerArea(props) {
                     </p>
                     <div className="d-block text-end">
                       <Link to="/see-bookings">
-                        <button className="btn" style={{ backgroundColor: "#0CF7E8", color: "black" }}>
+                        <button className="btn" style={{ backgroundColor: "#BF8756", color: "black" }}>
                           See bookings
                         </button>
                       </Link>
