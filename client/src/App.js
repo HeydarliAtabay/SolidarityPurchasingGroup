@@ -212,8 +212,11 @@ function App() {
       setLogged(true);
       setMessage('');
       
-      let index=clients.filter(x=>x.email===user.username&&x.name===user.name).map(x=>x.client_id);
-      let id=index[0];
+     let id,index;
+      if (user.role==="client"){
+       index=clients.filter(x=>x.email===user.username&&x.name===user.name).map(x=>x.client_id);
+       id=index[0];}
+      else id=user.id;
       
       setUserid(id);
       setUserRole(user.role);
