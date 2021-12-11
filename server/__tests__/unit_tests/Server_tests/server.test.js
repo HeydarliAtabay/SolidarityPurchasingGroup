@@ -12,50 +12,35 @@ afterAll(done => {
     done();
 })
 
-// describe("Test the products/all path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/products/all").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test the product/:product_id path", () => {
+    test("It should response the GET method", async () => {
+        const response = await request(server).get("/api/product/1")
+        expect(response.statusCode).toBe(200);
 
-// describe("Test the product/:product_id path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/product/1").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+    });
+});
 
-// describe("Test the products/categories path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/products/categories").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test the products/categories path", () => {
+    test("It should response the GET method", async () => {
+        const response = await request(server).get("/api/products/categories")
+        expect(response.statusCode).toBe(200);
+    });
+});
 
-// describe("Test the providers/all path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/providers/all").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test the providers/all path", () => {
+    test("It should response the GET method", async () => {
+        const response = await request(server).get("/api/providers/all")
+        expect(response.statusCode).toBe(200);
+    });
+});
 
-// describe("Test the provider/:product_id path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/provider/1").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test the provider/:product_id path", () => {
+    test("It should response the GET method", async () => {
+        const response = await request(server).get("/api/provider/1")
+        expect(response.statusCode).toBe(200);
+    });
+});
+
 // describe("Test the clients path", () => {
 //     test("It should response the GET method", () => {
 //         request(server).get("/api/clients").then((response) => {
@@ -127,7 +112,37 @@ afterAll(done => {
 //     });
 // });
 
-const productIDS = [1, 2, 3];
+const productIDS = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
+
+describe('Test the provider /api/provider-products-sent', () => {
+    var farmer = request.agent(server);
+    test('It should response the PUT method', async () => {
+        await farmer.delete('/api/sessions');
+        const login = await farmer.post('/api/sessions').send({ "username": "luca.bianchi@spg.it", "password": "1111" });
+        expect(login.statusCode).toBe(200);
+        const response = await farmer.put('/api/provider-products-sent').send(productIDS);
+        expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).put('/api/provider-products-sent').send(productIDS);
+        expect(response.statusCode).toBe(401);
+    });
+});
+
+describe('Test the provider /api/provider-products-notification', () => {
+    var farmer = request.agent(server);
+    test('It should response the GET method', async () => {
+        await farmer.delete('/api/sessions');
+        const login = await farmer.post('/api/sessions').send({ "username": "luca.bianchi@spg.it", "password": "1111" });
+        expect(login.statusCode).toBe(200);
+        const response = await farmer.get('/api/provider-products-notification');
+        expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).get('/api/provider-products-notification');
+        expect(response.statusCode).toBe(401);
+    });
+});
 
 describe('Test the provider /api/orders/farmershipped', () => {
     var farmer = request.agent(server);
@@ -137,6 +152,10 @@ describe('Test the provider /api/orders/farmershipped', () => {
         expect(login.statusCode).toBe(200);
         const response = await farmer.post('/api/orders/farmershipped').send(productIDS);
         expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).post('/api/orders/farmershipped').send(productIDS);
+        expect(response.statusCode).toBe(401);
     });
 });
 
@@ -163,6 +182,10 @@ describe('Test the provider /api/products/ordered/:year/:week_number', () => {
         const response = await farmer.get('/api/products/ordered/' + 2021 + '/' + 49);
         expect(response.statusCode).toBe(200);
     });
+    test('Login fail', async () => {
+        const response = await request(server).get('/api/products/ordered/' + 2021 + '/' + 49);
+        expect(response.statusCode).toBe(401);
+    });
 });
 
 describe('Test the provider /api/provider-products', () => {
@@ -173,6 +196,10 @@ describe('Test the provider /api/provider-products', () => {
         expect(login.statusCode).toBe(200);
         const response = await farmer.get('/api/provider-products')
         expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).get('/api/provider-products')
+        expect(response.statusCode).toBe(401);
     });
 });
 
@@ -185,6 +212,10 @@ describe('Test the provider /api/provider/confirmationStatus/:year/:week_number'
         const response = await farmer.get('/api/provider/confirmationStatus/' + 2021 + '/' + 49);
         expect(response.statusCode).toBe(200);
     });
+    test('Login fail', async () => {
+        const response = await request(server).get('/api/provider/confirmationStatus/' + 2021 + '/' + 49);
+        expect(response.statusCode).toBe(401);
+    });
 });
 
 describe('Test the provider /api/products/provider/expected/:year/:week_number', () => {
@@ -196,6 +227,10 @@ describe('Test the provider /api/products/provider/expected/:year/:week_number',
         const response = await farmer.get('/api/products/provider/expected/' + 2021 + '/' + 49);
         expect(response.statusCode).toBe(200);
     });
+    test('Login fail', async () => {
+        const response = await request(server).get('/api/products/provider/expected/' + 2021 + '/' + 49);
+        expect(response.statusCode).toBe(401);
+    });
 });
 
 describe('Test the provider /api/provider/shipmentstatus/:year/:week_number', () => {
@@ -206,6 +241,10 @@ describe('Test the provider /api/provider/shipmentstatus/:year/:week_number', ()
         expect(login.statusCode).toBe(200);
         const response = await farmer.get('/api/provider/shipmentstatus/' + 2021 + '/' + 49);
         expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).get('/api/provider/shipmentstatus/' + 2021 + '/' + 49);
+        expect(response.statusCode).toBe(401);
     });
 });
 
@@ -220,6 +259,10 @@ describe('Test the provider /api/products/expected/:year/:week_number', () => {
         expect(login.statusCode).toBe(200);
         const response = await farmer.post('/api/products/expected/' + 2021 + '/' + 49).send(expectedProducts);
         expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).post('/api/products/expected/' + 2021 + '/' + 49);
+        expect(response.statusCode).toBe(401);
     });
 });
 
@@ -264,6 +307,10 @@ describe('Test the provider /manager/applications/pending', () => {
         expect(response.statusCode).toBe(200);
         pendingApps = response.body;
     });
+    test('Login fail', async () => {
+        const response = await request(server).get('/manager/applications/pending');
+        expect(response.statusCode).toBe(401);
+    });
 });
 
 describe('Test the provider /manager/applications/accepted', () => {
@@ -274,6 +321,10 @@ describe('Test the provider /manager/applications/accepted', () => {
         expect(login.statusCode).toBe(200);
         const response = await manager.get('/manager/applications/accepted');
         expect(response.statusCode).toBe(200);
+    });
+    test('Login fail', async () => {
+        const response = await request(server).get('/manager/applications/accepted');
+        expect(response.statusCode).toBe(401);
     });
 });
 
@@ -286,6 +337,10 @@ describe('Test the manager /manager/applications/accept/:application_id', () => 
         const response = await manager.get('/manager/applications/accept/' + pendingApps[0].id);
         expect(response.statusCode).toBe(200);
     });
+    test('Login fail', async () => {
+        const response = await request(server).get('/manager/applications/accept/' + pendingApps[0].id);
+        expect(response.statusCode).toBe(401);
+    });
 });
 
 describe('Test the manager /manager/applications/reject/:application_id', () => {
@@ -296,6 +351,11 @@ describe('Test the manager /manager/applications/reject/:application_id', () => 
         expect(login.statusCode).toBe(200);
         const response = await manager.get('/manager/applications/reject/' + pendingApps[0].id);
         expect(response.statusCode).toBe(200);
+    });
+
+    test('Login fail', async () => {
+        const response = await request(server).get('/manager/applications/reject/' + pendingApps[0].id);
+        expect(response.statusCode).toBe(401);
     });
 });
 

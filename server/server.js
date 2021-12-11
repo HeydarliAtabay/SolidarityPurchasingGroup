@@ -247,6 +247,11 @@ app.put(
 
 //POST the product IDs to be set with state 'farmer_shipped'
 app.post('/api/orders/farmershipped', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+    return;
+  }
+
   try {
     console.log(req.body);
 
@@ -405,6 +410,7 @@ app.post('/api/neworder', async (req, res) => {
 app.put('/api/provider-products-sent/', async (req, res) => {
   if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
+    return;
   }
   try {
     //const ids = new Array();
@@ -429,6 +435,7 @@ app.put('/api/provider-products-sent/', async (req, res) => {
 app.get('/api/provider-products-notification', async (req, res) => {
   if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
+    return;
   }
   try {
     const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
@@ -478,7 +485,7 @@ app.get(
       res.status(401).json({ error: 'Unauthorized user' });
       return;
     }
-    
+
     try {
       const year = req.params.year;
       const week_number = req.params.week_number;
@@ -501,6 +508,7 @@ app.get(
 app.get('/api/provider/shipmentstatus/:year/:week_number', async (req, res) => {
   if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
+    return;
   }
 
   try {
@@ -807,7 +815,7 @@ app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
       .status(500)
       .json(
         `Error while updating the balance of user with id: ${clientId}   ` +
-          error
+        error
       );
   }
 });
