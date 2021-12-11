@@ -349,12 +349,104 @@ open your favourite browser and access the project at the url: http://localhost:
                 "error": "Unavailable service error during the delete of the order item"
          } `
 
+-------------------------------------------------------------------------------------------------------------------------------------------------------------   
+## API for adding a new client
 
+POST `/api/clients `
+    * Request parameter:
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+         
+         `{
+      "budget": c.budget,
+      "name": c.name,
+      "surname": c.surname,
+      "gender": c.gender,
+      "birthdate": c.birthdate,
+      "country": c.country,
+      "region": c.region,
+      "address": c.address,
+      "city": c.city,
+      "phone": c.phone,
+      "email": c.email,
+      "hash": hashedPassword,
+      
+         }
+         `     
+    * Response: `201 OK (success) or 500 
+    * Response body:
+     
+     `'New Client was added!` or
 
+        `{
+             "code":500
+             "error": "Unavailable service while adding new client!"
+         }`
+## API for getting all payment methods
 
+ * GET `/api/methods `
+    * Request parameter: 
+    * Request body:  
+    * Body of the content: 
+    * Response: `200 OK (success) or 500
+    * Response body:
+      
+      `{
+               "method_id": m.method_id,
+               "method_name": m.method_name,
+               "approval_time": m.approval_time
+      
+         } `      or
+         
+      `{
+           code: 500,
+           error: 'Database error during the retrieve of the list of payment methods.'
+         } `
+## API for increasing balane of the client
 
+* PUT `/api/clients/update/balance/:clientId/:amount `
+    * Request parameter: clientId , amount
+    * Request body: 
+    * Body of the content:
+    * Response: `200 OK (success) or 500` 
+    * Response body:
+     
+     `Balance of client : ${clientId} was increased` or
 
+        `{
+             "code":500
+             "error": ` Error while updating the balance of user with id: ${clientId} `
+         } `
 
+ 
+## API for adding a new transaction
+
+POST `/api/transactions `
+    * Request parameter:
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+         
+         `{
+     "type": tr.type, 
+     "client_id": tr.client_id, 
+     "method_id": tr.method_id, 
+     "account_num": tr.account_num, 
+     "amount": tr.amount, 
+     "date": tr.date, 
+     "time": tr.time, 
+     "status": tr.status
+      
+         }
+         `     
+    * Response: `201 OK (success) or 500 
+    * Response body:
+     
+     `'Id of the new transaction` or
+
+        `{
+             "code":500
+             "error": "Unavailable service while adding new transaction!"
+         }`
 
 
 

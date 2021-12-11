@@ -784,12 +784,12 @@ app.post('/api/clients', async (req, res) => {
     } else {
       await clientsDao
         .createClient(client)
-        .then((id) => res.status(201).json({ id: id }))
+        .then((id) => res.status(201).end('New Client was added !'))
         .catch((err) => res.status(500).json(error));
     }
   } catch (e) {
     console.log(e);
-    res.status(500).send('Something broke!');
+    res.status(500).send('Unavailable service while adding new client!');
   }
 });
 
