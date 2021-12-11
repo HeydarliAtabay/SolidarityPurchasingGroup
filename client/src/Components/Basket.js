@@ -260,6 +260,23 @@ function Basket(props) {
                 </Button>
               </div>
             </Alert>
+         <Alert
+              className="m-3"
+              show={props.showInsufficient}
+              onClose={() => props.setShowInsufficient(false)}
+              variant="secondary"
+            >
+              <Alert.Heading  style={{'fontSize':20}}class="text-danger">Cannot add / update products since your wallet balance is insufficient</Alert.Heading>
+              <hr />
+              <div className="d-flex justify-content-end">
+                <Button
+                  onClick={() => props.setShowInsufficient(false)}
+                  variant="outline-danger"
+                >
+                  Close
+                </Button>
+              </div>
+            </Alert>
           </Row>
         </>
       )}

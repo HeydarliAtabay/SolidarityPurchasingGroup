@@ -28,6 +28,7 @@ dayjs.Ls.en.weekStart = 1;
 function Booking(props) {
   const history = useHistory();
   const location = useLocation();
+ 
 
  const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
@@ -68,6 +69,8 @@ function Booking(props) {
   const [showsuccess, setShowsuccess] = useState(false);
   const [showdanger, setShowdanger] = useState(false);
    const[showUpdateError,setShowUpdateError]=useState(false);
+   const[showInsufficient,setShowInsufficient]=useState(false);
+
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
   let indice, ordine;
@@ -83,7 +86,15 @@ function Booking(props) {
       ordine = Math.max(...f) + 1;
     }
   }
-
+let somma=0;
+let wallet=props.clients.filter(x=>x.client_id===parseInt(props.clientid)).map(x=>x.budget);
+let amount=wallet[0];
+   console.log(amount);
+let itemsAmount=props.orders.filter(x=>x.client_id===parseInt(props.clientid)).map(x=>x.OrderPrice);
+for(const b of itemsAmount){
+somma=somma+b;
+}
+console.log(somma);
   function getRightWeek(timepassed) {
     // the week number should be changed after the 23 o'clock of sunday. It becomes a new week since the customer can not order anymore in this week
     //Sunday from 23.00 until 23.59 consider this week orders
@@ -177,6 +188,8 @@ function Booking(props) {
   });
 
  const onConfirm = async () => {
+let tot=0,total;
+
     if (props.isEmployee && selectedUser.client_id === -1) {
       setShowdanger(true);
       return;
@@ -184,8 +197,18 @@ function Booking(props) {
 
     console.log(deliveryFlag + ' ' + time + ' ' + date + ' ' + pickupDay + ' ' + pickupTime)
 
-    let p, s;
+    let p, s, stato,ins=false;
     if (!location.state) {
+
+         for (const p of productsBasket) {
+               tot=p.price+tot;
+}
+total=tot+somma;console.log(total);
+console.log(total);
+if(total>amount){
+stato="pending";}
+else {stato="booked";}
+console.log(stato);
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
 
@@ -207,7 +230,7 @@ function Booking(props) {
           a.name,
           a.id,
           a.qty,
-          'booked',
+          `${stato}`,
           null,
           p,
           `${indice}`,
@@ -229,6 +252,14 @@ function Booking(props) {
     } 
 else if(location.state.status==="add")
 {
+
+
+         for (const pr of productsBasket) {
+               tot=pr.price*pr.qty+tot;
+}
+total=tot+somma;console.log(total);
+console.log(total);
+if(total<=amount){
 
 for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
@@ -269,15 +300,20 @@ for (const a of productsBasket) {
           setTimeout(() => { }, 3000);
         });
         indice = indice + 1;
-      }
+      }}else {ins=true;}
 
 }
-
  else {
 
 if(productsBasket.length===1)
+{  
 
-{
+
+ for (const pri of productsBasket) {
+               tot=pri.price*pri.qty+tot;
+}
+total=tot+somma-location.state.item.OrderPrice;console.log(total);
+console.log(total);
        let i = location.state.item.id;
     
       let _time, _date, _pickup;
@@ -312,22 +348,26 @@ if(productsBasket.length===1)
         _pickup
       );
 
+if(total<=amount){
       API.updateItem(order).then(() => {
         props.setRecharged(true);
         setTimeout(() => { }, 3000);
       });
-    }}
+    }else {ins=true;}
+  }
 
-if(!location.state||location.state.status==="add"){
+}
+
+ if(!location.state||(location.state.status==="add"&&!ins)){
     setShowsuccess(true);
 
     props.updateProps();}
 else if(location.state.status==="update"&&productsBasket.length>1)
 setShowUpdateError(true);
-else{
+else if(location.state.status==="update"&&productsBasket.length===1&&!ins){
     setShowsuccess(true);
 
-    props.updateProps();}
+    props.updateProps();}else if(ins)setShowInsufficient(true);
   };
   function handleClick() {
     history.push('/registration');
@@ -625,6 +665,8 @@ else{
                   setShowsuccess={setShowsuccess}
                   setShowUpdateError={setShowUpdateError}
                   setShowdanger={setShowdanger}
+                   showInsufficient={showInsufficient}
+                  setShowInsufficient={setShowInsufficient}
                   showsuccess={showsuccess}
                   showdanger={showdanger}
                   showUpdateError={showUpdateError}

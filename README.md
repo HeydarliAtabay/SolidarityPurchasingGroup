@@ -71,6 +71,11 @@ open your favourite browser and access the project at the url: http://localhost:
 | Email address    | Password  |
 | :--------------- | :-------: |
 | warehouse1@shop.it | warehouse1 |
+### Farmer 
+
+| Email address    | Password  |
+| :--------------- | :-------: |
+| luca.bianchi@spg.it | 1111 |
 
 ## API Server
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -1,6 +1,8 @@
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
+import API from '../API';
+import { useState, useEffect } from 'react';
 
 var isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
@@ -10,6 +12,27 @@ var isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 dayjs.extend(isSameOrAfter);
 
 function FarmerArea(props) {
+  const [triggerNotification, setTriggerNotification] = useState(false);
+  const [productsNotified, setProductsNotified] = useState([]);
+
+  useEffect(() => {
+    const getUnsaelableProduct = async () => {
+      await API.getProviderProductsNotification()
+        .then((res) => {
+          console.log(res.length);
+          if (res.length > 0) {
+            setTriggerNotification(true);
+            setProductsNotified(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    getUnsaelableProduct();
+    console.log(productsNotified);
+  }, []);
 
   const history = useHistory();
 
@@ -33,149 +56,239 @@ function FarmerArea(props) {
   }
 
   return (
-    <div className="row w-100">
+    <>
+      <Alert className="m-2" show={triggerNotification} variant="warning">
+        <Alert.Heading>
+          It seems that one of your products is out of stock!
+        </Alert.Heading>
+        <p>the products that are out of stock:</p>
+        {productsNotified.map((product, idx) => (
+          <p key="idx">
+            Id: <b>{product.id}</b> ---- Name of the product:{' '}
+            <b>{product.name}</b>
+          </p>
+        ))}
 
-      <span className="d-block text-center mt-5 mb-2 display-2">
-        Farmer Area
-      </span>
-      <div className="col-lg-3">
-        <div className="card mx-3 my-2 shadow-sm">
-          <div className="card-header d-flex justify-content-between">
-            <h5 className="d-inline my-auto">Your profile</h5>
+        <div className="d-flex justify-content-end">
+          <Button
+            onClick={async () => {
+              setTriggerNotification(false);
+              await API.setNotificationasSent(productsNotified);
+            }}
+            variant="outline-dark"
+          >
+            Close me
+          </Button>
+        </div>
+      </Alert>
+      <div className="row w-100">
+        <span className="d-block text-center mt-5 mb-2 display-2">
+          Farmer Area
+        </span>
+        <div className="col-lg-3">
+          <div className="card mx-3 my-2 shadow-sm">
+            <div className="card-header d-flex justify-content-between">
+              <h5 className="d-inline my-auto">Your profile</h5>
+            </div>
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item d-flex justify-content-between">
+                {props.userName}
+              </li>
+              <li className="list-group-item d-flex justify-content-between">
+                {props.userMail}
+              </li>
+            </ul>
           </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item d-flex justify-content-between">
-              {props.userName}
-            </li>
-            <li className="list-group-item d-flex justify-content-between">
-              {props.userMail}
-            </li>
-          </ul>
+          <div className="d-block mx-3 my-4">
+            <button
+              className="btn btn-outline-secondary w-100"
+              onClick={() => {
+                props.logout();
+                history.push('/');
+              }}
+            >
+              Logout
+            </button>
+          </div>
         </div>
-        <div className="d-block mx-3 my-4">
-          <button className="btn btn-outline-secondary w-100" onClick={() => { props.logout(); history.push("/") }}>Logout</button>
-        </div>
-      </div>
-      <div className="col-lg-9 ">
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100 shadow">
-              <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #4A5B8C 80%, #FFFFFF)" }}>
-                  {declareIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Declare products availability
-                    </h5>
-                    <p>
-                      Here you can report the expected available product amounts
-                      for the next week
-                    </p>
-                    <p className="card-text">
-                      • You can declare items for the next week from Monday
-                      until Saturday 09.00AM <br />
-                    </p>
-                    <div className="d-block text-end">
-                      {intervalTimeBoolean() ? (
-                        <Link to="/declare-availability">
-                          <button className="btn" style={{ backgroundColor: "#4A5B8C", color: "white" }}>
+        <div className="col-lg-9 ">
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100 shadow">
+                <div className="row no-gutters">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #4A5B8C 80%, #FFFFFF)',
+                    }}
+                  >
+                    {declareIcon}
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        Declare products availability
+                      </h5>
+                      <p>
+                        Here you can report the expected available product
+                        amounts for the next week
+                      </p>
+                      <p className="card-text">
+                        • You can declare items for the next week from Monday
+                        until Saturday 09.00AM <br />
+                      </p>
+                      <div className="d-block text-end">
+                        {intervalTimeBoolean() ? (
+                          <Link to="/declare-availability">
+                            <button
+                              className="btn"
+                              style={{
+                                backgroundColor: '#4A5B8C',
+                                color: 'white',
+                              }}
+                            >
+                              Declare availability
+                            </button>
+                          </Link>
+                        ) : (
+                          <button disabled className="btn btn-primary">
                             Declare availability
                           </button>
-                        </Link>
-                      ) : (
-                        <button disabled className="btn btn-primary">
-                          Declare availability
-                        </button>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100 shadow">
-              <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #8697A6 80%, #FFFFFF)" }}>
-                  {availabilityIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">Confirm product availability</h5>
-                    <p className="card-text">
-                      • You can confirm items availability starting Saturday
-                      09.00AM until Monday 09.00AM <br />
-                      <br />
-                    </p>
-                    <div className="d-block text-end">
-                      {!intervalTimeBoolean() ? (
-                        <Link to="/order-confirmation-farmer">
-                          <button className="btn" style={{ backgroundColor: "#8697A6", color: "black" }}>
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100 shadow">
+                <div className="row no-gutters">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #8697A6 80%, #FFFFFF)',
+                    }}
+                  >
+                    {availabilityIcon}
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        Confirm product availability
+                      </h5>
+                      <p className="card-text">
+                        • You can confirm items availability starting Saturday
+                        09.00AM until Monday 09.00AM <br />
+                        <br />
+                      </p>
+                      <div className="d-block text-end">
+                        {!intervalTimeBoolean() ? (
+                          <Link to="/order-confirmation-farmer">
+                            <button
+                              className="btn"
+                              style={{
+                                backgroundColor: '#8697A6',
+                                color: 'black',
+                              }}
+                            >
+                              Confirm availability
+                            </button>
+                          </Link>
+                        ) : (
+                          <button
+                            disabled
+                            className="btn"
+                            style={{
+                              backgroundColor: '#8697A6',
+                              color: 'black',
+                            }}
+                          >
                             Confirm availability
                           </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100 shadow">
+                <div className="row no-gutters">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #BFCDD9 80%, #FFFFFF)',
+                    }}
+                  >
+                    {perparationIcon}
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">Confirm order preparation</h5>
+                      <p className="card-text">
+                        • Confirm the preparation of the booked orders to ship
+                        to the SPG shop
+                      </p>
+                      <div className="d-block text-end">
+                        <Link to="/order-preparation">
+                          <button
+                            className="btn"
+                            style={{
+                              backgroundColor: '#BFCDD9',
+                              color: 'black',
+                            }}
+                          >
+                            Confirm preparation
+                          </button>
                         </Link>
-                      ) : (
-                        <button disabled className="btn" style={{ backgroundColor: "#8697A6", color: "black" }}>
-                          Confirm availability
-                        </button>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100 shadow">
-              <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #BFCDD9 80%, #FFFFFF)" }}>
-                  {perparationIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">Confirm order preparation</h5>
-                    <p className="card-text">
-                      • Confirm the preparation of the booked orders to ship to
-                      the SPG shop
-                    </p>
-                    <div className="d-block text-end">
-                      <Link to="/order-preparation">
-                        <button className="btn" style={{ backgroundColor: "#BFCDD9", color: "black" }}>
-                          Confirm preparation
-                        </button>
-                      </Link>
-                    </div>
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100 shadow">
+                <div className="row no-gutters">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #BF8756 80%, #FFFFFF)',
+                    }}
+                  >
+                    {walletIcon}
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100 shadow">
-              <div className="row no-gutters">
-                <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #BF8756 80%, #FFFFFF)" }}>
-                  {walletIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">Bookings</h5>
-                    <p className="card-text">
-                      • See the list of all the booked orders
-                    </p>
-                    <div className="d-block text-end">
-                      <Link to="/see-bookings">
-                        <button className="btn" style={{ backgroundColor: "#BF8756", color: "black" }}>
-                          See bookings
-                        </button>
-                      </Link>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">Bookings</h5>
+                      <p className="card-text">
+                        • See the list of all the booked orders
+                      </p>
+                      <div className="d-block text-end">
+                        <Link to="/see-bookings">
+                          <button
+                            className="btn"
+                            style={{
+                              backgroundColor: '#BF8756',
+                              color: 'black',
+                            }}
+                          >
+                            See bookings
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -184,7 +297,7 @@ function FarmerArea(props) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
