@@ -113,24 +113,27 @@ exports.getPendingApplications = () => {
             if (err) {
                 reject(err);
             }
-            const pendingApplications = rows.map((p) => ({
-                id: p.application_id,
-                name: p.farmer_name,
-                surname: p.farmer_surname,
-                email: p.farmer_email,
-                phone: p.farmer_phone,
-                description: p.farmer_description,
-                country: p.farmer_country,
-                region: p.farmer_region,
-                city: p.farmer_city,
-                address: p.farmer_address,
-                zip: p.farmer_zipcode,
-                location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
-                complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
-                date: p.application_date,
-                status: p.application_status
-            }));
-            resolve(pendingApplications);
+            if (rows) {
+                const pendingApplications = rows.map((p) => ({
+                    id: p.application_id,
+                    name: p.farmer_name,
+                    surname: p.farmer_surname,
+                    email: p.farmer_email,
+                    phone: p.farmer_phone,
+                    description: p.farmer_description,
+                    country: p.farmer_country,
+                    region: p.farmer_region,
+                    city: p.farmer_city,
+                    address: p.farmer_address,
+                    zip: p.farmer_zipcode,
+                    location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
+                    complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
+                    date: p.application_date,
+                    status: p.application_status
+                }));
+                resolve(pendingApplications);
+            }
+            resolve([]);
         });
     });
 }
@@ -142,24 +145,27 @@ exports.getAcceptedApplications = () => {
             if (err) {
                 reject(err);
             }
-            const acceptedApplications = rows.map((p) => ({
-                id: p.application_id,
-                name: p.farmer_name,
-                surname: p.farmer_surname,
-                email: p.farmer_email,
-                phone: p.farmer_phone,
-                description: p.farmer_description,
-                country: p.farmer_country,
-                region: p.farmer_region,
-                city: p.farmer_city,
-                address: p.farmer_address,
-                zip: p.farmer_zipcode,
-                location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
-                complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
-                date: p.application_date,
-                status: p.application_status
-            }));
-            resolve(acceptedApplications);
+            if (rows) {
+                const acceptedApplications = rows.map((p) => ({
+                    id: p.application_id,
+                    name: p.farmer_name,
+                    surname: p.farmer_surname,
+                    email: p.farmer_email,
+                    phone: p.farmer_phone,
+                    description: p.farmer_description,
+                    country: p.farmer_country,
+                    region: p.farmer_region,
+                    city: p.farmer_city,
+                    address: p.farmer_address,
+                    zip: p.farmer_zipcode,
+                    location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
+                    complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
+                    date: p.application_date,
+                    status: p.application_status
+                }));
+                resolve(acceptedApplications);
+            }
+            resolve([]);
         });
     });
 }

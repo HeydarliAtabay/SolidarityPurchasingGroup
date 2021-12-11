@@ -13,6 +13,7 @@ async function getAllClients() {
     }
   }
 }
+
 //GET ->retrieve users 
 async function getAllUsers() {
   const response = await fetch('/api/users');
@@ -28,6 +29,7 @@ async function getAllUsers() {
     }
   }
 }
+
 //GET ->retrieve client orders
 async function getAllOrders() {
   const response = await fetch('/api/orders');
@@ -171,7 +173,7 @@ function updateStateFarmer(id, product_name, state) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: id, product_name: product_name, state: state}),
+      body: JSON.stringify({ id: id, product_name: product_name, state: state }),
     })
       .then((response) => {
         if (response.ok) {
@@ -728,6 +730,7 @@ function confirmExpectedProducts(product, year, week) {
 }
 //api login
 async function logIn(credentials) {
+  console.log(credentials);
   let response = await fetch('/api/sessions', {
     method: 'POST',
     headers: {
@@ -917,32 +920,32 @@ const submitEmail = async (e) => {
     });
 };
 function updateItem(order) {
- 
+
   return new Promise((resolve, reject) => {
-    fetch(`/api/orders/`+ order.id , {
+    fetch(`/api/orders/` + order.id, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
-        body: JSON.stringify({
-order_id:order.order_id,
-client_id:order.client_id,
-product_name:order.product_name,
-product_id:order.product_id,
-order_quantity:order.order_quantity,
-state:order.state,
-farmer_state:order.farmer_state,
-OrderPrice:order.OrderPrice,
-id:order.id,
-address:order.address,
-city:order.city,
-zipcode:order.zipcode,
-Nation:order.Nation,
-date:order.date,
-time:order.time,
-pickup:order.pickup
+      body: JSON.stringify({
+        order_id: order.order_id,
+        client_id: order.client_id,
+        product_name: order.product_name,
+        product_id: order.product_id,
+        order_quantity: order.order_quantity,
+        state: order.state,
+        farmer_state: order.farmer_state,
+        OrderPrice: order.OrderPrice,
+        id: order.id,
+        address: order.address,
+        city: order.city,
+        zipcode: order.zipcode,
+        Nation: order.Nation,
+        date: order.date,
+        time: order.time,
+        pickup: order.pickup
 
-}),
+      }),
     }).then((response) => {
       if (response.ok) {
         resolve(null);

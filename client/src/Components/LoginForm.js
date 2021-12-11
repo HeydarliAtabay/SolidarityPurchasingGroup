@@ -13,6 +13,8 @@ function LoginForm1(props) {
 
         const credentials = { username, password };
 
+        console.log(credentials);
+
         let valid = true;
         if (username.trim() === '' || password.trim() === '')
             valid = false;

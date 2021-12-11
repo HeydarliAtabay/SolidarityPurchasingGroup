@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="C:\Users\mario\Desktop\SPG\server\__tests__\unit_tests\Server_tests\server.test.js">
-    <testCase name="Test the provider /api/orders/farmershipped It should response the POST method" duration="10"/>
+    <testCase name="Test the provider /api/orders/farmershipped It should response the POST method" duration="572"/>
+    <testCase name="Test the provider /api/products/confirmed/:year/:week It should response the GET method" duration="14"/>
+    <testCase name="Test the provider /api/products/expected/:year/:week It should response the GET method" duration="14"/>
+    <testCase name="Test the provider /api/products/ordered/:year/:week_number It should response the GET method" duration="204"/>
+    <testCase name="Test the provider /api/provider-products It should response the GET method" duration="236"/>
+    <testCase name="Test the provider /api/provider/confirmationStatus/:year/:week_number It should response the GET method" duration="177"/>
+    <testCase name="Test the provider /api/products/provider/expected/:year/:week_number It should response the GET method" duration="192"/>
+    <testCase name="Test the provider /api/provider/shipmentstatus/:year/:week_number It should response the GET method" duration="231"/>
+    <testCase name="Test the provider /api/products/expected/:year/:week_number It should response the POST method" duration="235"/>
+    <testCase name="Test the provider /users/email-availability/:email It should response the GET method" duration="35"/>
+    <testCase name="Test the provider /provider/apply It should response the POST method" duration="325"/>
+    <testCase name="Test the provider /manager/applications/pending It should response the GET method" duration="200"/>
+    <testCase name="Test the provider /manager/applications/accepted It should response the GET method" duration="182"/>
+    <testCase name="Test the manager /manager/applications/accept/:application_id It should response the GET method" duration="221"/>
+    <testCase name="Test the manager /manager/applications/reject/:application_id It should response the GET method" duration="282"/>
   </file>
 </testExecutions>
