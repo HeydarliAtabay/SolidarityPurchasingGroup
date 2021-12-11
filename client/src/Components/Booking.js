@@ -310,7 +310,7 @@ if(productsBasket.length===1)
 
 
  for (const pri of productsBasket) {
-               tot=pri.price+pri.qty+tot;
+               tot=pri.price*pri.qty+tot;
 }
 total=tot+somma-location.state.item.OrderPrice;console.log(total);
 console.log(total);
