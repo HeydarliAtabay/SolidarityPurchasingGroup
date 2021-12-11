@@ -588,6 +588,7 @@ function App() {
                   userMail={userMail}
                   clients={clients}
                   clientid={userid}
+                  orders={orders}
                 />
               ) : (
                 <Redirect to="/login" />
