@@ -31,7 +31,6 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(fileUpload());
 
-
 app.setTestingMode = (test_db_name) => {
   clientsDao.setTestDB(test_db_name);
   ordersDao.setTestDB(test_db_name);
@@ -40,8 +39,7 @@ app.setTestingMode = (test_db_name) => {
   walletsDAO.setTestDB(test_db_name);
   warehouseDao.setTestDB(test_db_name);
   dbt.setTestDB(test_db_name);
-}
-
+};
 
 let transporter = nodemailer.createTransport({
   service: 'hotmail',
@@ -74,18 +72,24 @@ app.post('/api/sendEmail', function (req, res) {
 });
 
 /*** Set up Passport ***/
-passport.use(new passportLocal.Strategy((username, password, done) => {
-  dbt.getUser(username, password).then((user) => {
-    if (user) {               //Authentication successful, db returned user
-      done(null, user);
-    }
-    else {                   //Authentication failed (wrong credentials)
-      done(null, false, { message: 'Wrong username and/or password' });
-    }
-  }).catch((err) => {
-    done(err);              //DB error
-  });
-}));
+passport.use(
+  new passportLocal.Strategy((username, password, done) => {
+    dbt
+      .getUser(username, password)
+      .then((user) => {
+        if (user) {
+          //Authentication successful, db returned user
+          done(null, user);
+        } else {
+          //Authentication failed (wrong credentials)
+          done(null, false, { message: 'Wrong username and/or password' });
+        }
+      })
+      .catch((err) => {
+        done(err); //DB error
+      });
+  })
+);
 
 // serialize and de-serialize the user
 passport.serializeUser((user, done) => {
@@ -93,11 +97,14 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser((id, done) => {
-  dbt.getUserById(id).then((user) => {
-    done(null, user);   //make user available in req.user
-  }).catch((err) => {
-    done(err, null);    //user authorization failed (user with that id not existing)    
-  });
+  dbt
+    .getUserById(id)
+    .then((user) => {
+      done(null, user); //make user available in req.user
+    })
+    .catch((err) => {
+      done(err, null); //user authorization failed (user with that id not existing)
+    });
 });
 
 const isLoggedIn = (req, res, next) => {
@@ -142,7 +149,6 @@ app.get('/api/sessions/current', (req, res) => {
     res.status(200).json(req.user);
   } else res.status(401).json({ code: 401, error: 'Unauthenticated user!' });
 });
-
 
 // user logout
 app.delete('/api/sessions/current', (req, res) => {
@@ -205,7 +211,8 @@ app.put('/api/modifyStateFarmer', async (req, res) => {
 });
 
 //PUT to update a product as delivered
-app.put('/api/orders/:order_id/:product_name',
+app.put(
+  '/api/orders/:order_id/:product_name',
 
   async (req, res) => {
     try {
@@ -221,7 +228,8 @@ app.put('/api/orders/:order_id/:product_name',
 );
 
 //PUT to update a product as prepared
-app.put('/api/orders/:order_id/:product_name',
+app.put(
+  '/api/orders/:order_id/:product_name',
 
   async (req, res) => {
     try {
@@ -296,7 +304,7 @@ app.get('/api/product/:product_id', async (req, res) => {
 //GET all booked orders for a certain provider
 app.get('/api/products/ordered/:year/:week_number', async (req, res) => {
   try {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
 
@@ -304,7 +312,11 @@ app.get('/api/products/ordered/:year/:week_number', async (req, res) => {
     const week_number = req.params.week_number;
     const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
 
-    const products = await ordersDao.getBookedOrders(provider_id, year, week_number);
+    const products = await ordersDao.getBookedOrders(
+      provider_id,
+      year,
+      week_number
+    );
     res.json(products);
   } catch (err) {
     console.log(err);
@@ -348,14 +360,79 @@ app.get('/api/provider/:provider_id', async (req, res) => {
 
 //Get provider products
 app.get('/api/provider-products', async (req, res) => {
-  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
   }
 
   try {
     const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
-    console.log(provider_id);
-    const providerProducts = await providersDAO.getProviderExistingProducts(provider_id);
+    const providerProducts = await providersDAO.getProviderExistingProducts(
+      provider_id
+    );
+    res.json(providerProducts);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+app.post('/api/neworder', async (req, res) => {
+  try {
+    const client_id = req.body.client_id;
+    const totalorderprice = req.body.total;
+    const order_items = req.body.order_items;
+    let response, response1;
+
+    const order_id = await ordersDao.insert_order(client_id, totalorderprice);
+    order_items.forEach(async (prod) => {
+      if (prod.quantity >= prod.qty) {
+        response = await ordersDao.insert_order_items(order_id, prod);
+        if (response.status !== 'OK') throw 'something goes wrong';
+      } else throw 'We do not have enough product ';
+      const newQuantity = prod.quantity - prod.qty;
+      response1 = await productsDAO.putProductQuantity(prod.id, newQuantity);
+    });
+
+    res.json(response);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+//Post the notification as sent
+app.put('/api/provider-products-sent/', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+  try {
+    //const ids = new Array();
+    const ids = req.body.map((p) => p.id);
+    let result_change_notification = false;
+    for (let pid of ids) {
+      console.log(pid);
+      result_change_notification = await providersDAO.postProviderNotification(
+        pid
+      );
+    }
+    if (!result_change_notification) {
+      throw 'postProviderNotification failed';
+    }
+    res.json(result_change_notification);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+//Get provider products that are not available and not notificated to the farmer
+app.get('/api/provider-products-notification', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+  try {
+    const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
+    const providerProducts = await providersDAO.getProviderProductsNotification(
+      provider_id
+    );
+
     res.json(providerProducts);
   } catch (err) {
     console.log(err);
@@ -364,9 +441,10 @@ app.get('/api/provider-products', async (req, res) => {
 });
 
 //CHECK provider's confirmation status
-app.get('/api/provider/confirmationStatus/:year/:week_number',
+app.get(
+  '/api/provider/confirmationStatus/:year/:week_number',
   async (req, res) => {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
     try {
@@ -389,9 +467,10 @@ app.get('/api/provider/confirmationStatus/:year/:week_number',
 );
 
 //GET provider's expected production
-app.get('/api/products/provider/expected/:year/:week_number',
+app.get(
+  '/api/products/provider/expected/:year/:week_number',
   async (req, res) => {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
+    if (!req.isAuthenticated() || req.user.role !== 'farmer') {
       res.status(401).json({ error: 'Unauthorized user' });
     }
 
@@ -414,53 +493,46 @@ app.get('/api/products/provider/expected/:year/:week_number',
 );
 
 //GET providers shipment status
-app.get('/api/provider/shipmentstatus/:year/:week_number',
-  async (req, res) => {
-    if (!req.isAuthenticated() || req.user.role!=='farmer') {
-      res.status(401).json({ error: 'Unauthorized user' });
-    }
-
-    try {
-      const year = req.params.year;
-      const week_number = req.params.week_number;
-
-      const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
-
-      const shipmentStatus = await ordersDao.getProviderShipmentStatus(
-        provider_id,
-        year,
-        week_number
-      );
-      res.json(shipmentStatus);
-    } catch (err) {
-      console.log(err);
-      res.json(err);
-    }
+app.get('/api/provider/shipmentstatus/:year/:week_number', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
   }
-);
+
+  try {
+    const year = req.params.year;
+    const week_number = req.params.week_number;
+
+    const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
+
+    const shipmentStatus = await ordersDao.getProviderShipmentStatus(
+      provider_id,
+      year,
+      week_number
+    );
+    res.json(shipmentStatus);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
 
 //GET provider shipped orders
-app.get(
-  `/api/provider-orders/:id`,
-  async (req, res) => {
-    try {
-      const id = req.params.id;
+app.get(`/api/provider-orders/:id`, async (req, res) => {
+  try {
+    const id = req.params.id;
 
-      const farmerShippedOrders = await warehouseDao.getProviderShippedOrders(id
-      );
+    const farmerShippedOrders = await warehouseDao.getProviderShippedOrders(id);
 
-      res.json(farmerShippedOrders);
-    } catch (err) {
-      console.log(err);
-      res.json(err);
-    }
+    res.json(farmerShippedOrders);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
   }
-);
-
+});
 
 //Insert provider's expected production
 app.post('/api/products/expected/:year/:week_number', async (req, res) => {
-  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
   }
 
@@ -472,7 +544,11 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
     const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
 
     const oldProductIDs = (
-      await productsDAO.getProviderExpectedProducts(provider_id, year, week_number)
+      await productsDAO.getProviderExpectedProducts(
+        provider_id,
+        year,
+        week_number
+      )
     ).map((p) => p.id);
     const productIDs = [];
 
@@ -485,7 +561,10 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
       }
     });
     for (const product of products) {
-      const newID = await productsDAO.insertNewExpectedProduct(product, provider_id);
+      const newID = await productsDAO.insertNewExpectedProduct(
+        product,
+        provider_id
+      );
       productIDs.push({ old_id: product.id, new_id: newID });
     }
     console.log(productIDs);
@@ -530,7 +609,7 @@ app.get('/users/email-availability/:email', async (req, res) => {
 app.post('/provider/apply', async (req, res) => {
   try {
     let farmer = req.body;
-    console.log(farmer)
+    console.log(farmer);
     var salt = bcrypt.genSaltSync(10);
     farmer.password = await bcrypt.hash(farmer.password, salt);
     res.json(await providersDAO.insertFarmerApplication(farmer));
@@ -617,13 +696,18 @@ app.put('/api/modifyquantity', async (req, res) => {
 
 //update quantity
 app.put('/api/farmerConfirm/:product_id/:year/:week', async (req, res) => {
-  if (!req.isAuthenticated() || req.user.role!=='farmer') {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
     res.status(401).json({ error: 'Unauthorized user' });
   }
 
   const provider_id = await dbt.getProviderIDfromUserID(req.user.id);
   productsDAO
-    .confirmExpectedProduct(provider_id, req.params.product_id, req.params.year, req.params.week)
+    .confirmExpectedProduct(
+      provider_id,
+      req.params.product_id,
+      req.params.year,
+      req.params.week
+    )
     .then(() => {
       res.status(200).json();
       return res;
@@ -691,7 +775,7 @@ app.put('/api/clients/update/balance/:clientId/:amount', async (req, res) => {
       .status(500)
       .json(
         `Error while updating the balance of user with id: ${clientId}   ` +
-        error
+          error
       );
   }
 });
@@ -749,7 +833,7 @@ app.post('/api/orderinsert', async (req, res) => {
       address: req.body.address,
       date: req.body.date,
       time: req.body.time,
-      pickup: req.body.pickup
+      pickup: req.body.pickup,
     };
     await ordersDao.addOrder(t);
     res.status(201).end('Created order!');
@@ -787,20 +871,18 @@ app.get('/api/users', async (req, res) => {
   }
 });
 // PUT item order
-app.put('/api/orders/:id',
-  async (req, res) => {
+app.put('/api/orders/:id', async (req, res) => {
+  const order = req.body;
 
-    const order = req.body;
-
-
-    try {
-      await ordersDao.changeItem(order);
-      res.status(200).send(order);
-    } catch (err) {
-      res.status(503).json({ error: `Database error during the update of order .` });
-    }
-
-  });
+  try {
+    await ordersDao.changeItem(order);
+    res.status(200).send(order);
+  } catch (err) {
+    res
+      .status(503)
+      .json({ error: `Database error during the update of order .` });
+  }
+});
 
 //GET all deliverers
 app.get('/api/deliverers', async (req, res) => {

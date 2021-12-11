@@ -1,6 +1,8 @@
-import { Button } from 'react-bootstrap';
+import { Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import API from '../API';
+import { useState, useEffect } from 'react';
 
 var isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
@@ -10,6 +12,27 @@ var isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
 dayjs.extend(isSameOrAfter);
 
 function FarmerArea(props) {
+  const [triggerNotification, setTriggerNotification] = useState(false);
+  const [productsNotified, setProductsNotified] = useState([]);
+
+  useEffect(() => {
+    const getUnsaelableProduct = async () => {
+      await API.getProviderProductsNotification()
+        .then((res) => {
+          console.log(res.length);
+          if (res.length > 0) {
+            setTriggerNotification(true);
+            setProductsNotified(res);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    };
+
+    getUnsaelableProduct();
+    console.log(productsNotified);
+  }, []);
 
   function intervalTimeBoolean() {
     if (dayjs(props.time.date).day() === 1) {
@@ -31,146 +54,173 @@ function FarmerArea(props) {
   }
 
   return (
-    <div className="row w-100">
-      
-      <span className="d-block text-center mt-5 mb-2 display-2">
-        Farmer Area
-      </span>
-      <div className="col-lg-3">
-        <div className="card mx-3 my-2 shadow-sm">
-          <div className="card-header d-flex justify-content-between">
-            <h5 className="d-inline my-auto">Your profile</h5>
-          </div>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item d-flex justify-content-between">
-              {props.userName}
-            </li>
-            <li className="list-group-item d-flex justify-content-between">
-              {props.userMail}
-            </li>
-          </ul>
+    <>
+      <Alert className="m-2" show={triggerNotification} variant="warning">
+        <Alert.Heading>
+          It seems that one of your products is out of stock!
+        </Alert.Heading>
+        <p>the products that are out of stock:</p>
+        {productsNotified.map((product, idx) => (
+          <p key="idx">
+            Id: <b>{product.id}</b> ---- Name of the product:{' '}
+            <b>{product.name}</b>
+          </p>
+        ))}
+
+        <div className="d-flex justify-content-end">
+          <Button
+            onClick={async () => {
+              setTriggerNotification(false);
+              await API.setNotificationasSent(productsNotified);
+            }}
+            variant="outline-dark"
+          >
+            Close me
+          </Button>
         </div>
-      </div>
-      <div className="col-lg-9 ">
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100">
-              <div className="row no-gutters">
-                <div className="col-md-4 bg-secondary p-3 text-center">
-                  {declareIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      Declare products availability
-                    </h5>
-                    <p>
-                      Here you can report the expected available product amounts
-                      for the next week
-                    </p>
-                    <p className="card-text">
-                      • You can declare items for the next week from Monday
-                      until Saturday 09.00AM <br />
-                    </p>
-                    <div className="d-block text-end">
-                      {intervalTimeBoolean() ? (
-                        <Link to="/declare-availability">
-                          <button className="btn btn-primary">
+      </Alert>
+      <div className="row w-100">
+        <span className="d-block text-center mt-5 mb-2 display-2">
+          Farmer Area
+        </span>
+        <div className="col-lg-3">
+          <div className="card mx-3 my-2 shadow-sm">
+            <div className="card-header d-flex justify-content-between">
+              <h5 className="d-inline my-auto">Your profile</h5>
+            </div>
+            <ul className="list-group list-group-flush">
+              <li className="list-group-item d-flex justify-content-between">
+                {props.userName}
+              </li>
+              <li className="list-group-item d-flex justify-content-between">
+                {props.userMail}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div className="col-lg-9 ">
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100">
+                <div className="row no-gutters">
+                  <div className="col-md-4 bg-secondary p-3 text-center">
+                    {declareIcon}
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        Declare products availability
+                      </h5>
+                      <p>
+                        Here you can report the expected available product
+                        amounts for the next week
+                      </p>
+                      <p className="card-text">
+                        • You can declare items for the next week from Monday
+                        until Saturday 09.00AM <br />
+                      </p>
+                      <div className="d-block text-end">
+                        {intervalTimeBoolean() ? (
+                          <Link to="/declare-availability">
+                            <button className="btn btn-primary">
+                              Declare availability
+                            </button>
+                          </Link>
+                        ) : (
+                          <button disabled className="btn btn-primary">
                             Declare availability
                           </button>
-                        </Link>
-                      ) : (
-                        <button disabled className="btn btn-primary">
-                          Declare availability
-                        </button>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100">
-              <div className="row no-gutters">
-                <div className="col-md-4 bg-secondary p-3 text-center">
-                  {availabilityIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">Confirm product availability</h5>
-                    <p className="card-text">
-                      • You can confirm items availability starting Saturday
-                      09.00AM until Monday 09.00AM <br />
-                      <br />
-                    </p>
-                    <div className="d-block text-end">
-                      {!intervalTimeBoolean() ? (
-                        <Link to="/order-confirmation-farmer">
-                          <button className="btn btn-primary">
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100">
+                <div className="row no-gutters">
+                  <div className="col-md-4 bg-secondary p-3 text-center">
+                    {availabilityIcon}
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">
+                        Confirm product availability
+                      </h5>
+                      <p className="card-text">
+                        • You can confirm items availability starting Saturday
+                        09.00AM until Monday 09.00AM <br />
+                        <br />
+                      </p>
+                      <div className="d-block text-end">
+                        {!intervalTimeBoolean() ? (
+                          <Link to="/order-confirmation-farmer">
+                            <button className="btn btn-primary">
+                              Confirm availability
+                            </button>
+                          </Link>
+                        ) : (
+                          <button disabled className="btn btn-primary">
                             Confirm availability
                           </button>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100">
+                <div className="row no-gutters">
+                  <div className="col-md-4 bg-secondary p-3 text-center">
+                    {perparationIcon}
+                  </div>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">Confirm order preparation</h5>
+                      <p className="card-text">
+                        • Confirm the preparation of the booked orders to ship
+                        to the SPG shop
+                      </p>
+                      <div className="d-block text-end">
+                        <Link to="/order-preparation">
+                          <button className="btn btn-primary">
+                            Confirm preparation
+                          </button>
                         </Link>
-                      ) : (
-                        <button disabled className="btn btn-primary">
-                          Confirm availability
-                        </button>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100">
-              <div className="row no-gutters">
-                <div className="col-md-4 bg-secondary p-3 text-center">
-                  {perparationIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">Confirm order preparation</h5>
-                    <p className="card-text">
-                      • Confirm the preparation of the booked orders to ship to
-                      the SPG shop
-                    </p>
-                    <div className="d-block text-end">
-                      <Link to="/order-preparation">
-                        <button className="btn btn-primary">
-                          Confirm preparation
-                        </button>
-                      </Link>
-                    </div>
+          <div className="row w-100">
+            <div className="col-lg-12">
+              <div className="card m-3 w-100">
+                <div className="row no-gutters">
+                  <div className="col-md-4 bg-secondary p-3 text-center">
+                    {walletIcon}
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row w-100">
-          <div className="col-lg-12">
-            <div className="card m-3 w-100">
-              <div className="row no-gutters">
-                <div className="col-md-4 bg-secondary p-3 text-center">
-                  {walletIcon}
-                </div>
-                <div className="col-md-8">
-                  <div className="card-body">
-                    <h5 className="card-title">Bookings</h5>
-                    <p className="card-text">
-                      • See the list of all the booked orders
-                    </p>
-                    <div className="d-block text-end">
-                      <Link to="/see-bookings">
-                        <button className="btn btn-primary">
-                          See bookings
-                        </button>
-                      </Link>
+                  <div className="col-md-8">
+                    <div className="card-body">
+                      <h5 className="card-title">Bookings</h5>
+                      <p className="card-text">
+                        • See the list of all the booked orders
+                      </p>
+                      <div className="d-block text-end">
+                        <Link to="/see-bookings">
+                          <button className="btn btn-primary">
+                            See bookings
+                          </button>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -179,7 +229,7 @@ function FarmerArea(props) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -233,5 +283,5 @@ const walletIcon = (
   >
     <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z" />
   </svg>
-); 
+);
 export default FarmerArea;

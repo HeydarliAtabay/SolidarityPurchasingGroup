@@ -18,7 +18,7 @@ import {
 } from 'react-router-dom';
 import { LoginForm1 } from './Components/LoginForm';
 import ClientArea from './Components/ClientArea';
-import FarmerRegistration from './Components/FarmerRegistration'
+import FarmerRegistration from './Components/FarmerRegistration';
 import FarmerArea from './Components/FarmerArea';
 import FarmerProducts from './Components/FarmerProducts';
 import FarmerOrderPreparation from './Components/FarmerOrderPreparation';
@@ -32,7 +32,10 @@ import Fbookings from './Components/FarmerPageOrders';
 let r = [];
 
 function App() {
-  const [time, setTime] = useState({ date: dayjs().format('MM-DD-YYYY'), hour: dayjs().format('HH:mm') });
+  const [time, setTime] = useState({
+    date: dayjs().format('MM-DD-YYYY'),
+    hour: dayjs().format('HH:mm'),
+  });
   const [recharged, setRecharged] = useState(true);
   const [recharged1, setRecharged1] = useState(true);
   const [orders, setOrders] = useState([]);
@@ -245,7 +248,7 @@ function App() {
     setUserName('');
     setUserid(-1);
 
-    return <Redirect to="/" />
+    return <Redirect to="/" />;
   };
 
   return (
@@ -265,221 +268,260 @@ function App() {
           <Route
             path="/booking"
             exact
-            render={() => (logged ?
-              <Booking
-                browsing={false}
-                logged={logged}
-                orders={orders}
-                isEmployee={false}
-                products={confirmedProducts}
-                clients={clients}
-                updateProps={updateProps}
-                time={time}
-                clientid={userid}
-                setRecharged={updateRech}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <Booking
+                  browsing={false}
+                  logged={logged}
+                  orders={orders}
+                  isEmployee={false}
+                  products={confirmedProducts}
+                  clients={clients}
+                  updateProps={updateProps}
+                  time={time}
+                  clientid={userid}
+                  setRecharged={updateRech}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/products-next-week"
             exact
-            render={() => (logged ?
-              <Booking
-                browsing={true}
-                logged={logged}
-                isEmployee={false}
-                products={expectedProducts}
-                updateProps={updateProps}
-                time={time}
-                clientid={userid}
-                setRecharged={updateRech}
-                clients={clients}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <Booking
+                  browsing={true}
+                  logged={logged}
+                  isEmployee={false}
+                  products={expectedProducts}
+                  updateProps={updateProps}
+                  time={time}
+                  clientid={userid}
+                  setRecharged={updateRech}
+                  clients={clients}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/orders"
             exact
-            render={() => (logged ?
-              <Orders
-                orders={orders}
-                clientid={userid}
-                setRecharged={updateRech}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <Orders
+                  orders={orders}
+                  clientid={userid}
+                  setRecharged={updateRech}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/staff-booking"
             exact
-            render={() => (logged ?
-              <Booking
-                browsing={false}
-                logged={logged}
-                clients={clients}
-                orders={orders}
-                isEmployee={true}
-                clientid={userid}
-                products={confirmedProducts}
-                setRecharged={updateRech}
-                updateProps={updateProps}
-                time={time}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <Booking
+                  browsing={false}
+                  logged={logged}
+                  clients={clients}
+                  orders={orders}
+                  isEmployee={true}
+                  clientid={userid}
+                  products={confirmedProducts}
+                  setRecharged={updateRech}
+                  updateProps={updateProps}
+                  time={time}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/employee"
             exact
-            render={() => (logged ?
-              <EmployeePage
-                orders={orders}
-                clients={clients}
-                methods={methods}
-                mail={userMail}
-                addTr={addTransaction}
-                topUp={topUpBalance}
-                setRecharged={updateRech}
-                logout={doLogOut}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <EmployeePage
+                  orders={orders}
+                  clients={clients}
+                  methods={methods}
+                  mail={userMail}
+                  addTr={addTransaction}
+                  topUp={topUpBalance}
+                  setRecharged={updateRech}
+                  logout={doLogOut}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/warehouse-employee"
             exact
-            render={() => (logged ?
-              <WarehousePage
-                userRole="warehouse-employee"
-                orders={orders}
-                providers={providers}
-                methods={methods}
-                setRecharged={updateRech}
-                logout={doLogOut}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <WarehousePage
+                  userRole="warehouse-employee"
+                  orders={orders}
+                  providers={providers}
+                  methods={methods}
+                  setRecharged={updateRech}
+                  logout={doLogOut}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/warehouse-manager"
             exact
-            render={() => (logged ?
-              <WarehousePage
-                userRole="warehouse-manager"
-                orders={orders}
-                providers={providers}
-                methods={methods}
-                logout={doLogOut}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <WarehousePage
+                  userRole="warehouse-manager"
+                  orders={orders}
+                  providers={providers}
+                  methods={methods}
+                  logout={doLogOut}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/delivery"
             exact
-            render={() => (logged ?
-              <DeliveryPage
-                orders={orders}
-                providers={providers}
-                methods={methods}
-                mail={userMail}
-                userRole={userRole}
-                logout={doLogOut}
-                delivererId={userid}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <DeliveryPage
+                  orders={orders}
+                  providers={providers}
+                  methods={methods}
+                  mail={userMail}
+                  userRole={userRole}
+                  logout={doLogOut}
+                  delivererId={userid}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/manager"
             exact
-            render={() => (logged ?
-              <ManagerArea time={time} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? <ManagerArea time={time} /> : <Redirect to="/login" />
+            }
           />
           <Route
             path="/manager/applications/pending"
             exact
-            render={() => (logged ?
-              <ManagerFarmers pendingOnly={true} acceptedOnly={false} time={time} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <ManagerFarmers
+                  pendingOnly={true}
+                  acceptedOnly={false}
+                  time={time}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/manager/applications/processed"
             exact
-            render={() => (logged ?
-              <ManagerFarmers pendingOnly={false} acceptedOnly={true} time={time} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <ManagerFarmers
+                  pendingOnly={false}
+                  acceptedOnly={true}
+                  time={time}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/farmer-apply"
             exact
-            render={() => (<FarmerRegistration time={time} />)}
+            render={() => <FarmerRegistration time={time} />}
           />
           <Route
             path="/farmer"
             exact
-            render={() => (logged ?
-              <FarmerArea userName={userName} userMail={userMail} time={time} logout={doLogOut} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <FarmerArea
+                  userId={userid}
+                  userName={userName}
+                  userMail={userMail}
+                  time={time}
+                  logout={doLogOut}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
-           <Route
+          <Route
             path="/see-bookings"
             exact
-            render={() => (logged ?
-              <Fbookings
-                orders={orders}
-                time={time}
-                setRecharged={updateRech}
-              /> :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <Fbookings
+                  orders={orders}
+                  time={time}
+                  setRecharged={updateRech}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/declare-availability"
             exact
-            render={() => (logged ?
-              <FarmerProducts time={time} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? <FarmerProducts time={time} /> : <Redirect to="/login" />
+            }
           />
           <Route
             path="/order-preparation"
             exact
-            render={() => (logged ?
-              <FarmerOrderPreparation time={time} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <FarmerOrderPreparation time={time} />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
 
           <Route
             path="/order-confirmation-farmer"
             exact
-            render={() => (logged ?
-              <FarmerOrderConfirmation time={time} />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <FarmerOrderConfirmation time={time} />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/login"
@@ -498,17 +540,19 @@ function App() {
           <Route
             path="/client"
             exact
-            render={() => (logged ?
-              <ClientArea
-                logout={doLogOut}
-                userName={userName}
-                userMail={userMail}
-                clients={clients}
-                clientid={userid}
-              />
-              :
-              <Redirect to="/login" />
-            )}
+            render={() =>
+              logged ? (
+                <ClientArea
+                  logout={doLogOut}
+                  userName={userName}
+                  userMail={userMail}
+                  clients={clients}
+                  clientid={userid}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
+            }
           />
           <Route
             path="/registration"
