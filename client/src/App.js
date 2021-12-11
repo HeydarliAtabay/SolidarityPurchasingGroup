@@ -273,15 +273,14 @@ function App() {
         userMail={userMail}
         setTime={setTime}
       />
-      <Container fluid="sx">
+      <Container className="p-2">
         {' '}
         {message !== '' ? (
           <Row className="justify-content-md-center">
             <Alert
+              variant="danger"
               style={{
                 fontSize: 25,
-                backgroundColor: '#dc143c',
-                width: '600px',
               }}
               onClose={() => setMessage('')}
               dismissible

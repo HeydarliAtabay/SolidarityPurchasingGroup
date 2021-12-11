@@ -43,6 +43,7 @@ app.setTestingMode = (test_db_name) => {
 
 let transporter = nodemailer.createTransport({
   service: 'hotmail',
+  secure: true,
   auth: {
     user: 'se2_r02team@outlook.com',
     pass: '123torchiano123!',
@@ -896,7 +897,7 @@ app.put('/api/orders/:id', async (req, res) => {
 
   try {
     await ordersDao.changeItem(order);
-    res.status(200).send(order);
+    res.status(200).json(order);
   } catch (err) {
     res
       .status(503)
