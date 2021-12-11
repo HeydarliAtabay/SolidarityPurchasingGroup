@@ -13,8 +13,7 @@ async function getAllClients() {
     }
   }
 }
-
-//GET ->retrieve users 
+//GET ->retrieve users
 async function getAllUsers() {
   const response = await fetch('/api/users');
   if (response.ok) {
@@ -128,7 +127,7 @@ function updateWHPrepared(id, product_name) {
         });
       });
   });
-}//
+} //
 
 //update order state
 function updateState(id, product_name, state) {
@@ -138,7 +137,11 @@ function updateState(id, product_name, state) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: id, product_name: product_name, state: state }),
+      body: JSON.stringify({
+        id: id,
+        product_name: product_name,
+        state: state,
+      }),
     })
       .then((response) => {
         if (response.ok) {
@@ -173,7 +176,11 @@ function updateStateFarmer(id, product_name, state) {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ id: id, product_name: product_name, state: state }),
+      body: JSON.stringify({
+        id: id,
+        product_name: product_name,
+        state: state,
+      }),
     })
       .then((response) => {
         if (response.ok) {
@@ -202,9 +209,7 @@ function updateStateFarmer(id, product_name, state) {
 
 //GET all products
 async function getAllConfirmedProducts(year, week) {
-  const response = await fetch(
-    '/api/products/confirmed/' + year + '/' + week
-  );
+  const response = await fetch('/api/products/confirmed/' + year + '/' + week);
   if (response.ok) {
     return await response.json();
   } else {
@@ -214,9 +219,7 @@ async function getAllConfirmedProducts(year, week) {
 }
 
 async function getAllExpectedProducts(year, week) {
-  const response = await fetch(
-    '/api/products/expected/' + year + '/' + week
-  );
+  const response = await fetch('/api/products/expected/' + year + '/' + week);
   if (response.ok) {
     return await response.json();
   } else {
@@ -227,7 +230,7 @@ async function getAllExpectedProducts(year, week) {
 
 //GET all products in the booked or pending state of a certain provider
 async function getOrderedProductsForProvider(year, week) {
-  const response = await fetch('/api/products/ordered/' + year + "/" + week);
+  const response = await fetch('/api/products/ordered/' + year + '/' + week);
   if (response.ok) {
     return await response.json();
   } else {
@@ -238,7 +241,9 @@ async function getOrderedProductsForProvider(year, week) {
 
 //GET farmer shipment status
 async function getProviderShipmentStatus(year, week) {
-  const response = await fetch('/api/provider/shipmentstatus/' + year + "/" + week);
+  const response = await fetch(
+    '/api/provider/shipmentstatus/' + year + '/' + week
+  );
   if (response.ok) {
     return await response.json();
   } else {
@@ -264,9 +269,7 @@ async function setProductsAsFarmerShipped(productIDS) {
 
 //GET product by specific ID
 async function getProductById(product_id) {
-  const response = await fetch(
-    '/api/product/' + product_id
-  );
+  const response = await fetch('/api/product/' + product_id);
   if (response.ok) {
     return await response.json();
   } else {
@@ -299,9 +302,7 @@ async function getAllProviders() {
 
 //GET provider by specific ID
 async function getProviderById(provider_id) {
-  const response = await fetch(
-    '/api/provider/' + provider_id
-  );
+  const response = await fetch('/api/provider/' + provider_id);
   if (response.ok) {
     return await response.json();
   } else {
@@ -312,9 +313,7 @@ async function getProviderById(provider_id) {
 
 //GET provider products by providerID
 async function getProviderProducts() {
-  const response = await fetch(
-    '/api/provider-products'
-  );
+  const response = await fetch('/api/provider-products');
   if (response.ok) {
     return await response.json();
   } else {
@@ -322,7 +321,53 @@ async function getProviderProducts() {
     throw err; // An object with the error coming from the server
   }
 }
+//GET provider products by providerID that are not available and notification filed is equal to zero.
+async function getProviderProductsNotification() {
+  const response = await fetch('/api/provider-products-notification');
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+//POST set the notification as Sent
 
+async function setNotificationasSent(products) {
+  return new Promise((resolve, reject) => {
+    fetch('/api/provider-products-sent/', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(products),
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(response);
+        } else {
+          // cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            })
+            .catch((err) => {
+              reject({
+                errors: [
+                  { param: 'Application', msg: 'Cannot parse server response' },
+                ],
+              });
+            });
+        }
+      })
+      .catch((err) => {
+        reject({
+          errors: [{ param: 'Server', msg: 'Cannot communicate' }],
+        });
+      });
+  });
+}
 //GET provider products by providerID
 async function getProviderConfirmationStatus(year, week_number) {
   const response = await fetch(
@@ -399,8 +444,7 @@ async function sendFarmerApplication(farmerApplication) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(farmerApplication),
-  }
-  );
+  });
   if (response.ok) {
     return await response.json();
   } else {
@@ -430,7 +474,9 @@ async function getFarmerAcceptedApplications() {
 }
 
 async function acceptFarmerApplication(application_id) {
-  const response = await fetch('/manager/applications/accept/' + application_id);
+  const response = await fetch(
+    '/manager/applications/accept/' + application_id
+  );
   if (response.ok) {
     return await response.json();
   } else {
@@ -440,7 +486,9 @@ async function acceptFarmerApplication(application_id) {
 }
 
 async function rejectFarmerApplication(application_id) {
-  const response = await fetch('/manager/applications/reject/' + application_id);
+  const response = await fetch(
+    '/manager/applications/reject/' + application_id
+  );
   if (response.ok) {
     return await response.json();
   } else {
@@ -519,8 +567,6 @@ function updateQuantity(product_id, quantity) {
       });
   });
 }
-
-
 
 /* 
    Place a new order.
@@ -656,19 +702,13 @@ function addTransaction(tr) {
 // Increase balance of clients
 function increaseBalance(amount, clientId) {
   return new Promise((resolve, reject) => {
-    fetch(
-      '/api/clients/update/balance/' +
-      clientId +
-      '/' +
-      amount,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}),
-      }
-    )
+    fetch('/api/clients/update/balance/' + clientId + '/' + amount, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    })
       .then((response) => {
         if (response.ok) {
           resolve(null);
@@ -693,21 +733,13 @@ function increaseBalance(amount, clientId) {
 // Confirm expexted product
 function confirmExpectedProducts(product, year, week) {
   return new Promise((resolve, reject) => {
-    fetch(
-      '/api/farmerConfirm/' +
-      product +
-      '/' +
-      year +
-      '/' +
-      week,
-      {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({}),
-      }
-    )
+    fetch('/api/farmerConfirm/' + product + '/' + year + '/' + week, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({}),
+    })
       .then((response) => {
         if (response.ok) {
           resolve(null);
@@ -831,8 +863,8 @@ function addOrder(S) {
         Nation: S.nation,
         date: S.date,
         time: S.time,
-        pickup: S.pickup
-      })
+        pickup: S.pickup,
+      }),
     })
       .then((response) => {
         if (response.ok) {
@@ -943,19 +975,27 @@ function updateItem(order) {
         Nation: order.Nation,
         date: order.date,
         time: order.time,
-        pickup: order.pickup
-
+        pickup: order.pickup,
       }),
-    }).then((response) => {
-      if (response.ok) {
-        resolve(null);
-      } else {
-        // analyze the cause of error
-        response.json()
-          .then((obj) => { reject(obj); }) // error message in the response body
-          .catch(() => { reject({ error: "Cannot parse server response." }) }); // something else
-      }
-    }).catch(() => { reject({ error: "Cannot communicate with the server." }) }); // connection errors
+    })
+      .then((response) => {
+        if (response.ok) {
+          resolve(null);
+        } else {
+          // analyze the cause of error
+          response
+            .json()
+            .then((obj) => {
+              reject(obj);
+            }) // error message in the response body
+            .catch(() => {
+              reject({ error: 'Cannot parse server response.' });
+            }); // something else
+        }
+      })
+      .catch(() => {
+        reject({ error: 'Cannot communicate with the server.' });
+      }); // connection errors
   });
 }
 
@@ -992,9 +1032,7 @@ async function getDeliverableOrders(city) {
 
 //GET provider by specific mail
 async function getDelivererByMail(id) {
-  const response = await fetch(
-    '/api/deliverer/' + id
-  );
+  const response = await fetch('/api/deliverer/' + id);
   if (response.ok) {
     return await response.json();
   } else {
@@ -1048,7 +1086,9 @@ const API = {
   updateStateFarmer,
   getAllDeliverers,
   getDeliverableOrders,
-  getDelivererByMail
+  getDelivererByMail,
+  getProviderProductsNotification,
+  setNotificationasSent,
 };
 
 export default API;
