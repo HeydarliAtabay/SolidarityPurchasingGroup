@@ -73,8 +73,9 @@ const MyNavbar = function (props) {
               }
               {(props.userRole === 'client') &&
                 <NavDropdown className="text-light" title="Shopping" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Book products</NavDropdown.Item>
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/products-next-week"))}>Explore next week products</NavDropdown.Item>
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/booking"))}>Book products</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/products-next-week"))}>Explore next week products</NavDropdown.Item>
                 </NavDropdown>
               }
               {(props.userRole === 'client') &&
@@ -94,14 +95,16 @@ const MyNavbar = function (props) {
               }
               {(props.userRole === 'employee') &&
                 <NavDropdown className="text-light" title="Products" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Products to be delivered</NavDropdown.Item>
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/booking"))}>Products to be delivered</NavDropdown.Item>
                 </NavDropdown>
               }
               {(props.userRole === 'employee') &&
                 <NavDropdown className="text-light" title="Clients" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Register new client</NavDropdown.Item>
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Make order for client</NavDropdown.Item>
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/booking"))}>Top-up client wallet</NavDropdown.Item>
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/booking"))}>Register new client</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/booking"))}>Make order for client</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/booking"))}>Top-up client wallet</NavDropdown.Item>
                 </NavDropdown>
               }
 
@@ -113,9 +116,10 @@ const MyNavbar = function (props) {
               </li>
               }
               {(props.userRole === 'shop-manager') &&
-                <NavDropdown className="text-light" title="Applications" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/manager/applications/pending"))}>Pending applications</NavDropdown.Item>
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/manager/applications/processed"))}>Accepted/rejected applications</NavDropdown.Item>
+                <NavDropdown title="Applications" id="basic-nav-dropdown" >
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/manager/applications/pending"))}>Pending applications</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/manager/applications/processed"))}>Accepted/rejected applications</NavDropdown.Item>
                 </NavDropdown>
               }
 
@@ -127,14 +131,15 @@ const MyNavbar = function (props) {
               </li>
               }
               {(props.userRole === 'farmer') &&
-                <NavDropdown className="text-light" title="Products" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/declare-availability"))}>Declare product availability</NavDropdown.Item>
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/order-confirmation-farmer"))}>Confirm product availability</NavDropdown.Item>
+                <NavDropdown menuVariant="light" title="Products" id="basic-nav-dropdown">
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/declare-availability"))}>Declare product availability</NavDropdown.Item>
+                  <NavDropdown.Divider />
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/order-confirmation-farmer"))}>Confirm product availability</NavDropdown.Item>
                 </NavDropdown>
               }
               {(props.userRole === 'farmer') &&
                 <NavDropdown className="text-light" title="Orders" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#" onClick={() => (history.push("/order-preparation"))}>Confirm order preparation</NavDropdown.Item>
+                  <NavDropdown.Item className="fw-bold" href="#" onClick={() => (history.push("/order-preparation"))}>Confirm order preparation</NavDropdown.Item>
                 </NavDropdown>
               }
 

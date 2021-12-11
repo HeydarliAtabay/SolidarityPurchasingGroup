@@ -1,5 +1,5 @@
 import { Button, Alert } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
 import API from '../API';
 import { useState, useEffect } from 'react';
@@ -33,6 +33,8 @@ function FarmerArea(props) {
     getUnsaelableProduct();
     console.log(productsNotified);
   }, []);
+
+  const history = useHistory();
 
   function intervalTimeBoolean() {
     if (dayjs(props.time.date).day() === 1) {
@@ -97,13 +99,30 @@ function FarmerArea(props) {
               </li>
             </ul>
           </div>
+          <div className="d-block mx-3 my-4">
+            <button
+              className="btn btn-outline-secondary w-100"
+              onClick={() => {
+                props.logout();
+                history.push('/');
+              }}
+            >
+              Logout
+            </button>
+          </div>
         </div>
         <div className="col-lg-9 ">
           <div className="row w-100">
             <div className="col-lg-12">
-              <div className="card m-3 w-100">
+              <div className="card m-3 w-100 shadow">
                 <div className="row no-gutters">
-                  <div className="col-md-4 bg-secondary p-3 text-center">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #4A5B8C 80%, #FFFFFF)',
+                    }}
+                  >
                     {declareIcon}
                   </div>
                   <div className="col-md-8">
@@ -122,7 +141,13 @@ function FarmerArea(props) {
                       <div className="d-block text-end">
                         {intervalTimeBoolean() ? (
                           <Link to="/declare-availability">
-                            <button className="btn btn-primary">
+                            <button
+                              className="btn"
+                              style={{
+                                backgroundColor: '#4A5B8C',
+                                color: 'white',
+                              }}
+                            >
                               Declare availability
                             </button>
                           </Link>
@@ -140,9 +165,15 @@ function FarmerArea(props) {
           </div>
           <div className="row w-100">
             <div className="col-lg-12">
-              <div className="card m-3 w-100">
+              <div className="card m-3 w-100 shadow">
                 <div className="row no-gutters">
-                  <div className="col-md-4 bg-secondary p-3 text-center">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #8697A6 80%, #FFFFFF)',
+                    }}
+                  >
                     {availabilityIcon}
                   </div>
                   <div className="col-md-8">
@@ -158,12 +189,25 @@ function FarmerArea(props) {
                       <div className="d-block text-end">
                         {!intervalTimeBoolean() ? (
                           <Link to="/order-confirmation-farmer">
-                            <button className="btn btn-primary">
+                            <button
+                              className="btn"
+                              style={{
+                                backgroundColor: '#8697A6',
+                                color: 'black',
+                              }}
+                            >
                               Confirm availability
                             </button>
                           </Link>
                         ) : (
-                          <button disabled className="btn btn-primary">
+                          <button
+                            disabled
+                            className="btn"
+                            style={{
+                              backgroundColor: '#8697A6',
+                              color: 'black',
+                            }}
+                          >
                             Confirm availability
                           </button>
                         )}
@@ -176,9 +220,15 @@ function FarmerArea(props) {
           </div>
           <div className="row w-100">
             <div className="col-lg-12">
-              <div className="card m-3 w-100">
+              <div className="card m-3 w-100 shadow">
                 <div className="row no-gutters">
-                  <div className="col-md-4 bg-secondary p-3 text-center">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #BFCDD9 80%, #FFFFFF)',
+                    }}
+                  >
                     {perparationIcon}
                   </div>
                   <div className="col-md-8">
@@ -190,7 +240,13 @@ function FarmerArea(props) {
                       </p>
                       <div className="d-block text-end">
                         <Link to="/order-preparation">
-                          <button className="btn btn-primary">
+                          <button
+                            className="btn"
+                            style={{
+                              backgroundColor: '#BFCDD9',
+                              color: 'black',
+                            }}
+                          >
                             Confirm preparation
                           </button>
                         </Link>
@@ -203,9 +259,15 @@ function FarmerArea(props) {
           </div>
           <div className="row w-100">
             <div className="col-lg-12">
-              <div className="card m-3 w-100">
+              <div className="card m-3 w-100 shadow">
                 <div className="row no-gutters">
-                  <div className="col-md-4 bg-secondary p-3 text-center">
+                  <div
+                    className="col-md-4 p-3 text-center"
+                    style={{
+                      background:
+                        'linear-gradient(to right, #BF8756 80%, #FFFFFF)',
+                    }}
+                  >
                     {walletIcon}
                   </div>
                   <div className="col-md-8">
@@ -216,7 +278,13 @@ function FarmerArea(props) {
                       </p>
                       <div className="d-block text-end">
                         <Link to="/see-bookings">
-                          <button className="btn btn-primary">
+                          <button
+                            className="btn"
+                            style={{
+                              backgroundColor: '#BF8756',
+                              color: 'black',
+                            }}
+                          >
                             See bookings
                           </button>
                         </Link>

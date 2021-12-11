@@ -577,6 +577,10 @@ app.post('/api/products/expected/:year/:week_number', async (req, res) => {
 
 //UPLOAD image
 app.post('/api/products/upload/expected/:img_id', (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'farmer') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   if (!req.files) {
     return res.status(400).send('No files were uploaded.');
   }
@@ -620,6 +624,10 @@ app.post('/provider/apply', async (req, res) => {
 });
 
 app.get('/manager/applications/pending', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     res.json(await providersDAO.getPendingApplications());
   } catch (err) {
@@ -629,6 +637,10 @@ app.get('/manager/applications/pending', async (req, res) => {
 });
 
 app.get('/manager/applications/accepted', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     res.json(await providersDAO.getAcceptedApplications());
   } catch (err) {
@@ -638,6 +650,10 @@ app.get('/manager/applications/accepted', async (req, res) => {
 });
 
 app.get('/manager/applications/accept/:application_id', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     const application_id = req.params.application_id;
     res.json(await providersDAO.acceptApplication(application_id));
@@ -648,6 +664,10 @@ app.get('/manager/applications/accept/:application_id', async (req, res) => {
 });
 
 app.get('/manager/applications/reject/:application_id', async (req, res) => {
+  if (!req.isAuthenticated() || req.user.role !== 'shop-manager') {
+    res.status(401).json({ error: 'Unauthorized user' });
+  }
+
   try {
     const application_id = req.params.application_id;
     res.json(await providersDAO.rejectApplication(application_id));

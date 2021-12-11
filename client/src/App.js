@@ -10,6 +10,7 @@ import EmployeePage from './Components/EmployeePage';
 import WarehousePage from './Components/WarehousePage';
 import UserRegistration from './Components/UserRegistration';
 import { useState, useEffect } from 'react';
+import { Container, Alert, Row, Button } from 'react-bootstrap';
 import {
   Redirect,
   BrowserRouter as Router,
@@ -213,7 +214,16 @@ function App() {
 
       setLogged(true);
       setMessage('');
-      setUserid(user.id);
+
+      let id, index;
+      if (user.role === 'client') {
+        index = clients
+          .filter((x) => x.email === user.username && x.name === user.name)
+          .map((x) => x.client_id);
+        id = index[0];
+      } else id = user.id;
+
+      setUserid(id);
       setUserRole(user.role);
       setUserMail(user.username);
       setUserName(user.name);
@@ -263,7 +273,28 @@ function App() {
         userMail={userMail}
         setTime={setTime}
       />
-      <div className="container-fluid">
+      <Container fluid="sx">
+        {' '}
+        {message !== '' ? (
+          <Row className="justify-content-md-center">
+            <Alert
+              style={{
+                fontSize: 25,
+                backgroundColor: '#dc143c',
+                width: '600px',
+              }}
+              onClose={() => setMessage('')}
+              dismissible
+            >
+              {message}
+            </Alert>
+          </Row>
+        ) : (
+          <></>
+        )}
+      </Container>
+
+      <div className="container-fluid w-100">
         <Switch>
           <Route
             path="/booking"
@@ -423,7 +454,16 @@ function App() {
             path="/manager"
             exact
             render={() =>
-              logged ? <ManagerArea time={time} /> : <Redirect to="/login" />
+              logged ? (
+                <ManagerArea
+                  userName={userName}
+                  userMail={userMail}
+                  logout={doLogOut}
+                  time={time}
+                />
+              ) : (
+                <Redirect to="/login" />
+              )
             }
           />
           <Route
@@ -558,7 +598,7 @@ function App() {
             path="/registration"
             exact
             render={() => (
-              <UserRegistration clients={clients} setRecharged={updateRech1} />
+              <UserRegistration users={users} setRecharged={updateRech1} />
             )}
           />
           <Route path="/" render={() => <Frontpage />} />
