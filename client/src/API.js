@@ -333,39 +333,19 @@ async function getProviderProductsNotification() {
 //POST set the notification as Sent
 
 async function setNotificationasSent(products) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/provider-products-sent/', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(products),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(response);
-        } else {
-          // cause of error
-          response
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((err) => {
-              reject({
-                errors: [
-                  { param: 'Application', msg: 'Cannot parse server response' },
-                ],
-              });
-            });
-        }
-      })
-      .catch((err) => {
-        reject({
-          errors: [{ param: 'Server', msg: 'Cannot communicate' }],
-        });
-      });
+  const response = await fetch('/api/provider-products-sent/', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(products),
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 //GET provider products by providerID
 async function getProviderConfirmationStatus(year, week_number) {
@@ -496,42 +476,6 @@ async function rejectFarmerApplication(application_id) {
   }
 }
 
-//Insert a new order
-function insertNewBookOrder(itemsOrdered) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/neworder/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(itemsOrdered),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(response);
-        } else {
-          // cause of error
-          response
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((err) => {
-              reject({
-                errors: [
-                  { param: 'Application', msg: 'Cannot parse server response' },
-                ],
-              });
-            });
-        }
-      })
-      .catch((err) => {
-        reject({
-          errors: [{ param: 'Server', msg: 'Cannot communicate' }],
-        });
-      });
-  });
-}
 //update quantity of products
 function updateQuantity(product_id, quantity) {
   return new Promise((resolve, reject) => {
@@ -1067,7 +1011,6 @@ const API = {
   increaseBalance,
   deleteOrderItem,
   updateQuantity,
-  insertNewBookOrder,
   getAllCategories,
   logOut,
   logIn,

@@ -28,25 +28,17 @@ dayjs.Ls.en.weekStart = 1;
 function Booking(props) {
   const history = useHistory();
   const location = useLocation();
- 
 
- const [productsBasket, setProductsBasket] = useState([]);
+  const [productsBasket, setProductsBasket] = useState([]);
   const [showProductDetailsModal, setShowProductDetailsModal] = useState(false);
   const [currentProductDetails, setCurrentProductDetails] = useState();
   const [showCompletePurchase, setShowCompletePurchase] = useState(false);
-  const [address, setAddress] = useState( ''
-  );
-  const [nation, setNation] = useState(
-     ''
-  );
-  const [city, setCity] = useState( ''
-  );
-  const [date, setDate] = useState( ''
-  );
-  const [time, setTime] = useState( ''
-  );
-  const [zipCode, setZipCode] = useState(''
-  );
+  const [address, setAddress] = useState('');
+  const [nation, setNation] = useState('');
+  const [city, setCity] = useState('');
+  const [date, setDate] = useState('');
+  const [time, setTime] = useState('');
+  const [zipCode, setZipCode] = useState('');
   const [completeAddressing, setCompleteAddressing] = useState(false);
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -68,9 +60,8 @@ function Booking(props) {
 
   const [showsuccess, setShowsuccess] = useState(false);
   const [showdanger, setShowdanger] = useState(false);
-   const[showUpdateError,setShowUpdateError]=useState(false);
-   const[showInsufficient,setShowInsufficient]=useState(false);
-
+  const [showUpdateError, setShowUpdateError] = useState(false);
+  const [showInsufficient, setShowInsufficient] = useState(false);
 
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
   let indice, ordine;
@@ -86,15 +77,19 @@ function Booking(props) {
       ordine = Math.max(...f) + 1;
     }
   }
-let somma=0;
-let wallet=props.clients.filter(x=>x.client_id===parseInt(props.clientid)).map(x=>x.budget);
-let amount=wallet[0];
-   console.log(amount);
-let itemsAmount=props.orders.filter(x=>x.client_id===parseInt(props.clientid)).map(x=>x.OrderPrice);
-for(const b of itemsAmount){
-somma=somma+b;
-}
-console.log(somma);
+  let somma = 0;
+  let wallet = props.clients
+    .filter((x) => x.client_id === parseInt(props.clientid))
+    .map((x) => x.budget);
+  let amount = wallet[0];
+  console.log(amount);
+  let itemsAmount = props.orders
+    .filter((x) => x.client_id === parseInt(props.clientid))
+    .map((x) => x.OrderPrice);
+  for (const b of itemsAmount) {
+    somma = somma + b;
+  }
+  console.log(somma);
   function getRightWeek(timepassed) {
     // the week number should be changed after the 23 o'clock of sunday. It becomes a new week since the customer can not order anymore in this week
     //Sunday from 23.00 until 23.59 consider this week orders
@@ -187,28 +182,44 @@ console.log(somma);
       .slice(idx * 3, idx * 3 + 3);
   });
 
- const onConfirm = async () => {
-let tot=0,total;
+  const onConfirm = async () => {
+    let tot = 0,
+      total;
 
     if (props.isEmployee && selectedUser.client_id === -1) {
       setShowdanger(true);
       return;
     }
 
-    console.log(deliveryFlag + ' ' + time + ' ' + date + ' ' + pickupDay + ' ' + pickupTime)
+    console.log(
+      deliveryFlag +
+        ' ' +
+        time +
+        ' ' +
+        date +
+        ' ' +
+        pickupDay +
+        ' ' +
+        pickupTime
+    );
 
-    let p, s, stato,ins=false;
+    let p,
+      s,
+      stato,
+      ins = false;
     if (!location.state) {
-
-         for (const p of productsBasket) {
-               tot=p.price+tot;
-}
-total=tot+somma;console.log(total);
-console.log(total);
-if(total>amount){
-stato="pending";}
-else {stato="booked";}
-console.log(stato);
+      for (const p of productsBasket) {
+        tot = p.price + tot;
+      }
+      total = tot + somma;
+      console.log(total);
+      console.log(total);
+      if (total > amount) {
+        stato = 'pending';
+      } else {
+        stato = 'booked';
+      }
+      console.log(stato);
       for (const a of productsBasket) {
         p = (a.price * a.qty).toFixed(2);
 
@@ -217,9 +228,11 @@ console.log(stato);
           _date = date;
           _time = time;
           _pickup = 0;
-        }
-        else {
-          _date = dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD');
+        } else {
+          _date = dayjs(props.time.date)
+            .add(1, 'week')
+            .weekday(pickupDay)
+            .format('YYYY-MM-DD');
           _time = pickupTime;
           _pickup = 1;
         }
@@ -245,47 +258,98 @@ console.log(stato);
         console.log(order);
         API.addOrder(order).then(() => {
           props.setRecharged(true);
-          setTimeout(() => { }, 3000);
+          setTimeout(() => {}, 3000);
         });
         indice = indice + 1;
       }
-    } 
-else if(location.state.status==="add")
-{
+    } else if (location.state.status === 'add') {
+      for (const pr of productsBasket) {
+        tot = pr.price * pr.qty + tot;
+      }
+      total = tot + somma;
+      console.log(total);
+      console.log(total);
+      if (total <= amount) {
+        for (const a of productsBasket) {
+          p = (a.price * a.qty).toFixed(2);
 
+          let _time, _date, _pickup;
+          if (deliveryFlag === 'delivery') {
+            _date = date;
+            _time = time;
+            _pickup = 0;
+          } else {
+            _date = dayjs(props.time.date)
+              .add(1, 'week')
+              .weekday(pickupDay)
+              .format('YYYY-MM-DD');
+            _time = pickupTime;
+            _pickup = 1;
+          }
 
-         for (const pr of productsBasket) {
-               tot=pr.price*pr.qty+tot;
-}
-total=tot+somma;console.log(total);
-console.log(total);
-if(total<=amount){
-
-for (const a of productsBasket) {
-        p = (a.price * a.qty).toFixed(2);
+          let order = new clientOrders(
+            location.state.item.order_id,
+            parseInt(props.clientid),
+            a.name,
+            a.id,
+            a.qty,
+            'booked',
+            null,
+            p,
+            `${indice}`,
+            address,
+            city,
+            nation,
+            zipCode,
+            _date,
+            _time,
+            _pickup
+          );
+          console.log(order);
+          API.addOrder(order).then(() => {
+            props.setRecharged(true);
+            setTimeout(() => {}, 3000);
+          });
+          indice = indice + 1;
+        }
+      } else {
+        ins = true;
+      }
+    } else {
+      if (productsBasket.length === 1) {
+        for (const pri of productsBasket) {
+          tot = pri.price * pri.qty + tot;
+        }
+        total = tot + somma - location.state.item.OrderPrice;
+        console.log(total);
+        console.log(total);
+        let i = location.state.item.id;
 
         let _time, _date, _pickup;
         if (deliveryFlag === 'delivery') {
           _date = date;
           _time = time;
           _pickup = 0;
-        }
-        else {
-          _date = dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD');
+        } else {
+          _date = dayjs(props.time.date)
+            .add(1, 'week')
+            .weekday(pickupDay)
+            .format('YYYY-MM-DD');
           _time = pickupTime;
           _pickup = 1;
         }
-
+        let a = productsBasket[0];
+        s = (a.price * a.qty).toFixed(2);
         let order = new clientOrders(
           location.state.item.order_id,
-          parseInt(props.clientid),
+          location.state.item.client_id,
           a.name,
           a.id,
           a.qty,
           'booked',
           null,
-          p,
-          `${indice}`,
+          s,
+          i,
           address,
           city,
           nation,
@@ -294,80 +358,33 @@ for (const a of productsBasket) {
           _time,
           _pickup
         );
-        console.log(order);
-        API.addOrder(order).then(() => {
-          props.setRecharged(true);
-          setTimeout(() => { }, 3000);
-        });
-        indice = indice + 1;
-      }}else {ins=true;}
 
-}
- else {
-
-if(productsBasket.length===1)
-{  
-
-
- for (const pri of productsBasket) {
-               tot=pri.price*pri.qty+tot;
-}
-total=tot+somma-location.state.item.OrderPrice;console.log(total);
-console.log(total);
-       let i = location.state.item.id;
-    
-      let _time, _date, _pickup;
-      if (deliveryFlag === 'delivery') {
-        _date = date;
-        _time = time;
-        _pickup = 0;
+        if (total <= amount) {
+          API.updateItem(order).then(() => {
+            props.setRecharged(true);
+            setTimeout(() => {}, 3000);
+          });
+        } else {
+          ins = true;
+        }
       }
-      else {
-        _date = dayjs(props.time.date).add(1, 'week').weekday(pickupDay).format('YYYY-MM-DD');
-        _time = pickupTime;
-        _pickup = 1;
-      }
-      let a = productsBasket[0];
-      s = (a.price * a.qty).toFixed(2);
-      let order = new clientOrders(
-        location.state.item.order_id,
-        location.state.item.client_id,
-        a.name,
-        a.id,
-        a.qty,
-        'booked',
-        null,
-        s,
-        i,
-        address,
-        city,
-        nation,
-        zipCode,
-        _date,
-        _time,
-        _pickup
-      );
+    }
 
-if(total<=amount){
-      API.updateItem(order).then(() => {
-        props.setRecharged(true);
-        setTimeout(() => { }, 3000);
-      });
-    }else {ins=true;}
-  }
+    if (!location.state || (location.state.status === 'add' && !ins)) {
+      setShowsuccess(true);
 
-}
+      props.updateProps();
+    } else if (location.state.status === 'update' && productsBasket.length > 1)
+      setShowUpdateError(true);
+    else if (
+      location.state.status === 'update' &&
+      productsBasket.length === 1 &&
+      !ins
+    ) {
+      setShowsuccess(true);
 
- if(!location.state||(location.state.status==="add"&&!ins)){
-    setShowsuccess(true);
-
-    props.updateProps();}
-else if(location.state.status==="update"&&productsBasket.length>1)
-setShowUpdateError(true);
-else if(location.state.status==="update"&&productsBasket.length===1&&!ins){
-    setShowsuccess(true);
-
-    props.updateProps();}else if(ins)setShowInsufficient(true);
+      props.updateProps();
+    } else if (ins) setShowInsufficient(true);
   };
   function handleClick() {
     history.push('/registration');
@@ -455,7 +472,6 @@ else if(location.state.status==="update"&&productsBasket.length===1&&!ins){
                         variant="primary"
                         className="mb-1 align-middle"
                         disabled
-                   
                       >
                         {cartIcon} Add to Basket
                       </Button>
@@ -665,7 +681,7 @@ else if(location.state.status==="update"&&productsBasket.length===1&&!ins){
                   setShowsuccess={setShowsuccess}
                   setShowUpdateError={setShowUpdateError}
                   setShowdanger={setShowdanger}
-                   showInsufficient={showInsufficient}
+                  showInsufficient={showInsufficient}
                   setShowInsufficient={setShowInsufficient}
                   showsuccess={showsuccess}
                   showdanger={showdanger}
@@ -700,12 +716,12 @@ else if(location.state.status==="update"&&productsBasket.length===1&&!ins){
             defaultActiveKey="delivery"
             className="mb-3"
             activeKey={deliveryFlag}
-            onSelect={(k) => { console.log(k); setDeliveryFlag(k) }}
+            onSelect={(k) => {
+              console.log(k);
+              setDeliveryFlag(k);
+            }}
           >
-            <Tab
-              eventKey="delivery"
-              title="Home delivery"
-            >
+            <Tab eventKey="delivery" title="Home delivery">
               <Form>
                 <Form.Group className="mb-3" controlId="formGridAddress1">
                   <Form.Label>Address</Form.Label>
@@ -792,10 +808,7 @@ else if(location.state.status==="update"&&productsBasket.length===1&&!ins){
                 </div>
               </Form>
             </Tab>
-            <Tab
-              eventKey="pickup"
-              title="In shop pickup"
-            >
+            <Tab eventKey="pickup" title="In shop pickup">
               <h5 className="text-center my-3">
                 Select the day and the time for the pickup
               </h5>
