@@ -1,6 +1,6 @@
 import { Button, Row, Col, Container, Alert } from 'react-bootstrap';
 import { useState } from 'react';
-import API from '../API'
+import API from '../API';
 import dayjs from 'dayjs';
 
 var weekday = require('dayjs/plugin/weekday');
@@ -10,31 +10,27 @@ dayjs.Ls.en.weekStart = 1;
 
 function Basket(props) {
   const [mailerState, setMailerState] = useState({
-    email: "",
-    message: ""
+    email: '',
+    message: '',
   });
-  const [emailSent,setEmailSent]=useState(false)
+  const [emailSent, setEmailSent] = useState(false);
 
   const handleSubmitEmail = (event) => {
-
-   API.submitEmail(mailerState).then(()=>{
-    setEmailSent(true) 
+    API.submitEmail(mailerState).then(() => {
+      setEmailSent(true);
     });
-                 
-            
-  }
+  };
 
   return (
     <>
-
       <h2 className="text-center">Basket: </h2>
       {props.productsBasket.length === 0 && (
         <div className="text-center">Cart is Empty</div>
       )}
       {props.productsBasket.map((item) => (
         <Container key={item.id} className="text-center">
-          <Row className="pt-3">
-            <Col xs="4">
+          <Row className="pt-3 my-auto">
+            <Col md="4">
               <div>{props.capitalizeFirstLetter(item.name)}</div>
             </Col>
             <Col>
@@ -66,7 +62,7 @@ function Basket(props) {
       {props.productsBasket.length > 0 && (
         <>
           <Row>
-            <Col align="center" className="mb-3">
+            <Col align="center" className="mb-3 mt-2">
               Total: €{props.itemsPrice.toFixed(2)}
             </Col>
           </Row>
@@ -84,7 +80,7 @@ function Basket(props) {
             </Col>
           </Row>
 
-          {props.deliveryFlag==='delivery' &&
+          {props.deliveryFlag === 'delivery' &&
           props.address !== '' &&
           props.nation !== '' &&
           props.city !== '' &&
@@ -104,110 +100,118 @@ function Basket(props) {
                 </Row>
               </Container>
               <Row>
-              {props.clients.filter(x=>x.client_id===parseInt(props.clientid)).map((s)=>
-             
-              <>
-              
-               <Button onClick={() =>{
-                props.onConfirm()
-                setMailerState((prevState) => ({
-                  ...prevState,
-                  email: s.email,
-                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
-                  `
-          
-                  
-                }));
-              handleSubmitEmail();
-              setEmailSent(true)
-
-                } } className="mt-3">
-                Confirm
-              </Button>{' '}
-
-              {emailSent&& 
-              <>
-              <Button variant="secondary" onClick={() =>{
-                setMailerState((prevState) => ({
-                  ...prevState,
-                  email: s.email,
-                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
-                  `
-          
-                  
-                }));
-              handleSubmitEmail();
-              setEmailSent(true)
-
-                } } className="mt-3">
-                Resend Email
-              </Button>{' '}
-              </>
-              }
-              </>
-              )}
-               
+                {props.clients
+                  .filter((x) => x.client_id === parseInt(props.clientid))
+                  .map((s) => (
+                    <>
+                      <Button
+                        onClick={() => {
+                          props.onConfirm();
+                          setMailerState((prevState) => ({
+                            ...prevState,
+                            email: s.email,
+                            message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
+                  `,
+                          }));
+                          handleSubmitEmail();
+                          setEmailSent(true);
+                        }}
+                        className="mt-3"
+                      >
+                        Confirm
+                      </Button>{' '}
+                      {emailSent && (
+                        <>
+                          <Button
+                            variant="secondary"
+                            onClick={() => {
+                              setMailerState((prevState) => ({
+                                ...prevState,
+                                email: s.email,
+                                message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
+                  `,
+                              }));
+                              handleSubmitEmail();
+                              setEmailSent(true);
+                            }}
+                            className="mt-3"
+                          >
+                            Resend Email
+                          </Button>{' '}
+                        </>
+                      )}
+                    </>
+                  ))}
               </Row>
             </>
           ) : (
             <></>
           )}
 
-          {props.deliveryFlag!=='delivery' &&
-          (props.pickupDay === 2 || props.pickupDay === 3 || props.pickupDay === 4)  &&
+          {props.deliveryFlag !== 'delivery' &&
+          (props.pickupDay === 2 ||
+            props.pickupDay === 3 ||
+            props.pickupDay === 4) &&
           props.pickupTime !== '' ? (
             <>
               <Container fluid>
                 <Row>
                   <h5 className="d-block text-center">Pickup in shop</h5>
-                  <span><b>Date</b>: {dayjs(props.time.date).add(1, 'week').weekday(props.pickupDay).format('dddd, MMMM D, YYYY')}</span>
-                  <span><b>Time</b>: {props.pickupTime}</span>
+                  <span>
+                    <b>Date</b>:{' '}
+                    {dayjs(props.time.date)
+                      .add(1, 'week')
+                      .weekday(props.pickupDay)
+                      .format('dddd, MMMM D, YYYY')}
+                  </span>
+                  <span>
+                    <b>Time</b>: {props.pickupTime}
+                  </span>
                 </Row>
               </Container>
               <Row>
-              {props.clients.filter(x=>x.client_id===parseInt(props.clientid)).map((s)=>
-             
-              <>
-              
-               <Button onClick={() =>{
-                props.onConfirm()
-                setMailerState((prevState) => ({
-                  ...prevState,
-                  email: s.email,
-                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
-                  `
-          
-                  
-                }));
-              handleSubmitEmail();
-              setEmailSent(true)
-
-                } } className="mt-3">
-                Confirm
-              </Button>{' '}
-
-              {emailSent&& 
-              <>
-              <Button variant="secondary" onClick={() =>{
-                setMailerState((prevState) => ({
-                  ...prevState,
-                  email: s.email,
-                  message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
-                  `
-          
-                  
-                }));
-              handleSubmitEmail();
-              setEmailSent(true)
-
-                } } className="mt-3">
-                Resend Email
-              </Button>{' '}
-              </>
-              }
-              </>
-              )}
-               
+                {props.clients
+                  .filter((x) => x.client_id === parseInt(props.clientid))
+                  .map((s) => (
+                    <>
+                      <Button
+                        onClick={() => {
+                          props.onConfirm();
+                          setMailerState((prevState) => ({
+                            ...prevState,
+                            email: s.email,
+                            message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
+                  `,
+                          }));
+                          handleSubmitEmail();
+                          setEmailSent(true);
+                        }}
+                        className="mt-3"
+                      >
+                        Confirm
+                      </Button>{' '}
+                      {emailSent && (
+                        <>
+                          <Button
+                            variant="secondary"
+                            onClick={() => {
+                              setMailerState((prevState) => ({
+                                ...prevState,
+                                email: s.email,
+                                message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
+                  `,
+                              }));
+                              handleSubmitEmail();
+                              setEmailSent(true);
+                            }}
+                            className="mt-3"
+                          >
+                            Resend Email
+                          </Button>{' '}
+                        </>
+                      )}
+                    </>
+                  ))}
               </Row>
             </>
           ) : (
@@ -243,13 +247,15 @@ function Basket(props) {
                 </Button>
               </div>
             </Alert>
-              <Alert
+            <Alert
               className="m-3"
               show={props.showUpdateError}
               onClose={() => props.setShowUpdateError(false)}
               variant="warning"
             >
-              <Alert.Heading  style={{'fontSize':20}}class="text-danger">You must choose only one product type to do the change</Alert.Heading>
+              <Alert.Heading style={{ fontSize: 20 }} class="text-danger">
+                You must choose only one product type to do the change
+              </Alert.Heading>
               <hr />
               <div className="d-flex justify-content-end">
                 <Button
@@ -260,13 +266,16 @@ function Basket(props) {
                 </Button>
               </div>
             </Alert>
-         <Alert
+            <Alert
               className="m-3"
               show={props.showInsufficient}
               onClose={() => props.setShowInsufficient(false)}
               variant="secondary"
             >
-              <Alert.Heading  style={{'fontSize':20}}class="text-danger">Cannot add / update products since your wallet balance is insufficient</Alert.Heading>
+              <Alert.Heading style={{ fontSize: 20 }} class="text-danger">
+                Cannot add / update products since your wallet balance is
+                insufficient
+              </Alert.Heading>
               <hr />
               <div className="d-flex justify-content-end">
                 <Button

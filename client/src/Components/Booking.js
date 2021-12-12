@@ -19,6 +19,7 @@ import { useHistory } from 'react-router-dom';
 import { clientOrders } from '../classes/ClientOrder';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
+import { useMediaQuery } from 'react-responsive';
 
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
@@ -47,6 +48,14 @@ function Booking(props) {
   const [deliveryFlag, setDeliveryFlag] = useState('delivery');
   const [pickupDay, setPickupDay] = useState(2);
   const [pickupTime, setPickupTime] = useState('10:00');
+
+  const isDesktopOrLaptop = useMediaQuery({
+    query: '(min-width: 1224px)',
+  });
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1225px)' });
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
+  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
+  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' });
 
   console.log(time + ' ' + date);
   console.log(pickupDay + ' ' + pickupTime);
@@ -544,7 +553,7 @@ function Booking(props) {
 
   return (
     <>
-      <Container fluid className="mx-3 w-100-custom">
+      <Container fluid className=" w-100-custom">
         <span className="d-block text-center mt-5 mb-2 display-2">
           Product Booking
         </span>
@@ -600,7 +609,7 @@ function Booking(props) {
           ''
         )}
         {props.logged ? (
-          <Row className>
+          <Row className="m-1">
             <Col
               lg={9}
               className="my-5 vertical-separator-products text-center"
@@ -609,6 +618,7 @@ function Booking(props) {
                 <div className="container">
                   <div className="row">
                     <div className="col-lg-9 text-center">
+                      {isTabletOrMobile && <h4>Search for products</h4>}
                       <input
                         className="form-control mb-2"
                         value={searchTerm}
@@ -616,7 +626,7 @@ function Booking(props) {
                         placeholder="Search for products here"
                       />
                     </div>
-                    <div className="col-lg-3 text-center">
+                    <div className="col-lg-3 text-center mb-3">
                       <button
                         className="btn btn-primary px-5"
                         onClick={() => filterProducts()}
@@ -627,7 +637,7 @@ function Booking(props) {
                   </div>
                 </div>
 
-                <ul className="list-group list-group-horizontal">
+                <ul className="list-group list-group-horizontal-md">
                   {categories.map((cat) => (
                     <button
                       key={cat.name}
@@ -653,7 +663,44 @@ function Booking(props) {
                   ))}
                 </ul>
               </div>
-              <hr className="hr-color-custom" />
+              <hr style={{ color: 'black' }} />
+              {isTabletOrMobile && !props.browsing && (
+                <>
+                  <Col className="my-5 px-5">
+                    <Basket
+                      completeAddressing={false}
+                      clientid={props.clientid}
+                      clients={props.clients}
+                      setShowCompletePurchase={setShowCompletePurchase}
+                      deliveryFlag={deliveryFlag}
+                      address={address}
+                      nation={nation}
+                      city={city}
+                      zipCode={zipCode}
+                      time={time}
+                      date={date}
+                      pickupDay={pickupDay}
+                      pickupTime={pickupTime}
+                      setShowsuccess={setShowsuccess}
+                      setShowUpdateError={setShowUpdateError}
+                      setShowdanger={setShowdanger}
+                      showInsufficient={showInsufficient}
+                      setShowInsufficient={setShowInsufficient}
+                      showsuccess={showsuccess}
+                      showdanger={showdanger}
+                      showUpdateError={showUpdateError}
+                      productsBasket={productsBasket}
+                      onAdd={onAdd}
+                      onRemove={onRemove}
+                      onConfirm={onConfirm}
+                      capitalizeFirstLetter={capitalizeFirstLetter}
+                      itemsPrice={itemsPrice}
+                    />
+                  </Col>
+                  <hr style={{ color: 'black' }} />
+                </>
+              )}
+
               {products.filter((p) => p && p.active === 1).length > 0 ? (
                 listOfCardProducts
               ) : (
@@ -662,7 +709,7 @@ function Booking(props) {
                 </div>
               )}
             </Col>
-            {!props.browsing ? (
+            {isBigScreen && !props.browsing && (
               <Col lg={3} className="my-5 px-5">
                 <Basket
                   completeAddressing={false}
@@ -694,8 +741,6 @@ function Booking(props) {
                   itemsPrice={itemsPrice}
                 />
               </Col>
-            ) : (
-              <></>
             )}
           </Row>
         ) : (
