@@ -1,4 +1,4 @@
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import { Container, Button, Row, Col, Table, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
 import { useState } from "react";
 import p from './circle-fill.svg';
 import d from './iconDelete.svg';
@@ -30,36 +30,41 @@ let m=props.orders.filter(x=>x.state==="booked"&&dayjs(`${x.date}`).get('week')=
 m.reverse();
 const handleClose = (x) => setShow(x);
     return(<>
-      <span className="d-block text-center mt-5 mb-2 display-2">
+
+        
+         
+         <Link to="/farmer">
+                <Button variant="outline-warning">Back to Farmer Area</Button>
+              </Link>
+   
+      <span className="d-block text-center mt-2 mb-1 display-1">
                Bookings
             </span>
-<Row>
-
-<Col xs={3} md={2}>
-          <ListGroup variant="flush">
-           
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderColor': 'black'}}
-                onClick={(event) => {
-                  history.push("/farmer")
-                }}
-              >Back to my Area{'   '}  </Button></ListGroupItem></ListGroup>
-</Col><Col xs={8} md={8}>
-    <ListGroup variant="flush">
-     <ListGroupItem key={"ciao7"}variant ={"light"}style={{ 'fontSize': 25,'borderColor': 'black'}}></ListGroupItem>
-   <ListGroupItem key={"ciao"}variant ={"light"}style={{'borderColor': 'black'}}>
-<Row>
-    <Col xs={4} md={4}>ORDER_ID</Col>
-    <Col xs={4} md={4}>PRODUCTS</Col>
-    <Col xs={4} md={4}>TOTAL</Col>
-   
-    </Row>
+        <h5 className="d-block mx-auto mb-5 text-center text-muted">
+                        Choose a date clicking on the clock up above to see all the orders of that week 
+                    </h5>
 
 
-</ListGroupItem>
-    {props.orders.map((s)=>{
+
+                
+        <div className="card mx-5 my-5 ">
+     
+ <Table class="table table-bordered " bordered hover responsive="lg" size="lg"  style={{'borderColor': 'orange', 'fontSize': 23}}>
+  <thead >
+    <tr>
+      <th>Order id</th>
+      <th>Client id</th>
+      <th>Products</th>
+      <th>Total</th>
+      <th>Purchase Type</th>
+      <th>Date & Time</th>
+      
+    </tr>
+  </thead>
+<tbody>
+ {props.orders.map((s)=>{
      if (!m.find(x =>(parseInt(x) === parseInt(s.order_id)))) {
-                    return <ListGroupItem key={s.id}style={{ display: "none" }}></ListGroupItem> }
+                    return <td key={s.id}style={{ display: "none" }}></td> }
 else {
 let id=m[m.length-1];
 let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
@@ -70,25 +75,41 @@ for (const a of array)
 sum=sum.toFixed(2);
 m.pop();
 
-  return  <ListGroupItem key={s.id} style={{'fontSize': 20}}>
-      <Row><Col xs={4} md={4}>{s.order_id}</Col>
-   
-    <Col xs={4} md={4}>
+  return  <tr key={s.id} style={{'fontSize': 20}}>
+     <td>{s.order_id}</td>
+     <td>{s.client_id}</td>
+<td>
 <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setOrder(s);setId(s.order_id);}}>
-show </Button></Col>
-    
-    <Col xs={4} md={4}>
-
-
- {sum}{' '}€</Col>
+show </Button></td>
+<td >{sum}{' '}€</td>
+ {s.pickup===0 ? <td>Delivery</td> : <td>Pick up</td>  }
+  <td>{s.date}{' '}{s.time} </td>
  
     
-    </Row>
-    </ListGroupItem>
+      </tr>
+
+  
     }}
     )}
-  
-  </ListGroup></Col></Row>
+
+
+
+</tbody>
+</Table>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <Modal show={show} onHide={handleClose} animation={false}>
   <Modal.Header closeButton>
@@ -120,3 +141,17 @@ show </Button></Col>
    </>
     );}
  export default Fbookings;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
