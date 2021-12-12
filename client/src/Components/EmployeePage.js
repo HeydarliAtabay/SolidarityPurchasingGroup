@@ -498,7 +498,7 @@ function EmployeePage(props) {
 
         <Col >
           {show ?   //set recharged della tabella ordini-clienti
-                  <DeliverList setRecharged={props.setRecharged} orders={props.orders} clients={clients} setShow={setShow} b={b} />: <></>}
+                  <DeliverList setRecharged={props.setRecharged} orders={props.orders} clients={clients} setShow={setShow} b={b} time={props.time} />: <></>}
         </Col>
       <br />
     </div>

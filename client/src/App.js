@@ -389,6 +389,7 @@ function App() {
                   topUp={topUpBalance}
                   setRecharged={updateRech}
                   logout={doLogOut}
+                  time={time}
                 />
               ) : (
                 <Redirect to="/login" />

@@ -42,17 +42,16 @@ app.setTestingMode = (test_db_name) => {
 };
 
 let transporter = nodemailer.createTransport({
-  service: 'hotmail',
-  secure: true,
-  auth: {
-    user: 'se2_r02team@outlook.com',
-    pass: '123torchiano123!',
-  },
+  service: 'gmail',
+    auth:{
+        user: process.env.EMAIL_USER,
+        pass : process.env.EMAIL_PASS
+    }
 });
 
 app.post('/api/sendEmail', function (req, res) {
   let mailOptions = {
-    from: 'se2_r02team@outlook.com',
+    from: process.env.EMAIL_USER,
     to: `${req.body.email}`,
     subject: `Status of your Order`,
     text: `${req.body.message}`,
