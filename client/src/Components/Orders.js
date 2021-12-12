@@ -1,11 +1,11 @@
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import { Container, Button, Row, Col, Table, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
 import { useState } from "react";
 import p from './circle-fill.svg';
 import d from './iconDelete.svg';
 import im from './pencil-fill.svg';
 import API from '../API'
 import {Link} from 'react-router-dom'
-
+import {CardList, PlusCircle} from 'react-bootstrap-icons'
 import { useHistory } from "react-router-dom";
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
@@ -31,44 +31,30 @@ const handleClose = (x) => setShow(x);
 
 const handleClose2 = (x) => setShow2(x);
     return(<>
-      <span className="d-block text-center mt-5 mb-2 display-2">
-                My Orders
-            </span>
-<Row>
-
-<Col xs={3} md={2}>
-
-          <ListGroup variant="flush">
-            <ListGroupItem>
-            <Button variant="light" style={{ 'fontSize': 25, 'borderColor': 'black'}}
-                onClick={(event) => {
-                  history.push("/booking")
-                }}
-              > Make a new Order </Button>
-            </ListGroupItem> 
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderColor': 'black'}}
-                onClick={(event) => {
-                  history.push("/client")
-                }}
-              >Back to my Area{'   '}  </Button></ListGroupItem></ListGroup>
-</Col><Col xs={10} md={10}><div class="container">
-    <ListGroup variant="flush">
-     <ListGroupItem key={"ciao7"}variant ={"light"}style={{ 'fontSize': 25,'borderColor': 'black'}}></ListGroupItem>
-   <ListGroupItem key={"ciao"}variant ={"light"}style={{ 'borderColor': 'black'}}>
-<Row>
-    <Col xs={3} md={3}>ORDER_ID</Col>
-    <Col xs={3} md={3}>PRODUCTS</Col>
-    <Col xs={3} md={3}>TOTAL</Col>
-    <Col xs={3} md={3}>STATE</Col>
-   
-    </Row>
-
-
-</ListGroupItem>
-    {props.orders.filter(x=>parseInt(x.client_id) === t).map((s)=>{
+<div>
+  
+      <Link to="/booking">
+                <Button variant="outline-primary" style={{ 'cursor':'pointer'  }}>Make a new order</Button>
+              </Link></div>
+      <span className="d-block text-center mt-2 mb-1 display-1">
+                My Orders</span>
+          
+           
+        <div className="card mx-5 my-5 "> <Table class="table table-bordered " bordered hover responsive="lg" size="lg"  style={{'borderColor': 'blue', 'fontSize': 23}}>
+  <thead >
+    <tr>
+      <th>Order id</th>
+      <th>Products</th>
+      <th>Total</th>
+      <th>Purchase Type</th>
+      <th>Date & Time</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+<tbody>
+{props.orders.filter(x=>parseInt(x.client_id) === t).map((s)=>{
      if (!m.find(x =>(parseInt(x) === parseInt(s.order_id)))) {
-                    return <ListGroupItem key={s.id}style={{ display: "none" }}></ListGroupItem> }
+                    return <td key={s.id}style={{ display: "none" }}></td> }
 else {
 let id=m[m.length-1];
 let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
@@ -79,10 +65,10 @@ for (const a of array)
 sum=sum.toFixed(2);
 m.pop();
 
-  return  <ListGroupItem key={s.id} style={{'fontSize': 20}}>
-      <Row><Col xs={3} md={3}>{s.order_id}</Col>
+  return  <tr key={s.id} style={{'fontSize': 20}}>
+      <td>{s.order_id}</td>
    
-    <Col xs={3} md={3}>
+ <td>
 {s.state==="booked"?
 
 <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setOrder(s);setId(s.order_id);}}>
@@ -91,23 +77,28 @@ show{' / '}edit </Button>:
 show </Button>
 
 }
-</Col>
+</td>
     
-    <Col xs={3} md={3}>
-
-
- {sum}{' '}€</Col>
- <Col xs={3} md={3}>
-
-
- {s.state}</Col>
+ <td >{sum}{' '}€</td>
+ {s.pickup===0 ? <td>Delivery</td> : <td>Pick up</td>  }
+  <td>{s.date}{' '}{s.time} </td>
+ <td> {s.state}</td>
     
-    </Row>
-    </ListGroupItem>
+    
+    </tr>
     }}
     )}
-  
-  </ListGroup></div></Col></Row>
+
+
+
+</tbody>
+</Table>         
+        </div >
+
+
+
+
+
 
 <Modal show={show} onHide={handleClose} animation={false}>
   <Modal.Header closeButton>

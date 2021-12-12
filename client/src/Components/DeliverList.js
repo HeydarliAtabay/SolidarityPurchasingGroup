@@ -174,18 +174,29 @@ m.pop();
     );}
 
 
-    function Finestra(props){return(
+   function Finestra(props){return(
   <> <Modal show={props.show} onHide={props.handleClose} animation={false}>
   <Modal.Header closeButton>
-    <Modal.Title >List Of Ordered Products</Modal.Title>
+    <Modal.Title ><Row>
+    <Col xs={3} md={3}>Product</Col>
+    <Col xs={3} md={3}>{' '}</Col>
+    <Col xs={2} md={2}>Kilos</Col>
+<Col xs={1} md={1}>{' '}</Col>
+    <Col xs={2} md={2}>Price</Col></Row></Modal.Title>
   </Modal.Header>
 
 {props.orders.filter(x=>x.order_id===props.id).map((s)=>
   <Modal.Body key={s.id}>
- <Image src={p}style={{ width: '5px', height: '5px'}}></Image>{' '}{s.product_name.toUpperCase()}
+ <Row>
+<Col xs={4} md={4}><Image src={p}style={{ width: '5px', height: '5px'}}></Image>{' '}{s.product_name.toUpperCase()}
+</Col>
+<Col xs={2} md={2}style={{'fontSize': 20}}> {s.order_quantity}</Col>
+<Col xs={4} md={4}style={{'fontSize': 20}}>{' '} {s.OrderPrice}€</Col>
+</Row>
 </Modal.Body>)}
  
   </Modal></>);}
+
 
 
 function ClientModal(props){
