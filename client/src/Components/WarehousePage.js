@@ -18,7 +18,7 @@ function WarehousePage(props) {
         <br/>
     <div>
     
-    <Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
+    <Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#DCDCDC",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
   
 
         <Container fluid>
@@ -241,7 +241,7 @@ function WarehousePage(props) {
         <Col xs={2} md={2}>ORDER ID</Col>
         <Col xs={2} md={2}>CLIENT ID</Col>
         <Col xs={2} md={2}>CLIENT NAME</Col>
-        <Col xs={2} md={2}>ORDER PRODUCTS</Col>
+        <Col xs={2} md={2}>ORDERED PRODUCTS</Col>
         <Col xs={2} md={2}>PRODUCT</Col>
         <Col xs={2} md={2}>CONFIRM</Col>
         </Row></ListGroupItem>

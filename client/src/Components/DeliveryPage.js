@@ -14,9 +14,8 @@ function DeliveryPage(props){
     const [avaiableOrders, setAvaiableOrders] = useState([]);
     const [flag, setFlag] = useState(false);
     const [show, setShow] = useState(false);
- const [showClient, setShowClient]= useState(false);
-const [id, setId] = useState();
-
+    const [showClient, setShowClient]= useState(false);
+    const [id, setId] = useState();
     const [displayFlag, setDisplayFlag] = useState(false);
 
     
@@ -65,14 +64,14 @@ const [id, setId] = useState();
     return (<>
         <br/>
     <div>
-    <Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
+    <Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#DCDCDC",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
   
      
   
         
         <Container fluid>
        <span className="d-block text-center mt-5 mb-2 display-2">
-            Warehouse Personnel Area
+            Delivery Personnel Area
           </span>
           </Container>
           <h1 className="mt-3 text-center">{(avaiableOrders.length!=0)? <>There are {avaiableOrders.length} available order(s) in {delivererData.city}!</>: <>non ho letto correttamente</>}</h1> 
