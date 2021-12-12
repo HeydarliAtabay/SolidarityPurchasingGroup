@@ -948,32 +948,6 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
-describe('test insertNewBookOrder(itemsOrdered)', () => {
-  test('no errors', async () => {
-    fetch.mockResponseOnce({ mockData: 'test' });
-    await API.insertNewBookOrder('test').then((data) => {
-      expect.assertions(1);
-      expect(data.status).toEqual(200);
-    });
-  });
-  test('response not ok, json ok', async () => {
-    fetch.mockResponseOnce(
-      JSON.stringify({ err: 'API error' }, { status: 500 })
-    );
-    await API.insertNewBookOrder('test').catch((data) => {
-      expect.assertions(1);
-      expect(data.err).toEqual('API error');
-    });
-  });
-  test('fetch rejected', async () => {
-    fetch.mockRejectOnce('error');
-    await API.insertNewBookOrder('itemsOrder').catch((data) => {
-      expect.assertions(2);
-      expect(data.errors[0].param).toEqual('Server');
-      expect(data.errors[0].msg).toEqual('Cannot communicate');
-    });
-  });
-});
 // const user = {
 //   id: 7,
 //   name: 'Clare',
