@@ -73,15 +73,15 @@ code {
 }
 
 .vertical-separator-frontpage{
-  border-left: solid 1px rosybrown;
+  border-left: solid 1px rgb(68, 68, 68);
 }
 
 .vertical-separator-products{
-  border-right: solid 1px rosybrown;
+  border-right: solid 1px rgb(68 , 68, 68);
 }
 
 .hr-color-custom{
-  color: rosybrown;
+  color: rgb(68, 68, 68);
 }
 
 .carousel-custom-background{
@@ -117,7 +117,7 @@ code {
 }
 
 .bg-color-frontpage{
-  background-color: linen;
+  background-color: rgb(231, 231, 231);
 }
 
 .sticky-button-custom{

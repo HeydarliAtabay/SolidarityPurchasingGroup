@@ -4,6 +4,8 @@ import { NavLink} from 'react-bootstrap';
 import { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {BoxSeam} from 'react-bootstrap-icons';
+import ris from './reply-all-fill.svg';
+
 
 
 function DeliveryPage(props){
@@ -11,6 +13,9 @@ function DeliveryPage(props){
     const [delivererData, setDelivererData] = useState();
     const [avaiableOrders, setAvaiableOrders] = useState([]);
     const [flag, setFlag] = useState(false);
+    const [show, setShow] = useState(false);
+ const [showClient, setShowClient]= useState(false);
+const [id, setId] = useState();
 
     const [displayFlag, setDisplayFlag] = useState(false);
 
@@ -54,6 +59,7 @@ function DeliveryPage(props){
       }, [flag,]);
       
 
+      let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
 
 
     return (<>
@@ -69,19 +75,66 @@ function DeliveryPage(props){
             Warehouse Personnel Area
           </span>
           </Container>
-          <h1>{(avaiableOrders.length!=0)? <>read correctly the db, there are {avaiableOrders.length} avaiable orders in {delivererData.city}!</>: <>non ho letto correttamente</>}</h1>
-          <>userRole: {props.userRole}</>
+          <h1 className="mt-3 text-center">{(avaiableOrders.length!=0)? <>There are {avaiableOrders.length} available order(s) in {delivererData.city}!</>: <>non ho letto correttamente</>}</h1> 
+          <h1></h1>
+          {/*
+          <> userRole: {props.userRole}</>
           <> delivererId: {props.delivererId}</>
-          <> mail: {props.mail}</>
+          <> mail: {props.mail}</> */}
           <Container>
             <Table>
 
                   {/* to change state just use this api: API.updateState(1,'tomatoes','shipped') */}
 
-
+                  <thead>
+                    
+    <tr>
+      <th>Order ID</th>
+      <th>Client ID</th>
+      <th>Address</th>
+      <th>Zip Code</th>
+      <th>City</th>
+      <th>Status</th>
+      <th>Confirm Shipment</th>
+      <th>Confirm Payment & Delivery</th>
+    </tr>
+  </thead>
+  
                 {avaiableOrders.map((o) =>{
-                      return(  <Row><Col>{o.order_id}</Col>
-                              <Col>{o.city}</Col></Row>);
+                      return(  <>
+                        <tr key={o.id}>
+                          <td> {o.order_id}</td>
+                          <td>{o.client_id}</td>
+                          
+            <td>{o.address}</td>  
+            <td>{o.zipcode}</td>  
+            <td>{o.city}</td> 
+            <td>{o.state}</td>   
+            <td>
+            {
+             <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+           for(const a of array2){
+               API.updateState(id, a, "shipped").then(()=>{
+                setTimeout(()=>{},3000)});
+            }}
+        }></Image>
+      }
+        </td>
+        <td>
+            {
+             <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+           for(const a of array2){
+               API.updateState(id, a, "delivered").then(()=>{
+                setTimeout(()=>{},3000)});
+            }}
+        }></Image>
+      }
+        </td>
+          </tr>
+          </>
+                        
+                  
+                      );
                 })}
               
             </Table>

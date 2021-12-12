@@ -162,45 +162,31 @@ function WarehousePage(props) {
 
 
       return(<>
-        <Row><h1>MANAGER DASHBOARD</h1></Row>
+        <Row><h1 className="mt-3 text-center">MANAGER DASHBOARD</h1></Row>
         <>
           <Row>
-            <Col xs={3} md={2}>
-            <ListGroup variant="flush">
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow(true)}>Show products to be delivered for pick-up</Button>
-            </ListGroupItem></ListGroup>
-            </Col>
-            <Col xs={9} md={9}>
-          {show ?   
-                  <PickupList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />: <></>}
+          <Row><h2 className="mt-3">Orders to be Prepared</h2></Row>
+            <Col className="mt-3 text-center" xs={20} md={20}>  
+                  <PickupList setRecharged={props.setRecharged} orders={props.orders} setShow={setShow} b={b} />
         </Col>
-        <Col xs={3} md={2}>
-            <ListGroup variant="flush">
-            <ListGroupItem>
-              <Button variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} onClick={() => setShow2(true)}>Show the providers available on the platform</Button>
-            </ListGroupItem></ListGroup>
-            </Col>
-            <Col xs={9} md={9}>
-          {show2 ?
-           <FarmersListChoice setRecharged={props.setRecharged} orders={props.orders} providers = {providers} setShow2={setShow2} b={b} />: <></>} 
-        </Col></Row>
+        
+        </Row>
              
           <br/>
           </>
-        <Row><h4>providers avaiable on the platform</h4></Row>
+        <Row><h2>Providers Avaiable on the Platform</h2></Row>
         <Row>
-        {providers.map((p) => { return(<Col>{selectedProvider.id === p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
-                                              <Button  variant="secondary" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button>}</Col>)})}
+        {providers.map((p) => { return(<Col>{selectedProvider.id === p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "	#708090" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
+                                              <Button  variant="secondary" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#708090" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button>}</Col>)})}
         </Row>
 
-        <Row>
+       { /*<Row>
           <FarmersListChoice providers={providers}></FarmersListChoice>
         </Row>
         <Row>
           <FarmersListChoice2 providers={providers}></FarmersListChoice2>
         </Row>
-         {/*
+         /*
         <Row>
       {showSearchButton ? 
       <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {selectedProvider.id} onClick = {handleClick} >Click to check the farmer-shipped order</Button> :
@@ -213,7 +199,7 @@ function WarehousePage(props) {
 
       <Finestra show={showM}handleClose={handleClose}id={idM}orders={props.orders}/>
 
-      {show ? <><h1>Orders sent to the warehouse from {selectedProvider.name}</h1>
+      {show ? <><h2 className="mt-5 mb-2">Orders sent to the warehouse from {selectedProvider.name}</h2>
       <FarmerShippedOrderTable setShowM = {setShowM} setIdM = {setIdM} providerOrd = {providerOrders} idM = {idM} setIdPM={setIdPM} idPM={idPM} products = {products} setRecharged={setRecharged}></FarmerShippedOrderTable>
       </> : <></>}
 
@@ -250,7 +236,7 @@ function WarehousePage(props) {
         let farmerState = 'received';
 
         return(<ListGroup variant="flush">
-        <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
+        <ListGroupItem key={"hi*"} style={{'backgroundColor':"#A9A9A9",'fontSize': 20}}>
             <Row>
         <Col xs={2} md={2}>ORDER ID</Col>
         <Col xs={2} md={2}>CLIENT ID</Col>

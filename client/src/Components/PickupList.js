@@ -20,7 +20,7 @@ function onlyUnique(value,index,self){
   }
       return(<>
       <ListGroup variant="flush">
-      <ListGroupItem key={"hi*"} style={{'backgroundColor':"#ffb6c1",'fontSize': 20}}>
+      <ListGroupItem key={"hi*"} style={{'backgroundColor':"#A9A9A9",'fontSize': 20}}>
           <Row>
       <Col xs={2} md={2}>Order ID</Col>
       <Col xs={2} md={2}>Client ID</Col>
@@ -71,9 +71,7 @@ function onlyUnique(value,index,self){
       </ListGroupItem>
       }}
       )}
-      <ListGroupItem>
-      <Button variant={"light"}style={{'fontSize': 20,'borderStyle':'hidden','backgroundColor':"#ffb6c1",'position':'absolute' , 'right':'15px'}}onClick={()=>{props.setShow(false);}}>Close</Button></ListGroupItem>
-    
+     
     </ListGroup>
       <PickupWindow show={show}handleClose={handleClose}id={id}orders={props.orders}/>
       </>
