@@ -28,6 +28,7 @@ async function getAllUsers() {
     }
   }
 }
+
 //GET ->retrieve client orders
 async function getAllOrders() {
   const response = await fetch('/api/orders');
@@ -705,6 +706,7 @@ function confirmExpectedProducts(product, year, week) {
 }
 //api login
 async function logIn(credentials) {
+  console.log(credentials);
   let response = await fetch('/api/sessions', {
     method: 'POST',
     headers: {
@@ -894,6 +896,7 @@ const submitEmail = async (e) => {
     });
 };
 function updateItem(order) {
+
   return new Promise((resolve, reject) => {
     fetch(`/api/orders/` + order.id, {
       method: 'PUT',
