@@ -76,13 +76,13 @@ for (const a of array)
        sum=sum.toFixed(2);
 m.pop();
 const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (1000 * 60 * 60 * 24));
-if( s.pickup===1 && notified===0  ){
+/*if( s.pickup===1 && notified===0  ){
   setNotified(1)
-  if(diffDays(new Date(s.date), new Date(time.date))<=1 ){
+  if(diffDays(new Date(s.date), new Date(time.date))===1 ){
     toast.info(<ReminderToast client={s.client_id} date={s.date} time={s.time}/>, {autoClose: 5000})
     
   };  
-}
+}*/
         return (
           <>
           <tr key={s.id}>
