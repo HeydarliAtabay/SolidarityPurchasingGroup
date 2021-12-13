@@ -43,39 +43,50 @@ open your favourite browser and access the project at the url: http://localhost:
 
 ### Clients
 
-| Email address    | Password  |
-| :--------------- | :-------: |
-| antonio@spg.it | ant111 |
-| elnurs.shabanov@gmail.com  | elnur111  |
-| sara.bekkari@yahoo.it | sara |
-| clare.mint@yahoo.it | sara |
+| Email address             | Password |
+| :------------------------ | :------: |
+| antonio@spg.it            |  ant111  |
+| elnurs.shabanov@gmail.com | elnur111 |
+| sara.bekkari@yahoo.it     |   sara   |
+| clare.mint@yahoo.it       |   sara   |
 
 
 ### Shop employee
 
-| Email address    | Password  |
-| :--------------- | :-------: |
-| employee1@shop.it | shop |
-| employee2@shop.it  | shop  |
-| employee3@shop.it  | shop  |
+| Email address     | Password |
+| :---------------- | :------: |
+| employee1@shop.it |   shop   |
+| employee2@shop.it |   shop   |
+| employee3@shop.it |   shop   |
+
+### Shop manager
+
+| Email address     | Password |
+| :---------------- | :------: |
+| manager@spg.it    |   1111   |
 
 ### Warehouse manager
 
-| Email address    | Password  |
-| :--------------- | :-------: |
+| Email address     | Password  |
+| :---------------- | :-------: |
 | whmanager@shop.it | whmanager |
-
 
 ### Warehouse employee
 
-| Email address    | Password  |
-| :--------------- | :-------: |
+| Email address      |  Password  |
+| :----------------- | :--------: |
 | warehouse1@shop.it | warehouse1 |
 ### Farmer 
 
-| Email address    | Password  |
-| :--------------- | :-------: |
-| luca.bianchi@spg.it | 1111 |
+| Email address       | Password |
+| :------------------ | :------: |
+| luca.bianchi@spg.it |   1111   |
+| farmer@spg.it       |   1234   |
+| farmer2@spg.it      |   1234   |
+| matteo.rossi@spg.it |   1111   |
+| mattia.verdi@spg.it |   1111   |
+| newfarmer@spg.it    |   1234   |
+| farmer3@spg.it      |   1234   |
 
 ## API Server
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -453,7 +464,307 @@ POST `/api/transactions `
 
 
 
+* GET `/api/products/confirmed/:year/:week_number`
+    * Get all farmer-confirmed products for the given year and week of the year
+    * Request parameter: year, week_number
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.product_id,
+            name: p.product_name,
+            description: p.product_description,
+            category: p.category_name,
+            price: p.product_price,
+            unit: p.product_unit,
+            quantity: p.product_quantity,
+            expiryDate: p.product_expiry,
+            providerId: p.provider_id,
+            providerName: p.provider_name,
+            year: p.year,
+            week: p.week_number,
+            status: p.product_status,
+            active: 1
+         }`   
+
+* GET `/api/products/expected/:year/:week_number`
+    * Get all expected products for the given year and week of the year
+    * Request parameter: year, week_number
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.product_id,
+            name: p.product_name,
+            description: p.product_description,
+            category: p.category_name,
+            price: p.product_price,
+            unit: p.product_unit,
+            quantity: p.product_quantity,
+            expiryDate: p.product_expiry,
+            providerId: p.provider_id,
+            providerName: p.provider_name,
+            year: p.year,
+            week: p.week_number,
+            status: p.product_status,
+            active: 1
+         }`   
+
+* GET `/api/products/ordered/:year/:week_number`
+    * GET all products in the booked or pending state of a certain provider
+    * Request parameter: year, week_number
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.productID,
+            name: p.product_name,
+            tot_quantity: p.TotQty,
+            unit: p.product_unit
+         }`  
+
+
+* GET `/api/provider/shipmentstatus/:year/:week_number`
+    * Check if provider has already declared ordered items as shipped
+    * Request parameter: year, week_number
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `true if provider has shipped at least 1 product, false otherwise`
+
+
+POST `/api/orders/farmershipped`
+    * Set all the sent product IDs as farmer-shipped
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+         `[product_ID1, product_ID2, ..., productIDn]`     
+    * Response: `201 OK (success) or 500 
+    * Response body:
+        `true if all the products status was set to "farmer-shipped", false otherwise`
+
+
+* GET `/api/product/:product_id`
+    * Get a product given its product ID
+    * Request parameter: product_id
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `{
+            id: row.product_id,
+            name: row.product_name,
+            description: row.product_description,
+            category: row.category_name,
+            price: row.product_price,
+            unit: row.product_unit,
+            quantity: row.product_quantity,
+            expiryDate: row.product_expiry,
+            providerId: row.provider_id,
+            providerName: row.provider_name,
+            active: 1,
+         }`   
+
+
+* GET `/api/products/categories`
+    * Get all the product categories
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `{
+            id: c.category_id,
+            name: c.category_name,
+            active: 0,
+         }`   
+
+* GET `/api/providers/all`
+    * Get all the providers/farmers
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.provider_id,
+            name: p.provider_name,
+            description: p.provider_description,
+            location: p.provider_location,
+         }`   
+
+
+* GET `/api/provider/:provider_id`
+    * Get a provider/farmer given his/her provider ID
+    * Request parameter: provider_id
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `{
+             id: row.provider_id,
+            name: row.provider_name,
+            description: row.provider_description,
+            location: row.provider_location,
+         }`  
+
+
+* GET `/api/provider-products`
+    * Get ALL the products of the currently logged in provider/farmer
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.product_id,
+            name: p.product_name,
+            description: p.product_description,
+            category: p.category_id,
+            price: p.product_price,
+            unit: p.product_unit,
+            quantity: 0,
+            expiryDate: '',
+            providerId: provider_id,
+            providerName: '',
+            year: 0,
+            week: 0,
+            status: 'confirmed',
+            active: 1,
+         }`  
+
+
+* GET `/api/provider/confirmationStatus/:year/:week_number`
+    * Check if provider has already confirmed product availability for given year and week of year
+    * Request parameter: year, week_number
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `true if provider has confirmed at least 1 product, false otherwise`
+
+
+* GET `/api/products/provider/expected/:year/:week_number`
+    * Get ALL the expected products of the currently logged in provider/farmer for the given year and week of year
+    * Request parameter: year, week_number
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.product_id,
+            name: p.product_name,
+            description: p.product_description,
+            category: p.category_id,
+            price: p.product_price,
+            unit: p.product_unit,
+            quantity: p.product_quantity,
+            expiryDate: p.product_expiry,
+            providerId: p.provider_id,
+            year: p.year,
+            week: p.week_number,
+            status: p.product_status,
+         }` 
+
+
+* POST `/api/products/provider/expected/:year/:week_number`
+    * Declare expected products of the currently logged in provider/farmer for the given year and week of year
+    * Request parameter: year, week_number
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+        `array of {
+            id: prod.id,
+            name: prod.name,
+            description: prod.description,
+            category: prod.category,
+            price: prod.price,
+            unit: prod.unit,
+            quantity: prod.quantity,
+            year: year of next week (obtained with dayjs),
+            week_number: number of next week (obtained with dayjs),
+         }` 
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body: ALL the new IDs of the inserted products (used to upload product images)
+        `[product_ID1, product_ID2, ..., productIDn]`
+
+
+* POST `/api/products/upload/expected/:product_id`
+    * Upload product image with image name = product ID
+    * Request parameter: product_id
+    * Request body: An object representing (Content-Type: `application/x-www-form-urlencoded`).
+    * Body of the content:
+        `FormData with product image appended` 
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body: 
+        `'success' if image uploaded, 'No files were uploaded.' otherwise`
+
+
+* GET `/users/email-availability/:email`
+    * Check if email is available or not
+    * Request parameter: email
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `true if email already EXISTS, false otherwise`
+
+
+* POST `/provider/apply`
+    * POST a farmer application
+    * Request body: An object representing (Content-Type: `application/json`).
+    * Body of the content:
+        `{
+            name: name,
+            surname: surname,
+            email: email,
+            phone: phone,
+            country: country,
+            region: region,
+            city: city,
+            address: address,
+            zip: zip_code,
+            password: password,
+            description: description,
+            submit_date: date and time of submission (obtained with dayjs)
+        }` 
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body: ALL the new IDs of the inserted products (used to upload product images)
+        `true if application successfully submitted, false otherwise`
         
 
+* GET `/manager/applications/pending`
+    * GET all the pending farmer applications
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.application_id,
+            name: p.farmer_name,
+            surname: p.farmer_surname,
+            email: p.farmer_email,
+            phone: p.farmer_phone,
+            description: p.farmer_description,
+            country: p.farmer_country,
+            region: p.farmer_region,
+            city: p.farmer_city,
+            address: p.farmer_address,
+            zip: p.farmer_zipcode,
+            location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
+            complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
+            date: p.application_date,
+            status: pending  
+        }`
+
+
+* GET `/manager/applications/accepted`
+    * GET all the accepted/rejected farmer applications
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `array of {
+            id: p.application_id,
+            name: p.farmer_name,
+            surname: p.farmer_surname,
+            email: p.farmer_email,
+            phone: p.farmer_phone,
+            description: p.farmer_description,
+            country: p.farmer_country,
+            region: p.farmer_region,
+            city: p.farmer_city,
+            address: p.farmer_address,
+            zip: p.farmer_zipcode,
+            location: p.farmer_city + ', ' + p.farmer_region + ', ' + p.farmer_country,
+            complete_address: p.farmer_address + ', ' + p.farmer_zipcode,
+            date: p.application_date,
+            status: accepted or rejected  
+        }`
+
+
+* GET `/manager/applications/accept/:application_id`
+    * Accept a farmer application given the application id
+    * Request parameter: application_id
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `true if application was successfully accepted, the farmer was inserted in the users table and farmer details were registered in the providers table, false otherwise`
 
    
+* GET `/manager/applications/reject/:application_id`
+    * Reject a farmer application given the application id
+    * Request parameter: application_id
+    * Response: `201 OK (success) or 503 (request failed)`
+    * Response body:
+        `true if application was successfully rejected, false otherwise`

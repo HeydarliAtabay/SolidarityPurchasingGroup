@@ -207,7 +207,7 @@ function updateStateFarmer(id, product_name, state) {
   });
 }
 
-//GET all products
+//GET all confirmed products + readme OK
 async function getAllConfirmedProducts(year, week) {
   const response = await fetch('/api/products/confirmed/' + year + '/' + week);
   if (response.ok) {
@@ -218,6 +218,7 @@ async function getAllConfirmedProducts(year, week) {
   }
 }
 
+//GET all expected products + readme ok
 async function getAllExpectedProducts(year, week) {
   const response = await fetch('/api/products/expected/' + year + '/' + week);
   if (response.ok) {
@@ -228,7 +229,7 @@ async function getAllExpectedProducts(year, week) {
   }
 }
 
-//GET all products in the booked or pending state of a certain provider
+//GET all products in the booked or pending state of a certain provider + readme ok
 async function getOrderedProductsForProvider(year, week) {
   const response = await fetch('/api/products/ordered/' + year + '/' + week);
   if (response.ok) {
@@ -239,7 +240,7 @@ async function getOrderedProductsForProvider(year, week) {
   }
 }
 
-//GET farmer shipment status
+//Check if provider has already declared ordered items as shipped + readme ok
 async function getProviderShipmentStatus(year, week) {
   const response = await fetch(
     '/api/provider/shipmentstatus/' + year + '/' + week
@@ -252,7 +253,7 @@ async function getProviderShipmentStatus(year, week) {
   }
 }
 
-//POST all products IDs that were shipped
+//POST all products IDs that were shipped + readme ok
 async function setProductsAsFarmerShipped(productIDS) {
   const response = await fetch('/api/orders/farmershipped', {
     method: 'POST',
@@ -267,7 +268,7 @@ async function setProductsAsFarmerShipped(productIDS) {
   }
 }
 
-//GET product by specific ID
+//GET product by specific ID + readme ok
 async function getProductById(product_id) {
   const response = await fetch('/api/product/' + product_id);
   if (response.ok) {
@@ -278,7 +279,7 @@ async function getProductById(product_id) {
   }
 }
 
-//GET all categories
+//GET all categories + readme ok
 async function getAllCategories() {
   const response = await fetch('/api/products/categories');
   if (response.ok) {
@@ -289,7 +290,7 @@ async function getAllCategories() {
   }
 }
 
-//GET all providers
+//GET all providers + readme ok
 async function getAllProviders() {
   const response = await fetch('/api/providers/all');
   if (response.ok) {
@@ -300,7 +301,7 @@ async function getAllProviders() {
   }
 }
 
-//GET provider by specific ID
+//GET provider by specific ID + readme ok
 async function getProviderById(provider_id) {
   const response = await fetch('/api/provider/' + provider_id);
   if (response.ok) {
@@ -311,7 +312,7 @@ async function getProviderById(provider_id) {
   }
 }
 
-//GET provider products by providerID
+//GET provider products by providerID + readme ok
 async function getProviderProducts() {
   const response = await fetch('/api/provider-products');
   if (response.ok) {
@@ -348,7 +349,9 @@ async function setNotificationasSent(products) {
     throw err; // An object with the error coming from the server
   }
 }
-//GET provider products by providerID
+
+
+//Check if provider has already confirmed product availability for given year and week of year + readme ok
 async function getProviderConfirmationStatus(year, week_number) {
   const response = await fetch(
     '/api/provider/confirmationStatus/' + year + '/' + week_number
@@ -361,7 +364,7 @@ async function getProviderConfirmationStatus(year, week_number) {
   }
 }
 
-//GET provider products by providerID
+//GET provider expected products + readme ok 
 async function getProviderExpectedProducts(year, week_number) {
   const response = await fetch(
     '/api/products/provider/expected/' + year + '/' + week_number
@@ -374,7 +377,7 @@ async function getProviderExpectedProducts(year, week_number) {
   }
 }
 
-//POST array of products expected to be available next week
+//POST array of expected products + readme ok 
 async function declareAvailability(products, year, week) {
   const response = await fetch('/api/products/expected/' + year + '/' + week, {
     method: 'POST',
@@ -389,7 +392,7 @@ async function declareAvailability(products, year, week) {
   }
 }
 
-//POST product image & product_id (used to rename img for correctly displaying in booking.js)
+//POST product image & product_id (used to rename img for correctly displaying in booking.js) + readme ok
 async function uploadProductImage(formData, product_id) {
   const response = await fetch(
     '/api/products/upload/expected/' + product_id + '',
@@ -406,7 +409,7 @@ async function uploadProductImage(formData, product_id) {
   }
 }
 
-//Check if email already exists
+//Check if email already exists + readme ok
 async function checkEmailAvailability(email) {
   const response = await fetch('/users/email-availability/' + email);
   if (response.ok) {
@@ -417,7 +420,7 @@ async function checkEmailAvailability(email) {
   }
 }
 
-//POST a farmer application
+//POST a farmer application + readme ok
 async function sendFarmerApplication(farmerApplication) {
   console.log(farmerApplication);
   const response = await fetch('/provider/apply', {
@@ -433,6 +436,7 @@ async function sendFarmerApplication(farmerApplication) {
   }
 }
 
+//GET all the pending farmer applications + readme ok
 async function getFarmerPendingApplications() {
   const response = await fetch('/manager/applications/pending');
   if (response.ok) {
@@ -443,6 +447,7 @@ async function getFarmerPendingApplications() {
   }
 }
 
+//GET all the accepted/rejected farmer applications + readme ok
 async function getFarmerAcceptedApplications() {
   const response = await fetch('/manager/applications/accepted');
   if (response.ok) {
@@ -453,6 +458,7 @@ async function getFarmerAcceptedApplications() {
   }
 }
 
+//Accept a farmer application given the application id + readme ok
 async function acceptFarmerApplication(application_id) {
   const response = await fetch(
     '/manager/applications/accept/' + application_id
@@ -465,6 +471,7 @@ async function acceptFarmerApplication(application_id) {
   }
 }
 
+//Reject a farmer application given the application id + readme ok
 async function rejectFarmerApplication(application_id) {
   const response = await fetch(
     '/manager/applications/reject/' + application_id
