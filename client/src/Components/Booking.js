@@ -419,14 +419,14 @@ function Booking(props) {
     }
   };
 
-  const onRemove = (product) => {
+  const onRemove = (product, removeQty) => {
     const exist = productsBasket.find((x) => x.id === product.id);
-    if (exist.qty === 1) {
+    if (exist.qty === 0.5) {
       setProductsBasket(productsBasket.filter((x) => x.id !== product.id));
     } else {
       setProductsBasket(
         productsBasket.map((x) =>
-          x.id === product.id ? { ...exist, qty: exist.qty - 1 } : x
+          x.id === product.id ? { ...exist, qty: exist.qty - 0.5 } : x
         )
       );
     }
@@ -501,7 +501,7 @@ function Booking(props) {
                           variant="primary"
                           className="mb-1 align-middle"
                           onClick={() => {
-                            onAdd(productline, 1);
+                            onAdd(productline, 0.5);
                           }}
                         >
                           {cartIcon} Add to Basket

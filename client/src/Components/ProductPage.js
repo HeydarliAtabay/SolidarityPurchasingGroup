@@ -6,20 +6,26 @@ function ProductPage(props) {
   const [buyQuantity, setBuyQuantity] = useState(1);
 
   const RemoveProduct = () => {
+    if (props.prod.quantity === 0) {
+      return;
+    }
     setBuyQuantity((qty) => {
-      if (qty - 1 < 0) {
+      if (qty - 0.5 <= 0) {
         return qty;
       }
-      return qty - 1;
+      return qty - 0.5;
     });
   };
 
   const AddProduct = () => {
+    if (props.prod.quantity === 0) {
+      return;
+    }
     setBuyQuantity((qty) => {
-      if (qty + 1 > props.prod.quantity) {
+      if (qty + 0.5 > props.prod.quantity) {
         return qty;
       }
-      return qty + 1;
+      return qty + 0.5;
     });
   };
 
@@ -44,7 +50,7 @@ function ProductPage(props) {
                     </div>
                     <input
                       className="form-control text-center"
-                      value={buyQuantity + ' ' + props.prod.unit}
+                      value={props.prod.quantity > 0 ? buyQuantity + ' ' + props.prod.unit : 'Sold out'}
                       onChange={() => {
                         return;
                       }}
@@ -57,12 +63,14 @@ function ProductPage(props) {
                       <button
                         className="btn btn-primary rounded mx-2 product-buy-size-custom"
                         onClick={() => RemoveProduct()}
+                        disabled={props.prod.quantity === 0}
                       >
                         -
                       </button>
                       <button
                         className="btn btn-primary rounded mx-2 product-buy-size-custom"
                         onClick={() => AddProduct()}
+                        disabled={props.prod.quantity === 0}
                       >
                         +
                       </button>
@@ -78,9 +86,13 @@ function ProductPage(props) {
                 <button
                   className="btn btn-success mx-2"
                   onClick={() => {
+                    if (props.prod.quantity === 0) {
+                      return;
+                    }
                     props.onAdd(props.prod, buyQuantity);
                     props.setShowProductDetailsModal(false);
                   }}
+                  disabled={props.prod.quantity === 0}
                 >
                   Add to basket
                 </button>
@@ -132,7 +144,7 @@ function ProductPage(props) {
           <div className="d-inline-block">{producerIconBig}</div>
           <div className="d-inline-block mx-3 mb-4">
             <blockquote className="blockquote">
-              <p class>{props.prod.providerName}</p>
+              <p>{props.prod.providerName}</p>
               <footer className="blockquote-footer">
                 <cite title="Source Title">Torino</cite>
               </footer>

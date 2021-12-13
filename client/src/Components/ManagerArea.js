@@ -1,8 +1,67 @@
+import { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
+import API from '../API';
+import dayjs from 'dayjs';
 
 function ManagerArea(props) {
-  
+
   const history = useHistory();
+
+  const [pendingStats, setPendingStats] = useState();
+  const [acceptedStats, setAcceptedStats] = useState();
+  const [overallStats, setOverallStats] = useState();
+
+  useEffect(() => {
+    const getApplicationStats = async () => {
+      const pendingApplications = await API.getFarmerPendingApplications();
+
+      setPendingStats({ total: pendingApplications.length });
+
+      const acceptedApplications = await API.getFarmerAcceptedApplications();
+
+      let accepted = 0;
+      let rejected = 0;
+      acceptedApplications.forEach(app => {
+        if (app.status === 'accepted') {
+          accepted++;
+        }
+        else if (app.status === 'rejected') {
+          rejected++;
+        }
+      });
+
+      setAcceptedStats({ total: acceptedApplications.length, accepted: accepted, rejected: rejected });
+
+      const allApplications = [...pendingApplications, ...acceptedApplications];
+
+      let curr_time = dayjs(props.time.date + " " + props.time.hour);
+      let today = 0;
+      let this_week = 0;
+      let this_month = 0;
+      allApplications.forEach(app => {
+        if (curr_time.diff(app.date, 'day') === 0) {
+          today++;
+        }
+        else if (curr_time.diff(app.date, 'week') === 0) {
+          this_week++;
+        }
+        else if (curr_time.diff(app.date, 'month') === 0) {
+          this_month++;
+        }
+      });
+
+      setOverallStats({ today: today, this_week: this_week, this_month: this_month });
+
+    }
+    getApplicationStats();
+  }, []);
+
+  useEffect(() => {
+    const getAcceptedApplications = async () => {
+      
+    }
+    getAcceptedApplications();
+  }, []);
 
   return (
     <div className="row w-100">
@@ -21,6 +80,31 @@ function ManagerArea(props) {
             </li>
             <li className="list-group-item d-flex justify-content-between">
               {props.userMail}
+            </li>
+          </ul>
+        </div>
+        <div className="card mx-3 my-2 shadow">
+          <div className="card-header d-flex justify-content-between">
+            <h5 className="d-inline my-auto">Application stats</h5>
+          </div>
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item d-flex justify-content-between">
+              {pendingStats && 'Pending: '+pendingStats.total}
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              {acceptedStats && 'Accepted: '+acceptedStats.accepted}
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              {acceptedStats && 'Rejected: '+acceptedStats.rejected}
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              {overallStats && 'Received today: '+overallStats.today}
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              {overallStats && 'Received this week: '+overallStats.this_week}
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              {overallStats && 'Received this month: '+overallStats.this_month}
             </li>
           </ul>
         </div>

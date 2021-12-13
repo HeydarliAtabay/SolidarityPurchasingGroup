@@ -37,7 +37,7 @@ function Basket(props) {
               <Button
                 variant="success"
                 width="16"
-                onClick={() => props.onAdd(item, 1)}
+                onClick={() => props.onAdd(item, 0.5)}
               >
                 +
               </Button>
@@ -47,7 +47,7 @@ function Basket(props) {
               <Button
                 variant="danger"
                 width="16"
-                onClick={() => props.onRemove(item)}
+                onClick={() => props.onRemove(item, 0.5)}
               >
                 -
               </Button>{' '}
