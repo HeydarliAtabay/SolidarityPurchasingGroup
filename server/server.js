@@ -44,10 +44,11 @@ app.setTestingMode = (test_db_name) => {
 
 let transporter = nodemailer.createTransport({
   service: 'gmail',
-    auth:{
-        user: process.env.EMAIL_USER,
-        pass : process.env.EMAIL_PASS
-    }
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
 });
 
 app.post('/api/sendEmail', function (req, res) {
@@ -74,7 +75,7 @@ app.post('/api/sendEmail', function (req, res) {
 });
 
 app.post('/api/sendReminderForPickup', function (req, res) {
-  
+
   let mailOptions = {
     from: process.env.EMAIL_USER,
     to: `${req.body.email}`,
@@ -98,11 +99,11 @@ app.post('/api/sendReminderForPickup', function (req, res) {
 });
 
 
-let strA= '55 22 15 13 12 *'
+let strA = '55 22 15 13 12 *'
 
 cron.schedule(strA, () => {
   console.log('running a task every minute');
-});  
+});
 
 /*** Set up Passport ***/
 passport.use(
