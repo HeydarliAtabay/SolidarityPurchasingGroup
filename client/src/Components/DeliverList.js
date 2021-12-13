@@ -6,7 +6,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography"
 import ris from './reply-all-fill.svg';
 import API from '../API'
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import p from './circle-fill.svg';
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
@@ -18,7 +18,7 @@ function DeliverList(props){
  const [showClient, setShowClient]= useState(false);
  const [showContact, setShowContact]= useState(false);
  const [contactType, setContactType]=useState(0)
- const [notified, setNotified]=useState(0)
+ const [notified,setNotified]=useState(0) 
  const [pickupDate,setPickupDate] = useState({
   date: '',
   hour: '',
@@ -35,20 +35,21 @@ const handleClose = (x) => {
 
 function ReminderToast(props){
 const {client, date, time} = props
-setNotified(1)
   return(
     <>
     <Row> <h5>{`Client ${client} has to pickup his/her order at ${date} ${time}`}</h5> </Row>
-    <Row><> <Button> Notify them </Button></> </Row>
+    <Row><> <h6>{`Please Notify this client`}</h6></> </Row>
   </>
   )
 }
-
+useEffect(() => {
+  setNotified(0)
+}, [time]);
 
     return(<>
     <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
     <ClientModal show={showClient}handleClose={handleClose} client={client} clients={props.clients}/>
-    <ContactModal show={showContact} handleClose={handleClose} client={client} clients={props.clients} contactType={contactType} pickUp={pickupDate}/>
+    <ContactModal time={time} show={showContact} handleClose={handleClose} client={client} clients={props.clients} contactType={contactType} pickUp={pickupDate}/>
     <Table striped bordered hover variant="light" responsive="lg" size="lg">
   <thead>
     <tr>
@@ -66,16 +67,7 @@ setNotified(1)
       if(!m.find(x=>(parseInt(x)=== parseInt(s.order_id)))){
         return <td key={s.id} style={{display:"none"}}> </td>
       }
-      else {
-        const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (1000 * 60 * 60 * 24));
-        if(!notified){
-          if(diffDays(new Date(s.date), new Date(time.date))<=1 ){
-            toast.info(<ReminderToast client={s.client_id} date={s.date} time={s.time}/>, {autoClose: 15000})
-            
-          };  
-        }
-             
-        let id=m[m.length-1];
+      else {let id=m[m.length-1];
 let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
 let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
 let sum=0;
@@ -83,6 +75,14 @@ for (const a of array)
 {sum=sum+a;}
        sum=sum.toFixed(2);
 m.pop();
+const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (1000 * 60 * 60 * 24));
+if( s.pickup===1 && notified===0  ){
+  setNotified(1)
+  if(diffDays(new Date(s.date), new Date(time.date))<=1 ){
+    toast.info(<ReminderToast client={s.client_id} date={s.date} time={s.time}/>, {autoClose: 5000})
+    
+  };  
+}
         return (
           <>
           <tr key={s.id}>
@@ -114,6 +114,7 @@ m.pop();
    </Tooltip> 
    </>
   }
+  {console.log((new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour))))}
   {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? 
   <>
   <Tooltip title={
@@ -151,13 +152,17 @@ m.pop();
     setShowContact(true);
     setClient(s.client_id)
     setContactType(0)
+    setPickupDate((prevState) => ({
+      ...prevState,
+      date: s.date,
+      hour: s.time
+    }));
    }}
   
   />
      </Tooltip>
   </>
   }
-  
  
             </td>
           </tr>
@@ -295,6 +300,7 @@ function ContactModal(props){
     email: "",
     message: ""
   });
+  const [shouldBeNotified, setShouldBeNotified]=useState(0)
   const [emailSent, setEmailSent]=useState(false)
   const handleSubmitEmail = (event) => {
    
@@ -304,6 +310,9 @@ function ContactModal(props){
                  
             
   }
+
+  
+  
   return(
  
   <> 
@@ -324,7 +333,8 @@ function ContactModal(props){
    <Row>
     <Form.Group>
     <h4 style={{textAlign:"center"}}>Write an email</h4> 
-    <span style={{textDecoration:'underline', textAlign:'right', 'cursor':'pointer'}} 
+    
+     <span style={{textDecoration:'underline', textAlign:'right', 'cursor':'pointer'}} 
     onClick={()=>{
       if(contactType===1){
         setMailerState((prevState) => ({
@@ -356,6 +366,7 @@ Solidarity Purchase Group
       
     }}
     > apply suggestion</span>
+   
     <Form.Control
     as="textarea" 
     size="lg"
@@ -373,6 +384,30 @@ Solidarity Purchase Group
     </Form.Control>
     </Form.Group> 
    </Row>
+ 
+<Row>
+   <span style={{textDecoration:'underline', textAlign:"left", 'cursor':'pointer'}} 
+    onClick={()=>{
+        setMailerState((prevState) => ({
+          ...prevState,
+          email: s.email,
+          message: `Dear ${s.name} ${s.surname},
+          
+Tomorrow at ${pickUp.hour} you can pick up your order from our store. We kindly ask you to come and take your order.
+
+Please inform us, if you wouldn't be available to arrive tomorrow(${pickUp.date} ${pickUp.hour})          
+
+Best Regards,
+Solidarity Purchase Group
+          `
+
+        }));
+  
+      
+    }}
+    > Notification message about pickup 24h before</span>
+   </Row> 
+   
 </Modal.Body>)}
 <Modal.Footer>
             <Button variant="danger" onClick={()=>{
