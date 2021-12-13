@@ -107,8 +107,8 @@ function DeliveryPage(props){
           <> userRole: {props.userRole}</>
           <> delivererId: {props.delivererId}</>
           <> mail: {props.mail}</> */}
-          <Container>
-            <Table>
+          <Container className="table-responsive">
+            <Table className='table'>
 
                   {/* to change state just use this api: API.updateState(1,'tomatoes','shipped') */}
 
