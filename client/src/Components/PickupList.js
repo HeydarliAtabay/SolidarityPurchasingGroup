@@ -55,7 +55,6 @@ function onlyUnique(value,index,self){
               alert("Preparation confirmed");
               for(const a of array2){
                  API.updateState(id,state).then(()=>{
-                  props.setRecharged(true); 
                   setTimeout(()=>{},3000)});  
                }}
               }/> }
