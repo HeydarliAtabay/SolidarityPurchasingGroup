@@ -19,6 +19,7 @@ function DeliverList(props){
  const [showContact, setShowContact]= useState(false);
  const [contactType, setContactType]=useState(0)
  const [notified,setNotified]=useState(0) 
+ const [shouldBeNotified, setShouldBeNotified]=useState(0)
  const [pickupDate,setPickupDate] = useState({
   date: '',
   hour: '',
@@ -49,7 +50,7 @@ useEffect(() => {
     return(<>
     <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
     <ClientModal show={showClient}handleClose={handleClose} client={client} clients={props.clients}/>
-    <ContactModal time={time} show={showContact} handleClose={handleClose} client={client} clients={props.clients} contactType={contactType} pickUp={pickupDate}/>
+    <ContactModal notify={shouldBeNotified} show={showContact} handleClose={handleClose} client={client} clients={props.clients} contactType={contactType} pickUp={pickupDate}/>
     <Table striped bordered hover variant="light" responsive="lg" size="lg">
   <thead>
     <tr>
@@ -75,18 +76,23 @@ for (const a of array)
 {sum=sum+a;}
        sum=sum.toFixed(2);
 m.pop();
-const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (1000 * 60 * 60 * 24));
-/*if( s.pickup===1 && notified===0  ){
+/* if((Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1)&& notified===0 ){
   setNotified(1)
-  if(diffDays(new Date(s.date), new Date(time.date))===1 ){
+  setTimeout(() => {
     toast.info(<ReminderToast client={s.client_id} date={s.date} time={s.time}/>, {autoClose: 5000})
-    
-  };  
-}*/
+  }, 2000);
+
+
+}
+*/
         return (
           <>
-          <tr key={s.id}>
-            <td> {s.order_id}</td>
+         {(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1)? 
+        <>
+        <Tooltip title={<h6>{` Pleasy notify the client about tomorrow's pick up `}</h6>}>
+ <tr key={s.id} style={{color:"blue", fontSize:20, lightingColor:'blue', cursor:'pointer'}}>
+         
+         <td> {s.order_id}</td>
             <td>{s.client_id} </td>
             <td> 
             <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setId(s.order_id);}}>show</Button>
@@ -114,7 +120,6 @@ const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (10
    </Tooltip> 
    </>
   }
-  {console.log((new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour))))}
   {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? 
   <>
   <Tooltip title={
@@ -129,6 +134,7 @@ const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (10
     setShowContact(true);
     setClient(s.client_id)
     setContactType(1)
+    setShouldBeNotified(0)
     setPickupDate((prevState) => ({
       ...prevState,
       date: s.date,
@@ -152,6 +158,15 @@ const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (10
     setShowContact(true);
     setClient(s.client_id)
     setContactType(0)
+    if(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1){
+      setShouldBeNotified(1)
+      console.log("It will changed to 1")
+    }
+    else{
+      setShouldBeNotified(0)
+    }
+
+    
     setPickupDate((prevState) => ({
       ...prevState,
       date: s.date,
@@ -165,7 +180,104 @@ const diffDays = (date, otherDate) => Math.ceil(Math.abs(date - otherDate) / (10
   }
  
             </td>
-          </tr>
+         </tr>
+         </Tooltip>
+
+        
+         </>
+         :
+         <tr key={s.id}>
+<td> {s.order_id}</td>
+            <td>{s.client_id} </td>
+            <td> 
+            <Button variant={"light"}style={{ 'fontSize': 20, 'borderStyle': 'hidden'}}onClick={() =>{ setShow(true); setId(s.order_id);}}>show</Button>
+            </td>
+            <td>{sum}{' '} €</td>
+            {s.pickup===0 ? <td>Delivery</td> : <td>Pick up</td>  }
+            {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? <td style={{color:"red"}}>{s.date}{' '}{s.time} </td> : <td>{s.date}{' '}{s.time} </td> }
+            <td>
+            {s.state===props.b && 
+             <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+           for(const a of array2){
+               API.updateDelivered(id, a).then(()=>{
+               props.setRecharged(true); setTimeout(()=>{},3000)});
+            }}
+        }></Image>
+   }  
+    {s.state==="pending" && 
+    <>
+   <Tooltip title={ <h6>{`Order status is pending due to insufficient balance `}</h6>  } >
+   <ExclamationDiamond color="red" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+    setShowClient(true);
+    setClient(s.client_id)
+    
+   }}/>
+   </Tooltip> 
+   </>
+  }
+  {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? 
+  <>
+  <Tooltip title={
+    <>    <Typography color="red">Missed Pick-up</Typography>
+            <h4>{`Client didn't take his/her order at ${s.date} ${s.time} `}</h4> 
+            <span>"Click to contact the client!"</span>
+  </>
+  }
+  >
+  <ChatRightText size={32} color="red"  style={{ 'cursor':'pointer'}} 
+  onClick={()=>{
+    setShowContact(true);
+    setClient(s.client_id)
+    setContactType(1)
+    setShouldBeNotified(0)
+    setPickupDate((prevState) => ({
+      ...prevState,
+      date: s.date,
+      hour: s.time
+    }));
+   }}
+  />
+     </Tooltip>
+  </>
+  :
+  <>
+  <Tooltip title={
+    <>
+            <Typography>Contact client</Typography>
+            <h6>{`Click to contact the client `}</h6> 
+  </>
+  }
+  >
+  <ChatRightText size={32}   style={{ 'cursor':'pointer'}} 
+  onClick={()=>{
+    setShowContact(true);
+    setClient(s.client_id)
+    setContactType(0)
+    if(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1){
+      setShouldBeNotified(1)
+      console.log("It will changed to 1")
+    }
+    else{
+      setShouldBeNotified(0)
+    }
+
+    
+    setPickupDate((prevState) => ({
+      ...prevState,
+      date: s.date,
+      hour: s.time
+    }));
+   }}
+  
+  />
+     </Tooltip>
+  </>
+ 
+  }
+ 
+            </td>
+         </tr>
+         }
           </>
         )
       }
@@ -295,12 +407,11 @@ function ClientModal(props){
   </Modal>
   </>);}
 function ContactModal(props){
-  const {contactType,pickUp}=props
+  const {contactType,pickUp, notify}=props
   const [mailerState, setMailerState] = useState({
     email: "",
     message: ""
   });
-  const [shouldBeNotified, setShouldBeNotified]=useState(0)
   const [emailSent, setEmailSent]=useState(false)
   const handleSubmitEmail = (event) => {
    
@@ -312,7 +423,7 @@ function ContactModal(props){
   }
 
   
-  
+  console.log(notify)
   return(
  
   <> 
@@ -384,7 +495,8 @@ Solidarity Purchase Group
     </Form.Control>
     </Form.Group> 
    </Row>
- 
+ {notify===1 &&
+ <>
 <Row>
    <span style={{textDecoration:'underline', textAlign:"left", 'cursor':'pointer'}} 
     onClick={()=>{
@@ -407,6 +519,9 @@ Solidarity Purchase Group
     }}
     > Notification message about pickup 24h before</span>
    </Row> 
+ </>
+ }
+
    
 </Modal.Body>)}
 <Modal.Footer>
