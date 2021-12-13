@@ -130,7 +130,7 @@ function updateWHPrepared(id, product_name) {
 } //
 
 //update order state
-function updateState(id, product_name, state) {
+function updateState(id, state) {
   return new Promise((resolve, reject) => {
     fetch(`/api/modifyState`, {
       method: 'PUT',
@@ -139,8 +139,7 @@ function updateState(id, product_name, state) {
       },
       body: JSON.stringify({
         id: id,
-        product_name: product_name,
-        state: state,
+        state: state
       }),
     })
       .then((response) => {
@@ -169,7 +168,8 @@ function updateState(id, product_name, state) {
 }
 
 //update farmer state of a product of an order
-function updateStateFarmer(id, product_name, state) {
+
+function updateStateFarmer(id, state) {
   return new Promise((resolve, reject) => {
     fetch(`/api/modifyStateFarmer`, {
       method: 'PUT',
@@ -178,7 +178,7 @@ function updateStateFarmer(id, product_name, state) {
       },
       body: JSON.stringify({
         id: id,
-        product_name: product_name,
+        
         state: state,
       }),
     })
@@ -206,6 +206,7 @@ function updateStateFarmer(id, product_name, state) {
       });
   });
 }
+
 
 //GET all confirmed products + readme OK
 async function getAllConfirmedProducts(year, week) {

@@ -18,6 +18,9 @@ function DeliveryPage(props){
     const [id, setId] = useState();
     const [displayFlag, setDisplayFlag] = useState(false);
 
+
+    const [updated, setUpdated] = useState(false);
+
     
 
     
@@ -55,10 +58,34 @@ function DeliveryPage(props){
         getAllDeliverableOrders();
         console.log(avaiableOrders);
         }
-      }, [flag,]);
+        
+      }, [flag]);
+
+      useEffect(() => {
+        const getAllDeliverableOrdersUpdated = async () => {
+          await API.getDeliverableOrders(delivererData.city)
+            .then((res) => {
+              setAvaiableOrders(res);
+              
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        };
+        if(flag && delivererData && updated){
+        
+        getAllDeliverableOrdersUpdated();
+        setUpdated(false);
+        
+        }
+        
+      }, [flag, updated]);
       
 
-      let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+      //let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+      let array2;
+
+      console.log(avaiableOrders);
 
 
     return (<>
@@ -74,7 +101,7 @@ function DeliveryPage(props){
             Delivery Personnel Area
           </span>
           </Container>
-          <h1 className="mt-3 text-center">{(avaiableOrders.length!=0)? <>There are {avaiableOrders.length} available order(s) in {delivererData.city}!</>: <>non ho letto correttamente</>}</h1> 
+          <h1 className="mt-3 text-center">{(avaiableOrders.length!=0)? <>There are {avaiableOrders.length} available order(s) in {delivererData.city}!</>: <>database problem</>}</h1> 
           <h1></h1>
           {/*
           <> userRole: {props.userRole}</>
@@ -112,21 +139,23 @@ function DeliveryPage(props){
             <td>
             {
              <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-           for(const a of array2){
-               API.updateState(id, a, "shipped").then(()=>{
+              
+              API.updateState(o.order_id,"shipped").then(()=>{
                 setTimeout(()=>{},3000)});
-            }}
+                setUpdated(true);
+              
+              }
         }></Image>
       }
         </td>
         <td>
-            {
+            { o.state=="shipped" ? 
              <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-           for(const a of array2){
-               API.updateState(id, a, "delivered").then(()=>{
+              array2 = avaiableOrders.filter(x=>x.order_id===o.id).map(x=>x.product_name);
+              API.updateState(o.order_id,"shipped").then(()=>{
                 setTimeout(()=>{},3000)});
-            }}
-        }></Image>
+            }
+        }></Image> : <></>
       }
         </td>
           </tr>

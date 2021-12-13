@@ -36,10 +36,11 @@ exports.getAllDeliverers = () => {
 
   exports.getAllDeliverableOrders = (city) => {
     return new Promise((resolve, reject) => {
-      const product_status = 'booked';
+      const product_status1 = 'booked';
+      const product_status2 = 'shipped';
       const sql =
-        'SELECT * FROM orders WHERE city =? AND pickup=? AND state=?';
-      db.all(sql, [city,0,product_status], (err, rows) => {
+        'SELECT  DISTINCT order_id, client_id, state, address, city, zipcode   FROM orders WHERE (city =? AND pickup=? AND state=?) OR (city =? AND pickup=? AND state=?) ';
+      db.all(sql, [city,0,product_status1, city,0, product_status2], (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -72,7 +73,7 @@ exports.changeState = async (id, product_name, state) => {
 
   return new Promise((resolve, reject) => {
     const sql =
-      'UPDATE or REPLACE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE order_id=? AND product_name=?';
+      'UPDATE or REPLACE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE order_id=?';
     db.run(
       sql,
       [
@@ -90,7 +91,7 @@ exports.changeState = async (id, product_name, state) => {
         test.Nation,
         test.date,
         test.time,
-        1,
+        test.pickup,
         id,
         product_name
       ],

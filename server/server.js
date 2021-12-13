@@ -218,7 +218,7 @@ app.get('/api/orders', async (req, res) => {
 // PUT update state
 app.put('/api/modifyState', async (req, res) => {
   ordersDao
-    .changeState(req.body.id, req.body.product_name, req.body.state)
+    .changeState(req.body.id, req.body.state)
     .then(() => {
       res.status(200).json();
       return res;

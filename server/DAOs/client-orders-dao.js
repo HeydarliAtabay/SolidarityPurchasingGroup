@@ -59,6 +59,37 @@ exports.getO = (order_id, product_name) => {
     });
   });
 };
+exports.getOrders = (order_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * from orders WHERE order_id=?';
+
+    db.all(sql, [order_id], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const o = rows.map((e) => ({
+        order_id: e.order_id,
+        client_id: e.client_id,
+        product_name: e.product_name,
+        product_id: e.product_id,
+        order_quantity: e.order_quantity,
+        state: e.state,
+        farmer_state: e.farmer_state,
+        OrderPrice: e.OrderPrice,
+        id: e.id,
+        address: e.address,
+        city: e.city,
+        zipcode: e.zipcode,
+        Nation: e.Nation,
+        date: e.date,
+        time: e.time,
+        pickup: e.pickup
+      }));
+      resolve(o);
+    });
+  });
+};
 //update delivered order
 exports.delivered = async (order_id, product_name) => {
   const test = await this.getO(order_id, product_name);
@@ -136,6 +167,7 @@ exports.prepared = async (order_id, product_name) => {
 };
 
 //update state order
+/*
 exports.changeState = async (id, product_name, state) => {
   const test = await this.getO(id, product_name);
 
@@ -159,7 +191,7 @@ exports.changeState = async (id, product_name, state) => {
         test.Nation,
         test.date,
         test.time,
-        1,
+        test.pickup,
         id,
         product_name,
       ],
@@ -173,6 +205,78 @@ exports.changeState = async (id, product_name, state) => {
     );
   });
 };
+
+*/
+/*
+exports.changeState = async (id, state) => {
+  const testVector = await this.getOrders(id);
+  console.log(testVector);
+  console.log('id:'+id);
+  console.log('state:'+state);
+
+  return new Promise((resolve, reject) => {
+    
+    for (const test of testVector ){
+      console.log(test);
+    const sql =
+      'UPDATE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE order_id=? AND product_name=?';
+    db.run(
+      sql,
+      [
+        test.order_id,
+        test.client_id,
+        test.product_name,
+        test.product_id,
+        test.order_quantity,
+        state,
+        test.OrderPrice,
+        test.id,
+        test.address,
+        test.city,
+        test.zipcode,
+        test.Nation,
+        test.date,
+        test.time,
+        test.pickup,
+        test.id,
+        test.product_name,
+      ],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(null);
+      }
+    );
+    }  
+  });
+};
+*/
+
+exports.changeState = async (id, state) => {
+  
+
+  return new Promise((resolve, reject) => {
+    const sql =
+      'UPDATE orders SET  state=? WHERE order_id=? ';
+    db.run(
+      sql,
+      [
+        state,
+        id
+      ],
+      function (err) {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(null);
+      }
+    );
+  });
+};
+
 
 // insert a new order
 exports.insert_order = async (client_id, totalorderprice) => {
