@@ -990,6 +990,23 @@ async function getDelivererByMail(id) {
     throw err; // An object with the error coming from the server
   }
 }
+
+
+//GET ->retrieve all deliverers
+async function getOrderAndClientData() {
+  const response = await fetch('/api/orders/pickup/clientorder');
+  if (response.ok) {
+    const responseBody = await response.json();
+    return responseBody;
+  } else {
+    try {
+      const err = await response.json();
+      throw err.message;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
 const API = {
   getAllClients,
   getAllOrders,
@@ -1038,6 +1055,7 @@ const API = {
   getDelivererByMail,
   getProviderProductsNotification,
   setNotificationasSent,
+  getOrderAndClientData,
 };
 
 export default API;

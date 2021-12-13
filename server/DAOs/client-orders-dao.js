@@ -374,3 +374,43 @@ exports.changeItem = async (item) => {
     );
   });
 };
+
+
+// get clients data and orders
+
+exports.getOrderAndClientForPickup = () => {
+  return new Promise((resolve, reject) => {
+    const sql =
+      'SELECT * ' +
+      'FROM clients, orders ' +
+      'WHERE clients.client_id=orders.client_id AND pickup=1 '+
+      'GROUP BY orders.order_id' 
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      const orderClients = rows.map((e) => ({
+        order_id: e.order_id,
+        client_id: e.client_id,
+        product_name: e.product_name,
+        product_id: e.product_id,
+        order_quantity: e.order_quantity,
+        state: e.state,
+        farmer_state: e.farmer_state,
+        OrderPrice: e.OrderPrice,
+        id: e.id,
+        address: e.address,
+        city: e.city,
+        zipcode: e.zipcode,
+        Nation: e.Nation,
+        date: e.date,
+        time: e.time,
+        pickup: e.pickup,
+        name: e.name,
+        surname: e.surname,
+        email: e.email,
+      }));
+      resolve(orderClients);
+    });
+  });
+}
