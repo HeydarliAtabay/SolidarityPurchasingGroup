@@ -1,6 +1,7 @@
 'use strict';
 
 const express = require('express');
+const cron = require('node-cron'); // node-cron is for scheduling requests
 const nodemailer = require('nodemailer'); // for sending an email
 const bcrypt = require('bcryptjs');
 const morgan = require('morgan'); // logging middleware
@@ -57,6 +58,7 @@ app.post('/api/sendEmail', function (req, res) {
     text: `${req.body.message}`,
   };
 
+
   transporter.sendMail(mailOptions, function (err, data) {
     if (err) {
       res.json({
@@ -70,6 +72,37 @@ app.post('/api/sendEmail', function (req, res) {
     }
   });
 });
+
+app.post('/api/sendReminderForPickup', function (req, res) {
+  
+  let mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: `${req.body.email}`,
+    subject: `Status of your Order`,
+    text: `${req.body.message}`,
+  };
+
+
+  transporter.sendMail(mailOptions, function (err, data) {
+    if (err) {
+      res.json({
+        status: 'fail',
+      });
+    } else {
+      console.log('== Message Sent ==');
+      res.json({
+        status: 'success',
+      });
+    }
+  });
+});
+
+
+let strA= '55 22 15 13 12 *'
+
+cron.schedule(strA, () => {
+  console.log('running a task every minute');
+});  
 
 /*** Set up Passport ***/
 passport.use(
@@ -335,6 +368,17 @@ app.get('/api/products/categories', async (req, res) => {
   try {
     const categories = await productsDAO.getAllCategories();
     res.json(categories);
+  } catch (err) {
+    console.log(err);
+    res.json(err);
+  }
+});
+
+//GET cleints and orders data for pickup
+app.get('/api/orders/pickup/clientorder', async (req, res) => {
+  try {
+    const orders = await ordersDao.getOrderAndClientForPickup();
+    res.json(orders);
   } catch (err) {
     console.log(err);
     res.json(err);
