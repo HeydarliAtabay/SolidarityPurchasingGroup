@@ -1,9 +1,7 @@
 import API from '../API';
-import { Container, Button, Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown } from 'react-bootstrap';
-import { NavLink } from 'react-bootstrap';
+import { Container, Button, Table, Image } from 'react-bootstrap';
 import { useState, useEffect } from "react";
-import { useHistory, Link } from "react-router-dom";
-import { BoxSeam } from 'react-bootstrap-icons';
+import { Link } from "react-router-dom";
 import ris from './reply-all-fill.svg';
 
 
@@ -13,10 +11,6 @@ function DeliveryPage(props) {
   const [delivererData, setDelivererData] = useState();
   const [avaiableOrders, setAvaiableOrders] = useState([]);
   const [flag, setFlag] = useState(false);
-  const [show, setShow] = useState(false);
-  const [showClient, setShowClient] = useState(false);
-  const [id, setId] = useState();
-  const [displayFlag, setDisplayFlag] = useState(false);
 
 
   const [updated, setUpdated] = useState(false);
@@ -85,8 +79,6 @@ function DeliveryPage(props) {
   }, [flag, updated]);
 
 
-  //let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
-  let array2;
 
   console.log(avaiableOrders);
 
@@ -155,7 +147,6 @@ function DeliveryPage(props) {
               <td>
                 {o.state == "shipped" ?
                   <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px', 'cursor': 'pointer' }} onClick={() => {
-                    array2 = avaiableOrders.filter(x => x.order_id === o.id).map(x => x.product_name);
                     API.updateState(o.order_id, "delivered").then(() => {
                       setTimeout(() => { }, 3000)
                     });
