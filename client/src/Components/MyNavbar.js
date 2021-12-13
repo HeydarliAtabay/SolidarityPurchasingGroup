@@ -158,6 +158,14 @@ const MyNavbar = function (props) {
                 </Link>
               </li>
               }
+
+              {/* DELIVERER NAVBAR */}
+              {(props.userRole === 'delivery-personnel') && <li className="nav-item">
+                <Link to="/login" className="nav-link text-light">
+                  Deliverer area
+                </Link>
+              </li>
+              }
             </ul>
 
             {/* HOMEPAGE NAVBAR */}
