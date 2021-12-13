@@ -795,25 +795,26 @@ describe('test rejectFarmerApplication', () => {
 /*                      OTHER API TESTING                           */
 /*______________________________________________________________________*/
 
-// const itemsOrder = {
-//   client_id: 1,
-//   order_items: {
-//     id: 1,
-//     name: 'Carrots',
-//     description: 'Some description 1',
-//     category: 'Vegetables',
-//     price: 1.23,
-//     unit: 'kg',
-//     quantity: 110,
-//     expiryDate: '2021-11-20',
-//     providerId: 1,
-//     providerName: 'Luca Bianchi',
-//     active: 1,
-//     qty: 1,
-//   },
-//   total: 1.23,
-// };
+const itemsOrder = {
+  client_id: 1,
+  order_items: {
+    id: 1,
+    name: 'Carrots',
+    description: 'Some description 1',
+    category: 'Vegetables',
+    price: 1.23,
+    unit: 'kg',
+    quantity: 110,
+    expiryDate: '2021-11-20',
+    providerId: 1,
+    providerName: 'Luca Bianchi',
+    active: 1,
+    qty: 1,
+  },
+  total: 1.23,
+};
 
+/* FAILS: missing mock? */
 // describe('test AllPaymentMethods', () => {
 //   test('no errors', () => {
 //     const response = API.getAllPaymentMethods().then((data) => {
@@ -823,6 +824,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test getAllClients', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce({ mockData: 'test' });
@@ -841,6 +843,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test getAllOrders', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce({ mockData: 'test' });
@@ -859,6 +862,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test updateDelivered(order_id)', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce({ mockData: 'test' });
@@ -877,6 +881,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test getAllPaymentMethods', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
@@ -894,6 +899,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test addClient', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
@@ -911,7 +917,6 @@ describe('test rejectFarmerApplication', () => {
 //       expect(data.err).toEqual('API error');
 //     });
 //   });
-
 //   test('response not ok, json null', () => {
 //     fetch.mockResponseOnce(null, { status: 500 });
 //     API.addClient('client').catch((data) => {
@@ -921,6 +926,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test addTransaction', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
@@ -938,7 +944,6 @@ describe('test rejectFarmerApplication', () => {
 //       expect(data.err).toEqual('API error');
 //     });
 //   });
-
 //   test('response not ok, json null', () => {
 //     fetch.mockResponseOnce(null, { status: 500 });
 //     API.addTransaction('transaction').catch((data) => {
@@ -948,13 +953,14 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
-// const user = {
-//   id: 7,
-//   name: 'Clare',
-//   email: 'clare.mint@yahoo.it',
-//   role: 'client',
-// };
+const user = {
+  id: 7,
+  name: 'Clare',
+  email: 'clare.mint@yahoo.it',
+  role: 'client',
+};
 
+/* FAILS: unhandled rejection*/
 // describe('test getUserInfo', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce(JSON.stringify(user));
@@ -976,6 +982,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test login', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce(JSON.stringify(user));
@@ -1013,6 +1020,7 @@ describe('test rejectFarmerApplication', () => {
 //   });
 // });
 
+/* FAILS: unhandled rejection*/
 // describe('test delete order item', () => {
 //   test('no errors', () => {
 //     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
@@ -1021,7 +1029,6 @@ describe('test rejectFarmerApplication', () => {
 //       expect(data).toBeNull();
 //     });
 //   });
-
 //   test('fetch rejected', () => {
 //     fetch.mockRejectOnce('error');
 //     API.deleteOrderItem(1).catch((data) => {

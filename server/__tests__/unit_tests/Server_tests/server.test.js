@@ -16,7 +16,6 @@ describe("Test the product/:product_id path", () => {
     test("It should response the GET method", async () => {
         const response = await request(server).get("/api/product/1")
         expect(response.statusCode).toBe(200);
-
     });
 });
 
@@ -41,76 +40,70 @@ describe("Test the provider/:product_id path", () => {
     });
 });
 
-// describe("Test the clients path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/clients").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
-// describe("Test the orders path", () => {
-//     test("It should response the GET method", () => {
-//         request(server).get("/api/orders").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test the clients path", () => {
+    test("It should response the GET method", () => {
+        request(server).get("/api/clients").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
+describe("Test the orders path", () => {
+    test("It should response the GET method", () => {
+        request(server).get("/api/orders").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
+
+/*FAILS most probably because of the 1*/
 // describe("Test the update orders", () => {
 //     test("It should response the PUT method", () => {
 //         request(server).put("/api/orders/1/carrots").then((response) => {
 //             expect(response.statusCode).toBe(200);
-//             done();
 //         });
 //     });
 // });
 
-// describe("Test to get all payment methods", () => {
-//     test("It should response the PUT method", () => {
-//         request(server).get("/api/methods").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test to get all payment methods", () => {
+    test("It should response the PUT method", () => {
+        request(server).get("/api/methods").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
-// describe("Test increasing the balance of client", () => {
-//     test("It should response the PUT method", () => {
-//         request(server).put("/api/clients/update/balance/1/15").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test increasing the balance of client", () => {
+    test("It should response the PUT method", () => {
+        request(server).put("/api/clients/update/balance/1/15").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
-// describe('Test the provider /api/modifyquantity', () => {
-//     test('It should response the PUT method', () => {
-//         request(server).put('/api/modifyquantity').then(response => {
-//         expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe('Test the provider /api/modifyquantity', () => {
+    test('It should response the PUT method', () => {
+        request(server).put('/api/modifyquantity').then(response => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
-// describe('Test the provider /api/neworder path', () => {
-//     test('It should response the POST method', () => {
-//         request(server).post('/api/neworder').then(response => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe('Test the provider /api/neworder path', () => {
+    test('It should response the POST method', () => {
+        request(server).post('/api/neworder').then(response => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
 
-// describe('Test the provider /api/sendEmail', () => {
-//     test('It should response the POST method', () => {
-//         request(server).post('/api/sendEmail').then(response => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe('Test the provider /api/sendEmail', () => {
+    test('It should response the POST method', () => {
+        request(server).post('/api/sendEmail').then(response => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
 const productIDS = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
@@ -359,46 +352,41 @@ describe('Test the manager /manager/applications/reject/:application_id', () => 
     });
 });
 
-// describe("Test the delete path", () => {
-//     test("It should response the delete method", () => {
-//         request(server).delete("/api/orders/100000").then((response) => {
-//             expect(response.statusCode).toBe(204);
-//             done();
-//         });
-//     });
-// });
+describe("Test the delete path", () => {
+    test("It should response the delete method", () => {
+        request(server).delete("/api/orders/100000").then((response) => {
+            expect(response.statusCode).toBe(204);
+        });
+    });
+});
 
-// // describe("Test the add of order item", () => {
-// //     test("It should response the post method", () => {
-// //         request(server).post("/api/orders").then((response) => {
-// //             expect(response.statusCode).toBe(200);
-// //             done();
-// //         });
-// //     });
-// // });
+describe("Test the add of order item", () => {
+    test("It should response the post method", () => {
+        request(server).post("/api/orders").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
-// describe("Test the login path", () => {
-//     test("It should response the get method", () => {
-//         request(server).get("/api/sessions/current").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
-// describe("Test the login path", () => {
-//     test("It should response the delete method", () => {
-//         request(server).delete("/api/sessions/current").then((response) => {
-//             expect(response.statusCode).toBe(200);
-//             done();
-//         });
-//     });
-// });
+describe("Test the login path", () => {
+    test("It should response the get method", () => {
+        request(server).get("/api/sessions/current").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
+describe("Test the login path", () => {
+    test("It should response the delete method", () => {
+        request(server).delete("/api/sessions/current").then((response) => {
+            expect(response.statusCode).toBe(200);
+        });
+    });
+});
 
-// describe('Test the provider /api/orderinsert', () => {
-//     test('It should response the POST method', () => {
-//         request(server).post('/api/orderinsert').send(JSON.stringify({})).then(response => {
-//             expect(response.statusCode).toBe(503);
-//             done();
-//         });
-//     });
-// });
+describe('Test the provider /api/orderinsert', () => {
+    test('It should response the POST method', () => {
+        request(server).post('/api/orderinsert').send(JSON.stringify({})).then(response => {
+            expect(response.statusCode).toBe(503);
+        });
+    });
+});
