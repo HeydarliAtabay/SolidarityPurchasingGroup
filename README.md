@@ -88,6 +88,13 @@ open your favourite browser and access the project at the url: http://localhost:
 | newfarmer@spg.it    |   1234   |
 | farmer3@spg.it      |   1234   |
 
+### Delivery person
+
+| Email address      |  Password  |
+| :----------------- | :--------: |
+| deliverer1@shop.it | deliverer1 |
+| deliverer2@shop.it | deliverer2 |
+
 ## API Server
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 * login api:

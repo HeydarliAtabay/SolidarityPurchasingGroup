@@ -54,14 +54,13 @@ function onlyUnique(value,index,self){
       <BoxSeam color="green" size={32} style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               alert("Preparation confirmed");
               for(const a of array2){
-             API.updateState(id, a,state).then(()=>{
-                
-         props.setRecharged(true); setTimeout(()=>{},3000)});
-                    
+                 API.updateState(id,state).then(()=>{
+                  props.setRecharged(true); 
+                  setTimeout(()=>{},3000)});  
                }}
-          }/>
+              }/> }
   
-     }
+     
     
      
      

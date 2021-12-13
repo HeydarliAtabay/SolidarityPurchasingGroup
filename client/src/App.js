@@ -422,6 +422,7 @@ function App() {
                   providers={providers}
                   methods={methods}
                   logout={doLogOut}
+                  setRecharged={updateRech}
                 />
               ) : (
                 <Redirect to="/login" />

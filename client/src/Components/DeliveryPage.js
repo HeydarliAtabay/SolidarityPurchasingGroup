@@ -101,14 +101,14 @@ function DeliveryPage(props){
             Delivery Personnel Area
           </span>
           </Container>
-          <h1 className="mt-3 text-center">{(avaiableOrders.length!=0)? <>There are {avaiableOrders.length} available order(s) in {delivererData.city}!</>: <>database problem</>}</h1> 
+          <h1 className="mt-3 text-center">{(avaiableOrders.length!=0)? <>There are {avaiableOrders.length} available order(s) in {delivererData.city}!</>: <>There is no order in {delivererData.city}</>}</h1> 
           <h1></h1>
           {/*
           <> userRole: {props.userRole}</>
           <> delivererId: {props.delivererId}</>
           <> mail: {props.mail}</> */}
-          <Container>
-            <Table>
+          <Container className="table-responsive text-center">
+            <Table striped bordered hover variant="light" className='table'  responsive="lg" size="lg">
 
                   {/* to change state just use this api: API.updateState(1,'tomatoes','shipped') */}
 
@@ -135,7 +135,7 @@ function DeliveryPage(props){
             <td>{o.address}</td>  
             <td>{o.zipcode}</td>  
             <td>{o.city}</td> 
-            <td>{o.state}</td>   
+            <td style={{ color: '#4682B4' }}>{o.state}</td>   
             <td>
             {
              <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
@@ -152,8 +152,9 @@ function DeliveryPage(props){
             { o.state=="shipped" ? 
              <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               array2 = avaiableOrders.filter(x=>x.order_id===o.id).map(x=>x.product_name);
-              API.updateState(o.order_id,"shipped").then(()=>{
+              API.updateState(o.order_id,"delivered").then(()=>{
                 setTimeout(()=>{},3000)});
+                setUpdated(true);
             }
         }></Image> : <></>
       }
