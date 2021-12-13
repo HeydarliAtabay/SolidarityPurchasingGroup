@@ -775,3 +775,72 @@ POST `/api/orders/farmershipped`
     * Response: `201 OK (success) or 503 (request failed)`
     * Response body:
         `true if application was successfully rejected, false otherwise`
+
+
+## API for deliverer page
+
+*GET `/api/deliverers `
+    * get all the data of all deliverers
+    * Request parameter:
+         `     
+    * Response: `201 OK (success) or 500 
+    * Response body:
+     array of {
+     `'id: e.id,
+       username: e.username,
+       city: e.city`} or
+
+        `{
+             "code":500
+             "error": "Unavailable service"
+         }`
+
+*GET `/api/deliverers/{$id}`
+    * get deliverer by his mail
+    * Request parameter:
+         `     
+    * Response: `201 OK (success) or 500 
+    * Response body:
+      '{
+     id: row.id,
+              username: row.username,
+              name: row.name,
+              city: row.city}'
+
+        `{
+             "code":500
+             "error": "Unavailable service"
+         }`
+
+
+*GET `/api/deliverableOrders/${city}`
+    * get all the deliverable orders
+    * Request parameter:
+              
+    * Response: `201 OK (success) or 500 
+    * Response body:
+    array of:
+      '{
+            order_id: e.order_id,
+            client_id: e.client_id,
+            product_name: e.product_name,
+            product_id: e.product_id,
+            order_quantity: e.order_quantity,
+            state: e.state,
+            farmer_state: e.farmer_state,
+            OrderPrice: e.OrderPrice,
+            id: e.id,
+            address: e.address,
+            city: e.city,
+            zipcode: e.zipcode,
+            Nation: e.Nation,
+            date: e.date,
+            time: e.time,
+            pickup: e.pickup}'
+
+        `{
+             "code":500
+             "error": "Unavailable service"
+         }`
+
+
