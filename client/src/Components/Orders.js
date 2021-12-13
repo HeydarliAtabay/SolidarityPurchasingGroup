@@ -31,11 +31,7 @@ const handleClose = (x) => setShow(x);
 
 const handleClose2 = (x) => setShow2(x);
     return(<>
-<div>
-  
-      <Link to="/booking">
-                <Button variant="outline-primary" style={{ 'cursor':'pointer'  }}>Make a new order</Button>
-              </Link></div>
+
       <span className="d-block text-center mt-2 mb-1 display-1">
                 My Orders</span>
           
