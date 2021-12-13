@@ -72,7 +72,7 @@ m.pop();
             </td>
             <td>{sum}{' '} €</td>
             {s.pickup===0 ? <td>Delivery</td> : <td>Pick up</td>  }
-            {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? <td style={{color:"red"}}>{s.date}{' '}{s.time} </td> : <td>{s.date}{' '}{s.time} </td> }
+            {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)))  ? <td style={{color:"red"}}>{s.date}{' '}{s.time} </td> : <td>{s.date}{' '}{s.time} </td> }
             <td>
             {s.state===props.b && 
              <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
@@ -94,7 +94,7 @@ m.pop();
    </Tooltip> 
    </>
   }
-  {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? 
+  {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)))  ? 
   <>
   <Tooltip title={
     <>
@@ -310,6 +310,43 @@ function ContactModal(props){
    <Row> 
    <Col sm={2}> <span style={{fontStyle:'oblique', fontSize:'22px'}}>Email:</span></Col>
      <Col sm={8}><h4>{ `${s.email}`}</h4></Col>
+    <Col sm={2}>
+      
+    {!emailSent && 
+    <>
+    <Envelope color="green" size={24} style={{'cursor':'pointer'}}
+    onClick={()=>{
+      setMailerState((prevState) => ({
+        ...prevState,
+        email: s.email,
+        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
+
+        
+      }));
+      handleSubmitEmail();
+    }}
+    
+    />
+    </>
+    } 
+     {emailSent && 
+    <>
+    <Envelope color="gray" size={24} style={{'cursor':'pointer'}}
+    onClick={()=>{
+      setMailerState((prevState) => ({
+        ...prevState,
+        email: s.email,
+        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
+
+        
+      }));
+      handleSubmitEmail();
+    }}
+    
+    />
+    </>
+    }
+     </Col>
    </Row>
    <Row>
     <Form.Group>
@@ -320,14 +357,8 @@ function ContactModal(props){
         setMailerState((prevState) => ({
           ...prevState,
           email: s.email,
-          message: `Dear ${s.name} ${s.surname}, 
-
-You didn't pick up your order at ${pickUp.date} ${pickUp.hour}. Please contact us if there are any problems 
-
-Best Regards,
-Solidarity Purchase Group
-
-`
+          message: ` Dear ${s.name} ${s.surname}, You didn't pick up your order at ${pickUp.date} ${pickUp.hour}. Please contact us if there are any problems `
+  
           
         }));
       }
@@ -335,11 +366,7 @@ Solidarity Purchase Group
         setMailerState((prevState) => ({
           ...prevState,
           email: s.email,
-          message: `Dear ${s.name} ${s.surname},
-          
-Best Regards,
-Solidarity Purchase Group
-          `
+          message: ` Dear ${s.name} ${s.surname},`
   
           
         }));
@@ -350,7 +377,7 @@ Solidarity Purchase Group
     <Form.Control
     as="textarea" 
     size="lg"
-    rows={5}
+    rows={4}
     value={mailerState.message}
     onChange={(ev) => {
       setMailerState((prevState) => ({
@@ -368,15 +395,6 @@ Solidarity Purchase Group
    </Row>
 </Modal.Body>)}
 <Modal.Footer>
-            <Button variant="danger" onClick={()=>{
-               setMailerState((prevState) => ({
-                ...prevState,
-                email: "",
-                message: "",
-                
-              }));
-              props.handleClose();
-            }} >Cancel</Button>
             <Button variant="primary" onClick={()=>{
                handleSubmitEmail();
             }}>
