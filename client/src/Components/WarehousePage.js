@@ -1,15 +1,11 @@
 import API from '../API';
 import PickupList from './PickupList';
-import { Container, Button,Table, Row, Col, ListGroup, ListGroupItem, Image, Modal, Form, Dropdown, DropdownButton} from 'react-bootstrap';
+import { Container, Button, Table, Row, Col, ListGroup, ListGroupItem, Modal, Dropdown, DropdownButton} from 'react-bootstrap';
 import { Link} from 'react-router-dom';
 import { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
 import {BoxSeam} from 'react-bootstrap-icons';
 
 function WarehousePage(props) {
-
-
-
 
     const [show, setShow] = useState(false);
     let b = 1;
@@ -19,12 +15,9 @@ function WarehousePage(props) {
     <div>
     
     <Button variant="light"style={{'fontSize': 30,'borderStyle':'hidden','backgroundColor':"#DCDCDC",'position':'absolute' , 'right':'30px'}}onClick={props.logout}><Link to="/">LOGOUT</Link></Button></div>
-  
 
         <Container fluid>
-       <span className="d-block text-center mt-5 mb-2 display-2">
-            Warehouse Personnel Area
-          </span>
+       <span className="d-block text-center mt-5 mb-2 display-2">Warehouse Personnel Area</span>
           { (props.userRole === "warehouse-employee") ? 
           <>
           <Row>
@@ -35,8 +28,7 @@ function WarehousePage(props) {
             </ListGroupItem></ListGroup>
             </Col>
             <Col xs={9} md={9}>
-          {show ?   
-                  <PickupList setRecharged={props.setRecharged} orders={props.orders} userRole={props.userRole} setShow={setShow} b={b} />: <></>}
+          {show ? <PickupList setRecharged={props.setRecharged} orders={props.orders} userRole={props.userRole} setShow={setShow} b={b} />: <></>}
         </Col></Row>
              
           <br/>
@@ -52,7 +44,6 @@ function WarehousePage(props) {
     }
 
 
-
     function WarehouseManagerDashboard( props){
       const [show, setShow] = useState(false);
       const [showSearchButton, setShowSearchButton] = useState(false);
@@ -65,10 +56,8 @@ function WarehousePage(props) {
       const [idM, setIdM] = useState([]);
       const [idPM,setIdPM] = useState([]);
       const [products,setProducts] = useState([]);
-      const [show2, setShow2] = useState(false);
 
       let b = 1;
-
       
       useEffect(() => {
         const getAllProducts = async () => {
@@ -98,10 +87,8 @@ function WarehousePage(props) {
       }, [update]);
 
      
-      
-
      
-      const  handleClick = async(ev) => {
+      /* const  handleClick = async(ev) => {
         setShow(true);
         
         await API.getProviderDeliveredOrders(ev.target.id)
@@ -116,16 +103,13 @@ function WarehousePage(props) {
             });
             
           
-        };
+        }; */
 
 
         useEffect(() => {
           const pr = () => {
             API.getProviderDeliveredOrders(selectedProvider.id).then((res) => {
               setProviderOrders(res);
-
-              //setShowSearchButton(false);
-              //setShow(true);
             });
           };
           if (recharged){ 
@@ -174,7 +158,7 @@ function WarehousePage(props) {
              
           <br/>
           </>
-        <Row><h2>Providers Avaiable on the Platform</h2></Row>
+        <Row><h2>Providers Available on the Platform</h2></Row>
         <Row>
         {providers.map((p) => { return(<Col>{selectedProvider.id === p.id ? <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "	#708090" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button> : 
                                               <Button  variant="secondary" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#708090" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button>}</Col>)})}
@@ -194,8 +178,6 @@ function WarehousePage(props) {
       
       </Row> */}
       
-      
-     
 
       <Finestra show={showM}handleClose={handleClose}id={idM}orders={props.orders}/>
 
@@ -236,8 +218,10 @@ function WarehousePage(props) {
         let farmerState = 'received';
 
         return(<ListGroup variant="flush">
+          <Container className="table-responsive text-center">
+                  <Table responsive="lg" size="lg">
         <ListGroupItem key={"hi*"} style={{'backgroundColor':"#A9A9A9",'fontSize': 20}}>
-            <Row>
+          <Row>
         <Col xs={2} md={2}>ORDER ID</Col>
         <Col xs={2} md={2}>CLIENT ID</Col>
         <Col xs={2} md={2}>CLIENT NAME</Col>
@@ -268,8 +252,8 @@ show</Button></Col>
           </ListGroupItem>
 );}))}
 
-
-        
+</Table>
+        </Container>
         </ListGroup>)
       }
 
