@@ -21,4 +21,4 @@ const renderResult = render(<Fbookings orders={testOrders} time={time}/>);
     expect(renderResult.getByText("2021-12-10 10:50")).toBeInTheDocument();
     
 
-});/*
+});*/
