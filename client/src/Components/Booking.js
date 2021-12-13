@@ -94,11 +94,13 @@ function Booking(props) {
   let amount = wallet[0];
   console.log(amount);
 
-  let itemsAmount = props.orders
-    .filter((x) => x.client_id === parseInt(props.clientid))
-    .map((x) => x.OrderPrice);
-  for (const b of itemsAmount) {
-    somma = somma + b;
+  if (props.orders) {
+    let itemsAmount = props.orders
+      .filter((x) => x.client_id === parseInt(props.clientid))
+      .map((x) => x.OrderPrice);
+    for (const b of itemsAmount) {
+      somma = somma + b;
+    }
   }
 
   console.log(somma);
@@ -205,14 +207,14 @@ function Booking(props) {
 
     console.log(
       deliveryFlag +
-        ' ' +
-        time +
-        ' ' +
-        date +
-        ' ' +
-        pickupDay +
-        ' ' +
-        pickupTime
+      ' ' +
+      time +
+      ' ' +
+      date +
+      ' ' +
+      pickupDay +
+      ' ' +
+      pickupTime
     );
 
     let p,
@@ -270,7 +272,7 @@ function Booking(props) {
         console.log(order);
         API.addOrder(order).then(() => {
           props.setRecharged(true);
-          setTimeout(() => {}, 3000);
+          setTimeout(() => { }, 3000);
         });
         indice = indice + 1;
       }
@@ -320,7 +322,7 @@ function Booking(props) {
           console.log(order);
           API.addOrder(order).then(() => {
             props.setRecharged(true);
-            setTimeout(() => {}, 3000);
+            setTimeout(() => { }, 3000);
           });
           indice = indice + 1;
         }
@@ -374,7 +376,7 @@ function Booking(props) {
         if (total <= amount) {
           API.updateItem(order).then(() => {
             props.setRecharged(true);
-            setTimeout(() => {}, 3000);
+            setTimeout(() => { }, 3000);
           });
         } else {
           ins = true;
