@@ -108,6 +108,10 @@ code {
   height: 225px;
 }
 
+.product-img-custom-dimensions{
+  height: 225px;
+}
+
 .product-image-size-custom{
   width: 90%;
 }

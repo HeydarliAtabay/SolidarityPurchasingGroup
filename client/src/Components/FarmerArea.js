@@ -119,8 +119,8 @@ function FarmerArea(props) {
                   <div
                     className="col-md-4 p-3 text-center"
                     style={{
-                      background:
-                        'linear-gradient(to right, #4A5B8C 80%, #FFFFFF)',
+                      backgroundColor:
+                        '#4A5B8C',
                     }}
                   >
                     {declareIcon}
@@ -170,8 +170,8 @@ function FarmerArea(props) {
                   <div
                     className="col-md-4 p-3 text-center"
                     style={{
-                      background:
-                        'linear-gradient(to right, #8697A6 80%, #FFFFFF)',
+                      backgroundColor:
+                        '#8697A6',
                     }}
                   >
                     {availabilityIcon}
@@ -225,8 +225,8 @@ function FarmerArea(props) {
                   <div
                     className="col-md-4 p-3 text-center"
                     style={{
-                      background:
-                        'linear-gradient(to right, #BFCDD9 80%, #FFFFFF)',
+                      backgroundColor:
+                        '#BFCDD9',
                     }}
                   >
                     {perparationIcon}
@@ -264,8 +264,8 @@ function FarmerArea(props) {
                   <div
                     className="col-md-4 p-3 text-center"
                     style={{
-                      background:
-                        'linear-gradient(to right, #BF8756 80%, #FFFFFF)',
+                      backgroundColor:
+                        '#BF8756',
                     }}
                   >
                     {walletIcon}

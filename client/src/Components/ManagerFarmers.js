@@ -317,6 +317,7 @@ function ApplicationInspector(props) {
           </div>
           <div className="col-md-6">
             <PhoneInput
+              containerClass="mb-3"
               inputClass="w-100 rounded"
               inputStyle={{ height: "99%" }}
               placeholder="Phone number"
@@ -329,21 +330,21 @@ function ApplicationInspector(props) {
         <h4 className="text-start mb-3">Farmer address</h4>
         <Row className="mb-3">
           <div className="col-md-4">
-            <Form.Select size="lg" value={countryCode} disabled={true}>
+            <Form.Select className="mb-3" size="lg" value={countryCode} disabled={true}>
               {Country.getAllCountries().map((c) => (
                 <option key={c.isoCode} value={c.isoCode}>{c.name}</option>
               ))}
             </Form.Select>
           </div>
           <div className="col-md-4">
-            <Form.Select size="lg" value={regionCode} disabled={true}>
+            <Form.Select className="mb-3" size="lg" value={regionCode} disabled={true}>
               {State.getStatesOfCountry(countryCode).map((r) => (
                 <option key={r.isoCode} value={r.isoCode}>{r.name}</option>
               ))}
             </Form.Select>
           </div>
           <div className="col-md-4">
-            <Form.Select size="lg" value={props.application.city} disabled={true}>
+            <Form.Select className="mb-3" size="lg" value={props.application.city} disabled={true}>
               <option value="-1">City</option>
               {City.getCitiesOfState(countryCode, regionCode).map((c) => (
                 <option key={c.name} value={c.name}>{c.name}</option>

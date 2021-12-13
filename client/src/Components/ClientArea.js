@@ -46,7 +46,7 @@ function ClientArea(props) {
       <div className="col-lg-9 ">
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{background: "linear-gradient(to right, #8C7161 80%, #FFFFFF)"}}>
+            <div className="col-md-4 p-3 text-center" style={{backgroundColor: "#8C7161"}}>
               {cartIcon}
             </div>
             <div className="col-md-8">
@@ -73,7 +73,7 @@ function ClientArea(props) {
         </div>
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{background: "linear-gradient(to right, #A65729 80%, #FFFFFF)"}}>
+            <div className="col-md-4 p-3 text-center" style={{backgroundColor: "#A65729"}}>
               {walletIcon}
             </div>
             <div className="col-md-8">
@@ -96,7 +96,7 @@ function ClientArea(props) {
         </div>
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{background: "linear-gradient(to right, #402A22 80%, #FFFFFF)", color: 'white'}}>
+            <div className="col-md-4 p-3 text-center" style={{backgroundColor: "#402A22", color: 'white'}}>
               {cartIcon}
             </div>
             <div className="col-md-8">

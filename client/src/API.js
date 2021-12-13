@@ -713,7 +713,6 @@ function confirmExpectedProducts(product, year, week) {
 }
 //api login
 async function logIn(credentials) {
-  console.log(credentials);
   let response = await fetch('/api/sessions', {
     method: 'POST',
     headers: {

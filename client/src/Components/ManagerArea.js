@@ -31,7 +31,7 @@ function ManagerArea(props) {
       <div className="col-lg-9 ">
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #A6896F 80%, #FFFFFF)" }}>
+            <div className="col-md-4 p-3 text-center" style={{ backgroundColor: "#A6896F" }}>
               {pendingApps}
             </div>
             <div className="col-md-8">
@@ -53,7 +53,7 @@ function ManagerArea(props) {
 
         <div className="card m-3 d-block shadow">
           <div className="row no-gutters">
-            <div className="col-md-4 p-3 text-center" style={{ background: "linear-gradient(to right, #D9C9BA 80%, #FFFFFF)" }}>
+            <div className="col-md-4 p-3 text-center" style={{ backgroundColor: "#D9C9BA" }}>
               {acceptedApps}
             </div>
             <div className="col-md-8">

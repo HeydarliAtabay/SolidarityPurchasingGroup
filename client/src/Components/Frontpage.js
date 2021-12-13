@@ -50,7 +50,7 @@ function Frontpage(props) {
                             <div className="d-inline my-auto">Want to work with us?</div>
                             <div className="d-inline">
                                 <button className="mx-2 btn btn-outline-secondary" onClick={(event) => {
-                                    history.push("/registration")
+                                    history.push("/farmer-apply")
                                 }}>Apply here</button>
                             </div>
                         </li>
@@ -189,14 +189,14 @@ function Frontpage(props) {
                             </p>
                             <br />
                             <div className="d-block w-100">
-                                <Button onClick={() => {
+                                <Button variant="light" onClick={() => {
                                     history.push("/booking")
                                 }}>Explore our products</Button>
                             </div>
                         </div>
                         <div className="col-md-4 text-center">
                             <img
-                                className="w-100 my-auto mx-auto"
+                                className="product-img-custom-dimensions my-auto mx-auto"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-products-image.png"}
                                 alt="Product"
                             />
@@ -240,7 +240,7 @@ function Frontpage(props) {
                         </div>
                         <div className="col-lg-4 text-center">
                             <img
-                                className="w-100 my-auto mx-auto d-block"
+                                className="product-img-custom-dimensions my-auto mx-auto d-block"
                                 src={process.env.PUBLIC_URL + "Frontpage/browse-products-image.png"}
                                 alt="Product"
                             />
@@ -264,7 +264,7 @@ function Frontpage(props) {
                                 We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
                             </p>
                             <div className="d-block w-100 mt-5 text-center align-bottom-custom">
-                                <Button variant="light me-3">Apply as farmer</Button>
+                                <Button variant="secondary me-3">Apply as farmer</Button>
                                 <Button variant="secondary">Apply as deliverer</Button>
                             </div>
                         </div>

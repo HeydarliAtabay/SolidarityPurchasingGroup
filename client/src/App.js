@@ -228,7 +228,6 @@ function App() {
       setUserMail(user.username);
       setUserName(user.name);
 
-      console.log(user);
       if (user.role === 'client') {
         return <Redirect to="/client" />;
       } else if (user.role === 'employee') {
