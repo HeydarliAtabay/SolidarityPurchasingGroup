@@ -4,6 +4,7 @@ import { Link, useHistory } from "react-router-dom"
 function Frontpage(props) {
     const history = useHistory()
     return (
+
         <Row className="bg-color-frontpage">
             <div className="col-lg-4">
                 <br />
@@ -141,7 +142,7 @@ function Frontpage(props) {
                     <h1>Solidarity Purchasing Group</h1>
                     <br></br>
                 </div>
-                <div className="d-block w-75 mx-auto shadow-lg">
+                <div className="d-block mx-5 shadow-lg">
                     <Carousel variant="dark">
                         <Carousel.Item interval={10000}>
                             <img
@@ -264,8 +265,8 @@ function Frontpage(props) {
                                 We check and handpick each product one by one to make sure that on your table you will put only the freshest products.
                             </p>
                             <div className="d-block w-100 mt-5 text-center align-bottom-custom">
-                                <Button variant="secondary me-3">Apply as farmer</Button>
-                                <Button variant="secondary">Apply as deliverer</Button>
+                                <Button variant="secondary mb-3 me-3">Apply as farmer</Button>
+                                <Button variant="secondary mb-3">Apply as deliverer</Button>
                             </div>
                         </div>
                     </div>

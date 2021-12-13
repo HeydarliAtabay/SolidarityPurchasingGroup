@@ -272,9 +272,8 @@ function App() {
         userMail={userMail}
         setTime={setTime}
       />
-      <Container className="p-2">
-        {' '}
-        {message !== '' ? (
+      {message !== '' &&
+        (<Container className="p-2 m-2">
           <Row className="justify-content-md-center">
             <Alert
               variant="danger"
@@ -287,10 +286,9 @@ function App() {
               {message}
             </Alert>
           </Row>
-        ) : (
-          <></>
-        )}
-      </Container>
+        </Container>
+        )
+      }
 
       <div className="container-fluid w-100">
         <Switch>
