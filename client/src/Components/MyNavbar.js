@@ -40,7 +40,7 @@ const MyNavbar = function (props) {
   }
 
   return (
-    <Navbar variant="light" expand="lg" className="menu-bar p-1 w-100 shadow" >
+    <Navbar variant="dark" expand="lg" className="menu-bar p-1 w-100 shadow" >
       <Container className="text-light w-100-custom">
         {/*toggleNavbarBrand() === "SPG_logo" &&*/
           <Navbar.Brand className="p-0 pe-4 my-auto border-end text-light fs-1" href="#home" onClick={() => (history.push("/"))}>
@@ -53,7 +53,7 @@ const MyNavbar = function (props) {
             <div className="d-inline my-auto">{backIcon}</div>
             <div className="d-inline mt-auto" onClick={() => (history.goBack())}> Back</div>
           </Navbar.Brand>*/}
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Toggle aria-controls="basic-navbar-nav" style={{color: '#FFFFFF'}} />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto my-auto">
             <ul className="navbar-nav me-auto" style={{ fontSize: 22 }}>

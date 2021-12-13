@@ -56,7 +56,7 @@ function ModalWalletTopUp(props) {
         <Modal.Header closeButton>
           <Modal.Title>Wallet Top-up</Modal.Title>
         </Modal.Header>
-        <Form onSubmit={handleSubmit}>
+        <Form onSubmit={(event)=>(handleSubmit(event))}>
           <Modal.Body>
             <Form.Group as={Col} controlId="formUser">
 

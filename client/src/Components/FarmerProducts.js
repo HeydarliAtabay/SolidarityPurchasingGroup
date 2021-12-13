@@ -1326,7 +1326,7 @@ function ModifyProductModalBody(props) {
         <small className="d-block text-danger">{formImageError}</small>
       </div>
       <div className="d-block text-end">
-        <button className="btn btn-primary" onClick={() => modifyProduct()}>
+        <button className="btn btn-primary" type="button" onClick={() => modifyProduct()}>
           Modify product
         </button>
       </div>

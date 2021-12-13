@@ -100,7 +100,7 @@ function Booking(props) {
   for (const b of itemsAmount) {
     somma = somma + b;
   }
-  
+
   console.log(somma);
   function getRightWeek(timepassed) {
     // the week number should be changed after the 23 o'clock of sunday. It becomes a new week since the customer can not order anymore in this week
@@ -225,7 +225,7 @@ function Booking(props) {
       }
       total = tot + somma;
       console.log(total);
-      console.log(total);
+      console.log(amount);
       if (total > amount) {
         stato = 'pending';
       } else {

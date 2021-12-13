@@ -119,7 +119,7 @@ function ManagerFarmers(props) {
   }
 
   return (
-    <div className="row w-100">
+    <div className="row">
       <span className="d-block text-center mt-5 mb-2 display-2">
         {props.pendingOnly && 'Pending applications'}
         {props.acceptedOnly && 'Accepted applications'}
@@ -380,10 +380,10 @@ function ApplicationInspector(props) {
         {
           props.pendingOnly &&
           <div className="subBtn">
-            <Button variant="danger" type="button" size="lg" onClick={() => (setUpdateApplication('reject'))}>
+            <Button variant="danger" type="button" size="lg" className="mb-2" onClick={() => (setUpdateApplication('reject'))}>
               Reject application
             </Button>
-            <Button variant="primary" type="button" size="lg" className="mx-2" onClick={() => (setUpdateApplication('accept'))}>
+            <Button variant="primary" type="button" size="lg" className="mx-2 mb-2" onClick={() => (setUpdateApplication('accept'))}>
               Accept application
             </Button>
           </div>
@@ -391,11 +391,11 @@ function ApplicationInspector(props) {
         {
           props.acceptedOnly &&
           <div className="subBtn">
-            <Button variant="primary" type="button" size="lg" className="mx-2" onClick={() => (props.setInspectApplication(null))}>
+            <Button variant="primary" type="button" size="lg" className="mx-2 mb-2" onClick={() => (props.setInspectApplication(null))}>
               Finish inspection and go back
             </Button>
             {props.application.status === 'rejected' &&
-              <Button variant="success" type="button" size="lg" className="mx-2" onClick={() => (setUpdateApplication('accept'))}>
+              <Button variant="success" type="button" size="lg" className="mx-2 mb-2" onClick={() => (setUpdateApplication('accept'))}>
                 Accept appplication
               </Button>
             }

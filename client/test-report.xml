@@ -1,5 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
   <file path="C:\Users\mario\Desktop\SPG\client\src\__tests__\API.test.js">
+    <testCase name="test GetProductByID No errors" duration="17"/>
+    <testCase name="test GetProductByID Error" duration="5"/>
+    <testCase name="test getAllExpectedProducts No errors" duration="8"/>
+    <testCase name="test getAllExpectedProducts Error" duration="8"/>
+    <testCase name="test getAllConfirmedProducts No errors" duration="9"/>
+    <testCase name="test getAllConfirmedProducts Error" duration="3"/>
+    <testCase name="test getOrderedProductsForProvider No errors" duration="2"/>
+    <testCase name="test getOrderedProductsForProvider Error" duration="1"/>
+    <testCase name="test setProductsAsFarmerShipped No errors" duration="5"/>
+    <testCase name="test setProductsAsFarmerShipped Error" duration="2"/>
+    <testCase name="test declareAvailability No errors" duration="2"/>
+    <testCase name="test declareAvailability Error" duration="1"/>
+    <testCase name="test uploadProductImage No errors" duration="7"/>
+    <testCase name="test uploadProductImage Error" duration="1"/>
+    <testCase name="test GetAllCategories No errors" duration="2"/>
+    <testCase name="test GetAllCategories Error" duration="1"/>
+    <testCase name="test GetAllProviders No errors" duration="12"/>
+    <testCase name="test GetAllProviders Error" duration="1"/>
+    <testCase name="test GetProviderByID No errors" duration="1"/>
+    <testCase name="test GetProviderByID Error" duration="1"/>
+    <testCase name="test getProviderShipmentStatus No errors" duration="1"/>
+    <testCase name="test getProviderShipmentStatus Error" duration="1"/>
+    <testCase name="test getProviderProducts No errors" duration="8"/>
+    <testCase name="test getProviderProducts Error" duration="1"/>
+    <testCase name="test getProviderConfirmationStatus No errors" duration="1"/>
+    <testCase name="test getProviderConfirmationStatus Error" duration="1"/>
+    <testCase name="test getProviderExpectedProducts No errors" duration="7"/>
+    <testCase name="test getProviderExpectedProducts Error" duration="3"/>
+    <testCase name="test getProviderProductsNotification No errors" duration="3"/>
+    <testCase name="test getProviderProductsNotification Error" duration="0"/>
+    <testCase name="test setNotificationSent No errors" duration="10"/>
+    <testCase name="test setNotificationSent Error" duration="1"/>
+    <testCase name="test farmerApplication No errors" duration="4"/>
+    <testCase name="test farmerApplication Error" duration="0"/>
+    <testCase name="test checkEmailAvailability No errors" duration="0"/>
+    <testCase name="test checkEmailAvailability Error" duration="3"/>
+    <testCase name="test farmerPendingApplication No errors" duration="4"/>
+    <testCase name="test farmerPendingApplication Error" duration="2"/>
+    <testCase name="test getFarmerAcceptedApplications No errors" duration="2"/>
+    <testCase name="test getFarmerAcceptedApplications Error" duration="1"/>
+    <testCase name="test acceptFarmerApplication No errors" duration="7"/>
+    <testCase name="test acceptFarmerApplication Error" duration="0"/>
+    <testCase name="test rejectFarmerApplication No errors" duration="6"/>
+    <testCase name="test rejectFarmerApplication Error" duration="0"/>
   </file>
 </testExecutions>
