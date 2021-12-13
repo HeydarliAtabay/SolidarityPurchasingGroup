@@ -86,18 +86,21 @@ function Booking(props) {
       ordine = Math.max(...f) + 1;
     }
   }
+
   let somma = 0;
   let wallet = props.clients
     .filter((x) => x.client_id === parseInt(props.clientid))
     .map((x) => x.budget);
   let amount = wallet[0];
   console.log(amount);
+
   let itemsAmount = props.orders
     .filter((x) => x.client_id === parseInt(props.clientid))
     .map((x) => x.OrderPrice);
   for (const b of itemsAmount) {
     somma = somma + b;
   }
+  
   console.log(somma);
   function getRightWeek(timepassed) {
     // the week number should be changed after the 23 o'clock of sunday. It becomes a new week since the customer can not order anymore in this week
