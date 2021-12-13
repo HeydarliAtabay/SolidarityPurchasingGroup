@@ -152,8 +152,9 @@ function DeliveryPage(props){
             { o.state=="shipped" ? 
              <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
               array2 = avaiableOrders.filter(x=>x.order_id===o.id).map(x=>x.product_name);
-              API.updateState(o.order_id,"shipped").then(()=>{
+              API.updateState(o.order_id,"delivered").then(()=>{
                 setTimeout(()=>{},3000)});
+                setUpdated(true);
             }
         }></Image> : <></>
       }
