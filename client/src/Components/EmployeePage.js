@@ -1,7 +1,6 @@
 import DeliverList from './DeliverList';
-import { Container, Button, Row, Col, ListGroup, ListGroupItem, Modal, Form, Dropdown, Card} from 'react-bootstrap';
-import {MenuApp, List, ThreeDotsVertical} from 'react-bootstrap-icons'
-import{ Link } from 'react-router-dom';
+import { Container, Button, Row, Col, Modal, Form, Dropdown, Card} from 'react-bootstrap';
+import { List} from 'react-bootstrap-icons'
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 

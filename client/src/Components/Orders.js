@@ -1,12 +1,10 @@
-import { Container, Button, Row, Col, Table, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import { Button, Row, Col, Table, Image, Modal } from 'react-bootstrap';
 import { useState } from "react";
 import p from './circle-fill.svg';
 import d from './iconDelete.svg';
 import im from './pencil-fill.svg';
 import API from '../API'
 import {Link} from 'react-router-dom'
-import {CardList, PlusCircle} from 'react-bootstrap-icons'
-import { useHistory } from "react-router-dom";
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
 
@@ -18,8 +16,6 @@ const[show2,setShow2]= useState(false);
 const [id,setId]= useState();
 const [order,setOrder]= useState();
 
-
-const history = useHistory();
 
 let t=parseInt(props.clientid);
 

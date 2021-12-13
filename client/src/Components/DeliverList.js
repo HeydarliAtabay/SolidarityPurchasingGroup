@@ -6,7 +6,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography"
 import ris from './reply-all-fill.svg';
 import API from '../API'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import p from './circle-fill.svg';
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
@@ -18,7 +18,6 @@ function DeliverList(props){
  const [showClient, setShowClient]= useState(false);
  const [showContact, setShowContact]= useState(false);
  const [contactType, setContactType]=useState(0)
- const [notified,setNotified]=useState(0) 
  const [shouldBeNotified, setShouldBeNotified]=useState(0)
  const [pickupDate,setPickupDate] = useState({
   date: '',
@@ -33,20 +32,6 @@ const handleClose = (x) => {
   setShowClient(x);
   setShowContact(x)
 }
-
-function ReminderToast(props){
-const {client, date, time} = props
-  return(
-    <>
-    <Row> <h5>{`Client ${client} has to pickup his/her order at ${date} ${time}`}</h5> </Row>
-    <Row><> <h6>{`Please Notify this client`}</h6></> </Row>
-  </>
-  )
-}
-useEffect(() => {
-  setNotified(0)
-}, [time]);
-
     return(<>
     <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
     <ClientModal show={showClient}handleClose={handleClose} client={client} clients={props.clients}/>
@@ -68,29 +53,20 @@ useEffect(() => {
       if(!m.find(x=>(parseInt(x)=== parseInt(s.order_id)))){
         return <td key={s.id} style={{display:"none"}}> </td>
       }
-      else {let id=m[m.length-1];
-let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
-let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+      else {let id1=m[m.length-1];
+let array=props.orders.filter(x=>x.order_id===id1).map(x=>x.OrderPrice);
+let array2=props.orders.filter(x=>x.order_id===id1).map(x=>x.product_name);
 let sum=0;
 for (const a of array)
 {sum=sum+a;}
        sum=sum.toFixed(2);
 m.pop();
-/* if((Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1)&& notified===0 ){
-  setNotified(1)
-  setTimeout(() => {
-    toast.info(<ReminderToast client={s.client_id} date={s.date} time={s.time}/>, {autoClose: 5000})
-  }, 2000);
-
-
-}
-*/
         return (
           <>
          {(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1)? 
         <>
         <Tooltip title={<h6>{` Pleasy notify the client about tomorrow's pick up `}</h6>}>
- <tr key={s.id} style={{color:"blue", fontSize:20, lightingColor:'blue', cursor:'pointer'}}>
+ <tr key={s.id} style={{color:"blue", fontSize:20, cursor:'pointer'}}>
          
          <td> {s.order_id}</td>
             <td>{s.client_id} </td>
@@ -412,11 +388,10 @@ function ContactModal(props){
     email: "",
     message: ""
   });
-  const [emailSent, setEmailSent]=useState(false)
   const handleSubmitEmail = (event) => {
    
     API.submitEmail(mailerState).then(()=>{
-    setEmailSent(true) 
+      console.log("Mail sent correctly")
     });
                  
             

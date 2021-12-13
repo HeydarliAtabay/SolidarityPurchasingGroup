@@ -188,30 +188,6 @@ function WarehousePage(props) {
       
       </>);
       }
-
-      function FarmersListChoice(props){
-        return(  
-            <div>
-              <div>
-                <select id="dropdown" >
-                  {props.providers.map((p) =>{return(<option value={p.id}>{p.name}</option>)})}
-                </select>
-              </div>
-            </div>
-          
-        );
-      }
-
-      function FarmersListChoice2(props){
-        return(
-          <DropdownButton id="dropdown-item-button" title="Farmers">
-  
-  {props.providers.map((p) =>{return(<Dropdown.Item as="button" value={p.id} >{p.name}</Dropdown.Item>
-  )})}
-  
-</DropdownButton>
-        )
-      }
     
       function FarmerShippedOrderTable(props){
 

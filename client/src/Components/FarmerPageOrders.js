@@ -1,13 +1,9 @@
-import { Container, Button, Row, Col, Table, ListGroup, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import {  Button, Row, Col, Table, Image, Modal} from 'react-bootstrap';
 import { useState } from "react";
 import p from './circle-fill.svg';
-import d from './iconDelete.svg';
-import im from './pencil-fill.svg';
-import API from '../API'
 import {Link} from 'react-router-dom'
 
 import dayjs from 'dayjs';
-import { useHistory } from "react-router-dom";
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
 
@@ -18,8 +14,6 @@ const[show,setShow]= useState(false);
 const [id,setId]= useState();
 const [order,setOrder]= useState();
 
-
-const history = useHistory();
 
 let c=props.time.date;
 

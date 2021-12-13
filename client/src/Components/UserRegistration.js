@@ -3,7 +3,6 @@ import { Button, Form, Row, Col } from 'react-bootstrap'
 import { useHistory } from "react-router-dom";
 import 'react-phone-number-input/style.css'
 import PhoneInput from 'react-phone-number-input'
-import { CountryDropdown, RegionDropdown } from 'react-country-region-selector';
 import { Country, State} from 'country-state-city';
 import API from '../API'
 

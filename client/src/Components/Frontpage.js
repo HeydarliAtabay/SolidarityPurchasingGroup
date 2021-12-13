@@ -1,4 +1,4 @@
-import { Button, Row, Carousel, Container } from "react-bootstrap";
+import { Button, Row, Carousel } from "react-bootstrap";
 import { Link, useHistory } from "react-router-dom"
 
 function Frontpage(props) {
