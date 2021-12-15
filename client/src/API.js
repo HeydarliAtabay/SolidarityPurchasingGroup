@@ -17,8 +17,7 @@ async function getAllClients() {
 async function getAllUsers() {
   const response = await fetch('/api/users');
   if (response.ok) {
-    const responseBody = await response.json();
-    return responseBody;
+    return await response.json();
   } else {
     try {
       const err = await response.json();
@@ -33,8 +32,7 @@ async function getAllUsers() {
 async function getAllOrders() {
   const response = await fetch('/api/orders');
   if (response.ok) {
-    const responseBody = await response.json();
-    return responseBody;
+    return await response.json();;
   } else {
     try {
       const err = await response.json();
@@ -49,8 +47,7 @@ async function getAllOrders() {
 async function getProviderDeliveredOrders(id) {
   const response = await fetch(`/api/provider-orders/${id}`);
   if (response.ok) {
-    const responseBody = await response.json();
-    return responseBody;
+    return await response.json();
   } else {
     try {
       const err = await response.json();
@@ -223,7 +220,8 @@ async function getAllConfirmedProducts(year, week) {
 async function getAllExpectedProducts(year, week) {
   const responseAllExpectedProducts = await fetch('/api/products/expected/' + year + '/' + week);
   if (responseAllExpectedProducts.ok) {
-    return await responseAllExpectedProducts.json();
+    const responseAllExpectedProductsBody= await responseAllExpectedProducts.json();
+    return responseAllExpectedProductsBody
   } else {
     let errAllExpectedProducts = { status: responseAllExpectedProducts.status, errObj: await responseAllExpectedProducts.json() };
     throw errAllExpectedProducts; // An object with the error coming from the server
