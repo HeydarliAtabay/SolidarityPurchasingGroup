@@ -13,9 +13,8 @@ sections:
 
 - Committed Stories: 8 ; Stories Done: 8
 - Committed Points: 42; Points Done: 42
-- Planned Hours: 98h ; Spent Hours: 102h 10m
+- Planned Hours: 98h ; Spent Hours: 100h 50m
 
---------NOT MODIFIED-----------
 
 **Remember** a story is done ONLY if it fits the Definition of Done:
 
@@ -30,45 +29,40 @@ sections:
 
 | Story | # Tasks | Points | Hours est. | Hours actual     |
 | ----- | ------- | ------ | ---------- | ---------------- |
-| _#0_  | 13       | -      | 53h 30m    | 49h 30m          |
-| _#9_  | 2       | 8      | 5h         | 5h 30m              |
-| _#10_  | 2       | 2      | 4h 30m         | 45m              |
-| _#11_  | 2       | 8     | 5h        | 3h 30m             |
-| _#12_  | 2       | 5      | 5h         | 5h               |
-| _#13_  | 2       | 2      | 1h 30m         | 1h 10m           |
-| _#17_  | 2       | 2      | 3h         | 3h           |
-| _#15_  | 2       | 2      | 4h         | 7h               |
-| _#16_  | 2       | 13      | 5h         | 5h               |
-| _#14_  | 2       | 2      | 2h         | 2h 30m           |
-| _#18_  | 2       | 2      | 5h         | 7h30m           |
-| _#19_  | 1       | 2      | 2h         | 2h               |
-| _#20_  | 2       | 5      | 4h         | 4h               |
-
+| _#0_  | 10      | -       | 72h 30m     | 63h 50m          |
+| _#15_  | 2       | 2      | 1h 30m     |      3h 30m        |
+| _#16_  | 2       | 13     | 1h         |      2h 30m         |
+| _#21_  | 2       | 5      | 2h         |      3h 45m      |
+| _#22_  | 2       | 5      | 5h         |      5h 15m        |
+| _#23_  | 2       | 8      | 2h         |      4h        |
+| _#24_  | 2       | 5      | 4h         |      4h      |
+| _#25_  | 2       | 2      | 2h         |      3h         |
+| _#26_  | 2       | 2      | 8h         |      11h      |
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
-- Average hour per task: 102.15(hours)/36(#tasks)= 2.83 hours; 
-- Standard deviation: 0.46
-- Total task estimation error ratio: 0.97
+- Average hour per task: 100.8(hours)/26(#tasks)= 3.87 hours; 
+- Standard deviation: ------ Dunno how to calculate this shit --------
+- Total task estimation error ratio: 0.972
 
 ## QUALITY MEASURES
 
 - Unit Testing:
   - Total hours estimated: 3d 6h ( hours for implementing unit tests) 
-  - Total hours spent: 19h 30m 
-  - Nr of automated unit test cases : 30(for BackEnd) + 42(for FrontEnd) = 72 unit test cases
+  - Total hours spent: 13h 
+  - Nr of automated unit test cases : 30(for BackEnd) + 42(for FrontEnd) = 72 unit test cases [Please Modify this part :)]
 
 - E2E testing:
-  - Total hours estimated: 12h (1h per story) - included inside each story
-  - Total hours spent: 12 h
+  - Total hours estimated: 8h (1h per story) - included inside each story
+  - Total hours spent: 8 h
 - Code review
-  - Total hours estimated: 12h (1h per story) - included inside each story
-  - Total hours spent:12 h
+  - Total hours estimated: 8h (1h per story) - included inside each story
+  - Total hours spent:8 h
 - Technical Debt management:
-  - Total hours estimated: 1d 1h
-  - Total hours spent: 6h
+  - Total hours estimated: 1d 2h 30m
+  - Total hours spent: 1d
   - Hours estimated for remediation by SonarQube: 3h (only in Maintainability - fixing code smells)
   - Hours estimated for remediation by SonarQube only for the selected and planned issues: 3h (only in Maintainability - fixing code smells)
-  - Hours spent on remediation: 6h
+  - Hours spent on remediation: 1d 2h 30m
   - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.5%
   - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
 
