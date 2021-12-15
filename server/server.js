@@ -457,7 +457,6 @@ app.put('/api/provider-products-sent/', async (req, res) => {
     return;
   }
   try {
-    //const ids = new Array();
     const ids = req.body.map((p) => p.id);
     let result_change_notification = false;
     for (let pid of ids) {

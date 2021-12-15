@@ -1,6 +1,6 @@
 import API from '../API';
 import PickupList from './PickupList';
-import { Container, Button, Table, Row, Col, ListGroup, ListGroupItem, Modal, Dropdown, DropdownButton} from 'react-bootstrap';
+import { Container, Button, Table, Row, Col, ListGroup, ListGroupItem, Modal} from 'react-bootstrap';
 import { Link} from 'react-router-dom';
 import { useState, useEffect } from "react";
 import {BoxSeam} from 'react-bootstrap-icons';
@@ -86,26 +86,6 @@ function WarehousePage(props) {
         getAllProviders();
       }, [update]);
 
-     
-     
-      /* const  handleClick = async(ev) => {
-        setShow(true);
-        
-        await API.getProviderDeliveredOrders(ev.target.id)
-            .then((res) => {
-              setProviderOrders(res);
-              setShowSearchButton(false);
-              setShow(true);
-              
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-            
-          
-        }; */
-
-
         useEffect(() => {
           const pr = () => {
             API.getProviderDeliveredOrders(selectedProvider.id).then((res) => {
@@ -114,7 +94,7 @@ function WarehousePage(props) {
           };
           if (recharged){ 
               pr();
-              setRecharged(false)};
+              setRecharged(false)}
         }, [recharged]);
 
       

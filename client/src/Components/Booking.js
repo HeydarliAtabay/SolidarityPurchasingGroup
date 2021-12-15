@@ -15,9 +15,8 @@ import { useEffect, useState } from 'react';
 import API from './../API';
 import Basket from './Basket';
 import ProductPage from './ProductPage';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { clientOrders } from '../classes/ClientOrder';
-import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { useMediaQuery } from 'react-responsive';
 

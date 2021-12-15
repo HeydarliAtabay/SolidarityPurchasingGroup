@@ -17,7 +17,8 @@ async function getAllClients() {
 async function getAllUsers() {
   const response = await fetch('/api/users');
   if (response.ok) {
-    return await response.json();
+    const responseUsersBody= await response.json()
+    return await responseUsersBody
   } else {
     try {
       const err = await response.json();
@@ -32,7 +33,8 @@ async function getAllUsers() {
 async function getAllOrders() {
   const response = await fetch('/api/orders');
   if (response.ok) {
-    return await response.json();;
+    const responseAllOrders = await response.json()
+    return responseAllOrders;
   } else {
     try {
       const err = await response.json();

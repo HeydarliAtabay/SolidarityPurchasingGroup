@@ -220,9 +220,9 @@ const MyNavbar = function (props) {
                         <Form.Label as="h6">Virtual date</Form.Label>
                         <Form.Control type="date" value={date} onChange={(event) => {
                           setDate(event.target.value)
-                          props.setTime((time) => ({
+                          props.setTime((newTime) => ({
                             date: event.target.value,
-                            hour: time.hour,
+                            hour: newTime.hour,
                           }))
                         }} />
                       </Form.Group>
@@ -232,8 +232,8 @@ const MyNavbar = function (props) {
                         <Form.Control type="time" value={time}
                           onChange={(event) => {
                             setTime(event.target.value);
-                            props.setTime((time) => ({
-                              date: time.date,
+                            props.setTime((newTime1) => ({
+                              date: newTime1.date,
                               hour: event.target.value,
                             }))
                           }} />

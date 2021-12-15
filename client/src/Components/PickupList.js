@@ -32,9 +32,9 @@ function onlyUnique(value,index,self){
        if (!m.find(x => (parseInt(x) === parseInt(s.order_id)))) {
                       return <ListGroupItem key={s.id} style={{ display: "none" }}></ListGroupItem> }
   else {
-  let id=m[m.length-1];
-  let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
-  let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+  let id2=m[m.length-1];
+  let array=props.orders.filter(x=>x.order_id===id2).map(x=>x.OrderPrice);
+  let array2=props.orders.filter(x=>x.order_id===id2).map(x=>x.product_name);
   let sum=0;
   let state = 'prepared';
   for (const a of array)

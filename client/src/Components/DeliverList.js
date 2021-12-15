@@ -86,7 +86,7 @@ m.pop();
              <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
            for(const a of array2){
                API.updateDelivered(id, a).then(()=>{
-               props.setRecharged(true); setTimeout(()=>{},3000)});
+               props.setRecharged(true); setTimeout(()=>{console.log("Delivered")},3000)});
             }}
         }></Image>
    }  
@@ -181,7 +181,7 @@ m.pop();
              <Image src={ris}data-testid="im1" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
            for(const a of array2){
                API.updateDelivered(id, a).then(()=>{
-               props.setRecharged(true); setTimeout(()=>{},3000)});
+               props.setRecharged(true); setTimeout(()=>{"Delivered Successfully"},3000)});
             }}
         }></Image>
    }  
