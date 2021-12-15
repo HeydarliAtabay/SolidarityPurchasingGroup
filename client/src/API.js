@@ -841,10 +841,10 @@ function deleteOrderItem(id) {
             });
         }
       })
-      .catch((err) => {
+      .catch((errDeleteOrderItem) => {
         reject({
           errors: [
-            { param: 'Server', msg: 'Communication with server failed' },
+            { param: 'Server', msg: 'Communication with server failed while deleting the order item [/api/orders/:id ]' },
           ],
         });
       });
@@ -900,23 +900,23 @@ function updateItem(order) {
         pickup: order.pickup,
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseupdateItem) => {
+        if (responseupdateItem.ok) {
           resolve(null);
         } else {
           // analyze the cause of error
-          response
+          responseupdateItem
             .json()
             .then((obj) => {
               reject(obj);
             }) // error message in the response body
             .catch(() => {
-              reject({ error: 'Cannot parse server response.' });
+              reject({ error: 'Cannot parse server response while Updating Item.' });
             }); // something else
         }
       })
       .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
+        reject({ error: 'Cannot communicate with the server while implementing item update [/api/orders/:orderId].' });
       }); // connection errors
   });
 }

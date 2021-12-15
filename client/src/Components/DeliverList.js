@@ -148,8 +148,8 @@ m.pop();
     }
 
     
-    setPickupDate((prevState) => ({
-      ...prevState,
+    setPickupDate((prevState1) => ({
+      ...prevState1,
       date: s.date,
       hour: s.time
     }));
@@ -178,7 +178,7 @@ m.pop();
             {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? <td style={{color:"red"}}>{s.date}{' '}{s.time} </td> : <td>{s.date}{' '}{s.time} </td> }
             <td>
             {s.state===props.b && 
-             <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+             <Image src={ris}data-testid="im1" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
            for(const a of array2){
                API.updateDelivered(id, a).then(()=>{
                props.setRecharged(true); setTimeout(()=>{},3000)});
@@ -211,8 +211,8 @@ m.pop();
     setClient(s.client_id)
     setContactType(1)
     setShouldBeNotified(0)
-    setPickupDate((prevState) => ({
-      ...prevState,
+    setPickupDate((prevState2) => ({
+      ...prevState2,
       date: s.date,
       hour: s.time
     }));
@@ -236,15 +236,14 @@ m.pop();
     setContactType(0)
     if(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1){
       setShouldBeNotified(1)
-      console.log("It will changed to 1")
     }
     else{
       setShouldBeNotified(0)
     }
 
     
-    setPickupDate((prevState) => ({
-      ...prevState,
+    setPickupDate((prevState3) => ({
+      ...prevState3,
       date: s.date,
       hour: s.time
     }));
@@ -263,20 +262,6 @@ m.pop();
         )
       }
     })}
-
- {/*
-    <Col xs={2} md={2}> 
-   {s.state===props.b && 
-   <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-    for(const a of array2){
-           API.updateDelivered(id, a).then(()=>{
-              
-       props.setRecharged(true); setTimeout(()=>{},3000)});
-                  
-             }}
-        }></Image>
-
-   }*/}
   </tbody>
 </Table>
     </>

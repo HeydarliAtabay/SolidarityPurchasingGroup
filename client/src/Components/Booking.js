@@ -49,13 +49,8 @@ function Booking(props) {
   const [pickupDay, setPickupDay] = useState(2);
   const [pickupTime, setPickupTime] = useState('10:00');
 
-  const isDesktopOrLaptop = useMediaQuery({
-    query: '(min-width: 1224px)',
-  });
   const isBigScreen = useMediaQuery({ query: '(min-width: 1225px)' });
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
-  const isPortrait = useMediaQuery({ query: '(orientation: portrait)' });
-  const isRetina = useMediaQuery({ query: '(min-resolution: 2dppx)' });
 
   console.log(time + ' ' + date);
   console.log(pickupDay + ' ' + pickupTime);
@@ -222,8 +217,8 @@ function Booking(props) {
       stato,
       ins = false;
     if (!location.state) {
-      for (const p of productsBasket) {
-        tot = p.price + tot;
+      for (const pr of productsBasket) {
+        tot = pr.price + tot;
       }
       total = tot + somma;
       console.log(total);

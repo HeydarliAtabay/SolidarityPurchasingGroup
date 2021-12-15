@@ -60,8 +60,8 @@ const handleClose = (x) => setShow(x);
      if (!m.find(x =>(parseInt(x) === parseInt(s.order_id)))) {
                     return <td key={s.id}style={{ display: "none" }}></td> }
 else {
-let id=m[m.length-1];
-let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
+let id1=m[m.length-1];
+let array=props.orders.filter(x=>x.order_id===id1).map(x=>x.OrderPrice);
 let sum=0;
 for (const a of array)
 {sum=sum+a;}

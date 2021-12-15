@@ -219,10 +219,15 @@ Solidarity Purchase Group
                           <Button
                             variant="secondary"
                             onClick={() => {
-                              setMailerState((prevState) => ({
-                                ...prevState,
+                              setMailerState((prevState1) => ({
+                                ...prevState1,
                                 email: s.email,
-                                message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
+                                message: `Dear ${s.name} ${s.surname}, 
+                                
+Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop.
+
+Best Regards,
+Solidarity Purchase Group
                   `,
                               }));
                               handleSubmitEmail();
