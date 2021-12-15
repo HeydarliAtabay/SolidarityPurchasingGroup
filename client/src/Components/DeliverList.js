@@ -334,7 +334,12 @@ function ClientModal(props){
     setMailerState((prevState) => ({
       ...prevState,
       email: client.email,
-      message: `Dear ${client.name} ${client.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
+      message: `Dear ${client.name} ${client.surname}, 
+Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order 
+
+Best Regards,
+Solidarity Purchase Group
+`
       
     }));
   }
