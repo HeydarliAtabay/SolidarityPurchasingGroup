@@ -136,7 +136,7 @@ function DeliveryPage(props) {
                   <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px', 'cursor': 'pointer' }} onClick={() => {
 
                     API.updateState(o.order_id, "shipped").then(() => {
-                      setTimeout(() => { }, 3000)
+                      setTimeout(() => { console.log("Order is shipped") }, 3000)
                     });
                     setUpdated(true);
 
@@ -148,7 +148,7 @@ function DeliveryPage(props) {
                 {o.state == "shipped" ?
                   <Image src={ris} data-testid="im" style={{ width: '80px', height: '30px', 'cursor': 'pointer' }} onClick={() => {
                     API.updateState(o.order_id, "delivered").then(() => {
-                      setTimeout(() => { }, 3000)
+                      setTimeout(() => {  console.log("Order is delivered")}, 3000)
                     });
                     setUpdated(true);
                   }

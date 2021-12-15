@@ -56,12 +56,6 @@ function ManagerArea(props) {
     getApplicationStats();
   }, []);
 
-  useEffect(() => {
-    const getAcceptedApplications = async () => {
-      
-    }
-    getAcceptedApplications();
-  }, []);
 
   return (
     <div className="row w-100">

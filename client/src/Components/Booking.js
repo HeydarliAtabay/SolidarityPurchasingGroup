@@ -267,7 +267,7 @@ function Booking(props) {
         console.log(order);
         API.addOrder(order).then(() => {
           props.setRecharged(true);
-          setTimeout(() => { }, 3000);
+          setTimeout(() => {console.log("Order added successfully") }, 3000);
         });
         indice = indice + 1;
       }
@@ -317,7 +317,7 @@ function Booking(props) {
           console.log(order);
           API.addOrder(order).then(() => {
             props.setRecharged(true);
-            setTimeout(() => { }, 3000);
+            setTimeout(() => { console.log("Order added successfullly")}, 3000);
           });
           indice = indice + 1;
         }
@@ -371,7 +371,7 @@ function Booking(props) {
         if (total <= amount) {
           API.updateItem(order).then(() => {
             props.setRecharged(true);
-            setTimeout(() => { }, 3000);
+            setTimeout(() => { console.log("Order added with success")}, 3000);
           });
         } else {
           ins = true;
@@ -384,7 +384,9 @@ function Booking(props) {
 
       props.updateProps();
     } else if (location.state.status === 'update' && productsBasket.length > 1)
+     {
       setShowUpdateError(true);
+     } 
     else if (
       location.state.status === 'update' &&
       productsBasket.length === 1 &&

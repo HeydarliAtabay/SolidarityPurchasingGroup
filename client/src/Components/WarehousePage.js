@@ -164,20 +164,6 @@ function WarehousePage(props) {
                                               <Button  variant="secondary" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#708090" }} id = {p.id}  name ={p.name} onClick={handleProviderPick}>{p.name}</Button>}</Col>)})}
         </Row>
 
-       { /*<Row>
-          <FarmersListChoice providers={providers}></FarmersListChoice>
-        </Row>
-        <Row>
-          <FarmersListChoice2 providers={providers}></FarmersListChoice2>
-        </Row>
-         /*
-        <Row>
-      {showSearchButton ? 
-      <Button  variant="light" style={{ 'fontSize': 25, 'borderStyle': 'hidden', 'backgroundColor': "#ffb6c1" }} id = {selectedProvider.id} onClick = {handleClick} >Click to check the farmer-shipped order</Button> :
-      <></>}
-      
-      </Row> */}
-      
 
       <Finestra show={showM}handleClose={handleClose}id={idM}orders={props.orders}/>
 
@@ -220,7 +206,7 @@ show</Button></Col>
               alert("Shipment Received confirmed");
             
              API.updateStateFarmer(p.ord_id, p.prod_name,farmerState).then(()=>{     
-         props.setRecharged(true); setTimeout(()=>{},3000)});
+         props.setRecharged(true); setTimeout(()=>{console.log("Shipment received confirmed")},3000)});
                     
                }
           }/></Col>

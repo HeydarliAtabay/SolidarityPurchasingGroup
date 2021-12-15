@@ -55,7 +55,7 @@ function onlyUnique(value,index,self){
               alert("Preparation confirmed");
               for(const a of array2){
                  API.updateState(id,state).then(()=>{
-                  setTimeout(()=>{},3000)});  
+                  setTimeout(()=>{ console.log("preparation confirmed")},3000)});  
                }}
               }/> }
   
