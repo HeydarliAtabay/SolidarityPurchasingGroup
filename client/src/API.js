@@ -80,9 +80,9 @@ function updateDelivered(id, product_name) {
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errUpdateDelivered) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update Delivered ' }],
               });
             });
         }
@@ -104,19 +104,19 @@ function updateWHPrepared(id, product_name) {
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseWHPrepared) => {
+        if (responseWHPrepared.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseWHPrepared
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errWHPrepared) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update WHPrepared ' }],
               });
             });
         }
@@ -142,12 +142,12 @@ function updateState(id, state) {
         state: state
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseUpdateState) => {
+        if (responseUpdateState.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseUpdateState
             .json()
             .then((obj) => {
               reject(obj);
