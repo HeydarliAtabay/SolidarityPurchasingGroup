@@ -87,7 +87,7 @@ function updateDelivered(id, product_name) {
             });
         }
       })
-      .catch((err) => {
+      .catch((errUpdateDelivered1) => {
         reject({
           errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
         });
@@ -121,7 +121,7 @@ function updateWHPrepared(id, product_name) {
             });
         }
       })
-      .catch((err) => {
+      .catch((errWHPrepared1) => {
         reject({
           errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
         });
@@ -152,14 +152,14 @@ function updateState(id, state) {
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errUpdateState) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update state ' }],
               });
             });
         }
       })
-      .catch((err) => {
+      .catch((errUpdateState1) => {
         reject({
           errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
         });
@@ -182,24 +182,24 @@ function updateStateFarmer(id, product_name, state) {
         state: state,
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseStateFarmer) => {
+        if (responseStateFarmer.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseStateFarmer
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errStateFarmer) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update farmer state ' }],
               });
             });
         }
       })
-      .catch((err) => {
+      .catch((errStateFarmer1) => {
         reject({
           errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
         });
@@ -210,95 +210,95 @@ function updateStateFarmer(id, product_name, state) {
 
 //GET all confirmed products + readme OK
 async function getAllConfirmedProducts(year, week) {
-  const response = await fetch('/api/products/confirmed/' + year + '/' + week);
-  if (response.ok) {
-    return await response.json();
+  const responseAllConfirmedProducts = await fetch('/api/products/confirmed/' + year + '/' + week);
+  if (responseAllConfirmedProducts.ok) {
+    return await responseAllConfirmedProducts.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllConfirmedProducts = { status: responseAllConfirmedProducts.status, errObj: await responseAllConfirmedProducts.json() };
+    throw errAllConfirmedProducts; // An object with the error coming from the server
   }
 }
 
 //GET all expected products + readme ok
 async function getAllExpectedProducts(year, week) {
-  const response = await fetch('/api/products/expected/' + year + '/' + week);
-  if (response.ok) {
-    return await response.json();
+  const responseAllExpectedProducts = await fetch('/api/products/expected/' + year + '/' + week);
+  if (responseAllExpectedProducts.ok) {
+    return await responseAllExpectedProducts.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllExpectedProducts = { status: responseAllExpectedProducts.status, errObj: await responseAllExpectedProducts.json() };
+    throw errAllExpectedProducts; // An object with the error coming from the server
   }
 }
 
 //GET all products in the booked or pending state of a certain provider + readme ok
 async function getOrderedProductsForProvider(year, week) {
-  const response = await fetch('/api/products/ordered/' + year + '/' + week);
-  if (response.ok) {
-    return await response.json();
+  const responseOrderedProductsForProvider = await fetch('/api/products/ordered/' + year + '/' + week);
+  if (responseOrderedProductsForProvider.ok) {
+    return await responseOrderedProductsForProvider.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errOrderedProductsForProvider = { status: responseOrderedProductsForProvider.status, errObj: await responseOrderedProductsForProvider.json() };
+    throw errOrderedProductsForProvider; // An object with the error coming from the server
   }
 }
 
 //Check if provider has already declared ordered items as shipped + readme ok
 async function getProviderShipmentStatus(year, week) {
-  const response = await fetch(
+  const responseProviderShipmentStatus = await fetch(
     '/api/provider/shipmentstatus/' + year + '/' + week
   );
-  if (response.ok) {
-    return await response.json();
+  if (responseProviderShipmentStatus.ok) {
+    return await responseProviderShipmentStatus.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errProviderShipmentStatus = { status: responseProviderShipmentStatus.status, errObj: await responseProviderShipmentStatus.json() };
+    throw errProviderShipmentStatus; // An object with the error coming from the server
   }
 }
 
 //POST all products IDs that were shipped + readme ok
 async function setProductsAsFarmerShipped(productIDS) {
-  const response = await fetch('/api/orders/farmershipped', {
+  const responseSetProductAsFarmerShipped = await fetch('/api/orders/farmershipped', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(productIDS), // Conversion in JSON format
   });
-  if (response.ok) {
-    return await response.json();
+  if (responseSetProductAsFarmerShipped.ok) {
+    return await responseSetProductAsFarmerShipped.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errSetProductAsFarmerShipped = { status: responseSetProductAsFarmerShipped.status, errObj: await responseSetProductAsFarmerShipped.json() };
+    throw errSetProductAsFarmerShipped; // An object with the error coming from the server
   }
 }
 
 //GET product by specific ID + readme ok
 async function getProductById(product_id) {
-  const response = await fetch('/api/product/' + product_id);
-  if (response.ok) {
-    return await response.json();
+  const responseProductById = await fetch('/api/product/' + product_id);
+  if (responseProductById.ok) {
+    return await responseProductById.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errProductById = { status: responseProductById.status, errObj: await responseProductById.json() };
+    throw errProductById; // An object with the error coming from the server
   }
 }
 
 //GET all categories + readme ok
 async function getAllCategories() {
-  const response = await fetch('/api/products/categories');
-  if (response.ok) {
-    return await response.json();
+  const responseAllCategories = await fetch('/api/products/categories');
+  if (responseAllCategories.ok) {
+    return await responseAllCategories.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllCategories = { status: responseAllCategories.status, errObj: await responseAllCategories.json() };
+    throw errAllCategories; // An object with the error coming from the server
   }
 }
 
 //GET all providers + readme ok
 async function getAllProviders() {
-  const response = await fetch('/api/providers/all');
-  if (response.ok) {
-    return await response.json();
+  const responseAllProviders = await fetch('/api/providers/all');
+  if (responseAllProviders.ok) {
+    return await responseAllProviders.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllProviders = { status: responseAllProviders.status, errObj: await responseAllProviders.json() };
+    throw errAllProviders; // An object with the error coming from the server
   }
 }
 
