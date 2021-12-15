@@ -123,7 +123,7 @@ function updateWHPrepared(id, product_name) {
       })
       .catch((errWHPrepared1) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while trying to implement /api/orders/${id}/${product_name} ' }],
         });
       });
   });
@@ -161,7 +161,7 @@ function updateState(id, state) {
       })
       .catch((errUpdateState1) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyState' }],
         });
       });
   });
@@ -201,7 +201,7 @@ function updateStateFarmer(id, product_name, state) {
       })
       .catch((errStateFarmer1) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyStateFarmer ' }],
         });
       });
   });
@@ -514,40 +514,11 @@ function updateQuantity(product_id, quantity) {
       })
       .catch((err) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyquantity ' }],
         });
       });
   });
 }
-
-/* 
-   Place a new order.
-   orders = [(product_id, quantity), ...]
-*/
-//////////////////////////////////////////////////////////////////////
-//'insertNewOrder' is defined but never used => comment to reduce TD//
-//////////////////////////////////////////////////////////////////////
-/*async function insertNewOrder(client_id, orders) {
-  let product_order = { order_items: orders };
-
-  const order_response = await fetch(
-    '/api/insert-order?cid=' + client_id,
-    {
-      method: 'POST',
-      body: JSON.stringify(product_order),
-    }
-  );
-
-  if (order_response.ok) return await order_response.json(); // status: OK
-
-  // something went wrong with the request.
-  console.error(
-    'Error fetching resource: insert-order, status: ' + order_response.status
-  );
-
-  let ex = { status: order_response.status, errObj: order_response };
-  throw ex;
-}*/
 
 // Adding new client
 
@@ -661,12 +632,12 @@ function increaseBalance(amount, clientId) {
       },
       body: JSON.stringify({}),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseIncreaseBalance) => {
+        if (responseIncreaseBalance.ok) {
           resolve(null);
         } else {
           // analyze the cause of error
-          response
+          responseIncreaseBalance
             .json()
             .then((obj) => {
               reject(obj);
@@ -677,7 +648,7 @@ function increaseBalance(amount, clientId) {
         }
       })
       .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
+        reject({ error: 'Cannot communicate with the server while implementing /api/clients/update/balance/.' });
       }); // connection errors
   });
 }
@@ -714,19 +685,19 @@ function confirmExpectedProducts(product, year, week) {
 }
 //api login
 async function logIn(credentials) {
-  let response = await fetch('/api/sessions', {
+  let responseLogIn = await fetch('/api/sessions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(credentials),
   });
-  if (response.ok) {
-    const user = await response.json();
+  if (responseLogIn.ok) {
+    const user = await responseLogIn.json();
     return user;
   } else {
     try {
-      const errDetail = await response.json();
+      const errDetail = await responseLogIn.json();
       throw errDetail.message;
     } catch (err) {
       throw err;
@@ -817,17 +788,17 @@ function addOrder(S) {
         pickup: S.pickup,
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseAddOrder) => {
+        if (responseAddOrder.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseAddOrder
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errAddOrder) => {
               reject({
                 errors: [
                   { param: 'Application', msg: 'Cannot insert a order' },
@@ -836,10 +807,10 @@ function addOrder(S) {
             });
         }
       })
-      .catch((err) => {
+      .catch((errAddOrder1) => {
         reject({
           errors: [
-            { param: 'Server', msg: 'Communication with server failed' },
+            { param: 'Server', msg: 'Communication with server failed while inserting an order' },
           ],
         });
       });
@@ -952,13 +923,13 @@ function updateItem(order) {
 
 //GET ->retrieve all deliverers
 async function getAllDeliverers() {
-  const response = await fetch('/api/deliverers');
-  if (response.ok) {
-    const responseBody = await response.json();
+  const responseGetAllDeliverers = await fetch('/api/deliverers');
+  if (responseGetAllDeliverers.ok) {
+    const responseBody = await responseGetAllDeliverers.json();
     return responseBody;
   } else {
     try {
-      const err = await response.json();
+      const err = await responseGetAllDeliverers.json();
       throw err.message;
     } catch (err) {
       throw err;
