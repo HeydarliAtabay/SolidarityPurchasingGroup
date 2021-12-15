@@ -4,6 +4,11 @@ import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography"
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import ris from './reply-all-fill.svg';
 import API from '../API'
 import { useState } from "react";
@@ -308,14 +313,30 @@ function ClientModal(props){
     email: "",
     message: ""
   });
+  const [openDialog, setOpenDialog]=useState(false)
   const [emailSent, setEmailSent]=useState(false)
   const handleSubmitEmail = (event) => {
-   
     API.submitEmail(mailerState).then(()=>{
     setEmailSent(true) 
-    });
-                 
-            
+    setOpenDialog(false)
+    });         
+  }
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  function changeEmailState(client){
+    setMailerState((prevState) => ({
+      ...prevState,
+      email: client.email,
+      message: `Dear ${client.name} ${client.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
+      
+    }));
   }
   return(
  
@@ -345,13 +366,8 @@ function ClientModal(props){
     <>
     <Envelope color="green" size={24} style={{'cursor':'pointer'}}
     onClick={()=>{
-      setMailerState((prevState) => ({
-        ...prevState,
-        email: s.email,
-        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
-        
-      }));
-      handleSubmitEmail();
+      changeEmailState(s)
+      handleOpenDialog()
     }}
     
     />
@@ -359,18 +375,7 @@ function ClientModal(props){
     } 
      {emailSent && 
     <>
-    <Envelope color="gray" size={24} style={{'cursor':'pointer'}}
-    onClick={()=>{
-      setMailerState((prevState) => ({
-        ...prevState,
-        email: s.email,
-        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
-        
-      }));
-      handleSubmitEmail();
-    }}
-    
-    />
+    <Envelope color="gray" size={24} style={{'cursor':'pointer'}} disabled />
     </>
     }
      </Col>
@@ -381,6 +386,29 @@ function ClientModal(props){
 </Modal.Footer>
  
   </Modal>
+
+  <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Accepting email sending"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to send an email to the Client, about insufficient balance?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Disagree</Button>
+          <Button onClick={handleSubmitEmail} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+
   </>);}
 function ContactModal(props){
   const {contactType,pickUp, notify}=props
