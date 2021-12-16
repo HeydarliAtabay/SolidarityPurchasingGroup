@@ -40,11 +40,13 @@ sections:
 | _#26_  | 2       | 2      | 8h         |      11h      |
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
+
 Story 0 in-depth - fixing Git issues:
-- Navbar color contrast issue  Navbar was completely redesigned
-- Shopping cart not allowing floating point values  shopping cart now increments the quantity by 0.5 units instead of 1 unit 
+- Navbar color contrast issue -> Navbar was completely redesigned
+- Shopping cart not allowing floating point values -> shopping cart now increments the quantity by 0.5 units instead of 1 unit 
 
 
+Sprint statistics
 - Average hour per task: 100.8(hours)/26(#tasks)= 3.87 hours; 
 - Standard deviation: 0.54
 - Total task estimation error ratio: 0.972
