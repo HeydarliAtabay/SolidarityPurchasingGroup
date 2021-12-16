@@ -41,7 +41,7 @@ sections:
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
 - Average hour per task: 100.8(hours)/26(#tasks)= 3.87 hours; 
-- Standard deviation: ------ Dunno how to calculate this shit --------
+- Standard deviation: 0.54
 - Total task estimation error ratio: 0.972
 
 ## QUALITY MEASURES
@@ -69,9 +69,7 @@ sections:
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-  - FE development time was underestimated. We ended up reallocating time from the BE tasks to deliver a good UI for the tasks.
-  - We lost some time in interpreting the meaning of some stories and estimate correctly the time to implement them.
-  - We underestimated the time needed to update the database with the correct tables and columns to support the stories.
+  -Reviewing globally the app and controlling that every story is correctly connected to the others
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
@@ -81,11 +79,11 @@ sections:
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-  - We allocated more time for implementing tests.
-  - Remediation effort on new code decreased considerably since we had the chance to learn from SonarCloud how to write better code.
-  - We created an appropriate task for the Technical debt remediation and the result was much better in terms of remediation efforts needed on new code.
+  -We have cured more the design of our application and made all the pages responsive
+  -We have added to the read.me file api calls explanations 
+  -We have fixed all the past and new issues and the stories left from previous sprint
 
-Which ones you were not able to achieve? Why?
+- Which ones you were not able to achieve? Why?
   - We achieved all of the goals set in the previous retrospective.
 
 
