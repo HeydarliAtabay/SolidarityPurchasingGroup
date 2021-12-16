@@ -63,7 +63,7 @@ sections:
   - Hours estimated for remediation by SonarQube: 3h (only in Maintainability - fixing code smells)
   - Hours estimated for remediation by SonarQube only for the selected and planned issues: 3h (only in Maintainability - fixing code smells)
   - Hours spent on remediation: 1d 2h 30m
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.5%
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.3%
   - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
 
 ## ASSESSMENT
