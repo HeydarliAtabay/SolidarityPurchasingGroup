@@ -47,9 +47,9 @@ sections:
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated: 3d 6h ( 30 hours for implementing unit tests) 
-  - Total hours spent: 13h 
-  - Nr of automated unit test cases : 30(for BackEnd) + 42(for FrontEnd) = 72 unit test cases [Please Modify this part :)]
+  - Total hours estimated: 3d 6h ( hours for implementing unit tests) 
+  - Total hours spent: 1d 5h 
+  - Nr of automated unit test cases : (for BackEnd) + (for FrontEnd) =  unit test cases [Please Modify this part :)]
 
 - E2E testing:
   - Total hours estimated: 8h (1h per story) - included inside each story
