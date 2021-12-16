@@ -69,7 +69,7 @@ sections:
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
-  -Reviewing globally the app and controlling that every story is correctly connected to the others
+  - Reviewing globally the app and controlling that every story is correctly connected to the others
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
@@ -79,9 +79,9 @@ sections:
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
-  -We have cured more the design of our application and made all the pages responsive
-  -We have added to the read.me file api calls explanations 
-  -We have fixed all the past and new issues and the stories left from previous sprint
+  - We have cured more the design of our application and made all the pages responsive
+  - We have added to the read.me file api calls explanations 
+  - We have fixed all the past and new issues and the stories left from previous sprint
 
 - Which ones you were not able to achieve? Why?
   - We achieved all of the goals set in the previous retrospective.
