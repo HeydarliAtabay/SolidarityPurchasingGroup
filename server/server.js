@@ -20,8 +20,7 @@ const TelegramBot = require('node-telegram-bot-api'); //module for telegrom bot
 
 const fileUpload = require('express-fileupload'); //Middleware for storing files
 const path = require('path');
-const telegram_token = '5048293827:AAGa6eTGLM24v30dNJFVdjZljR8EYS-xNHA';
-const bot = new TelegramBot(telegram_token, {polling: true});
+
 const fs = require('fs');
 
 // init express
@@ -34,6 +33,9 @@ const PORT = 3001;
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(fileUpload());
+
+const telegram_token = process.env.TELEGRAM_TOKEN;
+const bot = new TelegramBot(telegram_token, {polling: true});
 
 app.setTestingMode = (test_db_name) => {
   clientsDao.setTestDB(test_db_name);
