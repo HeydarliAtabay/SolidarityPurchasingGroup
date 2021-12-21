@@ -75,6 +75,7 @@ bot.on('/start', (msg) => {
   
   Here you can use some functionalities of SPG. 
   In the Following lines, you can see all possible actions with this bot.
+  /subscribe [email adress] - for making Subscription with bot to receive individual updates related to your account
   /schedule  - for Checking schedule when products will be available & when can you make an order
   /balance - to check your balance
   /orders - to check the list of your new and past orders
@@ -85,15 +86,19 @@ bot.on('/start', (msg) => {
 // while writing /start
 bot.onText(/\/start/, function onStart(msg) {
   const chatId = msg.chat.id;
+  const username = msg.chat.username
   const photo = `../client/public/Frontpage/browse-farmers-image.png`;
   bot.sendPhoto(msg.chat.id, photo, {
     caption: `Welcome to Solidarity Purchase Group BOT.
   
     Here you can use some functionalities of SPG. 
     In the Following lines, you can see all possible actions with this bot.
+    /subscribe [email adress] - for making Subscription with bot to receive individual updates related to your account
     /schedule  - for Checking schedule when products will be available & when can you make an order
     /balance - to check your balance
-    /orders - to check the list of your new and past orders`
+    /orders - to check the list of your new and past orders
+    your userId is ${chatId} and name is ${username}
+    `
   });
 });
 // example for sending photos
@@ -104,6 +109,38 @@ bot.onText(/\/photo/, function onPhotoText(msg) {
   bot.sendPhoto(msg.chat.id, photo, {
     caption: "I'm a bot!"
   });
+});
+
+bot.onText(/\/subscribe (.+)/, async (msg, match) => {
+  // From file path
+  const userId = msg.chat.id;
+  const userName= msg.chat.username
+  const emailUser= match[1]
+  const clients = await clientsDao.getAllClients();
+  let emailIsCorrect=0
+
+  clients.forEach(client => {
+    if(client.email===emailUser)emailIsCorrect=1
+  });
+
+  if(emailIsCorrect===1){
+    bot.sendMessage(userId, `Dear ${userName}, you've succesfully made a subscription to our service!
+    Entered email was: ${emailUser}
+      `);
+        try {
+          await clientsDao.putTelegramUserId(userId, emailUser);
+        } catch (err) {
+          console.log("error while updating the telegram id")
+        }
+
+  }
+  else{
+    bot.sendMessage(userId, `Dear ${userName}, we could not find email entered by you in our server, please try again.
+    Entered email was: ${emailUser}
+      `);
+  }
+
+  
 });
 
 // for /schedule
@@ -172,11 +209,6 @@ app.post('/api/sendReminderForPickup', function (req, res) {
   });
 });
 
-/* text: `Dear Clients, we would like to inform you that the list of the available products for the next week is now online.
-    
-Please enter this link to open the page of available products.
-${textHtml}
-    `*/
 
 let sendUpdatedListNotificationTelegram = ()=>{
 let underlinedLink = "<u>http://localhost:3000/products-next-week</u>";

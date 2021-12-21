@@ -48,3 +48,17 @@ exports.createClient = (client) => {
     });
   });
 };
+
+exports.putTelegramUserId = (telegramId,email) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE clients SET telegramId=? WHERE email=?';
+    db.run(sql, [telegramId, email], (err) => {
+      if (err) {
+        console.log(err);
+        reject(err.message);
+        return;
+      }
+      resolve();
+    });
+  });
+};
