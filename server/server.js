@@ -16,9 +16,12 @@ const passportLocal = require('passport-local').Strategy; //Authentication strat
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
 const dbt = require('./DAOs/users-dao'); // module for accessing the DB
+const TelegramBot = require('node-telegram-bot-api'); //module for telegrom bot 
 
 const fileUpload = require('express-fileupload'); //Middleware for storing files
 const path = require('path');
+const telegram_token = '5048293827:AAGa6eTGLM24v30dNJFVdjZljR8EYS-xNHA';
+const bot = new TelegramBot(telegram_token, {polling: true});
 const fs = require('fs');
 
 // init express
@@ -49,6 +52,71 @@ let transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
+});
+
+
+bot.onText(/\/message (.+)/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const resp = match[1]; 
+  bot.sendMessage(chatId, `Your message was ${resp}`);
+});
+
+bot.on('/start', (msg) => {
+  const chatId = msg.chat.id;
+
+  // send a message to the chat acknowledging receipt of their message
+  bot.sendMessage(chatId, `Welcome to Solidarity Purchase Group BOT.
+  
+  Here you can use some functionalities of SPG. 
+  In the Following lines, you can see all possible actions with this bot.
+  /schedule  - for Checking schedule when products will be available & when can you make an order
+  /balance - to check your balance
+  /orders - to check the list of your new and past orders
+  `);
+ // bot.sendVideo(chatId, necef, {caption: "Sent by: " + "Elnur" } )
+});
+
+// while writing /start
+bot.onText(/\/start/, function onStart(msg) {
+  const chatId = msg.chat.id;
+  const photo = `../client/public/Frontpage/browse-farmers-image.png`;
+  bot.sendPhoto(msg.chat.id, photo, {
+    caption: `Welcome to Solidarity Purchase Group BOT.
+  
+    Here you can use some functionalities of SPG. 
+    In the Following lines, you can see all possible actions with this bot.
+    /schedule  - for Checking schedule when products will be available & when can you make an order
+    /balance - to check your balance
+    /orders - to check the list of your new and past orders`
+  });
+});
+// example for sending photos
+
+bot.onText(/\/photo/, function onPhotoText(msg) {
+  // From file path
+  const photo = `./GREETING.png`;
+  bot.sendPhoto(msg.chat.id, photo, {
+    caption: "I'm a bot!"
+  });
+});
+
+// for /schedule
+bot.onText(/\/schedule/, function onSchedule(msg) {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, `Dear Client, Here is the schedule for the next week:
+  `);
+});
+
+// for /balance
+bot.onText(/\/balance/, function onSchedule(msg) {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, `Dear Client, Here is your balance: `);
+});
+
+// for /balance
+bot.onText(/\/orders/, function onSchedule(msg) {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, `Dear Client, Here is your order list: `);
 });
 
 app.post('/api/sendEmail', function (req, res) {
