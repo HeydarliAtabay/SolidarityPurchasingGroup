@@ -873,6 +873,22 @@ const submitEmail = async (e) => {
       }
     });
 };
+
+/// send telegram notification on Saturday at 09:00
+const sendTelegramNotificationOnSaturday = async (e) => {
+  const response = await fetch('/api/SendTelegramNotification', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    }
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+    });
+};
+
 function updateItem(order) {
 
   return new Promise((resolve, reject) => {
@@ -1028,6 +1044,7 @@ const API = {
   getProviderProductsNotification,
   setNotificationasSent,
   getOrderAndClientData,
+  sendTelegramNotificationOnSaturday
 };
 
 export default API;

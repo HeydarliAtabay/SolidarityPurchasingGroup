@@ -10,6 +10,7 @@ const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
 const walletsDAO = require('./DAOs/wallet-dao');
+const axios = require('axios')
 const warehouseDao = require('./DAOs/warehouse-dao');
 const deliverersDao = require('./DAOs/deliverers-dao.js');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
@@ -22,6 +23,8 @@ const fileUpload = require('express-fileupload'); //Middleware for storing files
 const path = require('path');
 
 const fs = require('fs');
+const { request } = require('http');
+const { text } = require('body-parser');
 
 // init express
 let app = express();
@@ -35,6 +38,7 @@ app.use(express.json());
 app.use(fileUpload());
 
 const telegram_token = process.env.TELEGRAM_TOKEN;
+const telegram_group = process.env.TELEGRAM_GROUP_ID;
 const bot = new TelegramBot(telegram_token, {polling: true});
 
 app.setTestingMode = (test_db_name) => {
@@ -167,6 +171,42 @@ app.post('/api/sendReminderForPickup', function (req, res) {
     }
   });
 });
+
+/* text: `Dear Clients, we would like to inform you that the list of the available products for the next week is now online.
+    
+Please enter this link to open the page of available products.
+${textHtml}
+    `*/
+
+let sendUpdatedListNotificationTelegram = ()=>{
+let underlinedLink = "<u>http://localhost:3000/products-next-week</u>";
+  axios
+  .post(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+    chat_id: telegram_group,
+    parse_mode: 'HTML',
+    text: `Dear Clients, we would like to inform you that the list of the available products for the next week is now online.
+    
+Please enter this link to open the page of available products.
+    ${underlinedLink}`
+  })
+  .then(res => {
+    console.log(`Message was sent to Telegram`)
+  })
+  .catch(error => {
+    console.error(error)
+  })
+}
+
+app.post('/api/SendTelegramNotification', function (req, res) {
+  sendUpdatedListNotificationTelegram()
+});
+
+// string for cron which will implement function each Saturday Morning at 09:00
+let eachsaturday = '0 0 9 * * 6'
+
+cron.schedule(eachsaturday, ()=>{
+  sendUpdatedListNotificationTelegram()
+})
 
 
 let strA = '55 22 15 13 12 *'
