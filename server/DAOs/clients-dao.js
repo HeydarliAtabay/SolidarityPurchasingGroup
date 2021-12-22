@@ -62,3 +62,26 @@ exports.putTelegramUserId = (telegramId,email) => {
     });
   });
 };
+
+
+//get-> retrieve clients which balance is less than 5 euros and they have the telegram ID
+exports.getClientsWithInsufficientBalanceAndTelegramId = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * ' +
+    'FROM clients, orders ' +
+    'WHERE clients.client_id=orders.client_id AND clients.telegramId IS NOT NULL AND orders.state="pending" '+
+    'GROUP BY orders.order_id'
+
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const o = rows.map((e) => ({
+        client_id: e.client_id, budget: e.budget, name: e.name, surname: e.surname, gender: e.gender, phone: e.phone, email: e.email, telegramId: e.telegramId,
+        order_id:e.order_id, OrderPrice:e.OrderPrice, state:e.state, orderDate: e.date, orderTime:e.time
+      }));
+      resolve(o);
+    });
+  });
+};

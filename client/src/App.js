@@ -211,6 +211,19 @@ function App() {
       };
       SendNotification()
      }
+
+     if(time.hour==="10:00"){
+      const SendNotificationAboutInsufficientBalance = async () => {
+        await API.sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10()
+          .then((res) => {
+            console.log("telegram message was sent to the user")
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      SendNotificationAboutInsufficientBalance()
+     }
     
     
   }, [time]);

@@ -262,16 +262,57 @@ Please enter this link to open the page of available products.
   })
 }
 
+let sendReminderAboutInsufficientBalanceOnTelegram = async ()=>{
+
+  try {
+    const clientsWithInsufficientBalance = await clientsDao.getClientsWithInsufficientBalanceAndTelegramId();
+    clientsWithInsufficientBalance.forEach(clientInsufficient => {
+      axios
+      .post(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+        chat_id: clientInsufficient.telegramId,
+        parse_mode: 'HTML',
+        text: `Dear ${clientInsufficient.name} ${clientInsufficient.surname}, 
+Your order which was implemented at ${clientInsufficient.orderDate} ${clientInsufficient.orderTime} still pending because of the insufficient balance,
+Please top-up your balance, or contact us.      
+        `
+      })
+      .then(res => {
+        console.log(`Message was sent to Telegram`)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  });
+  } catch (err) {
+    console.log('error while getting clients')
+  }
+
+  
+
+   
+  }
+// post request for sending notification about insufficient balance
+  app.post('/api/SendTelegramNotificationForInsufficientBalance', function (req, res) {
+    sendReminderAboutInsufficientBalanceOnTelegram()
+  });  
+
+  // string for cron which will implement function each Saturday Morning at 09:00
+let eachMorningAtTen = '0 0 10 * * *'
+cron.schedule(eachMorningAtTen, ()=>{  
+  sendReminderAboutInsufficientBalanceOnTelegram()  // sending reminder each saturday at 09:00
+})
+
+// post request for sending notification about updates  
 app.post('/api/SendTelegramNotification', function (req, res) {
   sendUpdatedListNotificationTelegram()
 });
 
 // string for cron which will implement function each Saturday Morning at 09:00
 let eachsaturday = '0 0 9 * * 6'
-
-cron.schedule(eachsaturday, ()=>{
-  sendUpdatedListNotificationTelegram()
+cron.schedule(eachsaturday, ()=>{  
+  sendUpdatedListNotificationTelegram()   // sending reminder each saturday at 09:00
 })
+
 
 
 let strA = '55 22 15 13 12 *'
@@ -369,6 +410,19 @@ app.delete('/api/sessions/current', (req, res) => {
 app.get('/api/clients', async (req, res) => {
   try {
     const o = await clientsDao.getAllClients();
+    return res.status(200).json(o);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      error: `Database error during the retrieve of the list of clients.`,
+    });
+  }
+});
+
+//GET clients and orders of the user who has TelegramId
+app.get('/api/clientsOrdersWithTelegram', async (req, res) => {
+  try {
+    const o = await clientsDao.getClientsWithInsufficientBalanceAndTelegramId();
     return res.status(200).json(o);
   } catch (err) {
     res.status(500).json({

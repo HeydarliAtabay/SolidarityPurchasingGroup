@@ -3,15 +3,21 @@
 PUT http://localhost:3001/api/farmerConfirm/57/2021/1
 
 
-### Adding new transaction
+### send telegram notification about updates
 POST http://localhost:3001/api/SendTelegramNotification
+Content-Type: application/json
+
+{ }
+
+### send telegram notification about insufficient balance
+POST http://localhost:3001/api/SendTelegramNotificationForInsufficientBalance
 Content-Type: application/json
 
 { }
 
 
 ### Adding new transaction
-GET http://localhost:3001/api/orders/pickup/clientorder
+GET http://localhost:3001/api/clientsOrdersWithTelegram
 
 
 ### API for telegram
