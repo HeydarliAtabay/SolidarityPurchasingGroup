@@ -89,17 +89,17 @@ bot.onText(/\/start/, function onStart(msg) {
   const chatId = msg.chat.id;
   const username = msg.chat.username
   const photo = `../client/public/Frontpage/browse-farmers-image.png`;
-  bot.sendPhoto(msg.chat.id, photo, {
-    caption: `Welcome to Solidarity Purchase Group BOT.
+  bot.sendPhoto(chatId, photo, {
+    caption: `Welcome to Solidarity Purchase Group BOT dear ${username}.
   
-    Here you can use some functionalities of SPG. 
-    In the Following lines, you can see all possible actions with this bot.
-    /subscribe [email adress] - for making Subscription with bot to receive individual updates related to your account,
-    and to be able to use all the following commands
-    /schedule  - for Checking schedule when products will be available & when can you make an order
-    /balance - to check your balance
-    /orders - to check the list of your new and past orders
-    your userId is ${chatId} and name is ${username}
+Here you can use some functionalities of SPG. 
+Please firstly subcribe to our system with the help of the following command
+/subscribe [email adress] - for making Subscription with bot and receive individual updates related to your account,
+also you will be able to use all the following commands:
+
+/schedule  - for Checking schedule when products will be available & when can you make an order
+/balance - to check your balance
+/orders - to check the list of your new and past orders
     `
   });
 });
