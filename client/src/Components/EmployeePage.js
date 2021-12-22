@@ -3,9 +3,10 @@ import { Container, Button, Row, Col, Modal, Form, Dropdown, Card} from 'react-b
 import { List} from 'react-bootstrap-icons'
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import API from '../API';
 
 function ModalWalletTopUp(props) {
-  const { onClose, onSave, clients, methods } = props;
+  const { onClose, onSave, clients, methods, setClick } = props;
   const [clientId, setClientId] = useState(1)
   const [selectedUser, setSelectedUser] = useState({ client_id: -1 });
   const [method, setMethod] = useState(methods ? methods[0].method_name : "None")
@@ -26,12 +27,27 @@ function ModalWalletTopUp(props) {
 
   }, [method])
 
+  
+  
+  const SendTopUpNotificationTelegram = async (clientTelegram,transaction) => {
+    const SendNotification = async () => { 
+    await API.sendTelegramTopUpNotification(clientTelegram,transaction)
+      .then((res) => {
+        console.log("telegram message was sent to the user")
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+  SendNotification()
+  };
+
   {/*Should be modified*/ }
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     event.stopPropagation();
     let today=new Date()
-
+    let clientToSendTeleMessage = clients.filter(eachClient=>eachClient.client_id===clientId)
     const newTransaction = Object.assign({}, {
       type: "wallet top-up",
       client_id: clientId,
@@ -43,8 +59,10 @@ function ModalWalletTopUp(props) {
       status: 1
     });
 
-    onSave(newTransaction, amount, clientId)
-    window.location.reload(false);
+   await onSave(newTransaction, amount, clientId)
+    SendTopUpNotificationTelegram(clientToSendTeleMessage[0], newTransaction)
+    setClick(false)
+    //window.location.reload(false);
 
     
   };
@@ -493,7 +511,7 @@ function EmployeePage(props) {
 
       
             
-        {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
+        {(selectedTask !== MODAL.CLOSED) && <ModalWalletTopUp setClick={setClicked} onSave={handleSave} clients={clients} methods={methods} onClose={handleClose} ></ModalWalletTopUp>}
 
         <Col >
           {show ?   //set recharged della tabella ordini-clienti

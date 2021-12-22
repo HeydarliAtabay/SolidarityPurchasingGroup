@@ -889,6 +889,30 @@ const sendTelegramNotificationOnSaturday = async (e) => {
     });
 };
 
+/// send telegram notification on Saturday at 09:00
+const sendTelegramTopUpNotification = async (client,transaction) => {
+  const response = await fetch('/api/topUpNotificationTelegram', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      balance: client.budget,
+      telegramId: client.telegramId,
+      name: client.name,
+      surname: client.surname,
+      amount: transaction.amount,
+      date: transaction.date,
+      time: transaction.time
+    }),
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+    });
+};
+
 function updateItem(order) {
 
   return new Promise((resolve, reject) => {
@@ -1044,7 +1068,8 @@ const API = {
   getProviderProductsNotification,
   setNotificationasSent,
   getOrderAndClientData,
-  sendTelegramNotificationOnSaturday
+  sendTelegramNotificationOnSaturday,
+  sendTelegramTopUpNotification
 };
 
 export default API;

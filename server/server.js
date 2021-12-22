@@ -25,6 +25,7 @@ const path = require('path');
 const fs = require('fs');
 const { request } = require('http');
 const { text } = require('body-parser');
+const { parse } = require('dotenv');
 
 // init express
 let app = express();
@@ -93,7 +94,8 @@ bot.onText(/\/start/, function onStart(msg) {
   
     Here you can use some functionalities of SPG. 
     In the Following lines, you can see all possible actions with this bot.
-    /subscribe [email adress] - for making Subscription with bot to receive individual updates related to your account
+    /subscribe [email adress] - for making Subscription with bot to receive individual updates related to your account,
+    and to be able to use all the following commands
     /schedule  - for Checking schedule when products will be available & when can you make an order
     /balance - to check your balance
     /orders - to check the list of your new and past orders
@@ -156,7 +158,7 @@ bot.onText(/\/balance/, function onSchedule(msg) {
   bot.sendMessage(chatId, `Dear Client, Here is your balance: `);
 });
 
-// for /balance
+// for /orders
 bot.onText(/\/orders/, function onSchedule(msg) {
   const chatId = msg.chat.id;
   bot.sendMessage(chatId, `Dear Client, Here is your order list: `);
@@ -209,6 +211,37 @@ app.post('/api/sendReminderForPickup', function (req, res) {
   });
 });
 
+
+app.post('/api/topUpNotificationTelegram', function (req, res) {
+  const balance =req.body.balance
+  const telegramUserId=req.body.telegramId
+  const name = req.body.name
+  const surname = req.body.surname
+  const date = req.body.date
+  const time =req.body.time
+  const amount = req.body.amount
+  const newBalance= parseInt(balance)+parseInt(amount)
+
+
+  axios
+  .post(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+    chat_id: telegramUserId,
+    parse_mode: 'HTML',
+    text: `Dear ${name} ${surname}, your balance was ${balance}. Now your balance was topped up.
+
+    Details about your last Top-up:
+    added amount: ${amount} euros
+    date: ${date}
+    time: ${time}
+
+    Your new balance is : ${newBalance}
+
+
+    `
+  })
+
+  
+});
 
 let sendUpdatedListNotificationTelegram = ()=>{
 let underlinedLink = "<u>http://localhost:3000/products-next-week</u>";
