@@ -27,35 +27,8 @@ exports.getO = (order_id, product_name) => {
   });
 };
 
-/*
-exports.getProviderShippedOrders = (provider_id) => {
-    return new Promise((resolve, reject) => {
-        
-        const farmer_state = 'farmer-shipped';
-        const sql = 'SELECT provider_id, order_id, products.product_id, orders.client_id, product_name, clients.name FROM products, orders, clients  WHERE products.product_id = orders.product_id AND orders.farmer_state==? AND products.provider_id==? AND clients.client_id = orders.client_id';
-        
-        db.all(sql, [farmer_state, provider_id ], (err, rows) => {
-            if (err) {
-                reject(err);
-            }
-            const providerOrders = rows.map((p) => ({
-                prov_id: p.provider_id,
-                ord_id: p.order_id,
-                product_id: p.product_id,
-                cli_id: p.client_id,
-                prod_name: p.product_name,
-                client_name: p.name
-                
-                
-            }));
-            resolve(providerOrders);
-        });
-    });
-}
-*/
 exports.getProviderShippedOrders = (provider_id) => {
   return new Promise((resolve, reject) => {
-    const product_status = 'confirmed';
     const farmer_state = 'farmer-shipped';
     const sql = 'SELECT provider_id, order_id, clients.client_id, products.product_id, products.product_name, clients.name, clients.surname FROM products, orders, clients  WHERE  clients.client_id= orders.client_id AND products.product_id = orders.product_id  AND orders.farmer_state==? AND products.provider_id==?';
 

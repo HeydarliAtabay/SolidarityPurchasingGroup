@@ -125,18 +125,6 @@ function FarmerOrderConfirmation(props) {
                         className="btn btn-success"
                         onClick={() => {
                           setConfirmedProduct(product.id);
-                          /* setBookedProducts((prods) => {
-                                                        
-                                                        setConfirmedProduct(product.product_id)
-                                                        const newProds = [];
-                                                        for (const prod of prods) {
-                                                            if (prod.id === product.id) {
-                                                                prod.prepared = 1;
-                                                            }
-                                                            newProds.push(prod);
-                                                        }
-                                                        return newProds;
-                                                    })*/
                         }}
                       >
                         Confirm product

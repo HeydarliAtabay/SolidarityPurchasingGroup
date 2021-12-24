@@ -775,11 +775,19 @@ POST `/api/orders/farmershipped`
     * Response: `201 OK (success) or 503 (request failed)`
     * Response body:
         `true if application was successfully rejected, false otherwise`
+<<<<<<< HEAD
 
 
 ## API for deliverer page
 
 *GET `/api/deliverers `
+=======
+        
+ 
+## API for deliverer page
+
+* GET `/api/deliverers `
+>>>>>>> d722c735e43a7af2040869fe2e10b916c2c58b1a
     * get all the data of all deliverers
     * Request parameter:
          `     
@@ -795,7 +803,11 @@ POST `/api/orders/farmershipped`
              "error": "Unavailable service"
          }`
 
+<<<<<<< HEAD
 *GET `/api/deliverers/{$id}`
+=======
+* GET `/api/deliverers/{$id}`
+>>>>>>> d722c735e43a7af2040869fe2e10b916c2c58b1a
     * get deliverer by his mail
     * Request parameter:
          `     
@@ -813,7 +825,11 @@ POST `/api/orders/farmershipped`
          }`
 
 
+<<<<<<< HEAD
 *GET `/api/deliverableOrders/${city}`
+=======
+* GET `/api/deliverableOrders/${city}`
+>>>>>>> d722c735e43a7af2040869fe2e10b916c2c58b1a
     * get all the deliverable orders
     * Request parameter:
               

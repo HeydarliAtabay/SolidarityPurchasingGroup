@@ -1,12 +1,10 @@
-import { Container, Button, Row, Col, Table, ListGroupItem, Image, Modal, Form } from 'react-bootstrap';
+import { Button, Row, Col, Table, Image, Modal } from 'react-bootstrap';
 import { useState } from "react";
 import p from './circle-fill.svg';
 import d from './iconDelete.svg';
 import im from './pencil-fill.svg';
 import API from '../API'
 import {Link} from 'react-router-dom'
-import {CardList, PlusCircle} from 'react-bootstrap-icons'
-import { useHistory } from "react-router-dom";
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
 
@@ -18,8 +16,6 @@ const[show2,setShow2]= useState(false);
 const [id,setId]= useState();
 const [order,setOrder]= useState();
 
-
-const history = useHistory();
 
 let t=parseInt(props.clientid);
 
@@ -52,8 +48,8 @@ const handleClose2 = (x) => setShow2(x);
      if (!m.find(x =>(parseInt(x) === parseInt(s.order_id)))) {
                     return <td key={s.id}style={{ display: "none" }}></td> }
 else {
-let id=m[m.length-1];
-let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
+let id1=m[m.length-1];
+let array=props.orders.filter(x=>x.order_id===id1).map(x=>x.OrderPrice);
 let sum=0;
 for (const a of array)
 {sum=sum+a;}

@@ -97,16 +97,16 @@ exports.checkIfEmailExists = (email) => {
                 resolve(true);
             }
             else {
-                return new Promise((resolve, reject) => {
-                    const sql = 'SELECT * FROM farmer_applications WHERE farmer_email = ?';
-                    db.get(sql, [email], (err, row) => {
-                        if (err)
-                            reject(err);
-                        console.log(row);
-                        if (row)
-                            resolve(true);
+                return new Promise((resolve1, reject1) => {
+                    const sql1 = 'SELECT * FROM farmer_applications WHERE farmer_email = ?';
+                    db.get(sql1, [email], (err1, row1) => {
+                        if (err1)
+                            reject1(err1);
+                        console.log(row1);
+                        if (row1)
+                            resolve1(true);
                         else
-                            resolve(false);
+                            resolve1(false);
                     });
                 }).then((status) => (resolve(status))).catch((err) => (reject(err)));
             }

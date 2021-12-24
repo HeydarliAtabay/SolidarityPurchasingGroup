@@ -17,8 +17,8 @@ async function getAllClients() {
 async function getAllUsers() {
   const response = await fetch('/api/users');
   if (response.ok) {
-    const responseBody = await response.json();
-    return responseBody;
+    const responseUsersBody= await response.json()
+    return await responseUsersBody
   } else {
     try {
       const err = await response.json();
@@ -33,8 +33,8 @@ async function getAllUsers() {
 async function getAllOrders() {
   const response = await fetch('/api/orders');
   if (response.ok) {
-    const responseBody = await response.json();
-    return responseBody;
+    const responseAllOrders = await response.json()
+    return responseAllOrders;
   } else {
     try {
       const err = await response.json();
@@ -49,8 +49,7 @@ async function getAllOrders() {
 async function getProviderDeliveredOrders(id) {
   const response = await fetch(`/api/provider-orders/${id}`);
   if (response.ok) {
-    const responseBody = await response.json();
-    return responseBody;
+    return await response.json();
   } else {
     try {
       const err = await response.json();
@@ -80,14 +79,14 @@ function updateDelivered(id, product_name) {
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errUpdateDelivered) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update Delivered ' }],
               });
             });
         }
       })
-      .catch((err) => {
+      .catch((errUpdateDelivered1) => {
         reject({
           errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
         });
@@ -104,26 +103,26 @@ function updateWHPrepared(id, product_name) {
         'Content-Type': 'application/json',
       },
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseWHPrepared) => {
+        if (responseWHPrepared.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseWHPrepared
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errWHPrepared) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update WHPrepared ' }],
               });
             });
         }
       })
-      .catch((err) => {
+      .catch((errWHPrepared1) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while trying to implement /api/orders/${id}/${product_name} ' }],
         });
       });
   });
@@ -142,26 +141,26 @@ function updateState(id, state) {
         state: state
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseUpdateState) => {
+        if (responseUpdateState.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseUpdateState
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errUpdateState) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update state ' }],
               });
             });
         }
       })
-      .catch((err) => {
+      .catch((errUpdateState1) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyState' }],
         });
       });
   });
@@ -182,26 +181,26 @@ function updateStateFarmer(id, product_name, state) {
         state: state,
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseStateFarmer) => {
+        if (responseStateFarmer.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseStateFarmer
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errStateFarmer) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
+                errors: [{ param: 'Application', msg: 'Cannot update farmer state ' }],
               });
             });
         }
       })
-      .catch((err) => {
+      .catch((errStateFarmer1) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyStateFarmer ' }],
         });
       });
   });
@@ -210,95 +209,96 @@ function updateStateFarmer(id, product_name, state) {
 
 //GET all confirmed products + readme OK
 async function getAllConfirmedProducts(year, week) {
-  const response = await fetch('/api/products/confirmed/' + year + '/' + week);
-  if (response.ok) {
-    return await response.json();
+  const responseAllConfirmedProducts = await fetch('/api/products/confirmed/' + year + '/' + week);
+  if (responseAllConfirmedProducts.ok) {
+    return await responseAllConfirmedProducts.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllConfirmedProducts = { status: responseAllConfirmedProducts.status, errObj: await responseAllConfirmedProducts.json() };
+    throw errAllConfirmedProducts; // An object with the error coming from the server
   }
 }
 
 //GET all expected products + readme ok
 async function getAllExpectedProducts(year, week) {
-  const response = await fetch('/api/products/expected/' + year + '/' + week);
-  if (response.ok) {
-    return await response.json();
+  const responseAllExpectedProducts = await fetch('/api/products/expected/' + year + '/' + week);
+  if (responseAllExpectedProducts.ok) {
+    const responseAllExpectedProductsBody= await responseAllExpectedProducts.json();
+    return responseAllExpectedProductsBody
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllExpectedProducts = { status: responseAllExpectedProducts.status, errObj: await responseAllExpectedProducts.json() };
+    throw errAllExpectedProducts; // An object with the error coming from the server
   }
 }
 
 //GET all products in the booked or pending state of a certain provider + readme ok
 async function getOrderedProductsForProvider(year, week) {
-  const response = await fetch('/api/products/ordered/' + year + '/' + week);
-  if (response.ok) {
-    return await response.json();
+  const responseOrderedProductsForProvider = await fetch('/api/products/ordered/' + year + '/' + week);
+  if (responseOrderedProductsForProvider.ok) {
+    return await responseOrderedProductsForProvider.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errOrderedProductsForProvider = { status: responseOrderedProductsForProvider.status, errObj: await responseOrderedProductsForProvider.json() };
+    throw errOrderedProductsForProvider; // An object with the error coming from the server
   }
 }
 
 //Check if provider has already declared ordered items as shipped + readme ok
 async function getProviderShipmentStatus(year, week) {
-  const response = await fetch(
+  const responseProviderShipmentStatus = await fetch(
     '/api/provider/shipmentstatus/' + year + '/' + week
   );
-  if (response.ok) {
-    return await response.json();
+  if (responseProviderShipmentStatus.ok) {
+    return await responseProviderShipmentStatus.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errProviderShipmentStatus = { status: responseProviderShipmentStatus.status, errObj: await responseProviderShipmentStatus.json() };
+    throw errProviderShipmentStatus; // An object with the error coming from the server
   }
 }
 
 //POST all products IDs that were shipped + readme ok
 async function setProductsAsFarmerShipped(productIDS) {
-  const response = await fetch('/api/orders/farmershipped', {
+  const responseSetProductAsFarmerShipped = await fetch('/api/orders/farmershipped', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(productIDS), // Conversion in JSON format
   });
-  if (response.ok) {
-    return await response.json();
+  if (responseSetProductAsFarmerShipped.ok) {
+    return await responseSetProductAsFarmerShipped.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errSetProductAsFarmerShipped = { status: responseSetProductAsFarmerShipped.status, errObj: await responseSetProductAsFarmerShipped.json() };
+    throw errSetProductAsFarmerShipped; // An object with the error coming from the server
   }
 }
 
 //GET product by specific ID + readme ok
 async function getProductById(product_id) {
-  const response = await fetch('/api/product/' + product_id);
-  if (response.ok) {
-    return await response.json();
+  const responseProductById = await fetch('/api/product/' + product_id);
+  if (responseProductById.ok) {
+    return await responseProductById.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errProductById = { status: responseProductById.status, errObj: await responseProductById.json() };
+    throw errProductById; // An object with the error coming from the server
   }
 }
 
 //GET all categories + readme ok
 async function getAllCategories() {
-  const response = await fetch('/api/products/categories');
-  if (response.ok) {
-    return await response.json();
+  const responseAllCategories = await fetch('/api/products/categories');
+  if (responseAllCategories.ok) {
+    return await responseAllCategories.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllCategories = { status: responseAllCategories.status, errObj: await responseAllCategories.json() };
+    throw errAllCategories; // An object with the error coming from the server
   }
 }
 
 //GET all providers + readme ok
 async function getAllProviders() {
-  const response = await fetch('/api/providers/all');
-  if (response.ok) {
-    return await response.json();
+  const responseAllProviders = await fetch('/api/providers/all');
+  if (responseAllProviders.ok) {
+    return await responseAllProviders.json();
   } else {
-    let err = { status: response.status, errObj: await response.json() };
-    throw err; // An object with the error coming from the server
+    let errAllProviders = { status: responseAllProviders.status, errObj: await responseAllProviders.json() };
+    throw errAllProviders; // An object with the error coming from the server
   }
 }
 
@@ -514,40 +514,11 @@ function updateQuantity(product_id, quantity) {
       })
       .catch((err) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyquantity ' }],
         });
       });
   });
 }
-
-/* 
-   Place a new order.
-   orders = [(product_id, quantity), ...]
-*/
-//////////////////////////////////////////////////////////////////////
-//'insertNewOrder' is defined but never used => comment to reduce TD//
-//////////////////////////////////////////////////////////////////////
-/*async function insertNewOrder(client_id, orders) {
-  let product_order = { order_items: orders };
-
-  const order_response = await fetch(
-    '/api/insert-order?cid=' + client_id,
-    {
-      method: 'POST',
-      body: JSON.stringify(product_order),
-    }
-  );
-
-  if (order_response.ok) return await order_response.json(); // status: OK
-
-  // something went wrong with the request.
-  console.error(
-    'Error fetching resource: insert-order, status: ' + order_response.status
-  );
-
-  let ex = { status: order_response.status, errObj: order_response };
-  throw ex;
-}*/
 
 // Adding new client
 
@@ -661,12 +632,12 @@ function increaseBalance(amount, clientId) {
       },
       body: JSON.stringify({}),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseIncreaseBalance) => {
+        if (responseIncreaseBalance.ok) {
           resolve(null);
         } else {
           // analyze the cause of error
-          response
+          responseIncreaseBalance
             .json()
             .then((obj) => {
               reject(obj);
@@ -677,7 +648,7 @@ function increaseBalance(amount, clientId) {
         }
       })
       .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
+        reject({ error: 'Cannot communicate with the server while implementing /api/clients/update/balance/.' });
       }); // connection errors
   });
 }
@@ -714,19 +685,19 @@ function confirmExpectedProducts(product, year, week) {
 }
 //api login
 async function logIn(credentials) {
-  let response = await fetch('/api/sessions', {
+  let responseLogIn = await fetch('/api/sessions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(credentials),
   });
-  if (response.ok) {
-    const user = await response.json();
+  if (responseLogIn.ok) {
+    const user = await responseLogIn.json();
     return user;
   } else {
     try {
-      const errDetail = await response.json();
+      const errDetail = await responseLogIn.json();
       throw errDetail.message;
     } catch (err) {
       throw err;
@@ -817,17 +788,17 @@ function addOrder(S) {
         pickup: S.pickup,
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseAddOrder) => {
+        if (responseAddOrder.ok) {
           resolve(null);
         } else {
           // cause of error
-          response
+          responseAddOrder
             .json()
             .then((obj) => {
               reject(obj);
             })
-            .catch((err) => {
+            .catch((errAddOrder) => {
               reject({
                 errors: [
                   { param: 'Application', msg: 'Cannot insert a order' },
@@ -836,10 +807,10 @@ function addOrder(S) {
             });
         }
       })
-      .catch((err) => {
+      .catch((errAddOrder1) => {
         reject({
           errors: [
-            { param: 'Server', msg: 'Communication with server failed' },
+            { param: 'Server', msg: 'Communication with server failed while inserting an order' },
           ],
         });
       });
@@ -870,10 +841,10 @@ function deleteOrderItem(id) {
             });
         }
       })
-      .catch((err) => {
+      .catch((errDeleteOrderItem) => {
         reject({
           errors: [
-            { param: 'Server', msg: 'Communication with server failed' },
+            { param: 'Server', msg: 'Communication with server failed while deleting the order item [/api/orders/:id ]' },
           ],
         });
       });
@@ -902,6 +873,62 @@ const submitEmail = async (e) => {
       }
     });
 };
+
+/// send telegram notification on Saturday at 09:00
+const sendTelegramNotificationOnSaturday = async (e) => {
+  const response = await fetch('/api/SendTelegramNotification', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    }
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+    });
+};
+
+/// send telegram notification on Saturday at 09:00
+const sendTelegramTopUpNotification = async (client,transaction) => {
+  const response = await fetch('/api/topUpNotificationTelegram', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      balance: client.budget,
+      telegramId: client.telegramId,
+      name: client.name,
+      surname: client.surname,
+      amount: transaction.amount,
+      date: transaction.date,
+      time: transaction.time
+    }),
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+    });
+};
+
+
+/// send telegram notification on Saturday at 09:00
+const sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10 = async (e) => {
+  const response = await fetch('/api/SendTelegramNotificationForInsufficientBalance', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    }
+  })
+    .then((res) => res.json())
+    .then(async (res) => {
+      const resData = await res;
+      console.log(resData);
+    });
+};
+
 function updateItem(order) {
 
   return new Promise((resolve, reject) => {
@@ -929,36 +956,36 @@ function updateItem(order) {
         pickup: order.pickup,
       }),
     })
-      .then((response) => {
-        if (response.ok) {
+      .then((responseupdateItem) => {
+        if (responseupdateItem.ok) {
           resolve(null);
         } else {
           // analyze the cause of error
-          response
+          responseupdateItem
             .json()
             .then((obj) => {
               reject(obj);
             }) // error message in the response body
             .catch(() => {
-              reject({ error: 'Cannot parse server response.' });
+              reject({ error: 'Cannot parse server response while Updating Item.' });
             }); // something else
         }
       })
       .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
+        reject({ error: 'Cannot communicate with the server while implementing item update [/api/orders/:orderId].' });
       }); // connection errors
   });
 }
 
 //GET ->retrieve all deliverers
 async function getAllDeliverers() {
-  const response = await fetch('/api/deliverers');
-  if (response.ok) {
-    const responseBody = await response.json();
+  const responseGetAllDeliverers = await fetch('/api/deliverers');
+  if (responseGetAllDeliverers.ok) {
+    const responseBody = await responseGetAllDeliverers.json();
     return responseBody;
   } else {
     try {
-      const err = await response.json();
+      const err = await responseGetAllDeliverers.json();
       throw err.message;
     } catch (err) {
       throw err;
@@ -1057,6 +1084,9 @@ const API = {
   getProviderProductsNotification,
   setNotificationasSent,
   getOrderAndClientData,
+  sendTelegramNotificationOnSaturday,
+  sendTelegramTopUpNotification,
+  sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10
 };
 
 export default API;

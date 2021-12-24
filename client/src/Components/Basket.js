@@ -2,6 +2,12 @@ import { Button, Row, Col, Container, Alert } from 'react-bootstrap';
 import { useState } from 'react';
 import API from '../API';
 import dayjs from 'dayjs';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
@@ -14,12 +20,35 @@ function Basket(props) {
     message: '',
   });
   const [emailSent, setEmailSent] = useState(false);
+  const [openDialog, setOpenDialog]=useState(false)
 
   const handleSubmitEmail = (event) => {
     API.submitEmail(mailerState).then(() => {
       setEmailSent(true);
+      setOpenDialog(false)
     });
   };
+  
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  function changeEmailState(client){
+    setMailerState((prevState) => ({
+      ...prevState,
+      email: client.email,
+      message: `Dear ${client.name} ${client.surname}, 
+Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
+
+Best Regards,
+Solidarity Purchase Group
+`,
+    }));
+  }
 
   return (
     <>
@@ -107,13 +136,8 @@ function Basket(props) {
                       <Button
                         onClick={() => {
                           props.onConfirm();
-                          setMailerState((prevState) => ({
-                            ...prevState,
-                            email: s.email,
-                            message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to deliver
-                  `,
-                          }));
-                          handleSubmitEmail();
+                          changeEmailState(s);
+                          handleOpenDialog();
                           setEmailSent(true);
                         }}
                         className="mt-3"
@@ -195,10 +219,15 @@ function Basket(props) {
                           <Button
                             variant="secondary"
                             onClick={() => {
-                              setMailerState((prevState) => ({
-                                ...prevState,
+                              setMailerState((prevState1) => ({
+                                ...prevState1,
                                 email: s.email,
-                                message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop
+                                message: `Dear ${s.name} ${s.surname}, 
+                                
+Your order from Solidarity Purchase group was confirmed, You will be informed when your products will be ready to be picked up from the shop.
+
+Best Regards,
+Solidarity Purchase Group
                   `,
                               }));
                               handleSubmitEmail();
@@ -289,6 +318,27 @@ function Basket(props) {
           </Row>
         </>
       )}
+      <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Accepting email sending"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to send an email to the Client, about confirmation of his/her order?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Disagree</Button>
+          <Button onClick={handleSubmitEmail} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

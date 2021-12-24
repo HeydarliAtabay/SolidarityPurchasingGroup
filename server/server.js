@@ -10,16 +10,22 @@ const ordersDao = require('./DAOs/client-orders-dao');
 const productsDAO = require('./DAOs/products-dao');
 const providersDAO = require('./DAOs/providers-dao');
 const walletsDAO = require('./DAOs/wallet-dao');
+const axios = require('axios')
 const warehouseDao = require('./DAOs/warehouse-dao');
 const deliverersDao = require('./DAOs/deliverers-dao.js');
 const passportLocal = require('passport-local').Strategy; //Authentication strategy
 const session = require('express-session'); //Session middleware
 const passport = require('passport'); //Authentication middleware
 const dbt = require('./DAOs/users-dao'); // module for accessing the DB
+const TelegramBot = require('node-telegram-bot-api'); //module for telegrom bot 
 
 const fileUpload = require('express-fileupload'); //Middleware for storing files
 const path = require('path');
+
 const fs = require('fs');
+const { request } = require('http');
+const { text } = require('body-parser');
+const { parse } = require('dotenv');
 
 // init express
 let app = express();
@@ -31,6 +37,10 @@ const PORT = 3001;
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(fileUpload());
+
+const telegram_token = process.env.TELEGRAM_TOKEN;
+const telegram_group = process.env.TELEGRAM_GROUP_ID;
+const bot = new TelegramBot(telegram_token, {polling: true});
 
 app.setTestingMode = (test_db_name) => {
   clientsDao.setTestDB(test_db_name);
@@ -49,6 +59,109 @@ let transporter = nodemailer.createTransport({
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   }
+});
+
+
+bot.onText(/\/message (.+)/, (msg, match) => {
+  const chatId = msg.chat.id;
+  const resp = match[1]; 
+  bot.sendMessage(chatId, `Your message was ${resp}`);
+});
+
+bot.on('/start', (msg) => {
+  const chatId = msg.chat.id;
+
+  // send a message to the chat acknowledging receipt of their message
+  bot.sendMessage(chatId, `Welcome to Solidarity Purchase Group BOT.
+  
+  Here you can use some functionalities of SPG. 
+  In the Following lines, you can see all possible actions with this bot.
+  /subscribe [email adress] - for making Subscription with bot to receive individual updates related to your account
+  /schedule  - for Checking schedule when products will be available & when can you make an order
+  /balance - to check your balance
+  /orders - to check the list of your new and past orders
+  `);
+ // bot.sendVideo(chatId, necef, {caption: "Sent by: " + "Elnur" } )
+});
+
+// while writing /start
+bot.onText(/\/start/, function onStart(msg) {
+  const chatId = msg.chat.id;
+  const username = msg.chat.username
+  const photo = `../client/public/Frontpage/browse-farmers-image.png`;
+  bot.sendPhoto(chatId, photo, {
+    caption: `Welcome to Solidarity Purchase Group BOT dear ${username}.
+  
+Here you can use some functionalities of SPG. 
+Please firstly subcribe to our system with the help of the following command
+/subscribe [email adress] - for making Subscription with bot and receive individual updates related to your account,
+also you will be able to use all the following commands:
+
+/schedule  - for Checking schedule when products will be available & when can you make an order
+/balance - to check your balance
+/orders - to check the list of your new and past orders
+    `
+  });
+});
+// example for sending photos
+
+bot.onText(/\/photo/, function onPhotoText(msg) {
+  // From file path
+  const photo = `./GREETING.png`;
+  bot.sendPhoto(msg.chat.id, photo, {
+    caption: "I'm a bot!"
+  });
+});
+
+bot.onText(/\/subscribe (.+)/, async (msg, match) => {
+  // From file path
+  const userId = msg.chat.id;
+  const userName= msg.chat.username
+  const emailUser= match[1]
+  const clients = await clientsDao.getAllClients();
+  let emailIsCorrect=0
+
+  clients.forEach(client => {
+    if(client.email===emailUser)emailIsCorrect=1
+  });
+
+  if(emailIsCorrect===1){
+    bot.sendMessage(userId, `Dear ${userName}, you've succesfully made a subscription to our service!
+    Entered email was: ${emailUser}
+      `);
+        try {
+          await clientsDao.putTelegramUserId(userId, emailUser);
+        } catch (err) {
+          console.log("error while updating the telegram id")
+        }
+
+  }
+  else{
+    bot.sendMessage(userId, `Dear ${userName}, we could not find email entered by you in our server, please try again.
+    Entered email was: ${emailUser}
+      `);
+  }
+
+  
+});
+
+// for /schedule
+bot.onText(/\/schedule/, function onSchedule(msg) {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, `Dear Client, Here is the schedule for the next week:
+  `);
+});
+
+// for /balance
+bot.onText(/\/balance/, function onSchedule(msg) {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, `Dear Client, Here is your balance: `);
+});
+
+// for /orders
+bot.onText(/\/orders/, function onSchedule(msg) {
+  const chatId = msg.chat.id;
+  bot.sendMessage(chatId, `Dear Client, Here is your order list: `);
 });
 
 app.post('/api/sendEmail', function (req, res) {
@@ -97,6 +210,109 @@ app.post('/api/sendReminderForPickup', function (req, res) {
     }
   });
 });
+
+
+app.post('/api/topUpNotificationTelegram', function (req, res) {
+  const balance =req.body.balance
+  const telegramUserId=req.body.telegramId
+  const name = req.body.name
+  const surname = req.body.surname
+  const date = req.body.date
+  const time =req.body.time
+  const amount = req.body.amount
+  const newBalance= parseInt(balance)+parseInt(amount)
+
+
+  axios
+  .post(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+    chat_id: telegramUserId,
+    parse_mode: 'HTML',
+    text: `Dear ${name} ${surname}, your balance was ${balance}. Now your balance was topped up.
+
+    Details about your last Top-up:
+    added amount: ${amount} euros
+    date: ${date}
+    time: ${time}
+
+    Your new balance is : ${newBalance}
+
+
+    `
+  })
+
+  
+});
+
+let sendUpdatedListNotificationTelegram = ()=>{
+let underlinedLink = "<u>http://localhost:3000/products-next-week</u>";
+  axios
+  .post(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+    chat_id: telegram_group,
+    parse_mode: 'HTML',
+    text: `Dear Clients, we would like to inform you that the list of the available products for the next week is now online.
+    
+Please enter this link to open the page of available products.
+    ${underlinedLink}`
+  })
+  .then(res => {
+    console.log(`Message was sent to Telegram`)
+  })
+  .catch(error => {
+    console.error(error)
+  })
+}
+
+let sendReminderAboutInsufficientBalanceOnTelegram = async ()=>{
+
+  try {
+    const clientsWithInsufficientBalance = await clientsDao.getClientsWithInsufficientBalanceAndTelegramId();
+    clientsWithInsufficientBalance.forEach(clientInsufficient => {
+      axios
+      .post(`https://api.telegram.org/bot${telegram_token}/sendMessage`, {
+        chat_id: clientInsufficient.telegramId,
+        parse_mode: 'HTML',
+        text: `Dear ${clientInsufficient.name} ${clientInsufficient.surname}, 
+Your order which was implemented at ${clientInsufficient.orderDate} ${clientInsufficient.orderTime} still pending because of the insufficient balance,
+Please top-up your balance, or contact us.      
+        `
+      })
+      .then(res => {
+        console.log(`Message was sent to Telegram`)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  });
+  } catch (err) {
+    console.log('error while getting clients')
+  }
+
+  
+
+   
+  }
+// post request for sending notification about insufficient balance
+  app.post('/api/SendTelegramNotificationForInsufficientBalance', function (req, res) {
+    sendReminderAboutInsufficientBalanceOnTelegram()
+  });  
+
+  // string for cron which will implement function each Saturday Morning at 09:00
+let eachMorningAtTen = '0 0 10 * * *'
+cron.schedule(eachMorningAtTen, ()=>{  
+  sendReminderAboutInsufficientBalanceOnTelegram()  // sending reminder each saturday at 09:00
+})
+
+// post request for sending notification about updates  
+app.post('/api/SendTelegramNotification', function (req, res) {
+  sendUpdatedListNotificationTelegram()
+});
+
+// string for cron which will implement function each Saturday Morning at 09:00
+let eachsaturday = '0 0 9 * * 6'
+cron.schedule(eachsaturday, ()=>{  
+  sendUpdatedListNotificationTelegram()   // sending reminder each saturday at 09:00
+})
+
 
 
 let strA = '55 22 15 13 12 *'
@@ -194,6 +410,19 @@ app.delete('/api/sessions/current', (req, res) => {
 app.get('/api/clients', async (req, res) => {
   try {
     const o = await clientsDao.getAllClients();
+    return res.status(200).json(o);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      error: `Database error during the retrieve of the list of clients.`,
+    });
+  }
+});
+
+//GET clients and orders of the user who has TelegramId
+app.get('/api/clientsOrdersWithTelegram', async (req, res) => {
+  try {
+    const o = await clientsDao.getClientsWithInsufficientBalanceAndTelegramId();
     return res.status(200).json(o);
   } catch (err) {
     res.status(500).json({
@@ -457,7 +686,6 @@ app.put('/api/provider-products-sent/', async (req, res) => {
     return;
   }
   try {
-    //const ids = new Array();
     const ids = req.body.map((p) => p.id);
     let result_change_notification = false;
     for (let pid of ids) {

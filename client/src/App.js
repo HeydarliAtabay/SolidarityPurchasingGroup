@@ -194,6 +194,40 @@ function App() {
       });
   }
 
+   /* USEFFECT Telegram Notification */
+
+
+   useEffect(() => {
+     let dayOfWeek= dayjs(time.date).day()
+     if((dayOfWeek===6) && (time.hour==="09:00")){
+      const SendNotification = async () => {
+        await API.sendTelegramNotificationOnSaturday()
+          .then((res) => {
+            console.log("telegram message was sent to group")
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      SendNotification()
+     }
+
+     if(time.hour==="10:00"){
+      const SendNotificationAboutInsufficientBalance = async () => {
+        await API.sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10()
+          .then((res) => {
+            console.log("telegram message was sent to the user")
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+      SendNotificationAboutInsufficientBalance()
+     }
+    
+    
+  }, [time]);
+
   function topUpBalance(amount, client) {
     API.increaseBalance(amount, client)
       .then((err) => {

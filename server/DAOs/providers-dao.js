@@ -267,40 +267,40 @@ exports.acceptApplication = (applicationID) => {
                     date: row.application_date,
                 };
 
-                return new Promise((resolve, reject) => {
+                return new Promise((resolve1, reject1) => {
                     /*SET farmer application status to "accepted*/
-                    const sql =
+                    const sql1 =
                         'UPDATE farmer_applications SET application_status="accepted" WHERE application_id=?';
-                    db.run(sql, [applicationID], (err) => {
-                        if (err) {
-                            reject(err);
+                    db.run(sql1, [applicationID], (err1) => {
+                        if (err1) {
+                            reject1(err1);
                         }
 
-                        return new Promise((resolve, reject) => {
+                        return new Promise((resolve2, reject2) => {
                             /*insert new farmer user*/
                             const dummy_user_id = null;
-                            const sql =
+                            const sql2 =
                                 'INSERT INTO users( id, name, email, hash, role ) VALUES ( ?, ?, ?, ?, "farmer" )';
                             db.run(
-                                sql,
+                                sql2,
                                 [
                                     dummy_user_id,
                                     application.name,
                                     application.email,
                                     application.password,
                                 ],
-                                function (err) {
-                                    if (err) {
-                                        reject(err);
+                                function (err2) {
+                                    if (err2) {
+                                        reject2(err2);
                                     }
                                     const user_id = this.lastID; //userID from this insertion
 
-                                    return new Promise((resolve, reject) => {
+                                    return new Promise((resolve3, reject3) => {
                                         /*insert new provider*/
-                                        const sql =
+                                        const sql3 =
                                             'INSERT INTO providers( provider_id, user_id, provider_name, provider_description, provider_location, provider_address, provider_phone) VALUES ( NULL, ?, ?, ?, ?, ?, ? )';
                                         db.run(
-                                            sql,
+                                            sql3,
                                             [
                                                 user_id,
                                                 application.name,
@@ -309,17 +309,17 @@ exports.acceptApplication = (applicationID) => {
                                                 application.complete_address,
                                                 application.phone,
                                             ],
-                                            (err, row) => {
-                                                if (err) {
-                                                    reject(err);
+                                            (err3, row) => {
+                                                if (err3) {
+                                                    reject3(err3);
                                                 }
-                                                resolve(true);
+                                                resolve3(true);
                                             }
                                         );
-                                    }).then((res) => resolve(res));
+                                    }).then((res) => resolve2(res));
                                 }
                             );
-                        }).then((res) => resolve(res));
+                        }).then((res) => resolve1(res));
                     });
                 }).then((res) => resolve(res));
             }

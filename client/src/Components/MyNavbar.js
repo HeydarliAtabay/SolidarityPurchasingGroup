@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Form, OverlayTrigger, Popover, Navbar, Container, Nav, NavDropdown, Row } from 'react-bootstrap'
+import { Form, OverlayTrigger, Popover, Navbar, Container, Nav, NavDropdown} from 'react-bootstrap'
 import dayjs from 'dayjs';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -25,19 +25,6 @@ const MyNavbar = function (props) {
   }
 
   const history = useHistory();
-
-  const toggleNavbarBrand = () => {
-    console.log("Running");
-
-    const currLocation = history.location.pathname;
-
-    const displaySPGLocations = ["/", "/client", "/employee", "/farmer", "/warehouse-employee", "/warehouse-manager", "/delivery"];
-
-    if (displaySPGLocations.find((loc) => (loc === currLocation))) {
-      return "SPG_logo";
-    }
-    return "Back_button";
-  }
 
   return (
     <Navbar variant="dark" expand="lg" className="menu-bar p-1 w-100 shadow" >
@@ -233,9 +220,9 @@ const MyNavbar = function (props) {
                         <Form.Label as="h6">Virtual date</Form.Label>
                         <Form.Control type="date" value={date} onChange={(event) => {
                           setDate(event.target.value)
-                          props.setTime((time) => ({
+                          props.setTime((newTime) => ({
                             date: event.target.value,
-                            hour: time.hour,
+                            hour: newTime.hour,
                           }))
                         }} />
                       </Form.Group>
@@ -245,8 +232,8 @@ const MyNavbar = function (props) {
                         <Form.Control type="time" value={time}
                           onChange={(event) => {
                             setTime(event.target.value);
-                            props.setTime((time) => ({
-                              date: time.date,
+                            props.setTime((newTime1) => ({
+                              date: newTime1.date,
                               hour: event.target.value,
                             }))
                           }} />
@@ -281,9 +268,6 @@ const userIcon = <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" 
   <path fillRule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
 </svg>
 
-const backIcon = <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-arrow-bar-left" viewBox="0 0 16 16">
-  <path fillRule="evenodd" d="M12.5 15a.5.5 0 0 1-.5-.5v-13a.5.5 0 0 1 1 0v13a.5.5 0 0 1-.5.5zM10 8a.5.5 0 0 1-.5.5H3.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L3.707 7.5H9.5a.5.5 0 0 1 .5.5z" />
-</svg>
 
 export default MyNavbar;
 

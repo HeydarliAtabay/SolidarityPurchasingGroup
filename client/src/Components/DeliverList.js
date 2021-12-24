@@ -4,9 +4,14 @@ import {toast} from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import Tooltip from "@material-ui/core/Tooltip";
 import Typography from "@material-ui/core/Typography"
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 import ris from './reply-all-fill.svg';
 import API from '../API'
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import p from './circle-fill.svg';
 function onlyUnique(value,index,self){
 return self.indexOf(value)===index;
@@ -18,7 +23,6 @@ function DeliverList(props){
  const [showClient, setShowClient]= useState(false);
  const [showContact, setShowContact]= useState(false);
  const [contactType, setContactType]=useState(0)
- const [notified,setNotified]=useState(0) 
  const [shouldBeNotified, setShouldBeNotified]=useState(0)
  const [pickupDate,setPickupDate] = useState({
   date: '',
@@ -33,20 +37,6 @@ const handleClose = (x) => {
   setShowClient(x);
   setShowContact(x)
 }
-
-function ReminderToast(props){
-const {client, date, time} = props
-  return(
-    <>
-    <Row> <h5>{`Client ${client} has to pickup his/her order at ${date} ${time}`}</h5> </Row>
-    <Row><> <h6>{`Please Notify this client`}</h6></> </Row>
-  </>
-  )
-}
-useEffect(() => {
-  setNotified(0)
-}, [time]);
-
     return(<>
     <Finestra show={show}handleClose={handleClose}id={id}orders={props.orders}/>
     <ClientModal show={showClient}handleClose={handleClose} client={client} clients={props.clients}/>
@@ -68,29 +58,20 @@ useEffect(() => {
       if(!m.find(x=>(parseInt(x)=== parseInt(s.order_id)))){
         return <td key={s.id} style={{display:"none"}}> </td>
       }
-      else {let id=m[m.length-1];
-let array=props.orders.filter(x=>x.order_id===id).map(x=>x.OrderPrice);
-let array2=props.orders.filter(x=>x.order_id===id).map(x=>x.product_name);
+      else {let id1=m[m.length-1];
+let array=props.orders.filter(x=>x.order_id===id1).map(x=>x.OrderPrice);
+let array2=props.orders.filter(x=>x.order_id===id1).map(x=>x.product_name);
 let sum=0;
 for (const a of array)
 {sum=sum+a;}
        sum=sum.toFixed(2);
 m.pop();
-/* if((Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1)&& notified===0 ){
-  setNotified(1)
-  setTimeout(() => {
-    toast.info(<ReminderToast client={s.client_id} date={s.date} time={s.time}/>, {autoClose: 5000})
-  }, 2000);
-
-
-}
-*/
         return (
           <>
          {(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1)? 
         <>
         <Tooltip title={<h6>{` Pleasy notify the client about tomorrow's pick up `}</h6>}>
- <tr key={s.id} style={{color:"blue", fontSize:20, lightingColor:'blue', cursor:'pointer'}}>
+ <tr key={s.id} style={{color:"blue", fontSize:20, cursor:'pointer'}}>
          
          <td> {s.order_id}</td>
             <td>{s.client_id} </td>
@@ -105,7 +86,7 @@ m.pop();
              <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
            for(const a of array2){
                API.updateDelivered(id, a).then(()=>{
-               props.setRecharged(true); setTimeout(()=>{},3000)});
+               props.setRecharged(true); setTimeout(()=>{console.log("Delivered")},3000)});
             }}
         }></Image>
    }  
@@ -167,8 +148,8 @@ m.pop();
     }
 
     
-    setPickupDate((prevState) => ({
-      ...prevState,
+    setPickupDate((prevState1) => ({
+      ...prevState1,
       date: s.date,
       hour: s.time
     }));
@@ -197,10 +178,10 @@ m.pop();
             {(new Date(s.date+' '+s.time)<(new Date(time.date+' '+time.hour)) && s.pickup===1 )  ? <td style={{color:"red"}}>{s.date}{' '}{s.time} </td> : <td>{s.date}{' '}{s.time} </td> }
             <td>
             {s.state===props.b && 
-             <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
+             <Image src={ris}data-testid="im1" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
            for(const a of array2){
                API.updateDelivered(id, a).then(()=>{
-               props.setRecharged(true); setTimeout(()=>{},3000)});
+               props.setRecharged(true); setTimeout(()=>{"Delivered Successfully"},3000)});
             }}
         }></Image>
    }  
@@ -230,8 +211,8 @@ m.pop();
     setClient(s.client_id)
     setContactType(1)
     setShouldBeNotified(0)
-    setPickupDate((prevState) => ({
-      ...prevState,
+    setPickupDate((prevState2) => ({
+      ...prevState2,
       date: s.date,
       hour: s.time
     }));
@@ -255,15 +236,14 @@ m.pop();
     setContactType(0)
     if(Math.ceil(Math.abs((new Date(s.date)-new Date(time.date)))/(1000 * 60 * 60 * 24))<=1){
       setShouldBeNotified(1)
-      console.log("It will changed to 1")
     }
     else{
       setShouldBeNotified(0)
     }
 
     
-    setPickupDate((prevState) => ({
-      ...prevState,
+    setPickupDate((prevState3) => ({
+      ...prevState3,
       date: s.date,
       hour: s.time
     }));
@@ -282,20 +262,6 @@ m.pop();
         )
       }
     })}
-
- {/*
-    <Col xs={2} md={2}> 
-   {s.state===props.b && 
-   <Image src={ris}data-testid="im" style={{ width: '80px', height: '30px' ,'cursor':'pointer'}} onClick={()=>{
-    for(const a of array2){
-           API.updateDelivered(id, a).then(()=>{
-              
-       props.setRecharged(true); setTimeout(()=>{},3000)});
-                  
-             }}
-        }></Image>
-
-   }*/}
   </tbody>
 </Table>
     </>
@@ -332,14 +298,35 @@ function ClientModal(props){
     email: "",
     message: ""
   });
+  const [openDialog, setOpenDialog]=useState(false)
   const [emailSent, setEmailSent]=useState(false)
   const handleSubmitEmail = (event) => {
-   
     API.submitEmail(mailerState).then(()=>{
     setEmailSent(true) 
-    });
-                 
-            
+    setOpenDialog(false)
+    });         
+  }
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  function changeEmailState(client){
+    setMailerState((prevState) => ({
+      ...prevState,
+      email: client.email,
+      message: `Dear ${client.name} ${client.surname}, 
+Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order 
+
+Best Regards,
+Solidarity Purchase Group
+`
+      
+    }));
   }
   return(
  
@@ -369,13 +356,8 @@ function ClientModal(props){
     <>
     <Envelope color="green" size={24} style={{'cursor':'pointer'}}
     onClick={()=>{
-      setMailerState((prevState) => ({
-        ...prevState,
-        email: s.email,
-        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
-        
-      }));
-      handleSubmitEmail();
+      changeEmailState(s)
+      handleOpenDialog()
     }}
     
     />
@@ -383,18 +365,7 @@ function ClientModal(props){
     } 
      {emailSent && 
     <>
-    <Envelope color="gray" size={24} style={{'cursor':'pointer'}}
-    onClick={()=>{
-      setMailerState((prevState) => ({
-        ...prevState,
-        email: s.email,
-        message: `Dear ${s.name} ${s.surname}, Your order from Solidarity Purchase group is still pending, please top-up your wallet for letting us to complete your order `
-        
-      }));
-      handleSubmitEmail();
-    }}
-    
-    />
+    <Envelope color="gray" size={24} style={{'cursor':'pointer'}} disabled />
     </>
     }
      </Col>
@@ -405,6 +376,29 @@ function ClientModal(props){
 </Modal.Footer>
  
   </Modal>
+
+  <Dialog
+        open={openDialog}
+        onClose={handleCloseDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Accepting email sending"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Do you want to send an email to the Client, about insufficient balance?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Disagree</Button>
+          <Button onClick={handleSubmitEmail} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+
   </>);}
 function ContactModal(props){
   const {contactType,pickUp, notify}=props
@@ -412,11 +406,10 @@ function ContactModal(props){
     email: "",
     message: ""
   });
-  const [emailSent, setEmailSent]=useState(false)
   const handleSubmitEmail = (event) => {
    
     API.submitEmail(mailerState).then(()=>{
-    setEmailSent(true) 
+      console.log("Mail sent correctly")
     });
                  
             
