@@ -59,3 +59,20 @@ exports.createTransaction = (tr) => {
     });
   });
 };
+
+
+// retrieve balance from telegram id
+
+exports.retrieveBudgetByTelegramID = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT budget FROM clients WHERE telegramId=?';
+    db.all(sql, [id], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const methods = rows.map((res) => ({ budget: res.budget }));
+      resolve(methods);
+    });
+  });
+};

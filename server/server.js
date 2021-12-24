@@ -155,7 +155,32 @@ bot.onText(/\/schedule/, function onSchedule(msg) {
 // for /balance
 bot.onText(/\/balance/, function onSchedule(msg) {
   const chatId = msg.chat.id;
-  bot.sendMessage(chatId, `Dear Client, Here is your balance: `);
+  
+  const asyncExample = async () => {
+    const result = await walletsDAO.retrieveBudgetByTelegramID(chatId);
+
+    if(result.length>0){
+      bot.sendMessage(chatId, `Dear Client, Here is your balance: `+ result[0].budget);
+    }
+    else{
+      bot.sendMessage(chatId, `Dear Client, you haven't connected your  SPG account to Telegram `);
+    }
+    return result;
+   }
+   
+   res = asyncExample();
+});
+
+app.get('/api/telegramId', async (req, res) => {
+  try {
+    const m = await walletsDAO.retrieveBudgetByTelegramID(246950204);
+    return res.status(200).json(m);
+  } catch (err) {
+    res.status(500).json({
+      code: 500,
+      error: 'Database error during the retrieve of the list of users.',
+    });
+  }
 });
 
 // for /orders
