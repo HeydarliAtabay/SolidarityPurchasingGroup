@@ -163,7 +163,9 @@ bot.onText(/\/balance/, function onSchedule(msg) {
       bot.sendMessage(chatId, `Dear Client, Here is your balance: `+ result[0].budget);
     }
     else{
-      bot.sendMessage(chatId, `Dear Client, you haven't connected your  SPG account to Telegram `);
+      bot.sendMessage(chatId, `Dear Client, you haven't connected your  SPG account to Telegram
+Please, use /subscribe [your email address] to connect your telegram to our system      
+      `);
     }
     return result;
    }
