@@ -51,7 +51,7 @@ open your favourite browser and access the project at the url: http://localhost:
 | clare.mint@yahoo.it       |   sara   |
 | miriam@email.com | 1234 |
 | giovanni@email.com    |   1234   |
-| clare.mint@yahoo.it       |   sara   |
+
 
 
 ### Shop employee
