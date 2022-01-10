@@ -1,267 +1,95 @@
-import { Button, Alert, Table, Modal, Badge, Placeholder } from 'react-bootstrap';
-import { useState, useEffect } from "react";
+import { Button, Modal, OverlayTrigger, Badge, Tooltip } from 'react-bootstrap';
+import { BoxSeam } from 'react-bootstrap-icons';
 import API from '../API'
-import { Link, useHistory } from 'react-router-dom'
+import { useState, useEffect } from "react";
 import dayjs from 'dayjs';
 
-dayjs.Ls.en.weekStart = 1; //set week start as monday
+var isSameOrAfter = require('dayjs/plugin/isSameOrAfter');
+dayjs.extend(isSameOrAfter);
 
-function onlyUnique(value, index, self) {
-  return self.indexOf(value) === index;
-}
+dayjs.Ls.en.weekStart = 1; //set week to start on monday
 
-function Orders(props) {
+function PickupListManager(props) {
   const [show, setShow] = useState(false);
-  const [show2, setShow2] = useState(false);
   const [id, setId] = useState();
-  const [orderModifiedAlert, setOrderModifiedAlert] = useState(null);
+  const [orders, setOrders] = useState([]);
+  const [ordersMap, setOrdersMap] = useState(new Map());
+  const [prepare, setPrepare] = useState(false);
+  const [prepareID, setPrepareID] = useState(0);
+  const [updateOrders, setUpdateOrders] = useState(true);
 
+  const [showOrderStatus, setShowOrderStatus] = useState(false);
+
+  /* Create orders array to show in table*/
   useEffect(() => {
-    if (!props.orderModified) {
+    if (!updateOrders) {
       return;
     }
 
-    if (props.orderChangeItemID !== -1) {
-      const oldOrderEntry = props.orders.find((o) => (o.id === props.orderChangeItemID));
-      setOrderModifiedAlert({ variant: 'success', msg: 'The desired item was successfully swapped', order_id: oldOrderEntry.order_id });
-      setId(oldOrderEntry.order_id);
-      setShow(true);
-      props.setOrderChangeItemID(-1);
-    }
-    if (props.orderAddItemID !== -1) {
-      setOrderModifiedAlert({ variant: 'success', msg: 'The new item was successfully added to your order', order_id: props.orderAddItemID });
-      setId(props.orderAddItemID);
-      setShow(true);
-      props.setOrderAddItemID(-1);
-    }
+    const getOrders = async () => {
+
+      setUpdateOrders(false);
+
+      const previousWeek = getPreviousWeek().week_number;
+      const previousWeekYear = getPreviousWeek().year;
+
+      const condensedOrders = new Map();
 
 
-  }, [props.orderModified])
-
-  const currWeekNumber = dayjs(props.time.date).week();
-  let m = props.orders.filter(x => x.client_id === props.clientid).map(s => s.order_id).filter(onlyUnique);
-  m.reverse();
-
-  const modifyOrderAvailable = (productID) => {
-    const currWeekNumber = dayjs(props.time.date).week();
-
-    if (props.products.find(p => p.id === productID).week !== currWeekNumber) {
-      return false;
-    }
-
-    //Saturday
-    if (dayjs(props.time.date).day() === 5) {
-      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 9) {
-        //Before SAT 9AM -> not available
-        return false;
-      }
-      //After SAT 9AM -> available
-      else {
-        //next week = week + 2
-        return true;
-      }
-    }
-    //Sunday
-    else if (dayjs(props.time.date).day() === 6) {
-      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 23) {
-        //Before SUN 11PM -> available
-        return true;
-      }
-      //After SAT 9AM -> available
-      else {
-        //next week = week + 2
-        return false;
-      }
-    }
-    //from Monday up to Saturday 9am -> declaring for this week
-    else {
-      return false;
-    }
-  }
-
-  const handleModifyOrder = (allowModifications, order_id) => {
-    if (!allowModifications) {
-      return;
-    }
-    setShow(true);
-    setId(order_id);
-  }
-
-  return (
-    <>
-      <div className="container-fluid">
-
-        <span className="d-block text-center mt-5 mb-2 display-1">
-          My Orders
-        </span>
-        <h5 className="d-block mx-auto mb-5 text-center text-muted">
-          Below you can find and manage all the orders you have placed. The orders are ranked from the most recent one.<br /><br />
-          An order can only be modified during the purchasing window and if its payment has been completed.
-        </h5>
-
-        <div className="row mx-3">
-          <Table striped bordered hover variant="light" responsive="lg" size="lg" className='px-5'>
-            <thead >
-              <tr>
-                <th>Order id</th>
-                <th>Products</th>
-                <th>Total</th>
-                <th>Payment status</th>
-                <th>Purchase Type</th>
-                <th>Date & Time</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {props.orders.sort((a, b) => (b.order_id - a.order_id)).map((s) => {
-                if (m.find(x => (parseInt(x) === parseInt(s.order_id)))) {
-
-                  const order_id = s.order_id;
-                  let pendingFlag = false;
-                  let missedFlag = false;
-                  let deliveredFlag = false;
-                  let modifyFlag = true;
-                  props.orders.filter((o) => (o.order_id === order_id)).forEach(o => {
-                    if (o.state === "pending") {
-                      pendingFlag = true;
-                    }
-                    if (o.state === 'missed') {
-                      missedFlag = true;
-                    }
-                    if (o.state === 'delivered') {
-                      deliveredFlag = true;
-                    }
-                    if (!modifyOrderAvailable(o.product_id) || o.state !== 'booked' || o.farmer_state !== null) {
-                      modifyFlag = false;
-                    }
-                  });
-
-                  let id1 = m[m.length - 1];
-                  let array = props.orders.filter(x => x.order_id === id1).map(x => x.OrderPrice);
-                  let sum = 0;
-
-                  for (const a of array) { sum = sum + a; }
-                  sum = sum.toFixed(2);
-                  m.pop();
-
-                  return (
-                    <tr key={s.id}>
-                      <td className='align-middle'> {s.order_id}</td>
-                      <td className='align-middle'>
-                        <Button variant="link" onClick={() => { setShow(true); setId(s.order_id); }}>Show ordered products</Button>
-                      </td>
-                      <td className='align-middle'>{sum}€</td>
-                      {pendingFlag && <td className='align-middle text-danger'>Pending (contact shop)</td>}
-                      {!pendingFlag && <td className='align-middle'>Payment successfull</td>}
-                      <td className='align-middle'>{s.pickup === 0 ? 'Home delivery' : 'Pick up'}</td>
-                      {!missedFlag && !deliveredFlag && <td className='align-middle'>{dayjs(s.date + ' ' + s.time).format("ddd, MMM D, YYYY HH:mm")}</td>}
-                      {missedFlag && <td className='align-middle text-danger'>{dayjs(s.date + ' ' + s.time).format("ddd, MMM D, YYYY HH:mm")} (order missed)</td>}
-                      {deliveredFlag && !missedFlag && <td className='align-middle text-success'>{dayjs(s.date + ' ' + s.time).format("ddd, MMM D, YYYY HH:mm")} (order completed)</td>}
-                      <td>
-                        <Button variant={s.state === 'missed' ? "danger" : "success"} className="d-block my-1 mx-2 w-100" onClick={() => { setShow2(true); setId(s.order_id); }}>
-                          Track order status
-                        </Button>
-                        <button
-                          className="btn btn-secondary d-block my-1 mx-2 w-100"
-                          disabled={!modifyFlag}
-                          onClick={() => { handleModifyOrder(modifyFlag, s.order_id); }}
-                        >
-                          Modify order
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                }
-              })
-              }
-            </tbody>
-          </Table>
-          {props.orders.filter(x => x.client_id === props.clientid && (props.products.find(p => p.id === x.product_id).week === currWeekNumber || props.products.find(p => p.id === x.product_id).week === currWeekNumber - 1)).length === 0 &&
-            <div className='d-block text-center my-3'>
-              You have not placed any orders yet. Start by placing <Link to="/booking">an order</Link>.
-            </div>
+      (await API.getAllOrders()).filter(o => o.pickup === 1
+        && props.products.find((p) => (p.id === o.product_id)).week === previousWeek
+        && props.products.find((p) => (p.id === o.product_id)).year === previousWeekYear)
+        .forEach((order) => {
+          if (!condensedOrders.has(order.order_id)) {
+            condensedOrders.set(order.order_id, { order_prepared: false, order_delivered: false, order_array: new Array() });
           }
-        </div >
-      </div>
+          condensedOrders.get(order.order_id).order_array.push(order);
+        });
 
-      <ProductList show={show} setShow={setShow} time={props.time} orderModifiedAlert={orderModifiedAlert} setOrderModifiedAlert={setOrderModifiedAlert} setRecharged={props.setRecharged} orders={props.orders} products={props.products} id={id} setOrderChangeItemID={props.setOrderChangeItemID} setOrderAddItemID={props.setOrderAddItemID} />
-      <OrderStatus show={show2} setShow={setShow2} orders={props.orders} products={props.products} id={id} />
-    </>
-  );
-}
-
-function ProductList(props) {
-
-  const history = useHistory();
-
-  const [deleteOrderID, setDeleteOrderID] = useState(-1);
-  const [allowModify, setAllowModify] = useState(true);
-
-  useEffect(() => {
-    if (props.id === -1) {
-      return;
-    }
-
-    if (modifyOrderAvailable()) {
-      const currentWeekNumber = dayjs(props.time.date).week();
-      props.orders.filter((o) => (o.order_id === props.id)).forEach(o => {
-        if (o.state !== 'booked' || o.farmer_state !== null) {
-          setAllowModify(false);
-          return;
-        }
+      condensedOrders.forEach((order_obj) => {
+        const order_array = order_obj.order_array;
+        order_array.forEach((order) => {
+          if (order.state === 'prepared') {
+            order_obj.order_prepared = true;
+          }
+          if (order.farmer_state === 'delivered') {
+            order_obj.order_delivered = true;
+          }
+        });
       });
-      setAllowModify(true);
-    }
-    else {
-      setAllowModify(false);
+      setOrdersMap(condensedOrders);
+
+      const ords = [];
+      condensedOrders.forEach((order_obj) => {
+        let sum = 0;
+        order_obj.order_array.forEach((order) => {
+          sum += order.OrderPrice;
+        });
+        console.log(order_obj);
+        ords.push({
+          order_id: order_obj.order_array[0].order_id,
+          client_id: order_obj.order_array[0].client_id,
+          sum: sum,
+          date: order_obj.order_array[0].date,
+          time: order_obj.order_array[0].time,
+          order_delivered: order_obj.order_delivered,
+          order_prepared: order_obj.order_prepared
+        })
+      });
+      setOrders(ords);
     }
 
-  }, [props.id])
+    getOrders();
+  }, [props.time.date, props.orders.length])
 
-  useEffect(() => {
-    if (deleteOrderID === -1) {
-      return;
-    }
-
-    const deleteItem = async () => {
-      await API.deleteOrderItem(deleteOrderID);
-      props.setRecharged(true);
-      setDeleteOrderID(-1);
-    }
-
-    deleteItem();
-  }, [deleteOrderID]);
-
-  const modifyOrderAvailable = () => {
-    //Saturday
-    if (dayjs(props.time.date).day() === 5) {
-      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 9) {
-        //Before SAT 9AM -> not available
-        return false;
-      }
-      //After SAT 9AM -> available
-      else {
-        //next week = week + 2
-        return true;
-      }
-    }
-    //Sunday
-    else if (dayjs(props.time.date).day() === 6) {
-      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 23) {
-        //Before SUN 11PM -> available
-        return true;
-      }
-      //After SAT 9AM -> available
-      else {
-        //next week = week + 2
-        return false;
-      }
-    }
-    //from Monday up to Saturday 9am -> declaring for this week
-    else {
-      return false;
-    }
-  }
+  const getPreviousWeek = () => {
+    //every time get previous week
+    let previousWeekDate = dayjs(props.time.date).subtract(1, 'week');
+    return {
+      year: dayjs(props.time.date).year(),
+      week_number: dayjs(previousWeekDate).week(),
+    };
+  };
 
   const capitalizeEachFirstLetter = (str) => {
     return str
@@ -271,99 +99,103 @@ function ProductList(props) {
       .join(' ');
   };
 
-  return (
-    <Modal show={props.show} onHide={() => { props.setShow(false); props.setOrderModifiedAlert(null) }} size="lg">
-      <Modal.Header closeButton>
-        <Modal.Title >
-          Products in order #{props.id}
-        </Modal.Title>
-      </Modal.Header>
+  const handleClose = (x) => {
+    setShow(x);
+  }
 
-      <Modal.Body>
-        {props.orderModifiedAlert && props.orderModifiedAlert.order_id === props.id &&
-          <Alert
-            variant={props.orderModifiedAlert.variant}
-            className='my-3 mx-2'
-            dismissible={true}
-            onClose={() => props.setOrderModifiedAlert(null)}
-          >
-            {props.orderModifiedAlert.msg}
-          </Alert>
-        }
-        <ul className="list-group">
-          {props.orders.filter((o) => (o.order_id === props.id)).map((s) => (
-            <li key={s.product_id} className="list-group-item">
-              <div className="row">
-                <div className="col-md-2 mb-2 my-auto align-middle">
-                  <img
-                    className="w-100 shadow rounded-circle"
-                    src={
-                      process.env.PUBLIC_URL +
-                      'products/' +
-                      s.product_id +
-                      '.jpg'
-                    }
-                    alt="Product img"
-                  />
-                </div>
-                <div className="col-md-6 mb-2 text-start my-auto">
-                  <div className='d-block'>
+  return (
+    <>
+      <div className="d-block mx-3">
+        <table className='text-center table table-striped table-hover table-responsive'>
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Client</th>
+              <th>Products list</th>
+              <th>Total</th>
+              <th>Pick-up date</th>
+              <th>Order state</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {orders.map((s) => (
+              <tr key={s.order_id}>
+                <td className="align-middle">{s.order_id}</td>
+                <td className="align-middle">{props.clients.find((c) => (c.client_id === s.client_id)) ? props.clients.find((c) => (c.client_id === s.client_id)).name + " " + props.clients.find((c) => (c.client_id === s.client_id)).surname : "Unknown"}</td>
+                <td className="align-middle">
+                  <Button variant="link" onClick={() => { setShow(true); setId(s.order_id); }}>
+                    Show order products
+                  </Button>
+                </td>
+                <td className="align-middle">{s.sum.toFixed(2)}€</td>
+                <td className="align-middle">
+                  <span>
+                    {dayjs(s.date + " " + s.time).format("ddd, MMM D, YYYY HH:mm")}
+                  </span>
+                </td>
+                <td className="align-middle">
+                  {s.order_delivered && <span className="text-success fw-bold">Order delivered & completed</span>}
+                  {!s.order_delivered && s.order_prepared && <span className="text-success fw-bold">Ready for pick-up</span>}
+                  {!s.order_delivered && !s.order_prepared && <span className="text-danger fw-bold">Not ready for pick-up</span>}
+                </td>
+                <td>
+                  <Button variant="success" className="d-block my-1 mx-2 w-100" onClick={() => { setShowOrderStatus(true); setId(s.order_id); }}>
+                    Track order status
+                  </Button>
+                </td>
+              </tr>)
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <OrderStatus show={showOrderStatus} setShow={setShowOrderStatus} id={id} orders={props.orders} products={props.products} />
+
+      <Modal show={show} onHide={handleClose} size="lg">
+        <Modal.Header closeButton>
+          <Modal.Title >
+            Products in order #{id}
+          </Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+          <ul className="list-group">
+            {ordersMap.has(id) && ordersMap.get(id).order_array.map((s) => (
+              <li key={s.product_id} className="list-group-item">
+                <div className="row">
+                  <div className="col-md-1 mb-2 my-auto">
+                    <img
+                      className="w-100 shadow rounded-circle"
+                      src={
+                        process.env.PUBLIC_URL +
+                        'products/' +
+                        s.product_id +
+                        '.jpg'
+                      }
+                      alt="Product img"
+                    />
+                  </div>
+                  <div className="col-md-5 mb-2 text-start my-auto">
                     <h4>{capitalizeEachFirstLetter(s.product_name)}</h4>
                   </div>
-                  <div className='d-block'>
+                  <div className="col-md-3 mb-2 text-start my-auto">
                     {stockIcon} {s.order_quantity} {props.products.find((p) => (p.id === s.product_id)).unit}
                   </div>
-                  <div className='d-block'>
+                  <div className="col-md-3 mb-2 text-start my-auto">
                     {priceIcon} {s.OrderPrice.toFixed(2)}€
                   </div>
                 </div>
-                <div className="col-md-4 mb-2 my-auto">
-                  <Button variant="primary" className="d-block my-1 mx-2 w-100" onClick={() => { props.setOrderChangeItemID(s.id); history.push("/change-item"); }} disabled={!allowModify}>
-                    Change product
-                  </Button>
-                  <Button variant="secondary" className="d-block my-1 mx-2 w-100" onClick={() => (setDeleteOrderID(s.id))} disabled={!allowModify || deleteOrderID !== -1}>
-                    {deleteOrderID !== -1 ? 'Removing product...' : 'Remove product'}
-                  </Button>
-                </div>
-              </div>
-            </li>
-          ))}
-          <li className="list-group-item">
-            <div className="row">
-              <div className="col-md-2 mb-2 my-auto align-middle">
-                <img
-                  className="w-100 shadow rounded-circle"
-                  src={
-                    process.env.PUBLIC_URL +
-                    'Frontpage/img-placeholder.png'
-                  }
-                  alt="Product img"
-                />
-              </div>
-              <div className="col-md-6 mb-2 text-start">
-                <div className='d-block my-1'>
-                  <Placeholder size="lg" className='w-50 no-loading-onhover' />
-                </div>
-                <div className='d-block my-1'>
-                  <Placeholder size="lg" className='w-25 no-loading-onhover' />
-                </div>
-                <div className='d-block my-1'>
-                  <Placeholder size="lg" className='w-25 no-loading-onhover' />
-                </div>
-              </div>
-              <div className="col-md-4 my-auto">
-                <Button variant="success" className="d-block my-1 mx-2 w-100" onClick={() => { props.setOrderAddItemID(props.id); history.push("/add-item"); }} disabled={!allowModify}>
-                  Add new product
-                </Button>
-              </div>
-            </div>
-          </li>
-        </ul>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={() => { props.setShow(false); props.setOrderModifiedAlert(null) }}>Close product list</Button>
-      </Modal.Footer>
-    </Modal>);
+              </li>
+            ))}
+          </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button onClick={() => (setShow(false))}>Close product list</Button>
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
 }
 
 function OrderStatus(props) {
@@ -490,7 +322,7 @@ function OrderStatus(props) {
       }
     }
     else {
-      console.log("INVALID ORDER STATUS " + status + " " + type);
+      console.error("INVALID ORDER STATUS " + status + " " + type);
     }
 
     return orderStatus;
@@ -599,14 +431,14 @@ const stockIcon = (
   </svg>
 );
 
-const incompletedIcon = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle" viewBox="0 0 16 16">
-  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
-</svg>
-
 const priceIcon = (<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" className="bi bi-tag" viewBox="0 0 16 16">
   <path d="M6 4.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0zm-1 0a.5.5 0 1 0-1 0 .5.5 0 0 0 1 0z" />
   <path d="M2 1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2a1 1 0 0 1 1-1zm0 5.586 7 7L13.586 9l-7-7H2v4.586z" />
 </svg>)
+
+const incompletedIcon = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-circle" viewBox="0 0 16 16">
+  <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
+</svg>
 
 const completedIcon = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle" viewBox="0 0 16 16">
   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z" />
@@ -627,4 +459,7 @@ const dangerIcon = <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32
   <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z" />
 </svg>
 
-export default Orders;
+
+
+
+export default PickupListManager;

@@ -13,19 +13,19 @@ exports.setTestDB = (db_name) => {
 }
 
 //retrieve order given its id
-exports.getO = (order_id, product_name) => {
-  return new Promise((resolve, reject) => {
-    const sql = 'SELECT * FROM orders WHERE order_id =? AND product_name=? ';
+// exports.getO = (order_id, product_name) => {
+//   return new Promise((resolve, reject) => {
+//     const sql = 'SELECT * FROM orders WHERE order_id =? AND product_name=? ';
 
-    db.get(sql, [order_id, product_name], (err, row) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(row);
-    });
-  });
-};
+//     db.get(sql, [order_id, product_name], (err, row) => {
+//       if (err) {
+//         reject(err);
+//         return;
+//       }
+//       resolve(row);
+//     });
+//   });
+// };
 
 exports.getProviderShippedOrders = (provider_id) => {
   return new Promise((resolve, reject) => {
@@ -50,35 +50,12 @@ exports.getProviderShippedOrders = (provider_id) => {
   });
 }
 
-exports.changeStateFarmer = async (id, product_name, state) => {
-  const test = await this.getO(id, product_name);
-
+exports.changeStateFarmer = async (id, product_id, state) => {
   return new Promise((resolve, reject) => {
     const sql =
-      'UPDATE orders SET order_id=?, client_id=?, product_name=?, product_id=?, order_quantity=?, state=?, farmer_state=?, OrderPrice=? , id=?, address=?, city=?, zipcode=?, Nation=?, date=?, time=?, pickup=? WHERE order_id=? AND product_name=?';
+      'UPDATE orders SET farmer_state=? WHERE order_id=? AND product_id=?';
     db.run(
-      sql,
-      [
-        test.order_id,
-        test.client_id,
-        test.product_name,
-        test.product_id,
-        test.order_quantity,
-        test.state,
-        state,
-        test.OrderPrice,
-        test.id,
-        test.address,
-        test.city,
-        test.zipcode,
-        test.Nation,
-        test.date,
-        test.time,
-        1,
-        id,
-        product_name,
-      ],
-      function (err) {
+      sql, [state, id, product_id], function (err) {
         if (err) {
           reject(err);
           return;

@@ -1,51 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\mario\Desktop\SPG\server\__tests__\unit_tests\Server_tests\server.test.js">
-    <testCase name="Test the product/:product_id path It should response the GET method" duration="215"/>
-    <testCase name="Test the products/categories path It should response the GET method" duration="11"/>
-    <testCase name="Test the providers/all path It should response the GET method" duration="11"/>
-    <testCase name="Test the provider/:product_id path It should response the GET method" duration="14"/>
-    <testCase name="Test the clients path It should response the GET method" duration="3"/>
-    <testCase name="Test the orders path It should response the GET method" duration="3"/>
-    <testCase name="Test to get all payment methods It should response the PUT method" duration="5"/>
-    <testCase name="Test increasing the balance of client It should response the PUT method" duration="4"/>
-    <testCase name="Test the provider /api/modifyquantity It should response the PUT method" duration="5"/>
-    <testCase name="Test the provider /api/neworder path It should response the POST method" duration="5"/>
-    <testCase name="Test the provider /api/sendEmail It should response the POST method" duration="2"/>
-    <testCase name="Test the provider /api/provider-products-sent It should response the PUT method" duration="432"/>
-    <testCase name="Test the provider /api/provider-products-sent Login fail" duration="8"/>
-    <testCase name="Test the provider /api/provider-products-notification It should response the GET method" duration="166"/>
-    <testCase name="Test the provider /api/provider-products-notification Login fail" duration="9"/>
-    <testCase name="Test the provider /api/orders/farmershipped It should response the POST method" duration="155"/>
-    <testCase name="Test the provider /api/orders/farmershipped Login fail" duration="9"/>
+  <file path="C:\Users\mario\Downloads\SE2-SPG-main\server\__tests__\unit_tests\Wallets.test.js">
+    <testCase name="get all payment methods" duration="3"/>
+    <testCase name="get all payment methods but an error occours in db" duration="0"/>
+    <testCase name="get all payment methods but empty" duration="0"/>
+    <testCase name="add new transaction" duration="1"/>
+    <testCase name="add a transaction but an error in db occours when finding it" duration="0"/>
+  </file>
+  <file path="C:\Users\mario\Downloads\SE2-SPG-main\server\__tests__\unit_tests\Server_tests\server.test.js">
+    <testCase name="Test the product/:product_id path It should response the GET method" duration="89"/>
+    <testCase name="Test the products/categories path It should response the GET method" duration="8"/>
+    <testCase name="Test the providers/all path It should response the GET method" duration="6"/>
+    <testCase name="Test the provider/:product_id path It should response the GET method" duration="7"/>
+    <testCase name="Test the clients path It should response the GET method" duration="2"/>
+    <testCase name="Test the orders path It should response the GET method" duration="1"/>
+    <testCase name="Test to get all payment methods It should response the PUT method" duration="2"/>
+    <testCase name="Test increasing the balance of client It should response the PUT method" duration="1"/>
+    <testCase name="Test the provider /api/modifyquantity It should response the PUT method" duration="1"/>
+    <testCase name="Test the provider /api/neworder path It should response the POST method" duration="1"/>
+    <testCase name="Test the provider /api/sendEmail It should response the POST method" duration="1"/>
+    <testCase name="Test the provider /api/provider-products-sent It should response the PUT method" duration="267"/>
+    <testCase name="Test the provider /api/provider-products-sent Login fail" duration="6"/>
+    <testCase name="Test the provider /api/provider-products-notification It should response the GET method" duration="115"/>
+    <testCase name="Test the provider /api/provider-products-notification Login fail" duration="8"/>
+    <testCase name="Test the provider /api/orders/farmershipped It should response the POST method" duration="101"/>
+    <testCase name="Test the provider /api/orders/farmershipped Login fail" duration="5"/>
     <testCase name="Test the provider /api/products/confirmed/:year/:week It should response the GET method" duration="10"/>
-    <testCase name="Test the provider /api/products/expected/:year/:week It should response the GET method" duration="7"/>
-    <testCase name="Test the provider /api/products/ordered/:year/:week_number It should response the GET method" duration="158"/>
-    <testCase name="Test the provider /api/products/ordered/:year/:week_number Login fail" duration="16"/>
-    <testCase name="Test the provider /api/provider-products It should response the GET method" duration="143"/>
-    <testCase name="Test the provider /api/provider-products Login fail" duration="7"/>
-    <testCase name="Test the provider /api/provider/confirmationStatus/:year/:week_number It should response the GET method" duration="160"/>
-    <testCase name="Test the provider /api/provider/confirmationStatus/:year/:week_number Login fail" duration="8"/>
-    <testCase name="Test the provider /api/products/provider/expected/:year/:week_number It should response the GET method" duration="154"/>
-    <testCase name="Test the provider /api/products/provider/expected/:year/:week_number Login fail" duration="7"/>
-    <testCase name="Test the provider /api/provider/shipmentstatus/:year/:week_number It should response the GET method" duration="184"/>
-    <testCase name="Test the provider /api/provider/shipmentstatus/:year/:week_number Login fail" duration="8"/>
-    <testCase name="Test the provider /api/products/expected/:year/:week_number It should response the POST method" duration="189"/>
-    <testCase name="Test the provider /api/products/expected/:year/:week_number Login fail" duration="6"/>
-    <testCase name="Test the provider /users/email-availability/:email It should response the GET method" duration="7"/>
-    <testCase name="Test the provider /provider/apply It should response the POST method" duration="209"/>
-    <testCase name="Test the provider /manager/applications/pending It should response the GET method" duration="161"/>
-    <testCase name="Test the provider /manager/applications/pending Login fail" duration="8"/>
-    <testCase name="Test the provider /manager/applications/accepted It should response the GET method" duration="134"/>
-    <testCase name="Test the provider /manager/applications/accepted Login fail" duration="8"/>
-    <testCase name="Test the manager /manager/applications/accept/:application_id It should response the GET method" duration="159"/>
-    <testCase name="Test the manager /manager/applications/accept/:application_id Login fail" duration="7"/>
-    <testCase name="Test the manager /manager/applications/reject/:application_id It should response the GET method" duration="146"/>
-    <testCase name="Test the manager /manager/applications/reject/:application_id Login fail" duration="7"/>
-    <testCase name="Test the delete path It should response the delete method" duration="2"/>
-    <testCase name="Test the add of order item It should response the post method" duration="3"/>
-    <testCase name="Test the login path It should response the get method" duration="2"/>
+    <testCase name="Test the provider /api/products/expected/:year/:week It should response the GET method" duration="6"/>
+    <testCase name="Test the provider /api/products/ordered/:year/:week_number It should response the GET method" duration="88"/>
+    <testCase name="Test the provider /api/products/ordered/:year/:week_number Login fail" duration="5"/>
+    <testCase name="Test the provider /api/provider-products It should response the GET method" duration="97"/>
+    <testCase name="Test the provider /api/provider-products Login fail" duration="6"/>
+    <testCase name="Test the provider /api/provider/confirmationStatus/:year/:week_number It should response the GET method" duration="100"/>
+    <testCase name="Test the provider /api/provider/confirmationStatus/:year/:week_number Login fail" duration="5"/>
+    <testCase name="Test the provider /api/products/provider/expected/:year/:week_number It should response the GET method" duration="86"/>
+    <testCase name="Test the provider /api/products/provider/expected/:year/:week_number Login fail" duration="4"/>
+    <testCase name="Test the provider /api/provider/shipmentstatus/:year/:week_number It should response the GET method" duration="92"/>
+    <testCase name="Test the provider /api/provider/shipmentstatus/:year/:week_number Login fail" duration="4"/>
+    <testCase name="Test the provider /api/products/expected/:year/:week_number It should response the POST method" duration="108"/>
+    <testCase name="Test the provider /api/products/expected/:year/:week_number Login fail" duration="4"/>
+    <testCase name="Test the provider /users/email-availability/:email It should response the GET method" duration="5"/>
+    <testCase name="Test the provider /provider/apply It should response the POST method" duration="181"/>
+    <testCase name="Test the provider /manager/applications/pending It should response the GET method" duration="97"/>
+    <testCase name="Test the provider /manager/applications/pending Login fail" duration="5"/>
+    <testCase name="Test the provider /manager/applications/accepted It should response the GET method" duration="109"/>
+    <testCase name="Test the provider /manager/applications/accepted Login fail" duration="5"/>
+    <testCase name="Test the manager /manager/applications/accept/:application_id It should response the GET method" duration="115"/>
+    <testCase name="Test the manager /manager/applications/accept/:application_id Login fail" duration="5"/>
+    <testCase name="Test the manager /manager/applications/reject/:application_id It should response the GET method" duration="100"/>
+    <testCase name="Test the manager /manager/applications/reject/:application_id Login fail" duration="6"/>
+    <testCase name="Test the delete path It should response the delete method" duration="1"/>
+    <testCase name="Test the add of order item It should response the post method" duration="2"/>
+    <testCase name="Test the login path It should response the get method" duration="1"/>
     <testCase name="Test the login path It should response the delete method" duration="2"/>
-    <testCase name="Test the provider /api/orderinsert It should response the POST method" duration="3"/>
+    <testCase name="Test the provider /api/orderinsert It should response the POST method" duration="1"/>
   </file>
 </testExecutions>

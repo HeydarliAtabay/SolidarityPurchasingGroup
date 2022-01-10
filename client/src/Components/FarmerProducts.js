@@ -45,12 +45,12 @@ function FarmerProducts(props) {
       return;
     }
     const getExpectedProducts = async () => {
-      const nextWeek = getNextWeek();
+      const nextWeek = getCorrectWeekNumber();
 
       setShowLoading(true);
       setRefreshExpected(false);
 
-      let prods = await API.getProviderExpectedProducts(
+      let prods = await API.getProviderAvailableProducts(
         nextWeek.year,
         nextWeek.week_number
       );
@@ -67,19 +67,13 @@ function FarmerProducts(props) {
 
       setExpectedProducts(expectedProds);
 
+      const providerProds = await API.getProviderProducts();
+      setProviderProducts(providerProds);
+
       setShowLoading(false);
     };
     getExpectedProducts();
   }, [refreshExpected]);
-
-  //Get provider products
-  useEffect(() => {
-    const getExistingProducts = async () => {
-      const prods = await API.getProviderProducts();
-      setProviderProducts(prods);
-    };
-    getExistingProducts();
-  }, []);
 
   //Get product categories
   useEffect(() => {
@@ -98,7 +92,7 @@ function FarmerProducts(props) {
     const saveProductAvailability = async () => {
       setShowLoading(true);
 
-      const nextWeek = getNextWeek();
+      const nextWeek = getCorrectWeekNumber();
 
       const productData = [];
       expectedProducts.forEach((prod) =>
@@ -110,8 +104,8 @@ function FarmerProducts(props) {
           price: prod.price,
           unit: prod.unit,
           quantity: prod.quantity,
-          year: getNextWeek().year,
-          week_number: getNextWeek().week_number,
+          year: getCorrectWeekNumber().year,
+          week_number: getCorrectWeekNumber().week_number,
         })
       );
 
@@ -121,6 +115,8 @@ function FarmerProducts(props) {
         nextWeek.year,
         nextWeek.week_number
       );
+
+      console.log("hi");
 
       for (let i = 0; i < productIDs.length; i++) {
         let formData = new FormData();
@@ -158,36 +154,38 @@ function FarmerProducts(props) {
     return new File([buf], fileName, { type: mimeType });
   }
 
-  const getNextWeek = () => {
+  const getCorrectWeekNumber = () => {
     //Saturday
     if (dayjs(props.time.date).day() === 6) {
       if (dayjs('01/01/2021 ' + props.time.hour).hour() < 9) {
-        //next week = week + 1
-        const nextWeekDate = dayjs(props.time.date).add(1, 'week');
+        //Before SAT 9AM -> declaring for this week
+        const nextWeekDate = dayjs(props.time.date);
         return {
-          year: dayjs(nextWeekDate).year(),
-          week_number: dayjs(nextWeekDate).week(),
+          year: dayjs(props.time.date).year(),
+          week_number: dayjs(props.time.date).week(),
         };
-      } else {
+      }
+      //After SAT 9AM -> declaring for next week
+      else {
         //next week = week + 2
-        const nextWeekDate = dayjs(props.time.date).add(2, 'week');
+        const nextWeekDate = dayjs(props.time.date).add(1, 'week');
         return {
           year: dayjs(nextWeekDate).year(),
           week_number: dayjs(nextWeekDate).week(),
         };
       }
     }
-    //Sunday
+    //Sunday -> declaring for next week
     else if (dayjs(props.time.date).day() === 0) {
-      const nextWeekDate = dayjs(props.time.date).add(2, 'week');
+      const nextWeekDate = dayjs(props.time.date).add(1, 'week');
       return {
         year: dayjs(nextWeekDate).year(),
         week_number: dayjs(nextWeekDate).week(),
       };
     }
-    //from Monday up to Saturday 9am
+    //from Monday up to Saturday 9am -> declaring for this week
     else {
-      const nextWeekDate = dayjs(props.time.date).add(1, 'week');
+      const nextWeekDate = dayjs(props.time.date);
       return {
         year: dayjs(nextWeekDate).year(),
         week_number: dayjs(nextWeekDate).week(),
@@ -238,10 +236,7 @@ function FarmerProducts(props) {
                   /*DISPLAYING CURRENTLY INSERTED PRODUCTS*/
                   expectedProducts.map((product) => {
                     return (
-                      <div
-                        key={product.id}
-                        className="card mb-3 shadow-lg"
-                      >
+                      <div key={product.id} className="card mb-3 shadow-lg">
                         <div className="row g-0">
                           <div className="col-md-3">
                             <img
@@ -284,16 +279,16 @@ function FarmerProducts(props) {
                               </div>
                               <div className="d-block mt-4 text-center">
                                 <button
+                                  className="d-inlnee btn btn-danger mr-3"
+                                  onClick={() => setRemoveProductID(product.id)}
+                                >
+                                  Remove product
+                                </button>
+                                <button
                                   className="d-inline btn btn-primary mx-3"
                                   onClick={() => setModifyProductID(product.id)}
                                 >
                                   Modify details
-                                </button>
-                                <button
-                                  className="d-inlnee btn btn-secondary mr-3"
-                                  onClick={() => setRemoveProductID(product.id)}
-                                >
-                                  Remove product
                                 </button>
                               </div>
                             </div>
@@ -319,7 +314,7 @@ function FarmerProducts(props) {
         </button>
         <button
           className="mx-2 mt-2 p-3 btn btn-success"
-          onClick={() => setSaveAvailability(true)}
+          onClick={(event) => { event.preventDefault(); event.stopPropagation(); setSaveAvailability(true) }}
         >
           Save expected availability
         </button>
@@ -340,7 +335,7 @@ function FarmerProducts(props) {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleNewProductModalClose}>
+          <Button variant="danger" onClick={handleNewProductModalClose}>
             Cancel
           </Button>
         </Modal.Footer>
@@ -364,7 +359,7 @@ function FarmerProducts(props) {
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleModifyProductModalClose}>
+          <Button variant="danger" onClick={handleModifyProductModalClose}>
             Cancel
           </Button>
         </Modal.Footer>
@@ -380,7 +375,7 @@ function FarmerProducts(props) {
         </Modal.Header>
         <Modal.Body>Are you sure you want to remove this product?</Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleRemoveProductModalClose}>
+          <Button variant="danger" onClick={handleRemoveProductModalClose}>
             Cancel
           </Button>
           <Button
@@ -744,6 +739,11 @@ function NewProductModalBody(props) {
                 </div>
               ))
             }
+            {props.providerProducts.length === 0 && (
+              <div className='d-block text-center my-3'>
+                You have no previously inserted products
+              </div>
+            )}
           </div>
         </div>
         <div className="d-block text-center mt-3">
@@ -1326,7 +1326,11 @@ function ModifyProductModalBody(props) {
         <small className="d-block text-danger">{formImageError}</small>
       </div>
       <div className="d-block text-end">
-        <button className="btn btn-primary" type="button" onClick={() => modifyProduct()}>
+        <button
+          className="btn btn-primary"
+          type="button"
+          onClick={() => modifyProduct()}
+        >
           Modify product
         </button>
       </div>

@@ -2,7 +2,9 @@ import { Button, Alert } from 'react-bootstrap';
 import { Link, useHistory } from 'react-router-dom';
 import dayjs from 'dayjs';
 import API from '../API';
+import '../App.css';
 import { useState, useEffect } from 'react';
+import { App } from 'react-bootstrap-icons';
 
 var isBetween = require('dayjs/plugin/isBetween');
 dayjs.extend(isBetween);
@@ -19,7 +21,6 @@ function FarmerArea(props) {
     const getUnsaelableProduct = async () => {
       await API.getProviderProductsNotification()
         .then((res) => {
-          console.log(res.length);
           if (res.length > 0) {
             setTriggerNotification(true);
             setProductsNotified(res);
@@ -31,7 +32,6 @@ function FarmerArea(props) {
     };
 
     getUnsaelableProduct();
-    console.log(productsNotified);
   }, []);
 
   const history = useHistory();
@@ -55,240 +55,261 @@ function FarmerArea(props) {
     return false;
   }
 
-  return (
-    <>
-      <Alert className="m-2" show={triggerNotification} variant="warning">
-        <Alert.Heading>
-          It seems that one of your products is out of stock!
-        </Alert.Heading>
-        <p>the products that are out of stock:</p>
-        {productsNotified.map((product, idx) => (
-          <p key="idx">
-            Id: <b>{product.id}</b> ---- Name of the product:{' '}
-            <b>{product.name}</b>
-          </p>
-        ))}
+  /* prods confirmation is available Mon until 09.00 */
+  const confirmProductsAvailable = () => {
+    //Monday
+    if (dayjs(props.time.date).day() === 1) {
+      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 9) {
+        //Before MON 9AM -> available
+        return true;
+      }
+      //After MON 9AM -> unavailable
+      else {
+        //next week = week + 2
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
 
-        <div className="d-flex justify-content-end">
-          <Button
-            onClick={async () => {
-              setTriggerNotification(false);
-              await API.setNotificationasSent(productsNotified);
-            }}
-            variant="outline-dark"
-          >
-            Close me
-          </Button>
-        </div>
-      </Alert>
-      <div className="row w-100">
-        <span className="d-block text-center mt-5 mb-2 display-2">
-          Farmer Area
-        </span>
-        <div className="col-lg-3">
-          <div className="card mx-3 my-2 shadow-sm">
-            <div className="card-header d-flex justify-content-between">
-              <h5 className="d-inline my-auto">Your profile</h5>
-            </div>
-            <ul className="list-group list-group-flush">
-              <li className="list-group-item d-flex justify-content-between">
-                {props.userName}
-              </li>
-              <li className="list-group-item d-flex justify-content-between">
-                {props.userMail}
-              </li>
-            </ul>
-          </div>
-          <div className="d-block mx-3 my-4">
-            <button
-              className="btn btn-outline-secondary w-100"
-              onClick={() => {
-                props.logout();
-                history.push('/');
+  /* prods preparation is available from Mon 09.00 until Tuesday 23.59 */
+  const prepareProductsAvailable = () => {
+    //Sunday
+    if (dayjs(props.time.date).day() === 1) {
+      if (dayjs('01/01/2021 ' + props.time.hour).hour() >= 9) {
+        //After MON 9AM -> available
+        return true;
+      } else {
+        return false;
+      }
+    }
+    //Monday
+    else if (dayjs(props.time.date).day() === 2) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  return (
+    <div className="row w-100">
+      <span className="d-block text-center mt-5 mb-2 display-2">
+        Farmer Area
+      </span>
+      <div className="d-block">
+        <Alert
+          className="my-2 mx-5"
+          show={triggerNotification}
+          variant="warning"
+        >
+          <Alert.Heading>
+            It seems that one of your products is out of stock!
+          </Alert.Heading>
+          <p>the products that are out of stock:</p>
+          {productsNotified.map((product, idx) => (
+            <p key="idx">
+              Id: <b>{product.id}</b> ---- Name of the product:{' '}
+              <b>{product.name}</b>
+            </p>
+          ))}
+
+          <div className="d-block text-end">
+            <Button
+              onClick={async () => {
+                setTriggerNotification(false);
+                await API.setNotificationasSent(productsNotified);
               }}
+              variant="outline-dark"
             >
-              Logout
-            </button>
+              Close notification
+            </Button>
+          </div>
+        </Alert>
+      </div>
+      <div className="col-lg-3">
+        <div className="card mx-3 my-2 shadow-sm">
+          <div className="card-header d-flex justify-content-between">
+            <h5 className="d-inline my-auto">Your profile</h5>
+          </div>
+          <ul className="list-group list-group-flush">
+            <li className="list-group-item d-flex justify-content-between">
+              {props.userName}
+            </li>
+            <li className="list-group-item d-flex justify-content-between">
+              {props.userMail}
+            </li>
+          </ul>
+        </div>
+        <div className="d-block mx-3 my-4">
+          <button
+            className="btn btn-outline-secondary w-100"
+            onClick={() => {
+              props.logout();
+              history.push('/');
+            }}
+          >
+            Logout
+          </button>
+        </div>
+      </div>
+      <div className="col-lg-9 ">
+        <div className="row w-100">
+          <div className="col-lg-12">
+            <div className="card m-3 w-100 shadow ">
+              <div className="row no-gutters ">
+                <div
+                  className="col-md-4 p-3 text-center "
+                  style={{
+                    backgroundColor: '#4A5B8C',
+                    borderRadius: '25px',
+                  }}
+                >
+                  {declareIcon}
+                </div>
+                <div className="col-md-8">
+                  <div className="card-body">
+                    <h5 className="card-title">
+                      Declare products availability
+                    </h5>
+                    <p>
+                      Here you can report the expected available product amounts
+                    </p>
+                    <p className="card-text">
+                      • You can declare items expected availability <br />
+                    </p>
+                    <div className="d-block text-end">
+                      <button
+                        className="btn"
+                        style={{
+                          backgroundColor: '#4A5B8C',
+                          color: 'white',
+                        }}
+                        onClick={() => history.push('/declare-availability')}
+                      >
+                        Declare availability
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="col-lg-9 ">
-          <div className="row w-100">
-            <div className="col-lg-12">
-              <div className="card m-3 w-100 shadow">
-                <div className="row no-gutters">
-                  <div
-                    className="col-md-4 p-3 text-center"
-                    style={{
-                      backgroundColor:
-                        '#4A5B8C',
-                    }}
-                  >
-                    {declareIcon}
-                  </div>
-                  <div className="col-md-8">
-                    <div className="card-body">
-                      <h5 className="card-title">
-                        Declare products availability
-                      </h5>
-                      <p>
-                        Here you can report the expected available product
-                        amounts for the next week
-                      </p>
-                      <p className="card-text">
-                        • You can declare items for the next week from Monday
-                        until Saturday 09.00AM <br />
-                      </p>
-                      <div className="d-block text-end">
-                        {intervalTimeBoolean() ? (
-                          <Link to="/declare-availability">
-                            <button
-                              className="btn"
-                              style={{
-                                backgroundColor: '#4A5B8C',
-                                color: 'white',
-                              }}
-                            >
-                              Declare availability
-                            </button>
-                          </Link>
-                        ) : (
-                          <button disabled className="btn btn-primary">
-                            Declare availability
-                          </button>
-                        )}
-                      </div>
+        <div className="row w-100">
+          <div className="col-lg-12">
+            <div className="card m-3 w-100 shadow">
+              <div className="row no-gutters">
+                <div
+                  className="col-md-4 p-3 text-center"
+                  style={{
+                    backgroundColor: '#8697A6',
+                    borderRadius: '25px',
+                  }}
+                >
+                  {availabilityIcon}
+                </div>
+                <div className="col-md-8">
+                  <div className="card-body">
+                    <h5 className="card-title">Confirm product availability</h5>
+                    <p className="card-text">
+                      • You can confirm items availability on the Mondays until
+                      09.00AM <br />
+                      <br />
+                    </p>
+                    <div className="d-block text-end">
+                      <button
+                        disabled={!confirmProductsAvailable()}
+                        style={{
+                          backgroundColor: '#8697A6',
+                          color: 'black',
+                        }}
+                        className="btn"
+                        onClick={() =>
+                          history.push('/order-confirmation-farmer')
+                        }
+                      >
+                        Confirm availability
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row w-100">
-            <div className="col-lg-12">
-              <div className="card m-3 w-100 shadow">
-                <div className="row no-gutters">
-                  <div
-                    className="col-md-4 p-3 text-center"
-                    style={{
-                      backgroundColor:
-                        '#8697A6',
-                    }}
-                  >
-                    {availabilityIcon}
-                  </div>
-                  <div className="col-md-8">
-                    <div className="card-body">
-                      <h5 className="card-title">
-                        Confirm product availability
-                      </h5>
-                      <p className="card-text">
-                        • You can confirm items availability starting Saturday
-                        09.00AM until Monday 09.00AM <br />
-                        <br />
-                      </p>
-                      <div className="d-block text-end">
-                        {!intervalTimeBoolean() ? (
-                          <Link to="/order-confirmation-farmer">
-                            <button
-                              className="btn"
-                              style={{
-                                backgroundColor: '#8697A6',
-                                color: 'black',
-                              }}
-                            >
-                              Confirm availability
-                            </button>
-                          </Link>
-                        ) : (
-                          <button
-                            disabled
-                            className="btn"
-                            style={{
-                              backgroundColor: '#8697A6',
-                              color: 'black',
-                            }}
-                          >
-                            Confirm availability
-                          </button>
-                        )}
-                      </div>
+        </div>
+        <div className="row w-100">
+          <div className="col-lg-12">
+            <div className="card m-3 w-100 shadow">
+              <div className="row no-gutters">
+                <div
+                  className="col-md-4 p-3 text-center"
+                  style={{
+                    backgroundColor: '#BFCDD9',
+                    borderRadius: '25px',
+                  }}
+                >
+                  {perparationIcon}
+                </div>
+                <div className="col-md-8">
+                  <div className="card-body">
+                    <h5 className="card-title">Confirm order preparation</h5>
+                    <p className="card-text">
+                      • Confirm the preparation of the booked orders to ship to
+                      the SPG shop
+                      <br />• You can prepare orders starting Monday 9.00AM
+                      until Tuesday 11.59PM
+                    </p>
+                    <div className="d-block text-end">
+                      <button
+                        disabled={!prepareProductsAvailable()}
+                        className="btn"
+                        style={{
+                          backgroundColor: '#BFCDD9',
+                          color: 'black',
+                        }}
+                        onClick={() => history.push('/order-preparation')}
+                      >
+                        Confirm preparation
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="row w-100">
-            <div className="col-lg-12">
-              <div className="card m-3 w-100 shadow">
-                <div className="row no-gutters">
-                  <div
-                    className="col-md-4 p-3 text-center"
-                    style={{
-                      backgroundColor:
-                        '#BFCDD9',
-                    }}
-                  >
-                    {perparationIcon}
-                  </div>
-                  <div className="col-md-8">
-                    <div className="card-body">
-                      <h5 className="card-title">Confirm order preparation</h5>
-                      <p className="card-text">
-                        • Confirm the preparation of the booked orders to ship
-                        to the SPG shop
-                      </p>
-                      <div className="d-block text-end">
-                        <Link to="/order-preparation">
-                          <button
-                            className="btn"
-                            style={{
-                              backgroundColor: '#BFCDD9',
-                              color: 'black',
-                            }}
-                          >
-                            Confirm preparation
-                          </button>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
+        </div>
+        <div className="row w-100">
+          <div className="col-lg-12">
+            <div className="card m-3 w-100 shadow">
+              <div className="row no-gutters">
+                <div
+                  className="col-md-4 p-3 text-center"
+                  style={{
+                    backgroundColor: '#BF8756',
+                    borderRadius: '25px',
+                  }}
+                >
+                  {walletIcon}
                 </div>
-              </div>
-            </div>
-          </div>
-          <div className="row w-100">
-            <div className="col-lg-12">
-              <div className="card m-3 w-100 shadow">
-                <div className="row no-gutters">
-                  <div
-                    className="col-md-4 p-3 text-center"
-                    style={{
-                      backgroundColor:
-                        '#BF8756',
-                    }}
-                  >
-                    {walletIcon}
-                  </div>
-                  <div className="col-md-8">
-                    <div className="card-body">
-                      <h5 className="card-title">Bookings</h5>
-                      <p className="card-text">
-                        • See the list of all the booked orders
-                      </p>
-                      <div className="d-block text-end">
-                        <Link to="/see-bookings">
-                          <button
-                            className="btn"
-                            style={{
-                              backgroundColor: '#BF8756',
-                              color: 'black',
-                            }}
-                          >
-                            See bookings
-                          </button>
-                        </Link>
-                      </div>
+                <div className="col-md-8">
+                  <div className="card-body">
+                    <h5 className="card-title">Bookings</h5>
+                    <p className="card-text">
+                      • See the list of all the booked orders
+                    </p>
+                    <div className="d-block text-end">
+                      <Link to="/see-bookings">
+                        <button
+                          className="btn"
+                          style={{
+                            backgroundColor: '#BF8756',
+                            color: 'black',
+                          }}
+                        >
+                          See bookings
+                        </button>
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -297,7 +318,7 @@ function FarmerArea(props) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

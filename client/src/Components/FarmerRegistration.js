@@ -97,7 +97,10 @@ function FarmerRegistration(props) {
     send();
   }, [sendApplication])
 
-  const handleSubmit = () => {
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
     let errorFlag = false;
     if (name.trim() === "") {
       setNameError("• Please fill in your name");
@@ -185,7 +188,7 @@ function FarmerRegistration(props) {
     <>
 
       <div className="d-block mx-auto my-5 w-75">
-        {loading && <Spinner animation="grow" />}
+        {loading && <div className='d-block text-center'><Spinner animation="grow" /></div>}
         {!loading && applicationSent &&
           <Alert show={true} variant="success">
             <Alert.Heading>Application status</Alert.Heading>
@@ -199,16 +202,15 @@ function FarmerRegistration(props) {
             <hr />
             <div className="d-flex justify-content-end">
               <Link to="/">
-                <Button variant="outline-success">Back to Homepage</Button>
+                <Button variant="outline-light">Back to Homepage</Button>
               </Link>
             </div>
           </Alert>
         }
         {!loading && !applicationSent && <>
           <div className="d-block text-center border border-secondary rounded-3 shadow w-100">
-            <h2 className="regText">Farmer application form</h2>
-            <Form onSubmit={handleSubmit} className="m-3">
-              <hr />
+            <span className="d-block text-center mt-3 mb-5 display-2">Farmer application form</span>
+            <Form onSubmit={(event) => handleSubmit(event)} className="m-3">
               {/*Personal information*/}
               <h4 className="text-start mb-3">Your data</h4>
               <Row>
@@ -323,10 +325,10 @@ function FarmerRegistration(props) {
               <hr />
 
               <div className="subBtn">
-                <Button variant="danger" type="button" size="lg" className="mb-3" onClick={() => (handleClear())}>
-                  Clear form
+                <Button variant="secondary" type="button" size="lg" className="mb-3" onClick={() => (handleClear())}>
+                  Clear form data
                 </Button>
-                <Button variant="primary" type="button" size="lg" className="mx-2 mb-3" onClick={() => (handleSubmit())}>
+                <Button variant="primary" type="button" size="lg" className="mx-2 mb-3" onClick={(event) => (handleSubmit(event))}>
                   Submit application
                 </Button>
               </div>

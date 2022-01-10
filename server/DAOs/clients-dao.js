@@ -85,3 +85,22 @@ exports.getClientsWithInsufficientBalanceAndTelegramId = () => {
     });
   });
 };
+
+
+exports.getClientsTelegramId = (id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT telegramId ' +
+    'FROM clients ' +
+    'WHERE client_id=? '
+
+    db.all(sql, [id], (err, rows) => {
+      if (err) {
+        reject(err);
+        return;
+      }
+      const o = rows.map((e) => ({
+        telegramId: e.telegramId}));
+      resolve(o);
+    });
+  });
+};

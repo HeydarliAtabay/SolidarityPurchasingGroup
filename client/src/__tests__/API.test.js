@@ -657,7 +657,7 @@ describe('test checkEmailAvailability', () => {
   });
   test('Error', () => {
     fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
-    API.sendFarmerApplication(farmerApplication).catch((res) => {
+    API.checkEmailAvailability(email).catch((res) => {
       expect.assertions(2);
       expect(res.status).toBe(500);
       expect(res.errObj).toEqual('API error');
@@ -727,7 +727,7 @@ describe('test getFarmerAcceptedApplications', () => {
   });
   test('Error', () => {
     fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
-    API.getFarmerPendingApplications().catch((res) => {
+    API.getFarmerAcceptedApplications().catch((res) => {
       expect.assertions(2);
       expect(res.status).toBe(500);
       expect(res.errObj).toEqual('API error');
@@ -825,216 +825,593 @@ const itemsOrder = {
 // });
 
 /* FAILS: unhandled rejection*/
-// describe('test getAllClients', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce({ mockData: 'test' });
-//     API.getAllClients().then((data) => {
-//       expect(data.mockData).toEqual('test');
-//     });
-//   });
-//   test('error', () => {
-//     fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), {
-//       status: 500,
-//     });
-//     API.getAllClients().catch((data) => {
-//       expect(data.status).toBe(500);
-//       expect(data.errObj).toEqual('Communicate with server failed');
-//     });
-//   });
-// });
+describe('test getAllClients', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getAllClients().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getAllClients().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test getAllOrders', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce({ mockData: 'test' });
-//     API.getAllOrders().then((data) => {
-//       expect(data.mockData).toEqual('test');
-//     });
-//   });
-//   test('error', () => {
-//     fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), {
-//       status: 500,
-//     });
-//     API.getAllOrders().catch((data) => {
-//       expect(data.status).toBe(500);
-//       expect(data.errObj).toEqual('Communicate with server failed');
-//     });
-//   });
-// });
+describe('test getAllOrders', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getAllOrders().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getAllOrders().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test updateDelivered(order_id)', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce({ mockData: 'test' });
-//     API.updateDelivered(1).then((data) => {
-//       expect(data.mockData).toEqual('test');
-//     });
-//   });
-//   test('error', () => {
-//     fetch.mockResponseOnce(JSON.stringify('Communicate with server failed'), {
-//       status: 500,
-//     });
-//     API.updateDelivered(1).catch((data) => {
-//       expect(data.status).toBe(500);
-//       expect(data.errObj).toEqual('Communicate with server failed');
-//     });
-//   });
-// });
+describe('test updateDelivered(order_id)', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.updateDelivered(1).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.updateDelivered(1).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test getAllPaymentMethods', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
-//     API.getAllPaymentMethods().then((data) => {
-//       expect.assertions(1);
-//       expect(data.mockData).toEqual('test');
-//     });
-//   });
-//   test('error', () => {
-//     fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
-//     API.getAllPaymentMethods().catch((data) => {
-//       expect.assertions(0);
-//       expect(data.status).toBe(500);
-//     });
-//   });
-// });
+describe('test getAllPaymentMethods', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getAllPaymentMethods().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getAllPaymentMethods().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test addClient', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
-//     API.addClient('client').then((data) => {
-//       expect.assertions(1);
-//       expect(data).toBeNull();
-//     });
-//   });
-//   test('response not ok, json ok', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ err: 'API error' }), {
-//       status: 500,
-//     });
-//     API.addClient('client').catch((data) => {
-//       expect.assertions(1);
-//       expect(data.err).toEqual('API error');
-//     });
-//   });
-//   test('response not ok, json null', () => {
-//     fetch.mockResponseOnce(null, { status: 500 });
-//     API.addClient('client').catch((data) => {
-//       expect.assertions(1);
-//       expect(data.err).toEqual('API error');
-//     });
-//   });
-// });
+describe('test addClient', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.addClient('client').then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.addClient('client').catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test addTransaction', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
-//     API.addTransaction('transaction').then((data) => {
-//       expect.assertions(1);
-//       expect(data).toBeNull();
-//     });
-//   });
-//   test('response not ok, json ok', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ err: 'API error' }), {
-//       status: 500,
-//     });
-//     API.addTransaction('transaction').catch((data) => {
-//       expect.assertions(1);
-//       expect(data.err).toEqual('API error');
-//     });
-//   });
-//   test('response not ok, json null', () => {
-//     fetch.mockResponseOnce(null, { status: 500 });
-//     API.addTransaction('transaction').catch((data) => {
-//       expect.assertions(1);
-//       expect(data.err).toEqual('API error');
-//     });
-//   });
-// });
+describe('test addTransaction', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.addTransaction('transaction').then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.addTransaction('transaction').catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
 
 const user = {
-  id: 7,
+  userId: 7,
   name: 'Clare',
   email: 'clare.mint@yahoo.it',
   role: 'client',
 };
 
 /* FAILS: unhandled rejection*/
-// describe('test getUserInfo', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce(JSON.stringify(user));
-//     API.getUserInfo('7').then((data) => {
-//       //  expect.assertions(4);
-//       expect(data.userId).toEqual(7);
-//       expect(data.name).toEqual('Clare');
-//       expect(data.role).toEqual('client');
-//       expect(data.email).toEqual('clare.mint@yahoo.it');
-//     });
-//   });
-//   test('error', () => {
-//     fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
-//     API.getUserInfo(7).catch((data) => {
-//       //  expect.assertions(2);
-//       expect(data.status).toBe(500);
-//       expect(data.errObj).toEqual('API error');
-//     });
-//   });
-// });
+describe('test getUserInfo', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify(user));
+    API.getUserInfo().then((data) => {
+      console.log(data);
+      expect.assertions(4);
+      expect(data.userId).toEqual(7);
+      expect(data.name).toEqual('Clare');
+      expect(data.role).toEqual('client');
+      expect(data.email).toEqual('clare.mint@yahoo.it');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getUserInfo().catch((res) => {
+      console.log(res);
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test login', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce(JSON.stringify(user));
-//     API.logIn(7, 'test').then((data) => {
-//       // expect.assertions(4);
-//       expect(data.userId).toEqual(7);
-//       expect(data.name).toEqual('Clare');
-//       expect(data.role).toEqual('client');
-//       expect(data.email).toEqual('clare.mint@yahoo.it');
-//     });
-//   });
-//   test('response not ok, json ok', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ err: 'API error' }), {
-//       status: 500,
-//     });
-//     API.logIn(7, 'test').catch((data) => {
-//       //  expect.assertions(1);
-//       expect(data.err).toEqual('API error');
-//     });
-//   });
-//   test('response not ok, json null', () => {
-//     fetch.mockResponseOnce(null, { status: 500 });
-//     API.logIn(7, 'test').catch((data) => {
-//       //  expect.assertions(1);
-//       expect(data.err).toEqual('API error');
-//     });
-//   });
-//   test('fetch rejected', () => {
-//     fetch.mockRejectOnce('error');
-//     API.logIn(7, 'test').catch((data) => {
-//       //   expect.assertions(2);
-//       expect(data.errors[0].param).toEqual('Server');
-//       expect(data.errors[0].msg).toEqual('Cannot communicate');
-//     });
-//   });
-// });
+describe('test logIn', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify(user));
+    API.logIn(7, 'test').then((data) => {
+      expect.assertions(4);
+      expect(data.userId).toEqual(7);
+      expect(data.name).toEqual('Clare');
+      expect(data.role).toEqual('client');
+      expect(data.email).toEqual('clare.mint@yahoo.it');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.logIn(7, 'test').catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
 
 /* FAILS: unhandled rejection*/
-// describe('test delete order item', () => {
-//   test('no errors', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
-//     API.deleteOrderItem(1).then((data) => {
-//       //  expect.assertions(1);
-//       expect(data).toBeNull();
-//     });
-//   });
-//   test('fetch rejected', () => {
-//     fetch.mockRejectOnce('error');
-//     API.deleteOrderItem(1).catch((data) => {
-//       //expect.assertions(2);
-//       expect(data.errors[0].param).toEqual('Server');
-//       expect(data.errors[0].msg).toEqual('Cannot communicate');
-//     });
-//   });
-// });
+describe('test deleteOrderItem', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.deleteOrderItem(1).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.deleteOrderItem(1).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getAllUsers', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getAllUsers().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getAllUsers().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getAllProducts', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getAllProducts().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getAllProducts().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test updateWHPrepared', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.updateWHPrepared(1, "Tomatoes").then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.updateWHPrepared(1, "Tomatoes").catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test updateState', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.updateState(1, "delivered").then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.updateState(1, "delivered").catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test updateStateFarmer', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.updateStateFarmer(1, 1, "delivered").then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.updateStateFarmer(1, 1, "delivered").catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getProviderBookings', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getProviderBookings().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getProviderBookings().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test updateQuantity', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.updateQuantity(1, 100).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.updateQuantity(1, 100).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test increaseBalance', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.increaseBalance(1000, 1).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.increaseBalance(1000, 1).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test confirmExpectedProducts', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.confirmExpectedProducts(1, 2021, 1).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.confirmExpectedProducts(1, 2021, 1).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test logOut', () => {
+  test('no errors', () => {
+    API.logOut().then(() => {
+      expect.assertions(0);
+    });
+  });
+});
+
+describe('test addUser', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.addUser(user).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.addUser(user).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+const order = {
+  order_id: 1,
+  client_id: 1,
+  product_name: "Apples",
+  product_id: 1,
+  order_quantity: 123,
+  state: 'booked',
+  OrderPrice: 1234,
+  id: 1,
+  address: 'address',
+  city: 'city',
+  zipcode: 12345,
+  Nation: 'nation',
+  date: 'date',
+  time: 'time',
+  pickup: 1,
+}
+
+describe('test addOrder', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.addOrder(order).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.addOrder(order).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+const emailSubmit = {
+  email: 'email',
+  message: 'message',
+}
+
+
+describe('test submitEmail', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.submitEmail(emailSubmit).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.submitEmail(emailSubmit).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test sendTelegramNotificationOnSaturday', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.sendTelegramNotificationOnSaturday().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.sendTelegramNotificationOnSaturday().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+const telegramTopUpClient = {
+  balance: 123,
+  telegramId: 1,
+  name: "Mario",
+  surname: "Mario"
+}
+
+const telegramTopUpTransaction = {
+  amount: 1432,
+  date: 'date',
+  time: 'time'
+}
+
+describe('test sendTelegramTopUpNotification', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.sendTelegramTopUpNotification(telegramTopUpClient, telegramTopUpTransaction).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.sendTelegramTopUpNotification(telegramTopUpClient, telegramTopUpTransaction).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test updateItem', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.updateItem(order).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.updateItem(order).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getAllDeliverers', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getAllDeliverers().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getAllDeliverers().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getDeliverableOrders', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getDeliverableOrders('Torino').then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getDeliverableOrders('Torino').catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getDelivererByMail', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getDelivererByMail(1).then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getDelivererByMail(1).catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});
+
+describe('test getOrderAndClientData', () => {
+  test('no errors', () => {
+    fetch.mockResponseOnce(JSON.stringify({ mockData: 'test' }));
+    API.getOrderAndClientData().then((data) => {
+      expect.assertions(1);
+      expect(data.mockData).toEqual('test');
+    });
+  });
+  test('error', () => {
+    fetch.mockResponseOnce(JSON.stringify('API error'), { status: 500 });
+    API.getOrderAndClientData().catch((res) => {
+      expect.assertions(2);
+      expect(res.status).toBe(500);
+      expect(res.errObj).toEqual('API error');
+    });
+  });
+});

@@ -1,9 +1,18 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Button } from 'react-bootstrap';
 
 function ProductPage(props) {
+
   let imgName = props.prod.id + '.jpg';
 
   const [buyQuantity, setBuyQuantity] = useState(1);
+  const [farmer, setFarmer] = useState(null);
+
+  useEffect(() => {
+    if (props.providers) {
+      setFarmer(props.providers.find((p) => (p.id === props.prod.providerId)));
+    }
+  }, [props.prod.providerId])
 
   const RemoveProduct = () => {
     if (props.prod.quantity === 0) {
@@ -41,65 +50,120 @@ function ProductPage(props) {
             />
           </div>
           <div className="col-lg-6">
-            <div className="form-row align-items-center">
-              <div className="row">
-                <div className="col-sm-7">
-                  <div className="input-group mb-2">
-                    <div className="input-group-prepend">
-                      <div className="input-group-text">Quantity</div>
+            {(props.browsing || props.purchasing) && (
+              <div className="form-row align-items-center">
+                <div className="row">
+                  <div className="col-sm-7">
+                    <div className="input-group mb-2">
+                      <div className="input-group-prepend">
+                        <div className="input-group-text">Quantity</div>
+                      </div>
+                      <input
+                        className="form-control text-center"
+                        value={props.prod.quantity > 0 ? buyQuantity + ' ' + props.prod.unit : 'Sold out'}
+                        onChange={() => {
+                          return;
+                        }}
+                      />
                     </div>
-                    <input
-                      className="form-control text-center"
-                      value={props.prod.quantity > 0 ? buyQuantity + ' ' + props.prod.unit : 'Sold out'}
-                      onChange={() => {
-                        return;
-                      }}
-                    />
+                  </div>
+                  <div className="col-sm-5 text-center">
+                    {!props.browsing && props.purchasing && (
+                      <>
+                        <Button variant='secondary'
+                          className="rounded mx-2 product-buy-size-custom"
+                          onClick={() => RemoveProduct()}
+                          disabled={props.prod.quantity <= 0}
+                        >
+                          -
+                        </Button>
+                        <Button variant='primary'
+                          className="rounded mx-2 product-buy-size-custom"
+                          onClick={() => AddProduct()}
+                          disabled={props.prod.quantity <= 0}
+                        >
+                          +
+                        </Button>
+                      </>
+                    )}
+                    {props.browsing && (
+                      <>
+                        <Button variant='secondary'
+                          className="rounded mx-2 product-buy-size-custom"
+                          onClick={() => { return; }}
+                          disabled={true}
+                        >
+                          -
+                        </Button>
+                        <Button variant='primary'
+                          className="rounded mx-2 product-buy-size-custom"
+                          onClick={() => { return; }}
+                          disabled={true}
+                        >
+                          +
+                        </Button>
+                      </>
+                    )}
                   </div>
                 </div>
-                <div className="col-sm-5 text-center">
-                  {!props.browsing ? (
-                    <>
-                      <button
-                        className="btn btn-primary rounded mx-2 product-buy-size-custom"
-                        onClick={() => RemoveProduct()}
-                        disabled={props.prod.quantity === 0}
-                      >
-                        -
-                      </button>
-                      <button
-                        className="btn btn-primary rounded mx-2 product-buy-size-custom"
-                        onClick={() => AddProduct()}
-                        disabled={props.prod.quantity === 0}
-                      >
-                        +
-                      </button>
-                    </>
-                  ) : (
-                    <></>
-                  )}
-                </div>
               </div>
-            </div>
+            )}
             <div className="d-block text-center mt-3">
-              {!props.browsing ? (
-                <button
-                  className="btn btn-success mx-2"
+              {!props.browsing && props.purchasing && (
+                <Button variant='success'
+                  className="mx-2"
                   onClick={() => {
                     if (props.prod.quantity === 0) {
                       return;
                     }
-                    props.onAdd(props.prod, buyQuantity);
+                    props.addToCart(props.prod, buyQuantity);
                     props.setShowProductDetailsModal(false);
                   }}
                   disabled={props.prod.quantity === 0}
                 >
                   Add to basket
-                </button>
-              ) : (
-                <button disabled className="btn btn-success mx-2">
-                  Add to basket
-                </button>
+                </Button>
+              )}
+              {props.browsing && (
+                <Button variant='success'
+                  className="mx-2"
+                  onClick={() => { return; }}
+                  disabled={true}
+                >
+                  Available next week
+                </Button>
+              )}
+              {props.orderChangeItem && (
+                <Button variant='success'
+                  className="mx-2"
+                  onClick={() => {
+                    if (props.prod.quantity === 0) {
+                      return;
+                    }
+                    props.setShowProductDetailsModal(false);
+                    props.setNewItemID(props.prod.id);
+                    props.setShowChangeItemModal(true);
+                  }}
+                  disabled={props.prod.quantity === 0}
+                >
+                  Swap with this product
+                </Button>
+              )}
+              {props.orderAddItem && (
+                <Button variant='success'
+                  className="mx-2"
+                  onClick={() => {
+                    if (props.prod.quantity === 0) {
+                      return;
+                    }
+                    props.setShowProductDetailsModal(false);
+                    props.setNewItemID(props.prod.id);
+                    props.setShowAddItemModal(true);
+                  }}
+                  disabled={props.prod.quantity === 0}
+                >
+                  Add to order
+                </Button>
               )}
             </div>
             <hr />
@@ -119,7 +183,8 @@ function ProductPage(props) {
               <div className="d-block my-2">
                 {stockIcon}{' '}
                 <b>
-                  {props.prod.quantity} {props.prod.unit} available
+                  {props.prod.quantity > 0 && props.prod.quantity + ' ' + props.prod.unit + ' available'}
+                  {props.prod.quantity <= 0 && 'Out of stock'}
                 </b>
               </div>
               {props.prod.expiryDate ? (
@@ -133,7 +198,9 @@ function ProductPage(props) {
             <hr />
             <div className="d-block my-1">
               <h5>More about this product</h5>
-              <p className="text-wrap text-justify">{props.prod.description}</p>
+              <p className="text-wrap text-justify">
+                {props.prod.description ? props.prod.description : 'This product does not have any additional description'}
+              </p>
             </div>
           </div>
         </div>
@@ -146,13 +213,13 @@ function ProductPage(props) {
             <blockquote className="blockquote">
               <p>{props.prod.providerName}</p>
               <footer className="blockquote-footer">
-                <cite title="Source Title">Torino</cite>
+                <cite title="Source Title">{farmer && farmer.location}</cite>
               </footer>
             </blockquote>
           </div>
         </div>
         <div className="d-block">
-          Very professional. Has been doing this job for more than 30 years.
+          {farmer && farmer.description ? farmer.description : 'This farmer has no description available'}
         </div>
       </div>
     </div>

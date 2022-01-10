@@ -1,13 +1,20 @@
-import { Button, Spinner } from 'react-bootstrap';
+import { Button, Spinner, Alert, Modal } from 'react-bootstrap';
 import dayjs from 'dayjs';
-import { Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import API from '../API';
+
+dayjs.Ls.en.weekStart = 1; //set week start as monday
+
 const { useState, useEffect } = require('react');
 
 function FarmerOrderConfirmation(props) {
   /*products arrays*/
   const [bookedProducts, setBookedProducts] = useState([]);
-  const [confirmedProduct, setConfirmedProduct] = useState(0);
+  const [confirmedProduct, setConfirmedProduct] = useState(-1);
+  const [unavailableProduct, setUnavailableProduct] = useState(-1);
+
+  const [actionAlert, setActionAlert] = useState(null);
+  const history = useHistory();
 
   /*ship status alert*/
   const [refreshData, setRefreshData] = useState(true);
@@ -23,20 +30,11 @@ function FarmerOrderConfirmation(props) {
     }
     const getBookedOrders = async () => {
       setShowLoading(true);
-      console.log(props.time);
-      const weekpassedtmp = dayjs(props.time.date).add(1, 'week');
-      let year = dayjs(weekpassedtmp).year();
-      let weekpassed = dayjs(weekpassedtmp).week();
-      if (dayjs(props.time.date).day() === 1) {
-        weekpassed = dayjs(props.time.date).week();
-        year = dayjs(props.time.date).year();
-      }
-      console.log(weekpassed);
-      console.log(year);
 
-      const prods = (
-        await API.getProviderExpectedProducts(year, weekpassed)
-      ).map((p) => ({ ...p, prepared: 0 }));
+      const week = dayjs(props.time.date).subtract(1, 'week').week();
+      const year = dayjs(props.time.date).subtract(1, 'week').year();
+
+      const prods = await API.getProviderAvailableProducts(year, week);
       setBookedProducts(prods);
       setRefreshData(false);
       setShowLoading(false);
@@ -45,21 +43,88 @@ function FarmerOrderConfirmation(props) {
   }, [refreshData, props.time]);
 
   useEffect(() => {
-    if (confirmedProduct !== 0) {
-      const shipItems = async () => {
-        const weekpassedtmp = dayjs(props.time.date).add(1, 'week');
-        let year = dayjs(weekpassedtmp).year();
-        let weekpassed = dayjs(weekpassedtmp).week();
-        if (dayjs(props.time.date).day() === 1) {
-          weekpassed = dayjs(props.time.date).week();
-          year = dayjs(props.time.date).year();
-        }
-        await API.confirmExpectedProducts(confirmedProduct, year, weekpassed);
-        setRefreshData(true);
-      };
-      shipItems();
+    if (confirmedProduct === -1) {
+      return;
     }
-  }, [confirmedProduct, props.time]);
+
+    const shipItems = async () => {
+      try {
+        setShowLoading(true);
+        await API.confirmExpectedProducts(confirmedProduct);
+        setRefreshData(true);
+        setConfirmedProduct(-1);
+        setActionAlert({
+          variant: 'success',
+          msg: 'Product availability successfully confirmed',
+        });
+      } catch (error) {
+        setActionAlert({
+          variant: 'danger',
+          msg: 'Oops! Could not confirm product availability. Please try again',
+        });
+      }
+    };
+    shipItems();
+  }, [confirmedProduct]);
+
+  useEffect(() => {
+    if (unavailableProduct === -1) {
+      return;
+    }
+
+    const removeItems = async () => {
+      try {
+        setShowLoading(true);
+        for (const o of props.orders.filter(
+          (o) => o.product_id === unavailableProduct
+        )) {
+          let client = props.clients.find((c) => c.client_id === o.client_id);
+          let product = props.products.find((p) => p.id === unavailableProduct);
+          let mailObj = {
+            email: client.email,
+            message: '',
+          };
+          /* order payed */
+          if (o.state === 'booked') {
+            await API.increaseBalance(o.OrderPrice.toFixed(2), o.client_id);
+            mailObj.message =
+              'Dear ' +
+              client.name +
+              ' ' +
+              client.surname +
+              ',\nUnfortunately due to unforeseen circumstances the item "' +
+              product.name +
+              '" was marked as unavailable from the farmer.\nThe item was removed from your order and the balance was refunded to your wallet.\nKind regards\nSPG';
+          } else {
+            /* order pending */
+            mailObj.message =
+              'Dear ' +
+              client.name +
+              ' ' +
+              client.surname +
+              ',\nUnfortunately due to unforeseen circumstances the item "' +
+              product.name +
+              '" was marked as unavailable from the farmer.\nThe item was removed from your order.\nKind regards\nSPG';
+          }
+          await API.submitEmail(mailObj);
+        }
+        await API.setUnavailableProducts(unavailableProduct);
+        setRefreshData(true);
+        setActionAlert({
+          variant: 'success',
+          msg: 'Product was marked as unavailable. Clients were notified by email and they were refounded for the unavailable product.',
+        });
+        setUnavailableProduct(-1);
+      } catch (error) {
+        console.log(error);
+        setActionAlert({
+          variant: 'danger',
+          msg: 'Oops! Could not mark product as unavailable. Please try again',
+        });
+      }
+    };
+    removeItems();
+  }, [unavailableProduct]);
 
   const capitalizeEachFirstLetter = (str) => {
     return str
@@ -69,9 +134,26 @@ function FarmerOrderConfirmation(props) {
       .join(' ');
   };
 
+  const confirmProductsAvailable = () => {
+    //Monday
+    if (dayjs(props.time.date).day() === 1) {
+      if (dayjs('01/01/2021 ' + props.time.hour).hour() < 9) {
+        //Before MON 9AM -> available
+        return true;
+      }
+      //After MON 9AM -> unavailable
+      else {
+        //next week = week + 2
+        return false;
+      }
+    } else {
+      return false;
+    }
+  };
+
   return (
     <>
-      <div className="container-fluid mx-5 w-max100-custom">
+      <div className="d-block w-100">
         <span className="d-block text-center mt-5 mb-2 display-2">
           Confirm Product availability
         </span>
@@ -79,6 +161,18 @@ function FarmerOrderConfirmation(props) {
           Select the items which you want to confirm for the upcoming week.
           <br />
         </h5>
+
+        {actionAlert && (
+          <Alert
+            variant={actionAlert.variant}
+            className="text-center my-3 mx-5"
+            dismissible={true}
+            onClose={() => setActionAlert(null)}
+          >
+            {actionAlert.msg}
+          </Alert>
+        )}
+
         {showLoading && (
           <div className="d-block text-center p-5">
             <Spinner className="m-5" animation="grow" />
@@ -120,22 +214,22 @@ function FarmerOrderConfirmation(props) {
                     {stockIcon} {product.quantity + ' ' + product.unit}
                   </div>
                   <div className="col-md-3 text-center my-auto">
-                    {product.prepared === 0 && (
-                      <button
-                        className="btn btn-success"
-                        onClick={() => {
-                          setConfirmedProduct(product.id);
-                        }}
-                      >
-                        Confirm product
-                      </button>
-                    )}
-
-                    {product.prepared === 1 && (
-                      <span className="d-block text-center text-success">
-                        {checkIcon} Confirmed
-                      </span>
-                    )}
+                    <button
+                      className="d-block btn btn-success mb-2 mx-auto"
+                      onClick={() => {
+                        setConfirmedProduct(product.id);
+                      }}
+                    >
+                      Confirm product available
+                    </button>
+                    <button
+                      className="d-block btn btn-danger mx-auto"
+                      onClick={() => {
+                        setUnavailableProduct(product.id);
+                      }}
+                    >
+                      Mark as unavailable & notify clients
+                    </button>
                   </div>
                 </div>
               </li>
@@ -151,6 +245,28 @@ function FarmerOrderConfirmation(props) {
         </div>
         <div className="d-block mb-5 text-center"></div>
       </div>
+      {!confirmProductsAvailable() && (
+        <Modal
+          show={true}
+          dismissible={false}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Body>
+            The confirming windows is available only <b>on Monday until 9 AM</b>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button
+              variant="primary"
+              onClick={() => {
+                history.push('/farmer');
+              }}
+            >
+              Understood
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
     </>
   );
 }

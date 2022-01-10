@@ -14,12 +14,40 @@ exports.setTestDB = (db_name) => {
   });
 };
 
+exports.getAllProducts = () => {
+  return new Promise((resolve, reject) => {
+    const sql = 'SELECT * FROM products';
+    db.all(sql, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      console.log(rows)
+;      const products = rows.map((p) => ({
+        id: p.product_id,
+        name: p.product_name,
+        description: p.product_description,
+        category: p.category_name,
+        price: p.product_price,
+        unit: p.product_unit,
+        quantity: p.product_quantity,
+        expiryDate: p.product_expiry,
+        providerId: p.provider_id,
+        providerName: p.provider_name,
+        year: p.year,
+        week: p.week_number,
+        status: p.product_status,
+        active: p.notified,
+      }));
+      resolve(products);
+    });
+  });
+};
+
 exports.getAllConfirmedProducts = (year, week) => {
   return new Promise((resolve, reject) => {
-    const product_status = 'confirmed';
     const sql =
-      'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.product_status=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
-    db.all(sql, [year, week, product_status], (err, rows) => {
+      'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=?  AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
+    db.all(sql, [year, week], (err, rows) => {
       if (err) {
         reject(err);
       }
@@ -28,6 +56,7 @@ exports.getAllConfirmedProducts = (year, week) => {
         name: p.product_name,
         description: p.product_description,
         category: p.category_name,
+        categoryId: p.category_id,
         price: p.product_price,
         unit: p.product_unit,
         quantity: p.product_quantity,
@@ -46,10 +75,9 @@ exports.getAllConfirmedProducts = (year, week) => {
 
 exports.getAllExpectedProducts = (year, week) => {
   return new Promise((resolve, reject) => {
-    const product_status = 'expected';
     const sql =
-      'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.product_status=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
-    db.all(sql, [year, week, product_status], (err, rows) => {
+      'SELECT * FROM products, providers, product_categories WHERE products.year=? AND products.week_number=? AND products.category_id=product_categories.category_id AND products.provider_id=providers.provider_id';
+    db.all(sql, [year, week], (err, rows) => {
       if (err) {
         reject(err);
       }
@@ -58,6 +86,7 @@ exports.getAllExpectedProducts = (year, week) => {
         name: p.product_name,
         description: p.product_description,
         category: p.category_name,
+        categoryId: p.category_id,
         price: p.product_price,
         unit: p.product_unit,
         quantity: p.product_quantity,
@@ -87,6 +116,7 @@ exports.getProductById = (product_id) => {
         name: row.product_name,
         description: row.product_description,
         category: row.category_name,
+        categoryId: p.category_id,
         price: row.product_price,
         unit: row.product_unit,
         quantity: row.product_quantity,
@@ -110,7 +140,6 @@ exports.getAllCategories = () => {
       const categories = rows.map((c) => ({
         id: c.category_id,
         name: c.category_name,
-        active: 0,
       }));
       resolve(categories);
     });
@@ -131,19 +160,18 @@ exports.putProductQuantity = (product_id, quantity) => {
   });
 };
 
-exports.getProviderExpectedProducts = (provider_id, year, week_number) => {
+exports.getProviderAvailableProducts = (provider_id, year, week_number) => {
   return new Promise((resolve, reject) => {
-    const product_status = 'expected';
+    console.log(provider_id, year, week_number);
     const sql =
-      'SELECT * FROM products WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_status=?';
-    db.all(
-      sql,
-      [provider_id, year, week_number, product_status],
-      (err, rows) => {
-        if (err) {
-          reject(err);
-        }
-        const products = rows.map((p) => ({
+      'SELECT * FROM products WHERE products.provider_id=? AND products.year=? AND products.week_number=? AND products.product_confirmed=0';
+    db.all(sql, [provider_id, year, week_number], (err, rows) => {
+      if (err) {
+        reject(err);
+      }
+      let products = [];
+      if (rows.length > 0) {
+        products = rows.map((p) => ({
           id: p.product_id,
           name: p.product_name,
           description: p.product_description,
@@ -155,20 +183,19 @@ exports.getProviderExpectedProducts = (provider_id, year, week_number) => {
           providerId: p.provider_id,
           year: p.year,
           week: p.week_number,
-          status: p.product_status,
+          status: p.product_status
         }));
-        resolve(products);
       }
-    );
+      resolve(products);
+    });
   });
 };
 
 exports.deleteExpectedProducts = (provider_id, year, week_number) => {
   return new Promise((resolve, reject) => {
-    const product_status = 'expected';
     const sql =
-      'DELETE from products WHERE provider_id=? AND year=? AND week_number=? AND product_status=?';
-    db.run(sql, [provider_id, year, week_number, product_status], (err) => {
+      'DELETE from products WHERE provider_id=? AND year=? AND week_number=?';
+    db.run(sql, [provider_id, year, week_number], (err) => {
       if (err) {
         console.log(err);
         reject(err.message);
@@ -181,7 +208,7 @@ exports.deleteExpectedProducts = (provider_id, year, week_number) => {
 
 exports.insertNewExpectedProduct = (prod, provider_id) => {
   return new Promise((resolve, reject) => {
-    const product_status = 'expected';
+    const product_status = 'confirmed';
     const sql =
       'INSERT INTO products(product_name, product_description, category_id, product_price, product_unit, product_quantity, provider_id, year, week_number, product_status,notified) VALUES(?,?,?,?,?,?,?,?,?,?,?)';
     db.run(
@@ -210,16 +237,52 @@ exports.insertNewExpectedProduct = (prod, provider_id) => {
   });
 };
 
-exports.confirmExpectedProduct = (
-  provider_id,
-  product_id,
-  year,
-  week_number
-) => {
+exports.confirmExpectedProduct = (product_id) => {
   return new Promise((resolve, reject) => {
-    const sql =
-      'UPDATE products SET product_status="confirmed" WHERE provider_id = ? AND product_id=? AND year=? AND week_number=?';
-    db.run(sql, [provider_id, product_id, year, week_number], function (err) {
+    const sql = 'UPDATE orders SET farmer_state="confirmed" WHERE product_id=?';
+    db.run(sql, [product_id], function (err) {
+      if (err) {
+        console.log(err);
+        reject(err);
+        return;
+      }
+      resolve(this.lastID); // changed from resolve(exports.getTask(this.lastID) because of error "not found" (wrong lastID)
+    });
+  });
+};
+
+exports.markProductAsConfirmed = (product_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'UPDATE products SET product_confirmed=1 WHERE product_id=?';
+    db.run(sql, [product_id], function (err) {
+      if (err) {
+        console.log(err);
+        reject(err);
+        return;
+      }
+      resolve(true);
+    });
+  });
+};
+
+exports.unavailableProduct = (product_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'DELETE FROM orders WHERE product_id=?';
+    db.run(sql, [product_id], function (err) {
+      if (err) {
+        console.log(err);
+        reject(err);
+        return;
+      }
+      resolve(this.lastID); // changed from resolve(exports.getTask(this.lastID) because of error "not found" (wrong lastID)
+    });
+  });
+};
+
+exports.deleteProduct = (product_id) => {
+  return new Promise((resolve, reject) => {
+    const sql = 'DELETE FROM products WHERE product_id=?';
+    db.run(sql, [product_id], function (err) {
       if (err) {
         console.log(err);
         reject(err);

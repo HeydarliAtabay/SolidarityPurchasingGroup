@@ -3,10 +3,10 @@ import { Link, useHistory } from 'react-router-dom';
 import API from '../API';
 import dayjs from 'dayjs';
 
-function ManagerArea(props) {
+function WarehouseManagerArea(props) {
   const history = useHistory();
 
-  const [pendingStats, setPendingStats] = useState();
+  /*const [pendingStats, setPendingStats] = useState();
   const [acceptedStats, setAcceptedStats] = useState();
   const [overallStats, setOverallStats] = useState();
 
@@ -20,49 +20,45 @@ function ManagerArea(props) {
 
       let accepted = 0;
       let rejected = 0;
-      acceptedApplications.forEach((app) => {
+      acceptedApplications.forEach(app => {
         if (app.status === 'accepted') {
           accepted++;
-        } else if (app.status === 'rejected') {
+        }
+        else if (app.status === 'rejected') {
           rejected++;
         }
       });
 
-      setAcceptedStats({
-        total: acceptedApplications.length,
-        accepted: accepted,
-        rejected: rejected,
-      });
+      setAcceptedStats({ total: acceptedApplications.length, accepted: accepted, rejected: rejected });
 
       const allApplications = [...pendingApplications, ...acceptedApplications];
 
-      let curr_time = dayjs(props.time.date + ' ' + props.time.hour);
+      let curr_time = dayjs(props.time.date + " " + props.time.hour);
       let today = 0;
       let this_week = 0;
       let this_month = 0;
-      allApplications.forEach((app) => {
+      allApplications.forEach(app => {
         if (curr_time.diff(app.date, 'day') === 0) {
           today++;
-        } else if (curr_time.diff(app.date, 'week') === 0) {
+        }
+        else if (curr_time.diff(app.date, 'week') === 0) {
           this_week++;
-        } else if (curr_time.diff(app.date, 'month') === 0) {
+        }
+        else if (curr_time.diff(app.date, 'month') === 0) {
           this_month++;
         }
       });
 
-      setOverallStats({
-        today: today,
-        this_week: this_week,
-        this_month: this_month,
-      });
-    };
+      setOverallStats({ today: today, this_week: this_week, this_month: this_month });
+
+    }
     getApplicationStats();
-  }, []);
+  }, []);*/
 
   return (
     <div className="row w-100">
       <span className="d-block text-center mt-5 mb-2 display-2">
-        Shop Manager Area
+        Warehouse Manager Area
       </span>
       <div className="col-lg-3">
         <div className="card mx-3 my-2 shadow">
@@ -78,32 +74,31 @@ function ManagerArea(props) {
             </li>
           </ul>
         </div>
-        <div className="card mx-3 my-2 shadow">
+        {/* <div className="card mx-3 my-2 shadow">
           <div className="card-header d-flex justify-content-between">
             <h5 className="d-inline my-auto">Application stats</h5>
           </div>
           <ul className="list-group list-group-flush">
             <li className="list-group-item d-flex justify-content-between">
-              {pendingStats && 'Pending: ' + pendingStats.total}
+              {pendingStats && 'Pending: '+pendingStats.total}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              {acceptedStats && 'Accepted: ' + acceptedStats.accepted}
+              {acceptedStats && 'Accepted: '+acceptedStats.accepted}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              {acceptedStats && 'Rejected: ' + acceptedStats.rejected}
+              {acceptedStats && 'Rejected: '+acceptedStats.rejected}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              {overallStats && 'Received today: ' + overallStats.today}
+              {overallStats && 'Received today: '+overallStats.today}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              {overallStats && 'Received this week: ' + overallStats.this_week}
+              {overallStats && 'Received this week: '+overallStats.this_week}
             </li>
             <li className="list-group-item d-flex justify-content-between">
-              {overallStats &&
-                'Received this month: ' + overallStats.this_month}
+              {overallStats && 'Received this month: '+overallStats.this_month}
             </li>
           </ul>
-        </div>
+        </div> */}
         <div className="d-block mx-3 my-4">
           <button
             className="btn btn-outline-secondary w-100"
@@ -127,20 +122,23 @@ function ManagerArea(props) {
             </div>
             <div className="col-md-8">
               <div className="card-body">
-                <h5 className="card-title">Pending farmer applications</h5>
+                <h5 className="card-title">Pick-up orders</h5>
                 <p className="card-text">
-                  • View &#38; browse pending farmer applications
+                  • View pick-up orders schedule
                   <br />
-                  • Accept or decline a farmer application
+                  • View pick-up orders preparation status
+                  <br />
+                  • View pick-up orders that have not yet been picked up by the
+                  clients
                   <br />
                 </p>
                 <div className="d-block text-end">
-                  <Link to="/manager/applications/pending">
+                  <Link to="/warehouse-orders">
                     <button
                       className="btn"
                       style={{ backgroundColor: '#A6896F', color: 'black' }}
                     >
-                      Browse pending applications
+                      View orders
                     </button>
                   </Link>
                 </div>
@@ -159,53 +157,20 @@ function ManagerArea(props) {
             </div>
             <div className="col-md-8">
               <div className="card-body">
-                <h5 className="card-title">
-                  Accepted/rejected farmer applications
-                </h5>
+                <h5 className="card-title">Incoming farmer shipments</h5>
                 <p className="card-text">
-                  • View &#38; browse accepted or rejected farmer applications
+                  • View &#38; incoming farmer shipments
                   <br />
-                  • Inspect a farmer application
-                  <br />
-                  • Accept a previously rejected application
+                  • Confirm receipt of farmer shipment
                   <br />
                 </p>
                 <div className="d-block text-end">
-                  <Link to="/manager/applications/processed">
+                  <Link to="/warehouse-shipments">
                     <button
                       className="btn"
                       style={{ backgroundColor: '#D9C9BA', color: 'black' }}
                     >
-                      Browse processed applications
-                    </button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="card m-3 d-block shadow">
-          <div className="row no-gutters">
-            <div
-              className="col-md-4 p-3 text-center"
-              style={{ backgroundColor: '#f5f5dc', borderRadius: '25px' }}
-            >
-              {walletIcon}
-            </div>
-            <div className="col-md-8">
-              <div className="card-body">
-                <h5 className="card-title">List of past pickups </h5>
-                <p className="card-text">
-                  •Mark as missed an unpicked up order
-                  <br />
-                </p>
-                <div className="d-block text-end">
-                  <Link to="/see-pickups">
-                    <button
-                      className="btn"
-                      style={{ backgroundColor: '#f5f5dc', color: 'black' }}
-                    >
-                      See past pickups{' '}
+                      Manage farmer shipments
                     </button>
                   </Link>
                 </div>
@@ -258,16 +223,4 @@ const acceptedApps = (
   </svg>
 );
 
-const walletIcon = (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="128"
-    height="128"
-    fill="currentColor"
-    className="bi bi-wallet"
-    viewBox="0 0 16 16"
-  >
-    <path d="M0 3a2 2 0 0 1 2-2h13.5a.5.5 0 0 1 0 1H15v2a1 1 0 0 1 1 1v8.5a1.5 1.5 0 0 1-1.5 1.5h-12A2.5 2.5 0 0 1 0 12.5V3zm1 1.732V12.5A1.5 1.5 0 0 0 2.5 14h12a.5.5 0 0 0 .5-.5V5H2a1.99 1.99 0 0 1-1-.268zM1 3a1 1 0 0 0 1 1h12V2H2a1 1 0 0 0-1 1z" />
-  </svg>
-);
-export default ManagerArea;
+export default WarehouseManagerArea;

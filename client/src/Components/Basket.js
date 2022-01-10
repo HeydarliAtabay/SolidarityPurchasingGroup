@@ -8,7 +8,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
-
 var weekday = require('dayjs/plugin/weekday');
 dayjs.extend(weekday);
 
@@ -20,15 +19,15 @@ function Basket(props) {
     message: '',
   });
   const [emailSent, setEmailSent] = useState(false);
-  const [openDialog, setOpenDialog]=useState(false)
+  const [openDialog, setOpenDialog] = useState(false);
 
   const handleSubmitEmail = (event) => {
     API.submitEmail(mailerState).then(() => {
       setEmailSent(true);
-      setOpenDialog(false)
+      setOpenDialog(false);
     });
   };
-  
+
   const handleOpenDialog = () => {
     setOpenDialog(true);
   };
@@ -37,7 +36,7 @@ function Basket(props) {
     setOpenDialog(false);
   };
 
-  function changeEmailState(client){
+  function changeEmailState(client) {
     setMailerState((prevState) => ({
       ...prevState,
       email: client.email,
@@ -67,6 +66,8 @@ Solidarity Purchase Group
                 variant="success"
                 width="16"
                 onClick={() => props.onAdd(item, 0.5)}
+                className="roundbox-t"
+                style={{ borderRadius: '25px' }}
               >
                 +
               </Button>
@@ -77,6 +78,7 @@ Solidarity Purchase Group
                 variant="danger"
                 width="16"
                 onClick={() => props.onRemove(item, 0.5)}
+                style={{ borderRadius: '25px' }}
               >
                 -
               </Button>{' '}
@@ -103,6 +105,7 @@ Solidarity Purchase Group
               <Button
                 variant="outline-primary"
                 onClick={() => props.setShowCompletePurchase(true)}
+                style={{ borderRadius: '25px' }}
               >
                 Insert
               </Button>
@@ -141,6 +144,7 @@ Solidarity Purchase Group
                           setEmailSent(true);
                         }}
                         className="mt-3"
+                        style={{ borderRadius: '25px' }}
                       >
                         Confirm
                       </Button>{' '}
@@ -148,6 +152,7 @@ Solidarity Purchase Group
                         <>
                           <Button
                             variant="secondary"
+                            style={{ borderRadius: '25px' }}
                             onClick={() => {
                               setMailerState((prevState) => ({
                                 ...prevState,
@@ -181,13 +186,20 @@ Solidarity Purchase Group
               <Container fluid>
                 <Row>
                   <h5 className="d-block text-center">Pickup in shop</h5>
-                  <span>
-                    <b>Date</b>:{' '}
-                    {dayjs(props.time.date)
-                      .add(1, 'week')
-                      .weekday(props.pickupDay)
-                      .format('dddd, MMMM D, YYYY')}
-                  </span>
+                  {props.flag ? (
+                    <span>
+                      <b>Date</b>:{' '}
+                      {dayjs(props.date).format('dddd, MMMM D, YYYY')}
+                    </span>
+                  ) : (
+                    <span>
+                      <b>Date</b>:{' '}
+                      {dayjs(props.time.date)
+                        .add(1, 'week')
+                        .weekday(props.pickupDay)
+                        .format('dddd, MMMM D, YYYY')}
+                    </span>
+                  )}
                   <span>
                     <b>Time</b>: {props.pickupTime}
                   </span>
@@ -210,6 +222,7 @@ Solidarity Purchase Group
                           handleSubmitEmail();
                           setEmailSent(true);
                         }}
+                        style={{ borderRadius: '25px' }}
                         className="mt-3"
                       >
                         Confirm
@@ -218,6 +231,7 @@ Solidarity Purchase Group
                         <>
                           <Button
                             variant="secondary"
+                            style={{ borderRadius: '25px' }}
                             onClick={() => {
                               setMailerState((prevState1) => ({
                                 ...prevState1,
@@ -252,6 +266,7 @@ Solidarity Purchase Group
               <hr />
               <div className="d-flex justify-content-end">
                 <Button
+                  style={{ borderRadius: '25px' }}
                   onClick={() => props.setShowsuccess(false)}
                   variant="outline-success"
                 >
@@ -269,6 +284,7 @@ Solidarity Purchase Group
               <hr />
               <div className="d-flex justify-content-end">
                 <Button
+                  style={{ borderRadius: '25px' }}
                   onClick={() => props.setShowdanger(false)}
                   variant="outline-danger"
                 >
@@ -288,6 +304,7 @@ Solidarity Purchase Group
               <hr />
               <div className="d-flex justify-content-end">
                 <Button
+                  style={{ borderRadius: '25px' }}
                   onClick={() => props.setShowUpdateError(false)}
                   variant="outline-danger"
                 >
@@ -308,6 +325,7 @@ Solidarity Purchase Group
               <hr />
               <div className="d-flex justify-content-end">
                 <Button
+                  style={{ borderRadius: '25px' }}
                   onClick={() => props.setShowInsufficient(false)}
                   variant="outline-danger"
                 >
@@ -325,16 +343,23 @@ Solidarity Purchase Group
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Accepting email sending"}
+          {'Accepting email sending'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Do you want to send an email to the Client, about confirmation of his/her order?
+            Do you want to send an email to the Client, about confirmation of
+            his/her order?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog}>Disagree</Button>
-          <Button onClick={handleSubmitEmail} autoFocus>
+          <Button style={{ borderRadius: '25px' }} onClick={handleCloseDialog}>
+            Disagree
+          </Button>
+          <Button
+            style={{ borderRadius: '25px' }}
+            onClick={handleSubmitEmail}
+            autoFocus
+          >
             Agree
           </Button>
         </DialogActions>

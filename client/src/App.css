@@ -3,9 +3,79 @@
   padding: 0px;
   font-family: 'Montserrat', sans-serif;
 }
+.badge {
+  border-radius: 25px !important;
+}
+.bg-success {
+  background-color: #66915c !important;
+}
+.insideAlert {
+  border-color: #ffffff !important;
+  color: white !important;
+  background-color: tomato;
+}
+.card {
+  border-radius: 25px !important;
+}
+.alert {
+  border-radius: 25px !important;
+  text-align: center;
+}
+.btn {
+  border-radius: 25px !important;
+}
+.btn-link {
+  color: #31708e !important;
+}
+.btn-primary {
+  background-color: #31708e !important;
+  border-color: #31708e !important;
+}
+.btn-secondary {
+  background-color: #9c645d !important;
+  border-color: #9c645d !important;
+}
+.btn-danger {
+  background-color: #f14666 !important;
+  border-color: #f14666 !important;
+}
+.btn-outline-danger {
+  border-color: #f14666 !important;
+  color: #f14666 !important;
+}
+.text-danger {
+  color: #f14666 !important;
+  font-weight: 700 !important;
+}
+.text-success {
+  color: #66915c !important;
+  font-weight: 700 !important;
+}
+.list-group-item-rounded{
+  border-bottom-left-radius: 25px !important;
+  border-bottom-right-radius: 25px !important;
+}
+.list-group-item.active {
+  background-color: #31708e !important;
+  border-color: #31708e !important;
+}
+.btn-success {
+  background-color: #66915c !important;
+  border-color: #66915c !important;
+}
+.alert-success {
+  background-color: #66915c !important;
+  color: white !important ;
+}
+.alert-danger {
+  background-color: #ee8980 !important;
+  color: white !important ;
+}
 
-
-
+.alert-warning {
+  background-color: #ffcdaa !important;
+  color: white !important ;
+}
 .RegistrationForm {
   padding-top: 1rem;
   width: 900px;
@@ -20,14 +90,12 @@
   text-align: center;
 }
 
-
-.pet{
+.pet {
   margin-left: 110px;
   display: flex;
-  
 }
 
-.subBtn{
+.subBtn {
   margin-top: 25px;
   align-items: center;
   align-self: center;
@@ -40,4 +108,4 @@
 .countReg1{
   width: 200px;
 }
-*/ 
+*/

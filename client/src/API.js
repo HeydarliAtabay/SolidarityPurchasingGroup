@@ -5,20 +5,16 @@ async function getAllClients() {
     const responseBody = await response.json();
     return responseBody;
   } else {
-    try {
-      const err = await response.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
-//GET ->retrieve users
-async function getAllUsers() {
-  const response = await fetch('/api/users');
+//GET ->retrieve missed
+async function getAllMissedPickups() {
+  const response = await fetch('/api/missed-pickups');
   if (response.ok) {
-    const responseUsersBody= await response.json()
-    return await responseUsersBody
+    const responseBody = await response.json();
+    return responseBody;
   } else {
     try {
       const err = await response.json();
@@ -28,46 +24,18 @@ async function getAllUsers() {
     }
   }
 }
-
-//GET ->retrieve client orders
-async function getAllOrders() {
-  const response = await fetch('/api/orders');
-  if (response.ok) {
-    const responseAllOrders = await response.json()
-    return responseAllOrders;
-  } else {
-    try {
-      const err = await response.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
-  }
-}
-
-//GET ->retrieve client orders
-async function getProviderDeliveredOrders(id) {
-  const response = await fetch(`/api/provider-orders/${id}`);
-  if (response.ok) {
-    return await response.json();
-  } else {
-    try {
-      const err = await response.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
-  }
-}
-
-//PUT to update a product as delivered
-function updateDelivered(id, product_name) {
+//Add missed
+function addMissedPickup(S) {
   return new Promise((resolve, reject) => {
-    fetch(`/api/orders/${id}/${product_name}`, {
-      method: 'PUT',
+    fetch('/api/missed-pickup', {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({
+        order_id: S.order_id,
+        client_id: S.client_id,
+      }),
     })
       .then((response) => {
         if (response.ok) {
@@ -79,164 +47,235 @@ function updateDelivered(id, product_name) {
             .then((obj) => {
               reject(obj);
             })
-            .catch((errUpdateDelivered) => {
+            .catch((err) => {
               reject({
-                errors: [{ param: 'Application', msg: 'Cannot update Delivered ' }],
+                errors: [
+                  {
+                    param: 'Application',
+                    msg: 'Cannot insert a missed pickup',
+                  },
+                ],
               });
             });
         }
       })
-      .catch((errUpdateDelivered1) => {
+      .catch((err) => {
         reject({
-          errors: [{ param: 'Server', msg: 'Communicate with server failed' }],
+          errors: [
+            { param: 'Server', msg: 'Communication with server failed' },
+          ],
         });
       });
   });
+}
+
+//GET ->retrieve users
+async function getAllUsers() {
+  const response = await fetch('/api/users');
+  if (response.ok) {
+    const responseUsersBody = await response.json();
+    return await responseUsersBody;
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//GET ->retrieve client orders
+async function getAllOrders() {
+  const response = await fetch('/api/orders');
+  if (response.ok) {
+    const responseAllOrders = await response.json();
+    return responseAllOrders;
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+//GET ->retrieve products
+async function getAllProducts() {
+  const response = await fetch('/api/products');
+  if (response.ok) {
+    const responseAllProducts = await response.json();
+    return responseAllProducts;
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+//GET ->retrieve client orders
+async function getProviderDeliveredOrders(id) {
+  const response = await fetch(`/api/provider-orders/${id}`);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//PUT to update a product as delivered
+async function updateDelivered(id, product_name) {
+  const response = await fetch(`/api/orders/${id}/${product_name}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 // PUT to update a product as prepared
-function updateWHPrepared(id, product_name) {
-  return new Promise((resolve, reject) => {
-    fetch(`/api/orders/${id}/${product_name}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((responseWHPrepared) => {
-        if (responseWHPrepared.ok) {
-          resolve(null);
-        } else {
-          // cause of error
-          responseWHPrepared
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((errWHPrepared) => {
-              reject({
-                errors: [{ param: 'Application', msg: 'Cannot update WHPrepared ' }],
-              });
-            });
-        }
-      })
-      .catch((errWHPrepared1) => {
-        reject({
-          errors: [{ param: 'Server', msg: 'Communication with server failed while trying to implement /api/orders/${id}/${product_name} ' }],
-        });
-      });
+async function updateWHPrepared(id, product_name) {
+  const response = await fetch(`/api/orders/${id}/${product_name}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 } //
 
 //update order state
-function updateState(id, state) {
-  return new Promise((resolve, reject) => {
-    fetch(`/api/modifyState`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: id,
-        state: state
-      }),
-    })
-      .then((responseUpdateState) => {
-        if (responseUpdateState.ok) {
-          resolve(null);
-        } else {
-          // cause of error
-          responseUpdateState
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((errUpdateState) => {
-              reject({
-                errors: [{ param: 'Application', msg: 'Cannot update state ' }],
-              });
-            });
-        }
-      })
-      .catch((errUpdateState1) => {
-        reject({
-          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyState' }],
-        });
-      });
+async function updateState(id, state) {
+  const response = await fetch(`/api/modifyState`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+      state: state,
+    }),
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+//update order state
+async function updateStateOnce(id, state) {
+  const response = await fetch(`/api/modifyStateOnce`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+      state: state
+    }),
+  })
+  if (response.ok) {
+    return await response.json();
+  }
+  else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
+
+//update user suspension value
+async function updateSuspension(id, suspension) {
+  const response = await fetch(`/api/updateSuspension`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+      suspension: suspension,
+    }),
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 //update farmer state of a product of an order
-
-function updateStateFarmer(id, product_name, state) {
-  return new Promise((resolve, reject) => {
-    fetch(`/api/modifyStateFarmer`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: id,
-        product_name: product_name,
-        state: state,
-      }),
-    })
-      .then((responseStateFarmer) => {
-        if (responseStateFarmer.ok) {
-          resolve(null);
-        } else {
-          // cause of error
-          responseStateFarmer
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((errStateFarmer) => {
-              reject({
-                errors: [{ param: 'Application', msg: 'Cannot update farmer state ' }],
-              });
-            });
-        }
-      })
-      .catch((errStateFarmer1) => {
-        reject({
-          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyStateFarmer ' }],
-        });
-      });
+async function updateStateFarmer(id, product_id, state) {
+  const response = await fetch(`/api/modifyStateFarmer`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: id,
+      product_id: product_id,
+      state: state,
+    }),
   });
+  console.log(response);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
-
 
 //GET all confirmed products + readme OK
 async function getAllConfirmedProducts(year, week) {
-  const responseAllConfirmedProducts = await fetch('/api/products/confirmed/' + year + '/' + week);
+  const responseAllConfirmedProducts = await fetch(
+    '/api/products/confirmed/' + year + '/' + week
+  );
   if (responseAllConfirmedProducts.ok) {
     return await responseAllConfirmedProducts.json();
   } else {
-    let errAllConfirmedProducts = { status: responseAllConfirmedProducts.status, errObj: await responseAllConfirmedProducts.json() };
+    let errAllConfirmedProducts = {
+      status: responseAllConfirmedProducts.status,
+      errObj: await responseAllConfirmedProducts.json(),
+    };
     throw errAllConfirmedProducts; // An object with the error coming from the server
   }
 }
 
 //GET all expected products + readme ok
 async function getAllExpectedProducts(year, week) {
-  const responseAllExpectedProducts = await fetch('/api/products/expected/' + year + '/' + week);
+  const responseAllExpectedProducts = await fetch(
+    '/api/products/expected/' + year + '/' + week
+  );
   if (responseAllExpectedProducts.ok) {
-    const responseAllExpectedProductsBody= await responseAllExpectedProducts.json();
-    return responseAllExpectedProductsBody
+    const responseAllExpectedProductsBody =
+      await responseAllExpectedProducts.json();
+    return responseAllExpectedProductsBody;
   } else {
-    let errAllExpectedProducts = { status: responseAllExpectedProducts.status, errObj: await responseAllExpectedProducts.json() };
+    let errAllExpectedProducts = {
+      status: responseAllExpectedProducts.status,
+      errObj: await responseAllExpectedProducts.json(),
+    };
     throw errAllExpectedProducts; // An object with the error coming from the server
   }
 }
 
 //GET all products in the booked or pending state of a certain provider + readme ok
 async function getOrderedProductsForProvider(year, week) {
-  const responseOrderedProductsForProvider = await fetch('/api/products/ordered/' + year + '/' + week);
+  const responseOrderedProductsForProvider = await fetch(
+    '/api/products/ordered/' + year + '/' + week
+  );
   if (responseOrderedProductsForProvider.ok) {
     return await responseOrderedProductsForProvider.json();
   } else {
-    let errOrderedProductsForProvider = { status: responseOrderedProductsForProvider.status, errObj: await responseOrderedProductsForProvider.json() };
+    let errOrderedProductsForProvider = {
+      status: responseOrderedProductsForProvider.status,
+      errObj: await responseOrderedProductsForProvider.json(),
+    };
     throw errOrderedProductsForProvider; // An object with the error coming from the server
   }
 }
@@ -249,22 +288,31 @@ async function getProviderShipmentStatus(year, week) {
   if (responseProviderShipmentStatus.ok) {
     return await responseProviderShipmentStatus.json();
   } else {
-    let errProviderShipmentStatus = { status: responseProviderShipmentStatus.status, errObj: await responseProviderShipmentStatus.json() };
+    let errProviderShipmentStatus = {
+      status: responseProviderShipmentStatus.status,
+      errObj: await responseProviderShipmentStatus.json(),
+    };
     throw errProviderShipmentStatus; // An object with the error coming from the server
   }
 }
 
 //POST all products IDs that were shipped + readme ok
 async function setProductsAsFarmerShipped(productIDS) {
-  const responseSetProductAsFarmerShipped = await fetch('/api/orders/farmershipped', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(productIDS), // Conversion in JSON format
-  });
+  const responseSetProductAsFarmerShipped = await fetch(
+    '/api/orders/farmershipped',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(productIDS), // Conversion in JSON format
+    }
+  );
   if (responseSetProductAsFarmerShipped.ok) {
     return await responseSetProductAsFarmerShipped.json();
   } else {
-    let errSetProductAsFarmerShipped = { status: responseSetProductAsFarmerShipped.status, errObj: await responseSetProductAsFarmerShipped.json() };
+    let errSetProductAsFarmerShipped = {
+      status: responseSetProductAsFarmerShipped.status,
+      errObj: await responseSetProductAsFarmerShipped.json(),
+    };
     throw errSetProductAsFarmerShipped; // An object with the error coming from the server
   }
 }
@@ -275,7 +323,10 @@ async function getProductById(product_id) {
   if (responseProductById.ok) {
     return await responseProductById.json();
   } else {
-    let errProductById = { status: responseProductById.status, errObj: await responseProductById.json() };
+    let errProductById = {
+      status: responseProductById.status,
+      errObj: await responseProductById.json(),
+    };
     throw errProductById; // An object with the error coming from the server
   }
 }
@@ -286,7 +337,10 @@ async function getAllCategories() {
   if (responseAllCategories.ok) {
     return await responseAllCategories.json();
   } else {
-    let errAllCategories = { status: responseAllCategories.status, errObj: await responseAllCategories.json() };
+    let errAllCategories = {
+      status: responseAllCategories.status,
+      errObj: await responseAllCategories.json(),
+    };
     throw errAllCategories; // An object with the error coming from the server
   }
 }
@@ -297,7 +351,10 @@ async function getAllProviders() {
   if (responseAllProviders.ok) {
     return await responseAllProviders.json();
   } else {
-    let errAllProviders = { status: responseAllProviders.status, errObj: await responseAllProviders.json() };
+    let errAllProviders = {
+      status: responseAllProviders.status,
+      errObj: await responseAllProviders.json(),
+    };
     throw errAllProviders; // An object with the error coming from the server
   }
 }
@@ -323,6 +380,18 @@ async function getProviderProducts() {
     throw err; // An object with the error coming from the server
   }
 }
+
+//GET provider products by providerID + readme ok
+async function getProviderBookings() {
+  const response = await fetch('/api/provider-bookings');
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
 //GET provider products by providerID that are not available and notification filed is equal to zero.
 async function getProviderProductsNotification() {
   const response = await fetch('/api/provider-products-notification');
@@ -351,7 +420,6 @@ async function setNotificationasSent(products) {
   }
 }
 
-
 //Check if provider has already confirmed product availability for given year and week of year + readme ok
 async function getProviderConfirmationStatus(year, week_number) {
   const response = await fetch(
@@ -365,10 +433,10 @@ async function getProviderConfirmationStatus(year, week_number) {
   }
 }
 
-//GET provider expected products + readme ok 
-async function getProviderExpectedProducts(year, week_number) {
+//GET provider expected products + readme ok
+async function getProviderAvailableProducts(year, week_number) {
   const response = await fetch(
-    '/api/products/provider/expected/' + year + '/' + week_number
+    '/api/products/provider/available/' + year + '/' + week_number
   );
   if (response.ok) {
     return await response.json();
@@ -378,7 +446,7 @@ async function getProviderExpectedProducts(year, week_number) {
   }
 }
 
-//POST array of expected products + readme ok 
+//POST array of expected products + readme ok
 async function declareAvailability(products, year, week) {
   const response = await fetch('/api/products/expected/' + year + '/' + week, {
     method: 'POST',
@@ -486,83 +554,50 @@ async function rejectFarmerApplication(application_id) {
 }
 
 //update quantity of products
-function updateQuantity(product_id, quantity) {
-  return new Promise((resolve, reject) => {
-    fetch(`/api/modifyquantity`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ id: product_id, quantity: quantity }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(null);
-        } else {
-          // cause of error
-          response
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((err) => {
-              reject({
-                errors: [{ param: 'Application', msg: 'Cannot update ' }],
-              });
-            });
-        }
-      })
-      .catch((err) => {
-        reject({
-          errors: [{ param: 'Server', msg: 'Communication with server failed while implementing /api/modifyquantity ' }],
-        });
-      });
+async function updateQuantity(product_id, quantity) {
+  const response = await fetch(`/api/modifyquantity`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ id: product_id, quantity: quantity }),
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 // Adding new client
-
-function addClient(client) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/clients', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        budget: client.budget,
-        name: client.name,
-        surname: client.surname,
-        gender: client.gender,
-        birthdate: client.birthdate,
-        country: client.country,
-        region: client.region,
-        address: client.address,
-        city: client.city,
-        phone: client.phone,
-        email: client.email,
-        hash: client.hash,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(null);
-        } else {
-          // analyze the cause of error
-          response
-            .json()
-            .then((message) => {
-              reject(message);
-            }) // error message in the response body
-            .catch(() => {
-              reject({ error: 'Cannot parse server response.' });
-            }); // something else
-        }
-      })
-      .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
-      }); // connection errors
+async function addClient(client) {
+  const response = await fetch('/api/clients', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      budget: client.budget,
+      name: client.name,
+      surname: client.surname,
+      gender: client.gender,
+      birthdate: client.birthdate,
+      country: client.country,
+      region: client.region,
+      address: client.address,
+      city: client.city,
+      phone: client.phone,
+      email: client.email,
+      hash: client.hash,
+    }),
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 //GET ->retrieve payment methods
@@ -572,117 +607,88 @@ async function getAllPaymentMethods() {
     const responseBody = await response.json();
     return responseBody;
   } else {
-    try {
-      const err = await response.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
 
 // Adding new transaction
-
-function addTransaction(tr) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/transactions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        type: tr.type,
-        client_id: tr.client_id,
-        method_id: tr.method_id,
-        account_num: tr.account_num,
-        amount: tr.amount,
-        date: tr.date,
-        time: tr.time,
-        status: 1,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(null);
-        } else {
-          // analyze the cause of error
-          response
-            .json()
-            .then((message) => {
-              reject(message);
-            }) // error message in the response body
-            .catch(() => {
-              reject({ error: 'Cannot parse server response.' });
-            }); // something else
-        }
-      })
-      .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
-      }); // connection errors
+async function addTransaction(tr) {
+  const response = await fetch('/api/transactions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      type: tr.type,
+      client_id: tr.client_id,
+      method_id: tr.method_id,
+      account_num: tr.account_num,
+      amount: tr.amount,
+      date: tr.date,
+      time: tr.time,
+      status: 1,
+    }),
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 // Increase balance of clients
-function increaseBalance(amount, clientId) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/clients/update/balance/' + clientId + '/' + amount, {
+async function increaseBalance(amount, clientId) {
+  const response = await fetch(
+    '/api/clients/update/balance/' + clientId + '/' + amount,
+    {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({}),
-    })
-      .then((responseIncreaseBalance) => {
-        if (responseIncreaseBalance.ok) {
-          resolve(null);
-        } else {
-          // analyze the cause of error
-          responseIncreaseBalance
-            .json()
-            .then((obj) => {
-              reject(obj);
-            }) // error message in the response body
-            .catch(() => {
-              reject({ error: 'Cannot parse server response.' });
-            }); // something else
-        }
-      })
-      .catch(() => {
-        reject({ error: 'Cannot communicate with the server while implementing /api/clients/update/balance/.' });
-      }); // connection errors
-  });
+    }
+  );
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 // Confirm expexted product
-function confirmExpectedProducts(product, year, week) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/farmerConfirm/' + product + '/' + year + '/' + week, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({}),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(null);
-        } else {
-          // analyze the cause of error
-          response
-            .json()
-            .then((obj) => {
-              reject(obj);
-            }) // error message in the response body
-            .catch(() => {
-              reject({ error: 'Cannot parse server response.' });
-            }); // something else
-        }
-      })
-      .catch(() => {
-        reject({ error: 'Cannot communicate with the server.' });
-      }); // connection errors
+async function confirmExpectedProducts(product, year, week) {
+  const response = await fetch('/api/farmerConfirm/' + product, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
+
+async function setUnavailableProducts(product, year, week) {
+  const response = await fetch('/api/farmerUnavailable/' + product, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+}
+
 //api login
 async function logIn(credentials) {
   let responseLogIn = await fetch('/api/sessions', {
@@ -696,12 +702,11 @@ async function logIn(credentials) {
     const user = await responseLogIn.json();
     return user;
   } else {
-    try {
-      const errDetail = await responseLogIn.json();
-      throw errDetail.message;
-    } catch (err) {
-      throw err;
-    }
+    let err = {
+      status: responseLogIn.status,
+      errObj: await responseLogIn.json(),
+    };
+    throw err; // An object with the error coming from the server
   }
 }
 
@@ -713,109 +718,70 @@ async function logOut() {
 
 async function getUserInfo() {
   const response = await fetch('/api/sessions/current');
-  const userInfo = await response.json();
   if (response.ok) {
-    return userInfo;
+    return await response.json();
   } else {
-    throw userInfo; // an object with the error coming from the server
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
 
 //POST di un nuovo incontro
-function addUser(S) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id: S.id,
-        name: S.name,
-        email: S.email,
-        hash: S.hash,
-        role: S.role,
-      }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          resolve(null);
-        } else {
-          // cause of error
-          response
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((err) => {
-              reject({
-                errors: [{ param: 'Application', msg: 'Cannot insert a user' }],
-              });
-            });
-        }
-      })
-      .catch((err) => {
-        reject({
-          errors: [
-            { param: 'Server', msg: 'Communication with server failed' },
-          ],
-        });
-      });
+async function addUser(S) {
+  const response = await fetch('/api/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      id: S.id,
+      name: S.name,
+      email: S.email,
+      hash: S.hash,
+      role: S.role,
+    }),
   });
+
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 //POST di un nuovo incontro
-function addOrder(S) {
-  return new Promise((resolve, reject) => {
-    fetch('/api/orderinsert', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        order_id: S.order_id,
-        client_id: S.client_id,
-        product_name: S.product_name,
-        product_id: S.product_id,
-        order_quantity: S.order_quantity,
-        state: S.state,
-        OrderPrice: S.OrderPrice,
-        id: S.id,
-        address: S.address,
-        city: S.city,
-        zipcode: S.zipcode,
-        Nation: S.nation,
-        date: S.date,
-        time: S.time,
-        pickup: S.pickup,
-      }),
-    })
-      .then((responseAddOrder) => {
-        if (responseAddOrder.ok) {
-          resolve(null);
-        } else {
-          // cause of error
-          responseAddOrder
-            .json()
-            .then((obj) => {
-              reject(obj);
-            })
-            .catch((errAddOrder) => {
-              reject({
-                errors: [
-                  { param: 'Application', msg: 'Cannot insert a order' },
-                ],
-              });
-            });
-        }
-      })
-      .catch((errAddOrder1) => {
-        reject({
-          errors: [
-            { param: 'Server', msg: 'Communication with server failed while inserting an order' },
-          ],
-        });
-      });
+async function addOrder(S) {
+  const response = await fetch('/api/orderinsert', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      order_id: S.order_id,
+      client_id: S.client_id,
+      product_name: S.product_name,
+      product_id: S.product_id,
+      order_quantity: S.order_quantity,
+      state: S.state,
+      OrderPrice: S.OrderPrice,
+      id: S.id,
+      address: S.address,
+      city: S.city,
+      zipcode: S.zipcode,
+      Nation: S.nation,
+      date: S.date,
+      time: S.time,
+      pickup: S.pickup,
+    }),
   });
+  console.log(response);
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
+
 //DELETE ->order item
 function deleteOrderItem(id) {
   return new Promise((resolve, reject) => {
@@ -841,10 +807,10 @@ function deleteOrderItem(id) {
             });
         }
       })
-      .catch((errDeleteOrderItem) => {
+      .catch((err) => {
         reject({
           errors: [
-            { param: 'Server', msg: 'Communication with server failed while deleting the order item [/api/orders/:id ]' },
+            { param: 'Server', msg: 'Communication with server failed' },
           ],
         });
       });
@@ -861,49 +827,114 @@ const submitEmail = async (e) => {
       email: e.email,
       message: e.message,
     }),
-  })
-    .then((res) => res.json())
-    .then(async (res) => {
-      const resData = await res;
-      console.log(resData);
-      if (resData.status === 'success') {
-        alert('Message Sent');
-      } else if (resData.status === 'fail') {
-        alert('Message failed to send');
-      }
-    });
+  });
+  if (response.ok) {
+    const resData = await response.json();
+    //console.log(resData);
+    // if (resData.status === 'success') {
+    //   alert('Message Sent');
+    // }
+    // else if (resData.status === 'fail') {
+    //   alert('Message failed to send');
+    // }
+    return resData;
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+  //   .then((res) => res.json())
+  // .then(async (res) => {
+  //   const resData = await res;
+
+  // });
 };
 
 /// send telegram notification on Saturday at 09:00
-const sendTelegramNotificationOnSaturday = async (e) => {
+const sendTelegramNotificationOnSaturday = async () => {
   const response = await fetch('/api/SendTelegramNotification', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
-    }
-  })
-    .then((res) => res.json())
-    .then(async (res) => {
-      const resData = await res;
-      console.log(resData);
-    });
+    },
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+  // .then((res) => res.json())
+  // .then(async (res) => {
+  //   const resData = await res;
+  //   console.log(resData);
+  // });
 };
 
 /// send telegram notification on Saturday at 09:00
-const sendTelegramTopUpNotification = async (client,transaction) => {
+const sendTelegramTopUpNotification = async (client, transaction) => {
   const response = await fetch('/api/topUpNotificationTelegram', {
     method: 'POST',
     headers: {
       'Content-type': 'application/json',
     },
     body: JSON.stringify({
+      clientid: client.client_id,
       balance: client.budget,
       telegramId: client.telegramId,
       name: client.name,
       surname: client.surname,
       amount: transaction.amount,
       date: transaction.date,
-      time: transaction.time
+      time: transaction.time,
+    }),
+  });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
+  // .then((res) => res.json())
+  // .then(async (res) => {
+  //   const resData = await res;
+  //   console.log(resData);
+  // });
+};
+
+/// send telegram notification on Saturday at 09:00
+const sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10 =
+  async () => {
+    const response = await fetch(
+      '/api/SendTelegramNotificationForInsufficientBalance',
+      {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+      }
+    );
+    if (response.ok) {
+      return await response.json();
+    } else {
+      let err = { status: response.status, errObj: await response.json() };
+      throw err; // An object with the error coming from the server
+    }
+    // .then((res) => res.json())
+    // .then(async (res) => {
+    //   const resData = await res;
+    //   console.log(resData);
+    // });
+  };
+
+const sendTelegramOrderStateNotification = async (clientId, state) => {
+  const response = await fetch('/api/orderStateConfirmation', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/json',
+    },
+    body: JSON.stringify({
+      clientId: clientId,
+      state: state,
     }),
   })
     .then((res) => res.json())
@@ -913,85 +944,53 @@ const sendTelegramTopUpNotification = async (client,transaction) => {
     });
 };
 
-
-/// send telegram notification on Saturday at 09:00
-const sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10 = async (e) => {
-  const response = await fetch('/api/SendTelegramNotificationForInsufficientBalance', {
-    method: 'POST',
+async function updateItem(order) {
+  const response = await fetch(`/api/orders/` + order.id, {
+    method: 'PUT',
     headers: {
-      'Content-type': 'application/json',
-    }
-  })
-    .then((res) => res.json())
-    .then(async (res) => {
-      const resData = await res;
-      console.log(resData);
-    });
-};
-
-function updateItem(order) {
-
-  return new Promise((resolve, reject) => {
-    fetch(`/api/orders/` + order.id, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        order_id: order.order_id,
-        client_id: order.client_id,
-        product_name: order.product_name,
-        product_id: order.product_id,
-        order_quantity: order.order_quantity,
-        state: order.state,
-        farmer_state: order.farmer_state,
-        OrderPrice: order.OrderPrice,
-        id: order.id,
-        address: order.address,
-        city: order.city,
-        zipcode: order.zipcode,
-        Nation: order.Nation,
-        date: order.date,
-        time: order.time,
-        pickup: order.pickup,
-      }),
-    })
-      .then((responseupdateItem) => {
-        if (responseupdateItem.ok) {
-          resolve(null);
-        } else {
-          // analyze the cause of error
-          responseupdateItem
-            .json()
-            .then((obj) => {
-              reject(obj);
-            }) // error message in the response body
-            .catch(() => {
-              reject({ error: 'Cannot parse server response while Updating Item.' });
-            }); // something else
-        }
-      })
-      .catch(() => {
-        reject({ error: 'Cannot communicate with the server while implementing item update [/api/orders/:orderId].' });
-      }); // connection errors
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      order_id: order.order_id,
+      client_id: order.client_id,
+      product_name: order.product_name,
+      product_id: order.product_id,
+      order_quantity: order.order_quantity,
+      state: order.state,
+      farmer_state: order.farmer_state,
+      OrderPrice: order.OrderPrice,
+      id: order.id,
+      address: order.address,
+      city: order.city,
+      zipcode: order.zipcode,
+      Nation: order.Nation,
+      date: order.date,
+      time: order.time,
+      pickup: order.pickup,
+    }),
   });
+  if (response.ok) {
+    return await response.json();
+  } else {
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
+  }
 }
 
 //GET ->retrieve all deliverers
 async function getAllDeliverers() {
   const responseGetAllDeliverers = await fetch('/api/deliverers');
   if (responseGetAllDeliverers.ok) {
-    const responseBody = await responseGetAllDeliverers.json();
-    return responseBody;
+    return await responseGetAllDeliverers.json();
   } else {
-    try {
-      const err = await responseGetAllDeliverers.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
+    let err = {
+      status: responseGetAllDeliverers.status,
+      errObj: await responseGetAllDeliverers.json(),
+    };
+    throw err; // An object with the error coming from the server
   }
 }
+
 //GET ->retrieve deliverable orders
 async function getDeliverableOrders(city) {
   const response = await fetch(`/api/deliverableOrders/${city}`);
@@ -999,12 +998,8 @@ async function getDeliverableOrders(city) {
     const responseBody = await response.json();
     return responseBody;
   } else {
-    try {
-      const err = await response.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
 
@@ -1019,7 +1014,6 @@ async function getDelivererByMail(id) {
   }
 }
 
-
 //GET ->retrieve all deliverers
 async function getOrderAndClientData() {
   const response = await fetch('/api/orders/pickup/clientorder');
@@ -1027,16 +1021,14 @@ async function getOrderAndClientData() {
     const responseBody = await response.json();
     return responseBody;
   } else {
-    try {
-      const err = await response.json();
-      throw err.message;
-    } catch (err) {
-      throw err;
-    }
+    let err = { status: response.status, errObj: await response.json() };
+    throw err; // An object with the error coming from the server
   }
 }
+
 const API = {
   getAllClients,
+  getAllProducts,
   getAllOrders,
   updateDelivered,
   updateWHPrepared,
@@ -1045,12 +1037,15 @@ const API = {
   getOrderedProductsForProvider,
   getProviderShipmentStatus,
   setProductsAsFarmerShipped,
+  updateStateOnce,
   getProductById,
   getAllProviders,
   getProviderById,
   getProviderProducts,
-  getProviderExpectedProducts,
+  getProviderAvailableProducts,
+  getProviderBookings,
   getProviderConfirmationStatus,
+  setUnavailableProducts,
   declareAvailability,
   uploadProductImage,
   checkEmailAvailability,
@@ -1076,6 +1071,7 @@ const API = {
   getProviderDeliveredOrders,
   getAllUsers,
   updateState,
+  updateSuspension,
   updateItem,
   updateStateFarmer,
   getAllDeliverers,
@@ -1086,7 +1082,10 @@ const API = {
   getOrderAndClientData,
   sendTelegramNotificationOnSaturday,
   sendTelegramTopUpNotification,
-  sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10
+  sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10,
+  getAllMissedPickups,
+  addMissedPickup,
+  sendTelegramOrderStateNotification,
 };
 
 export default API;
