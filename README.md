@@ -80,13 +80,7 @@ open your favourite browser and access the project at the url: http://localhost:
 
 | Email address       | Password |
 | :------------------ | :------: |
-| luca.bianchi@spg.it |   1111   |
-| farmer@spg.it       |   1234   |
-| farmer2@spg.it      |   1234   |
-| matteo.rossi@spg.it |   1111   |
-| mattia.verdi@spg.it |   1111   |
-| newfarmer@spg.it    |   1234   |
-| farmer3@spg.it      |   1234   |
+| calvin@email.com |   1234  |
 
 ### Delivery person
 
