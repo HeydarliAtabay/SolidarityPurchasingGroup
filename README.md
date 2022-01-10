@@ -11,7 +11,7 @@ Use these npm scripts to install and run the project:
 3. `cd client →npm install`
 4. `cd .. → cd server → npm install`
 5. `cd client → npm start`
-6. (open another termianal window) `cd server npm start`
+6. (open another terminal window) `cd server npm start`
 
 The application should now run at [http://localhost:3000](http://localhost:3000/) of the browser
 
