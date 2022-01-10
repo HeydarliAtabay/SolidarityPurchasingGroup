@@ -8,7 +8,7 @@ Use these npm scripts to install and run the project:
 
 1. clone the repository
 2. `cd namedirectory`
-3. `cd client →npm install`
+3. `cd client → npm install`
 4. `cd .. → cd server → npm install`
 5. `cd client → npm start`
 6. (open another terminal window) `cd server npm start`
