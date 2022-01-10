@@ -8,10 +8,10 @@ Use these npm scripts to install and run the project:
 
 1. clone the repository
 2. `cd namedirectory`
-3. `cd client →npm install`
+3. `cd client → npm install`
 4. `cd .. → cd server → npm install`
 5. `cd client → npm start`
-6. (open another termianal window) `cd server npm start`
+6. (open another terminal window) `cd server npm start`
 
 The application should now run at [http://localhost:3000](http://localhost:3000/) of the browser
 
@@ -49,6 +49,9 @@ open your favourite browser and access the project at the url: http://localhost:
 | elnurs.shabanov@gmail.com | elnur111 |
 | sara.bekkari@yahoo.it     |   sara   |
 | clare.mint@yahoo.it       |   sara   |
+| miriam@email.com | 1234 |
+| giovanni@email.com    |   1234   |
+
 
 
 ### Shop employee
@@ -56,7 +59,7 @@ open your favourite browser and access the project at the url: http://localhost:
 | Email address     | Password |
 | :---------------- | :------: |
 | employee1@shop.it |   shop   |
-| employee2@shop.it |   shop   |
+| mario@spg.it |   1234   |
 | employee3@shop.it |   shop   |
 
 ### Shop manager
@@ -80,13 +83,7 @@ open your favourite browser and access the project at the url: http://localhost:
 
 | Email address       | Password |
 | :------------------ | :------: |
-| luca.bianchi@spg.it |   1111   |
-| farmer@spg.it       |   1234   |
-| farmer2@spg.it      |   1234   |
-| matteo.rossi@spg.it |   1111   |
-| mattia.verdi@spg.it |   1111   |
-| newfarmer@spg.it    |   1234   |
-| farmer3@spg.it      |   1234   |
+| calvin@email.com |   1234  |
 
 ### Delivery person
 
