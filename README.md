@@ -49,6 +49,9 @@ open your favourite browser and access the project at the url: http://localhost:
 | elnurs.shabanov@gmail.com | elnur111 |
 | sara.bekkari@yahoo.it     |   sara   |
 | clare.mint@yahoo.it       |   sara   |
+| miriam@email.com | 1234 |
+| giovanni@email.com    |   1234   |
+| clare.mint@yahoo.it       |   sara   |
 
 
 ### Shop employee
@@ -56,7 +59,7 @@ open your favourite browser and access the project at the url: http://localhost:
 | Email address     | Password |
 | :---------------- | :------: |
 | employee1@shop.it |   shop   |
-| employee2@shop.it |   shop   |
+| mario@spg.it |   1234   |
 | employee3@shop.it |   shop   |
 
 ### Shop manager
