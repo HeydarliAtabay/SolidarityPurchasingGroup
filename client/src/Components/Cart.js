@@ -89,10 +89,10 @@ function Cart(props) {
 
         if (sendTelegram) {
           if (orderTotal > client.budget) {
-            await API.sendTelegramOrderStateNotification(clientID, 'placed');
+            await API.sendTelegramOrderStateNotification(clientID, 'pending');
           }
           else {
-            await API.sendTelegramOrderStateNotification(clientID, 'pending');
+            await API.sendTelegramOrderStateNotification(clientID, 'placed');
           }
           setTelegramAlert({ variant: 'success', msg: 'Telegram notification successfully sent to ' + client.email })
         }
