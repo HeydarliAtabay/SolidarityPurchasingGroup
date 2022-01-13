@@ -1,4 +1,4 @@
-# RETROSPECTIVE of THIRD SPRINT (Team R02)
+# RETROSPECTIVE of FOURTH SPRINT (Team R02)
 
 The retrospective should include _at least_ the following
 sections:
@@ -11,9 +11,9 @@ sections:
 
 ### Macro statistics
 
-- Committed Stories:  ; Stories Done: 
-- Committed Points: ; Points Done: 
-- Planned Hours: ; Spent Hours:
+- Committed Stories: 8 ; Stories Done: 6
+- Committed Points: 81; Points Done: 68
+- Planned Hours: 98h  ; Spent Hours: 102h 30m
 
 
 **Remember** a story is done ONLY if it fits the Definition of Done:
@@ -29,19 +29,27 @@ sections:
 
 | Story | # Tasks | Points | Hours est. | Hours actual     |
 | ----- | ------- | ------ | ---------- | ---------------- |
-| | | | | |
-
+| _#0_  | 7      | -       | 59h 75m     | 63h 50m          |
+| _#40_  | 2       | 13     | 5h     |      5h 30m        |
+| _#41_  | 2       | 5     | 5h         |      0h         |
+| _#42_  | 2       | 21      | 9h         |      9h       |
+| _#43_  | 2       | 8     | 3h         |      13h        |
+| _#44_  | 2       | 13     | 7h         |      7h        |
+| _#45_  | 2       | 8      | 3h         |      3h 30m      |
+| _#46_  | 2       | 8     | 3h         |      3h 30m        |
+| _#47_  | 2       | 5     | 2h         |      2h  30m     |
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
 
 Story 0 in-depth - fixing Git issues:
-- Navbar color contrast issue -> Navbar was completely redesigned 
+- Navbar color contrast issue -> Navbar was completely redesigned
+- Shopping cart not allowing floating point values -> shopping cart now increments the quantity by 0.5 units instead of 1 unit 
 
 
 Sprint statistics
-- Average hour per task: (hours)/(#tasks)= hours; 
-- Standard deviation: 
-- Total task estimation error ratio: 
+- Average hour per task: 102.5(hours)/23(#tasks)= 4.45 hours; 
+- Standard deviation: 0.54 ----------------------------------------
+- Total task estimation error ratio: 0.956
 
 ## QUALITY MEASURES
 
