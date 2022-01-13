@@ -1,108 +1,104 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testExecutions version="1">
-  <file path="C:\Users\mario\Downloads\SE2-SPG-main\client\src\__tests__\API.test.js">
-    <testCase name="test GetProductByID No errors" duration="7"/>
-    <testCase name="test GetProductByID Error" duration="1"/>
-    <testCase name="test getAllExpectedProducts No errors" duration="7"/>
+  <file path="C:\Users\mario\Desktop\SPG\client\src\__tests__\API.test.js">
+    <testCase name="test GetProductByID No errors" duration="9"/>
+    <testCase name="test GetProductByID Error" duration="3"/>
+    <testCase name="test getAllExpectedProducts No errors" duration="6"/>
     <testCase name="test getAllExpectedProducts Error" duration="1"/>
-    <testCase name="test getAllConfirmedProducts No errors" duration="10"/>
+    <testCase name="test getAllConfirmedProducts No errors" duration="4"/>
     <testCase name="test getAllConfirmedProducts Error" duration="1"/>
-    <testCase name="test getOrderedProductsForProvider No errors" duration="2"/>
+    <testCase name="test getOrderedProductsForProvider No errors" duration="8"/>
     <testCase name="test getOrderedProductsForProvider Error" duration="1"/>
-    <testCase name="test setProductsAsFarmerShipped No errors" duration="1"/>
-    <testCase name="test setProductsAsFarmerShipped Error" duration="0"/>
-    <testCase name="test declareAvailability No errors" duration="1"/>
+    <testCase name="test setProductsAsFarmerShipped No errors" duration="4"/>
+    <testCase name="test setProductsAsFarmerShipped Error" duration="2"/>
+    <testCase name="test declareAvailability No errors" duration="2"/>
     <testCase name="test declareAvailability Error" duration="1"/>
     <testCase name="test uploadProductImage No errors" duration="1"/>
     <testCase name="test uploadProductImage Error" duration="0"/>
-    <testCase name="test GetAllCategories No errors" duration="1"/>
-    <testCase name="test GetAllCategories Error" duration="0"/>
-    <testCase name="test GetAllProviders No errors" duration="1"/>
+    <testCase name="test GetAllCategories No errors" duration="3"/>
+    <testCase name="test GetAllCategories Error" duration="2"/>
+    <testCase name="test GetAllProviders No errors" duration="2"/>
     <testCase name="test GetAllProviders Error" duration="0"/>
     <testCase name="test GetProviderByID No errors" duration="1"/>
-    <testCase name="test GetProviderByID Error" duration="1"/>
+    <testCase name="test GetProviderByID Error" duration="0"/>
     <testCase name="test getProviderShipmentStatus No errors" duration="1"/>
     <testCase name="test getProviderShipmentStatus Error" duration="1"/>
-    <testCase name="test getProviderProducts No errors" duration="2"/>
-    <testCase name="test getProviderProducts Error" duration="1"/>
+    <testCase name="test getProviderProducts No errors" duration="3"/>
+    <testCase name="test getProviderProducts Error" duration="2"/>
     <testCase name="test getProviderConfirmationStatus No errors" duration="1"/>
     <testCase name="test getProviderConfirmationStatus Error" duration="1"/>
-    <testCase name="test getProviderExpectedProducts No errors" duration="2"/>
-    <testCase name="test getProviderExpectedProducts Error" duration="0"/>
-    <testCase name="test getProviderProductsNotification No errors" duration="2"/>
-    <testCase name="test getProviderProductsNotification Error" duration="1"/>
-    <testCase name="test setNotificationSent No errors" duration="2"/>
-    <testCase name="test setNotificationSent Error" duration="0"/>
-    <testCase name="test farmerApplication No errors" duration="4"/>
-    <testCase name="test farmerApplication Error" duration="1"/>
-    <testCase name="test checkEmailAvailability No errors" duration="1"/>
+    <testCase name="test getProviderProductsNotification No errors" duration="3"/>
+    <testCase name="test getProviderProductsNotification Error" duration="0"/>
+    <testCase name="test setNotificationSent No errors" duration="5"/>
+    <testCase name="test setNotificationSent Error" duration="1"/>
+    <testCase name="test farmerApplication No errors" duration="3"/>
+    <testCase name="test farmerApplication Error" duration="2"/>
+    <testCase name="test checkEmailAvailability No errors" duration="0"/>
     <testCase name="test checkEmailAvailability Error" duration="1"/>
-    <testCase name="test farmerPendingApplication No errors" duration="2"/>
-    <testCase name="test farmerPendingApplication Error" duration="1"/>
+    <testCase name="test farmerPendingApplication No errors" duration="8"/>
+    <testCase name="test farmerPendingApplication Error" duration="0"/>
     <testCase name="test getFarmerAcceptedApplications No errors" duration="2"/>
     <testCase name="test getFarmerAcceptedApplications Error" duration="1"/>
     <testCase name="test acceptFarmerApplication No errors" duration="2"/>
     <testCase name="test acceptFarmerApplication Error" duration="1"/>
-    <testCase name="test rejectFarmerApplication No errors" duration="2"/>
-    <testCase name="test rejectFarmerApplication Error" duration="0"/>
-    <testCase name="test getAllClients no errors" duration="0"/>
+    <testCase name="test rejectFarmerApplication No errors" duration="5"/>
+    <testCase name="test rejectFarmerApplication Error" duration="2"/>
+    <testCase name="test getAllClients no errors" duration="1"/>
     <testCase name="test getAllClients error" duration="0"/>
-    <testCase name="test getAllOrders no errors" duration="0"/>
-    <testCase name="test getAllOrders error" duration="0"/>
-    <testCase name="test updateDelivered(order_id) no errors" duration="0"/>
-    <testCase name="test updateDelivered(order_id) error" duration="0"/>
-    <testCase name="test getAllPaymentMethods no errors" duration="1"/>
-    <testCase name="test getAllPaymentMethods error" duration="1"/>
+    <testCase name="test getAllOrders no errors" duration="1"/>
+    <testCase name="test getAllOrders error" duration="1"/>
+    <testCase name="test updateDelivered(order_id) no errors" duration="1"/>
+    <testCase name="test updateDelivered(order_id) error" duration="1"/>
+    <testCase name="test getAllPaymentMethods no errors" duration="0"/>
+    <testCase name="test getAllPaymentMethods error" duration="2"/>
     <testCase name="test addClient no errors" duration="1"/>
-    <testCase name="test addClient error" duration="0"/>
-    <testCase name="test addTransaction no errors" duration="0"/>
+    <testCase name="test addClient error" duration="1"/>
+    <testCase name="test addTransaction no errors" duration="1"/>
     <testCase name="test addTransaction error" duration="0"/>
     <testCase name="test getUserInfo no errors" duration="1"/>
     <testCase name="test getUserInfo error" duration="1"/>
     <testCase name="test logIn no errors" duration="1"/>
-    <testCase name="test logIn error" duration="0"/>
-    <testCase name="test deleteOrderItem no errors" duration="1"/>
-    <testCase name="test deleteOrderItem error" duration="0"/>
-    <testCase name="test getAllUsers no errors" duration="0"/>
-    <testCase name="test getAllUsers error" duration="0"/>
-    <testCase name="test getAllProducts no errors" duration="0"/>
-    <testCase name="test getAllProducts error" duration="0"/>
-    <testCase name="test updateWHPrepared no errors" duration="0"/>
+    <testCase name="test logIn error" duration="2"/>
+    <testCase name="test getAllUsers no errors" duration="1"/>
+    <testCase name="test getAllUsers error" duration="2"/>
+    <testCase name="test getAllProducts no errors" duration="1"/>
+    <testCase name="test getAllProducts error" duration="1"/>
+    <testCase name="test updateWHPrepared no errors" duration="1"/>
     <testCase name="test updateWHPrepared error" duration="1"/>
     <testCase name="test updateState no errors" duration="0"/>
     <testCase name="test updateState error" duration="1"/>
-    <testCase name="test updateStateFarmer no errors" duration="0"/>
-    <testCase name="test updateStateFarmer error" duration="0"/>
+    <testCase name="test updateStateFarmer no errors" duration="2"/>
+    <testCase name="test updateStateFarmer error" duration="1"/>
     <testCase name="test getProviderBookings no errors" duration="1"/>
     <testCase name="test getProviderBookings error" duration="1"/>
     <testCase name="test updateQuantity no errors" duration="1"/>
-    <testCase name="test updateQuantity error" duration="1"/>
+    <testCase name="test updateQuantity error" duration="0"/>
     <testCase name="test increaseBalance no errors" duration="1"/>
-    <testCase name="test increaseBalance error" duration="0"/>
-    <testCase name="test confirmExpectedProducts no errors" duration="0"/>
-    <testCase name="test confirmExpectedProducts error" duration="0"/>
-    <testCase name="test logOut no errors" duration="0"/>
-    <testCase name="test addUser no errors" duration="1"/>
-    <testCase name="test addUser error" duration="1"/>
+    <testCase name="test increaseBalance error" duration="1"/>
+    <testCase name="test confirmExpectedProducts no errors" duration="1"/>
+    <testCase name="test confirmExpectedProducts error" duration="1"/>
+    <testCase name="test logOut no errors" duration="1"/>
+    <testCase name="test addUser no errors" duration="2"/>
+    <testCase name="test addUser error" duration="0"/>
     <testCase name="test addOrder no errors" duration="1"/>
-    <testCase name="test addOrder error" duration="0"/>
-    <testCase name="test submitEmail no errors" duration="0"/>
-    <testCase name="test submitEmail error" duration="0"/>
-    <testCase name="test sendTelegramNotificationOnSaturday no errors" duration="1"/>
-    <testCase name="test sendTelegramNotificationOnSaturday error" duration="2"/>
+    <testCase name="test addOrder error" duration="1"/>
+    <testCase name="test submitEmail no errors" duration="1"/>
+    <testCase name="test submitEmail error" duration="1"/>
+    <testCase name="test sendTelegramNotificationOnSaturday no errors" duration="0"/>
+    <testCase name="test sendTelegramNotificationOnSaturday error" duration="1"/>
     <testCase name="test sendTelegramTopUpNotification no errors" duration="1"/>
-    <testCase name="test sendTelegramTopUpNotification error" duration="1"/>
-    <testCase name="test sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10 no errors" duration="0"/>
+    <testCase name="test sendTelegramTopUpNotification error" duration="2"/>
+    <testCase name="test sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10 no errors" duration="1"/>
     <testCase name="test sendTelegramNotificationAboutInsufficientBalanceEveryDayAt10 error" duration="0"/>
-    <testCase name="test updateItem no errors" duration="0"/>
-    <testCase name="test updateItem error" duration="0"/>
-    <testCase name="test getAllDeliverers no errors" duration="1"/>
-    <testCase name="test getAllDeliverers error" duration="0"/>
-    <testCase name="test getDeliverableOrders no errors" duration="0"/>
-    <testCase name="test getDeliverableOrders error" duration="0"/>
-    <testCase name="test getDelivererByMail no errors" duration="0"/>
-    <testCase name="test getDelivererByMail error" duration="0"/>
-    <testCase name="test getOrderAndClientData no errors" duration="0"/>
-    <testCase name="test getOrderAndClientData error" duration="1"/>
+    <testCase name="test updateItem no errors" duration="1"/>
+    <testCase name="test updateItem error" duration="1"/>
+    <testCase name="test getAllDeliverers no errors" duration="0"/>
+    <testCase name="test getAllDeliverers error" duration="1"/>
+    <testCase name="test getDeliverableOrders no errors" duration="1"/>
+    <testCase name="test getDeliverableOrders error" duration="2"/>
+    <testCase name="test getDelivererByMail no errors" duration="1"/>
+    <testCase name="test getDelivererByMail error" duration="1"/>
+    <testCase name="test getOrderAndClientData no errors" duration="1"/>
+    <testCase name="test getOrderAndClientData error" duration="0"/>
   </file>
 </testExecutions>
