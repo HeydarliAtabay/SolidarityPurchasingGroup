@@ -29,7 +29,7 @@ sections:
 
 | Story | # Tasks | Points | Hours est. | Hours actual     |
 | ----- | ------- | ------ | ---------- | ---------------- |
-| _#0_  | 7      | -       | 59h 75m     | 63h 50m          |
+| _#0_  | 7      | -       | 60h 15m     | 63h 50m          |
 | _#40_  | 2       | 13     | 5h     |      5h 30m        |
 | _#41_  | 2       | 5     | 5h         |      0h         |
 | _#42_  | 2       | 21      | 9h         |      9h       |
@@ -42,8 +42,8 @@ sections:
 
 
 Story 0 in-depth - fixing Git issues:
-- Navbar color contrast issue -> Navbar was completely redesigned
-- Shopping cart not allowing floating point values -> shopping cart now increments the quantity by 0.5 units instead of 1 unit 
+- Logos on manage orders: app design was completely upgraded
+ 
 
 
 Sprint statistics
@@ -54,45 +54,54 @@ Sprint statistics
 ## QUALITY MEASURES
 
 - Unit Testing:
-  - Total hours estimated:  ( hours for implementing unit tests) 
-  - Total hours spent:  
-  - Nr of automated unit test cases :  (for BackEnd) +  (for FrontEnd) =  unit test cases
+  - Total hours estimated: 2d 6h ( hours for implementing unit tests) 
+  - Total hours spent: 1d 3h
+  - Nr of automated unit test cases : 46 (for BackEnd) + 88 (for FrontEnd) = 134 unit test cases
 
 - E2E testing:
-  - Total hours estimated:  - included inside each story
-  - Total hours spent: 
+  - Total hours estimated: 8h (1h per story - included inside each story) + 6h in design task = 14h
+  - Total hours spent: 6h for stories + 6h for design task = 12h
 - Code review
-  - Total hours estimated:  - included inside each story
-  - Total hours spent: 
+  - Total hours estimated: 8h (1h per story) - included inside each story
+  - Total hours spent: 6h
 - Technical Debt management:
-  - Total hours estimated: 
-  - Total hours spent: 
-  - Hours estimated for remediation by SonarQube:  (only in Maintainability - fixing code smells)
-  - Hours estimated for remediation by SonarQube only for the selected and planned issues:  (only in New Code - Maintainability - fixing code smells)
-  - Hours spent on remediation: 
-  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.3%
-  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): Reliability - A, Security - A, Maintainability - A
+  - Total hours estimated: 1d 1h 30m 
+  - Total hours spent: 6h
+  - Hours estimated for remediation by SonarQube: 4d3h (only in Maintainability - fixing code smells)
+  - Hours estimated for remediation by SonarQube only for the selected and planned issues: 4d1h (only in New Code - Maintainability - fixing code smells)
+  - Hours spent on remediation: 6h
+  - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.4%
+  - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): 
+
+Reliability	C (Sonarcloud considers as bugs the usage of some HTML tags like <b>, <i>, <th> etc.)
+
+Security	 	→	A
+
+Maintainability	→	A
+
 
 ## ASSESSMENT
 
 - What caused your errors in estimation (if any)?
   - Visual design & usability improvement proved really tough (especially making every page design consistent with the rest) so we overspent some hours for this task.
   - API testing integration proved to be less difficult due to the repetitive nature of the API calls.
-  - The Story # (Disabled users) proved very difficult and by sacrificing time for it (still could not finish) we ended up with less time on the Story # (Unpicked food) and we completed none of the stories.
+  - The Story #43 (Disabled users) proved very difficult and by sacrificing time for it (still could not finish) we ended up with less time on the Story #41 (Unpicked food) and we completed none of the stories.
 
 
 
 - What lessons did you learn (both positive and negative) in this sprint?
-  - Story integration was not as swift as we expected. We faced some initial difficulty on integrating our previously implemented stories with the new ones
-  - Documentation (the Git readme) proved to be very helpful and we often used it as a “manual” to quickly search and get the information we needed
-  - At the end of this sprint we were able to deliver a much better looking and much more responsive app. This step helped us better understand the effects of a better design on the stakeholders feedback and “happiness”
+  - Since this was the last sprint of the course we were unconsciously influenced by this fact and ended up trying to deliver a “near final” version of our app.
+  - Story integration was not as swift as we expected. We faced difficulty on integrating the Story #43 (Disabled users) with the other stories and this impacted the result of the stories successfully done.
+  - There is no workaround to good design & usability. When upgrading the app design we discovered many usability problems and design inconsistencies.
+  - Sprint presentation should be better prepared according to the Sprint structure.
+
 
 
 
 - Which improvement goals set in the previous retrospective were you able to achieve?
   - Design & usability was very much improved. 
   - Different alerts and interactive buttons were placed throughout the app. 
-  - API test suite coverage went up from less than 50% to higher than 90%. 
+  - API test suite coverage went up from less than 50% to higher than 80%. 
 
 
 - Which ones you were not able to achieve? Why?
