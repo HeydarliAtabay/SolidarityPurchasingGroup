@@ -73,7 +73,7 @@ Sprint statistics
   - debt ratio (as reported by SonarQube under "Measures-Maintainability"): 0.4%
   - rating for each quality characteristic reported in SonarQube under "Measures" (namely reliability, security, maintainability ): 
 
-Reliability	C (Sonarcloud considers as bugs the usage of some HTML tags like <b>, <i>, <th> etc.)
+Reliability	C (Sonarcloud considers as bugs the usage of some HTML tags like b, i, th etc.)
 
 Security	 	→	A
 
