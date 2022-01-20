@@ -1,6 +1,6 @@
-# SE2-SPG
+# Solidarity Purchasing Group Web Application
 
-The webapplication runs on node.js and npm, so you need to install it. Get the lastest version from [here](https://nodejs.org/) and [here](https://npmjs.org/)
+The web application runs on node.js and npm, so you need to install it. Get the lastest version from [here](https://nodejs.org/) and [here](https://npmjs.org/)
 
 ## How to run it:
 
@@ -840,4 +840,26 @@ POST `/api/orders/farmershipped`
              "error": "Unavailable service"
          }`
 
+## Some Screenshots of the Application
 
+### Main page 
+![Main Page](screenshots/SPG_Main.png)
+
+### Client Area
+![Client Area](screenshots/SPG_ClientArea.png)
+
+### Product Booking page
+![Product Booking](screenshots/SPG_ProductBooking.png)
+
+
+### Product Details Floating Page
+![Product Details](screenshots/SPG_ProductDetails.png)
+
+### Shop Personnel Area
+![Shop Personnel Area](screenshots/SPG_ShopPersonnelArea.png)
+
+### List of Client Orders
+![List of Client orders](screenshots/SPG_ClientOrders.png)
+
+### Shop Manager Area
+![Shop Manager Area](screenshots/SPG_ShopManagerArea.png)
